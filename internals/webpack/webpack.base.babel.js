@@ -33,8 +33,12 @@ module.exports = (options) => ({
       include: /node_modules/,
       loaders: ['style-loader', 'css-loader', 'postcss-loader'],
     }, {
+      test: /\.scss$/,
+      loaders: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
+    }, {
       test: /\.(eot|svg|ttf|woff|woff2)$/,
       loader: 'file-loader',
+      exclude: svgDirs,
     }, {
       test: /\.(jpg|png|gif)$/,
       loaders: [
