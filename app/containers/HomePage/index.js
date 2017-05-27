@@ -11,14 +11,23 @@
 
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
+import { NavBar, Icon } from 'antd-mobile';
+
 import messages from './messages';
 
 export default class HomePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   render() {
     return (
-      <h1>
-        <FormattedMessage {...messages.header} />
-      </h1>
+      <div>
+        <NavBar leftContent="back"
+          mode="light"
+          onLeftClick={() => console.log('onLeftClick')}
+          rightContent={[
+            <Icon key="0" type="search" style={{ marginRight: '0.32rem' }} />,
+            <Icon key="1" type="ellipsis" />,
+          ]}
+        >NavBar</NavBar>
+      </div>
     );
   }
 }

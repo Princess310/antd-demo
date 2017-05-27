@@ -49,6 +49,15 @@ module.exports = require('./webpack.base.babel')({
     // See https://github.com/babel/babel-loader/issues/149 and
     // https://github.com/webpack/webpack/issues/1866
     presets: ['babel-preset-react-hmre'].map(require.resolve),
+    plugins: [
+      [
+        "import",
+        {
+          "style": "css",
+          "libraryName": "antd-mobile"
+        }
+      ]
+    ],
   },
 
   // Emit a source map for easier debugging

@@ -5,6 +5,12 @@
 const path = require('path');
 const webpack = require('webpack');
 
+const svgDirs = [
+  require.resolve('antd-mobile').replace(/warn\.js$/, ''),  // 1. 属于 antd-mobile 内置 svg 文件
+  // path.resolve(__dirname, 'src/my-project-svg-foler'),  // 2. 自己私人的 svg 存放目录
+];
+
+
 module.exports = (options) => ({
   entry: options.entry,
   output: Object.assign({ // Compile into js/build.js
@@ -25,7 +31,7 @@ module.exports = (options) => ({
       // So, no need for ExtractTextPlugin here.
       test: /\.css$/,
       include: /node_modules/,
-      loaders: ['style-loader', 'css-loader'],
+      loaders: ['style-loader', 'css-loader', 'postcss-loader'],
     }, {
       test: /\.(eot|svg|ttf|woff|woff2)$/,
       loader: 'file-loader',
@@ -58,7 +64,11 @@ module.exports = (options) => ({
       query: {
         limit: 10000,
       },
-    }],
+    }, {
+      test: /\.(svg)$/i,
+      loader: 'svg-sprite-loader',
+      include: svgDirs,  // 把 svgDirs 路径下的所有 svg 文件交给 svg-sprite-loader 插件处理
+    },],
   },
   plugins: options.plugins.concat([
     new webpack.ProvidePlugin({
@@ -77,9 +87,11 @@ module.exports = (options) => ({
     new webpack.NamedModulesPlugin(),
   ]),
   resolve: {
-    modules: ['app', 'node_modules'],
+    modules: ['app', 'node_modules', path.join(__dirname, './node_modules')],
     extensions: [
+      '.web.js',
       '.js',
+      '.json',
       '.jsx',
       '.react.js',
     ],
