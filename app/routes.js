@@ -22,12 +22,204 @@ export default function createRoutes(store) {
       name: 'home',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
+          import('containers/HomePage/reducer'),
+          import('containers/HomePage/sagas'),
           import('containers/HomePage'),
+
+          import('containers/UserCenter/reducer'),
+          import('containers/UserCenter/sagas'),
         ]);
 
         const renderRoute = loadModule(cb);
 
-        importModules.then(([component]) => {
+        importModules.then(([
+          reducer, sagas, component,
+          userCenterReducer, userCenterSagas,
+        ]) =>{
+          injectReducer('home', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+
+          injectReducer('userCenter', userCenterReducer.default);
+          injectSagas(userCenterSagas.default);
+        });
+
+        importModules.catch(errorLoading);
+      },
+      childRoutes: [
+        {
+          path: 'userSetting',
+          name: 'userSettingPage',
+          getComponent(nextState, cb) {
+            const importModules = Promise.all([
+              import('containers/UserSettingPage/reducer'),
+              import('containers/UserSettingPage/sagas'),
+              import('containers/UserSettingPage'),
+            ]);
+
+            const renderRoute = loadModule(cb);
+
+            importModules.then(([reducer, sagas, component]) => {
+              injectReducer('userSettingPage', reducer.default);
+              injectSagas(sagas.default);
+              renderRoute(component);
+            });
+
+            importModules.catch(errorLoading);
+          },
+        }, {
+          path: 'userPrivacy',
+          name: 'userPrivacy',
+          getComponent(location, cb) {
+            import('containers/UserPrivacy')
+              .then(loadModule(cb))
+              .catch(errorLoading);
+          },
+        }, {
+          path: 'userBlackList',
+          name: 'userBlackList',
+          getComponent(nextState, cb) {
+            const importModules = Promise.all([
+              import('containers/UserBlackList/reducer'),
+              import('containers/UserBlackList/sagas'),
+              import('containers/UserBlackList'),
+            ]);
+
+            const renderRoute = loadModule(cb);
+
+            importModules.then(([reducer, sagas, component]) => {
+              injectReducer('userBlackList', reducer.default);
+              injectSagas(sagas.default);
+              renderRoute(component);
+            });
+
+            importModules.catch(errorLoading);
+          },
+        }, {
+          path: 'resetPassword',
+          name: 'resetPassword',
+          getComponent(nextState, cb) {
+            const importModules = Promise.all([
+              import('containers/ResetPassword'),
+            ]);
+
+            const renderRoute = loadModule(cb);
+
+            importModules.then(([component]) => {
+              renderRoute(component);
+            });
+
+            importModules.catch(errorLoading);
+          },
+        }, {
+          path: 'resetMobile',
+          name: 'resetMobile',
+          getComponent(nextState, cb) {
+            const importModules = Promise.all([
+              import('containers/ResetMobile'),
+            ]);
+
+            const renderRoute = loadModule(cb);
+
+            importModules.then(([component]) => {
+              renderRoute(component);
+            });
+
+            importModules.catch(errorLoading);
+          },
+        }, {
+          path: 'about',
+          name: 'aboutPage',
+          getComponent(location, cb) {
+            import('containers/AboutPage')
+              .then(loadModule(cb))
+              .catch(errorLoading);
+          },
+        }, {
+          path: 'browser',
+          name: 'browserPage',
+          getComponent(location, cb) {
+            import('containers/BrowserPage')
+              .then(loadModule(cb))
+              .catch(errorLoading);
+          },
+        }, {
+          path: 'feedBack',
+          name: 'feedBackPage',
+          getComponent(nextState, cb) {
+            const importModules = Promise.all([
+              import('containers/FeedBackPage/reducer'),
+              import('containers/FeedBackPage/sagas'),
+              import('containers/FeedBackPage'),
+            ]);
+
+            const renderRoute = loadModule(cb);
+
+            importModules.then(([reducer, sagas, component]) => {
+              injectReducer('feedBackPage', reducer.default);
+              injectSagas(sagas.default);
+              renderRoute(component);
+            });
+
+            importModules.catch(errorLoading);
+          },
+        }, {
+          path: 'feedBackResult',
+          name: 'feedBackResult',
+          getComponent(location, cb) {
+            import('containers/FeedBackResult')
+              .then(loadModule(cb))
+              .catch(errorLoading);
+          },
+        }, {
+          path: 'userEdit',
+          name: 'userEdit',
+          getComponent(nextState, cb) {
+            const importModules = Promise.all([
+              import('containers/UserEdit'),
+            ]);
+
+            const renderRoute = loadModule(cb);
+
+            importModules.then(([component]) => {
+              renderRoute(component);
+            });
+
+            importModules.catch(errorLoading);
+          },
+        }, {
+          path: 'userEditBasic',
+          name: 'userEditBasic',
+          getComponent(nextState, cb) {
+            const importModules = Promise.all([
+              import('containers/UserEditBasic'),
+            ]);
+
+            const renderRoute = loadModule(cb);
+
+            importModules.then(([component]) => {
+              renderRoute(component);
+            });
+
+            importModules.catch(errorLoading);
+          },
+        },
+      ]
+    }, {
+      path: 'login',
+      name: 'loginPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          import('containers/LoginPage/reducer'),
+          import('containers/LoginPage/sagas'),
+          import('containers/LoginPage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('loginPage', reducer.default);
+          injectSagas(sagas.default);
           renderRoute(component);
         });
 

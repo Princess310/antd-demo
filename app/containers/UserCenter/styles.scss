@@ -1,0 +1,7 @@
+.user-center {
+  .user-sub-info-item {
+    &:last-child {
+      border-left: 1px #f0f0f0 solid;
+    }
+  }
+}

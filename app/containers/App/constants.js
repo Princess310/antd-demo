@@ -9,4 +9,5 @@
  * export const YOUR_ACTION_CONSTANT = 'yourproject/YourContainer/YOUR_ACTION_CONSTANT';
  */
 
+export const LOAD_USER = 'containers/App/LOAD_USER';
 export const DEFAULT_LOCALE = 'en';
