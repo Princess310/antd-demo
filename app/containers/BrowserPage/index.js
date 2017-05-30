@@ -14,7 +14,6 @@ import messages from './messages';
 
 export class BrowserPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   render() {
-    console.log();
     const { location: { state } } = this.props;
     return (
       <div>

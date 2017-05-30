@@ -179,6 +179,7 @@ HomePage.propTypes = {
 export function mapDispatchToProps(dispatch) {
   return {
     getUser: () => dispatch(fetchUser()),
+    getIndustry: () => dispatch(fetchIndustry()),
   };
 }
 

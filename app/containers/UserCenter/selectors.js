@@ -3,7 +3,7 @@ import { createSelector } from 'reselect';
 /**
  * Direct selector to the userCenter state domain
  */
- const selectGlobal = (state) => state.get('global');
+ const selectUserCenter = (state) => state.get('userCenter');
 
 /**
  * Other specific selectors
@@ -14,12 +14,17 @@ import { createSelector } from 'reselect';
  * Default selector used by UserCenter
  */
 
-const makeSelectUserCenter = () => createSelector(
-  selectGlobal,
-  (substate) => substate.get('currentUser')
+const makeSelectUserCenterIndustry = () => createSelector(
+  selectUserCenter,
+  (substate) => substate.get('industry')
 );
 
-export default makeSelectUserCenter;
+const makeSelectUserCenterService = () => createSelector(
+  selectUserCenter,
+  (substate) => substate.get('service')
+);
+
 export {
-  selectUserCenterDomain,
+  makeSelectUserCenterIndustry,
+  makeSelectUserCenterService,
 };

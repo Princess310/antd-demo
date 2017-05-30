@@ -76,12 +76,16 @@ export class UserEdit extends React.PureComponent { // eslint-disable-line react
             <Item
               extra={currentUser.tag_identity_name}
               arrow="horizontal"
-              onClick={() => {}}
+              onClick={() => {
+                browserHistory.push('/userEditIdentity');
+              }}
             >行业角色</Item>
             <Item
               extra={currentUser.main_service_name}
               arrow="horizontal"
-              onClick={() => {}}
+              onClick={() => {
+                browserHistory.push('/userEditService');
+              }}
             >主营类别</Item>
           </List>
           <WhiteSpace size="md" />
@@ -94,7 +98,9 @@ export class UserEdit extends React.PureComponent { // eslint-disable-line react
             <Item
               arrow="horizontal"
               multipleLine
-              onClick={() => {}}
+              onClick={() => {
+                browserHistory.push('/userEditCompany');
+              }}
             >
               公司地址
               <Brief>
@@ -107,7 +113,9 @@ export class UserEdit extends React.PureComponent { // eslint-disable-line react
             <Item
               arrow="horizontal"
               multipleLine
-              onClick={() => {}}
+              onClick={() => {
+                browserHistory.push('/userEditIntro');
+              }}
             >
               业务介绍
               <Brief>

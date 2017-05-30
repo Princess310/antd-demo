@@ -20,8 +20,12 @@ import FlexSB from 'components/FlexSB';
 import FlexRow from 'components/FlexRow';
 import { List, Icon, WhiteSpace, Button, ActionSheet } from 'antd-mobile';
 import userBg from 'assets/images/person-bg.png';
-import makeSelectUserCenter from './selectors';
+import { makeSelectCurrentUser } from 'containers/HomePage/selectors';
 import messages from './messages';
+
+import {
+  fetchIndustry,
+} from './actions';
 
 import './styles.scss';
 
@@ -182,12 +186,12 @@ export class UserCenter extends React.PureComponent { // eslint-disable-line rea
 }
 
 UserCenter.propTypes = {
-  dispatch: PropTypes.func.isRequired,
+  dispatch: PropTypes.func,
   currentUser: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
-  currentUser: makeSelectUserCenter(),
+  currentUser: makeSelectCurrentUser(),
 });
 
 function mapDispatchToProps(dispatch) {

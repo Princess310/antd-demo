@@ -24,24 +24,27 @@ export default function createRoutes(store) {
         const importModules = Promise.all([
           import('containers/HomePage/reducer'),
           import('containers/HomePage/sagas'),
-          import('containers/HomePage'),
 
           import('containers/UserCenter/reducer'),
           import('containers/UserCenter/sagas'),
+
+          import('containers/HomePage'),
         ]);
 
         const renderRoute = loadModule(cb);
 
         importModules.then(([
-          reducer, sagas, component,
+          reducer, sagas,
           userCenterReducer, userCenterSagas,
+          component,
         ]) =>{
           injectReducer('home', reducer.default);
           injectSagas(sagas.default);
-          renderRoute(component);
 
           injectReducer('userCenter', userCenterReducer.default);
           injectSagas(userCenterSagas.default);
+
+          renderRoute(component);
         });
 
         importModules.catch(errorLoading);
@@ -202,6 +205,38 @@ export default function createRoutes(store) {
             });
 
             importModules.catch(errorLoading);
+          },
+        }, {
+          path: 'userEditCompany',
+          name: 'userEditCompany',
+          getComponent(location, cb) {
+            import('containers/UserEditCompany')
+              .then(loadModule(cb))
+              .catch(errorLoading);
+          },
+        }, {
+          path: 'userEditIntro',
+          name: 'userEditIntro',
+          getComponent(location, cb) {
+            import('containers/UserEditIntro')
+              .then(loadModule(cb))
+              .catch(errorLoading);
+          },
+        }, {
+          path: 'userEditIdentity',
+          name: 'userEditIdentity',
+          getComponent(location, cb) {
+            import('containers/UserEditIdentity')
+              .then(loadModule(cb))
+              .catch(errorLoading);
+          },
+        }, {
+          path: 'userEditService',
+          name: 'userEditService',
+          getComponent(location, cb) {
+            import('containers/UserEditService')
+              .then(loadModule(cb))
+              .catch(errorLoading);
           },
         },
       ]
