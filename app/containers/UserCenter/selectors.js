@@ -24,7 +24,19 @@ const makeSelectUserCenterService = () => createSelector(
   (substate) => substate.get('service')
 );
 
+const makeSelectUserCenterBusiness = () => createSelector(
+  selectUserCenter,
+  (substate) => substate.get('business')
+);
+
+const makeSelectUserCenterCity = () => createSelector(
+  selectUserCenter,
+  (substate) => substate.get('city')
+);
+
 export {
   makeSelectUserCenterIndustry,
   makeSelectUserCenterService,
+  makeSelectUserCenterBusiness,
+  makeSelectUserCenterCity,
 };

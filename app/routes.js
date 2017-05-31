@@ -238,6 +238,22 @@ export default function createRoutes(store) {
               .then(loadModule(cb))
               .catch(errorLoading);
           },
+        }, {
+          path: 'userEditPics',
+          name: 'userEditPictures',
+          getComponent(location, cb) {
+            import('containers/UserEditPictures')
+              .then(loadModule(cb))
+              .catch(errorLoading);
+          },
+        }, {
+          path: 'selectAddress',
+          name: 'selectAddress',
+          getComponent(location, cb) {
+            import('containers/SelectAddress')
+              .then(loadModule(cb))
+              .catch(errorLoading);
+          },
         },
       ]
     }, {

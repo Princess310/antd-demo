@@ -17,6 +17,12 @@ import AppContent from 'components/AppContent';
 import { makeSelectCurrentUser } from './selectors';
 import messages from './messages';
 
+const briefStyle = {
+  overflow: 'auto',
+  textOverflow: 'inherit',
+  whiteSpace: 'inherit',
+};
+
 const Item = List.Item;
 const Brief = Item.Brief;
 export class UserEdit extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
@@ -93,7 +99,9 @@ export class UserEdit extends React.PureComponent { // eslint-disable-line react
             <Item
               extra={currentUser.city_location === '' ? '未设置' : currentUser.city_location}
               arrow="horizontal"
-              onClick={() => {}}
+              onClick={() => {
+                browserHistory.push('/selectAddress');
+              }}
             >工作地区</Item>
             <Item
               arrow="horizontal"
@@ -103,7 +111,7 @@ export class UserEdit extends React.PureComponent { // eslint-disable-line react
               }}
             >
               公司地址
-              <Brief>
+              <Brief style={briefStyle}>
                 {currentUser.company_locate === '' ? '请填写您的公司地址' : currentUser.company_locate}
               </Brief>
             </Item>
@@ -113,12 +121,13 @@ export class UserEdit extends React.PureComponent { // eslint-disable-line react
             <Item
               arrow="horizontal"
               multipleLine
+              wrap
               onClick={() => {
                 browserHistory.push('/userEditIntro');
               }}
             >
               业务介绍
-              <Brief>
+              <Brief style={briefStyle}>
                 {currentUser.intro === '' ? '完善您的业务介绍，让大家更容易了解您~' : currentUser.intro}
               </Brief>
             </Item>
@@ -127,7 +136,9 @@ export class UserEdit extends React.PureComponent { // eslint-disable-line react
           <List>
             <Item
               arrow="horizontal"
-              onClick={() => {}}
+              onClick={() => {
+                browserHistory.push('/userEditPics');
+              }}
             >展示图片</Item>
           </List>
           <WhiteSpace size="md" />

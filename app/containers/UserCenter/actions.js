@@ -10,6 +10,11 @@ import {
   LOAD_INDUSTRY,
   FETCH_SERVICE,
   LOAD_SERVICE,
+  FETCH_BUSINESS_INFO,
+  LOAD_BUSINESS_INFO,
+  SVAE_BUSINESS_INFO,
+  FETCH_CITY_INFO,
+  LAOD_CITY_INFO,
 } from './constants';
 
 export function saveUser(params) {
@@ -50,6 +55,45 @@ export function loadService(list) {
     type: LOAD_SERVICE,
     payload: {
       list,
+    },
+  };
+}
+
+export function fetchBusiness() {
+  return {
+    type: FETCH_BUSINESS_INFO,
+  };
+}
+
+export function loadBusiness(data) {
+  return {
+    type: LOAD_BUSINESS_INFO,
+    payload: {
+      data,
+    },
+  };
+}
+
+export function saveBusiness(params) {
+  return {
+    type: SVAE_BUSINESS_INFO,
+    payload: {
+      params,
+    },
+  };
+}
+
+export function fetchCity() {
+  return {
+    type: FETCH_CITY_INFO,
+  };
+}
+
+export function loadCity(data) {
+  return {
+    type: LAOD_CITY_INFO,
+    payload: {
+      data,
     },
   };
 }

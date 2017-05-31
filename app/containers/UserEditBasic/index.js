@@ -16,11 +16,11 @@ import { NavBar, List, WhiteSpace, InputItem } from 'antd-mobile';
 import Avatar from 'components/Avatar';
 import MenuBtn from 'components/MenuBtn';
 
-import messages from './messages';
-import styles from './styles.scss';
-
 import { saveUser } from 'containers/UserCenter/actions';
 import oss from 'utils/oss';
+
+import messages from './messages';
+import styles from './styles.scss';
 
 const FileItem = styled.input`
   position: absolute;

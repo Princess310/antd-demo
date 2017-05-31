@@ -105,7 +105,8 @@ export class ResetMobile extends React.PureComponent { // eslint-disable-line re
         >
           {currentUser.mobile === '' ? '绑定手机并设置密码' : '修改绑定手机号'}
         </NavBar>
-        <List renderHeader={() => '请输入需要绑定的手机号'}>
+        <WhiteSpace size="md" />
+        <List>
           <InputItem
             type="phone"
             placeholder="手机号"

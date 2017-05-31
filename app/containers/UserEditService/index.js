@@ -28,9 +28,8 @@ export class UserEditService extends React.PureComponent { // eslint-disable-lin
       main_service_id: currentUser.main_service_id,
     }
 
-    // fetch industry list here
+    // fetch service list here
     if (currentUser && currentUser.tag_identity_id) {
-      console.log('currentUser', currentUser);
       getService(currentUser.tag_identity_id);
     }
   }
@@ -107,6 +106,7 @@ UserEditService.propTypes = {
     PropTypes.bool,
   ]),
   saveUserInfo: PropTypes.func,
+  getService: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
