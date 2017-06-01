@@ -15,6 +15,18 @@ import {
   SVAE_BUSINESS_INFO,
   FETCH_CITY_INFO,
   LAOD_CITY_INFO,
+
+  FETCH_USER_VISITOR,
+  LOAD_USER_VISITOR,
+  LOAD_USER_VISITOR_REFRESH,
+  LOAD_USER_VISITOR_LOADING,
+
+  FETCH_USER_COLLECTS,
+  LOAD_USER_COLLECTS,
+  LOAD_USER_COLLECTS_REFRESH,
+  LOAD_USER_COLLECTS_LOADING,
+  DELETE_USER_COLLECT,
+  REMOVE_USER_COLLECT,
 } from './constants';
 
 export function saveUser(params) {
@@ -94,6 +106,102 @@ export function loadCity(data) {
     type: LAOD_CITY_INFO,
     payload: {
       data,
+    },
+  };
+}
+
+export function fetchVistor(type, page) {
+  return {
+    type: FETCH_USER_VISITOR,
+    payload: {
+      type,
+      page,
+    },
+  };
+}
+
+export function loadUserVistor(type, list, page) {
+  return {
+    type: LOAD_USER_VISITOR,
+    payload: {
+      type,
+      list,
+      page,
+    },
+  };
+}
+
+export function loadVisitorRefresh(type, refresh) {
+  return {
+    type: LOAD_USER_VISITOR_REFRESH,
+    payload: {
+      type,
+      refresh,
+    },
+  };
+}
+
+export function loadVisitorLoading(type, loading) {
+  return {
+    type: LOAD_USER_VISITOR_LOADING,
+    payload: {
+      type,
+      loading,
+    },
+  };
+}
+
+export function fetchCollects(page) {
+  return {
+    type: FETCH_USER_COLLECTS,
+    payload: {
+      page,
+    },
+  };
+}
+
+export function loadCollects(list, page) {
+  return {
+    type: LOAD_USER_COLLECTS,
+    payload: {
+      list,
+      page,
+    },
+  };
+}
+
+export function loadCollectsRefresh(refresh) {
+  return {
+    type: LOAD_USER_COLLECTS_REFRESH,
+    payload: {
+      refresh,
+    },
+  };
+}
+
+export function loadCollectsLoading(loading) {
+  return {
+    type: LOAD_USER_COLLECTS_LOADING,
+    payload: {
+      loading,
+    },
+  };
+}
+
+export function delCollect(id) {
+  return {
+    type: DELETE_USER_COLLECT,
+    payload: {
+      id,
+    },
+  };
+}
+
+export function removeCollect(id) {
+  return {
+    type: REMOVE_USER_COLLECT,
+    payload: {
+      id,
     },
   };
 }

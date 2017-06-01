@@ -12,11 +12,12 @@ import request from 'utils/request';
 import pallete from 'styles/colors';
 
 import { browserHistory } from 'react-router';
-import { NavBar, List, InputItem, Icon, WhiteSpace, WingBlank, Button } from 'antd-mobile';
+import { NavBar, List, InputItem, Icon, WhiteSpace, WingBlank, Button, Toast } from 'antd-mobile';
 
 import { makeSelectCurrentUser } from 'containers/HomePage/selectors';
 import messages from './messages';
 
+let timer = null;
 export class ResetMobile extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   state = {
     pwdInputType: 'password',
@@ -25,6 +26,13 @@ export class ResetMobile extends React.PureComponent { // eslint-disable-line re
     password: '',
     startTime: 60,
     time: 60,
+  }
+
+  componentWillUnmount() {
+    // clear the timer when comp unmount
+    if (timer) {
+      clearInterval(timer);
+    }
   }
 
   changeInputType = () => {
@@ -50,6 +58,7 @@ export class ResetMobile extends React.PureComponent { // eslint-disable-line re
       password: value,
     });
   }
+  
 
   getCode = () => {
     const { phone, time, startTime } = this.state;
@@ -61,9 +70,11 @@ export class ResetMobile extends React.PureComponent { // eslint-disable-line re
     const self = this;
     request.doGet('code/getcode', {
       type: 2,
-      username: phone,
+      username: phone.replace(/\s/g, ''),
     }).then(() => {
-      const timer = setInterval(() => {
+      Toast.success('验证码已发送', 1);
+
+      timer = setInterval(() => {
         self.setState({
           time: (this.state.time - 1),
         });
@@ -83,7 +94,7 @@ export class ResetMobile extends React.PureComponent { // eslint-disable-line re
     const {phone, code, password} = this.state;
 
     request.doPost('user/bind-mobile', {
-      mobile: phone,
+      mobile: phone.replace(/\s/g, ''),
       code,
       password,
     }).then(() => {
@@ -115,7 +126,7 @@ export class ResetMobile extends React.PureComponent { // eslint-disable-line re
             labelNumber={2}
           >
             <Icon
-              type={require('icons/user-home-page/setting-sm.svg')}
+              type={require('icons/ali/手机.svg')}
               color={phone === '' ? pallete.button.grey.background : pallete.theme}
               size="md"
             />
@@ -131,7 +142,7 @@ export class ResetMobile extends React.PureComponent { // eslint-disable-line re
             >{time === startTime ? '获取验证码' : `${time}s重新获取`}</div>}
           >
             <Icon
-              type={require('icons/user-home-page/setting-sm.svg')}
+              type={require('icons/ali/绑定.svg')}
               color={code === '' ? pallete.button.grey.background : pallete.theme}
               size="md"
             />
@@ -144,7 +155,7 @@ export class ResetMobile extends React.PureComponent { // eslint-disable-line re
             labelNumber={2}
             extra={
               <Icon
-                type={require('icons/user-home-page/setting-sm.svg')}
+                type={require('icons/ali/查看.svg')}
                 color={pwdInputType === 'password' ? pallete.button.grey.background : pallete.theme}
                 size="md"
               />
@@ -152,7 +163,7 @@ export class ResetMobile extends React.PureComponent { // eslint-disable-line re
             onExtraClick={this.changeInputType}
           >
             <Icon
-              type={require('icons/user-home-page/setting-sm.svg')}
+              type={require('icons/ali/输入密码.svg')}
               color={password === '' ? pallete.button.grey.background : pallete.theme}
               size="md"
             />

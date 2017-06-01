@@ -97,7 +97,7 @@ export class UserEdit extends React.PureComponent { // eslint-disable-line react
           <WhiteSpace size="md" />
           <List>
             <Item
-              extra={currentUser.city_location === '' ? '未设置' : currentUser.city_location}
+              extra={currentUser.company_locate === '' ? '未设置' : currentUser.company_locate}
               arrow="horizontal"
               onClick={() => {
                 browserHistory.push('/selectAddress');
@@ -112,7 +112,7 @@ export class UserEdit extends React.PureComponent { // eslint-disable-line react
             >
               公司地址
               <Brief style={briefStyle}>
-                {currentUser.company_locate === '' ? '请填写您的公司地址' : currentUser.company_locate}
+                {currentUser.address === '' ? '请填写您的公司地址' : currentUser.address}
               </Brief>
             </Item>
           </List>

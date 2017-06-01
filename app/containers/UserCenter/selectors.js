@@ -34,9 +34,51 @@ const makeSelectUserCenterCity = () => createSelector(
   (substate) => substate.get('city')
 );
 
+const makeSelectUserVisitorUsers = () => createSelector(
+   selectUserCenter,
+  (substate) => {
+    const info = substate.get('visitorUsers');
+    return {
+      refresh: info.get('refresh'),
+      loading: info.get('loading'),
+      list: info.get('list'),
+      hasNext: info.get('hasNext'),
+    };
+  }
+);
+
+const makeSelectUserVisitorMine = () => createSelector(
+   selectUserCenter,
+  (substate) => {
+    const info = substate.get('visitorMine');
+    return {
+      refresh: info.get('refresh'),
+      loading: info.get('loading'),
+      list: info.get('list'),
+      hasNext: info.get('hasNext'),
+    };
+  }
+);
+
+const makeSelectUserCollects = () => createSelector(
+   selectUserCenter,
+  (substate) => {
+    const info = substate.get('collects');
+    return {
+      refresh: info.get('refresh'),
+      loading: info.get('loading'),
+      list: info.get('list'),
+      hasNext: info.get('hasNext'),
+    };
+  }
+);
+
 export {
   makeSelectUserCenterIndustry,
   makeSelectUserCenterService,
   makeSelectUserCenterBusiness,
   makeSelectUserCenterCity,
+  makeSelectUserVisitorUsers,
+  makeSelectUserVisitorMine,
+  makeSelectUserCollects,
 };

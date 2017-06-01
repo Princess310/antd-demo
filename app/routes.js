@@ -254,6 +254,22 @@ export default function createRoutes(store) {
               .then(loadModule(cb))
               .catch(errorLoading);
           },
+        }, {
+          path: 'userCenterVisitor',
+          name: 'userCenterVisitor',
+          getComponent(location, cb) {
+            import('containers/UserCenterVisitor')
+              .then(loadModule(cb))
+              .catch(errorLoading);
+          },
+        }, {
+          path: 'userCenterCollects',
+          name: 'userCenterCollects',
+          getComponent(location, cb) {
+            import('containers/UserCenterCollects')
+              .then(loadModule(cb))
+              .catch(errorLoading);
+          },
         },
       ]
     }, {

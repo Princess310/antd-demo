@@ -22,6 +22,7 @@ const pallete = {
     cancel: '#e7e7e8',
     lighter: '#50aaee',
     form: '#50abf1',
+    deep: '#e6e9ec',
   },
   background: {
     normal: '#f6f6f6',
@@ -30,6 +31,8 @@ const pallete = {
     audio: '#cee2f1',
     chatBubble: '#d9e8f8',
     progress: '#dfdce0',
+    collect: '#f2f2f2',
+    antd: '#f5f5f9',
   },
   button: {
     default: {

@@ -23,7 +23,7 @@ export class UserEditCompany extends React.PureComponent { // eslint-disable-lin
 
     const { currentUser } = props;
     this.state = {
-      company_locate: currentUser.company_locate,
+      address: currentUser.address,
     }
   }
 
@@ -31,27 +31,27 @@ export class UserEditCompany extends React.PureComponent { // eslint-disable-lin
     const { currentUser } = nextProps;
 
     this.setState({
-      company_locate: currentUser.company_locate,
+      address: currentUser.address,
     })
   }
 
   handleChange = (value) => {
     this.setState({
-      company_locate: value,
+      address: value,
     });
   }
 
   handleSave = () => {
     const { saveUserInfo } = this.props;
-    const { company_locate} = this.state;
+    const { address} = this.state;
 
     saveUserInfo({
-      company_locate,
+      address,
     });
   }
 
   render() {
-    const { company_locate } = this.state;
+    const { address } = this.state;
     
     return (
       <div>
@@ -69,7 +69,7 @@ export class UserEditCompany extends React.PureComponent { // eslint-disable-lin
         <List>
           <TextareaItem
             placeholder="请填写公司地址"
-            value={company_locate}
+            value={address}
             onChange={this.handleChange}
             rows={4}
             count={30}

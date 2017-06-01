@@ -47,4 +47,10 @@ injectGlobal`
   .t-r {
     text-align: right;
   }
+
+  .am-result .am-result-pic {
+    display: flex;
+    align-items: cener;
+    justify-content: center;
+  }
 `;

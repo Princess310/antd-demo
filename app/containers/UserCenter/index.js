@@ -61,8 +61,9 @@ const SubInfo = styled.div`
 `;
 
 const ItemWrapper = styled.div`
-  width: 100%;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const shareIconList = [
@@ -135,27 +136,31 @@ export class UserCenter extends React.PureComponent { // eslint-disable-line rea
         <WhiteSpace size="md" />
         <List>
           <Item
-            thumb={<Icon type={require('icons/icon-core/like.svg')} color={pallete.theme} />}
+            thumb={<Icon type={require('icons/ali/多人.svg')} color={pallete.theme} />}
             arrow="horizontal"
-            onClick={() => {}}
+            onClick={() => {
+              browserHistory.push('/userCenterVisitor');
+            }}
           >访客</Item>
           <Item
-            thumb={<Icon type={require('icons/icon-core/like.svg')} color={pallete.theme} />}
+            thumb={<Icon type={require('icons/ali/我的需求.svg')} color={pallete.theme} />}
             arrow="horizontal"
             onClick={() => {}}
           >我的供求</Item>
           <Item
-            thumb={<Icon type={require('icons/icon-core/like.svg')} color={pallete.theme} />}
+            thumb={<Icon type={require('icons/ali/朋友圈.svg')} color={pallete.theme} />}
             arrow="horizontal"
             onClick={() => {}}
           >我的交流</Item>
           <Item
-            thumb={<Icon type={require('icons/icon-core/like.svg')} color={pallete.theme} />}
+            thumb={<Icon type={require('icons/ali/收藏.svg')} color={pallete.theme} />}
             arrow="horizontal"
-            onClick={() => {}}
+            onClick={() => {
+              browserHistory.push('/userCenterCollects');
+            }}
           >我的收藏</Item>
           <Item
-            thumb={<Icon type={require('icons/icon-core/like.svg')} color={pallete.theme} />}
+            thumb={<Icon type={require('icons/ali/我的钱包.svg')} color={pallete.theme} />}
             arrow="horizontal"
             onClick={() => {}}
           >我的钱包</Item>
@@ -163,7 +168,7 @@ export class UserCenter extends React.PureComponent { // eslint-disable-line rea
         <WhiteSpace size="md" />
         <List>
           <Item
-            thumb={<Icon type={require('icons/icon-core/like.svg')} color={pallete.theme} />}
+            thumb={<Icon type={require('icons/ali/感叹号.svg')} color={pallete.theme} />}
             arrow="horizontal"
             onClick={() => {}}
           >成为认证用户</Item>
@@ -174,7 +179,7 @@ export class UserCenter extends React.PureComponent { // eslint-disable-line rea
             onClick={this.showShareActionSheet}
           >
             <ItemWrapper>
-              <Icon type={require('icons/icon-core/like.svg')} color={pallete.theme} />
+              <Icon type={require('icons/ali/分享.svg')} color={pallete.theme} />
               <span style={{ marginLeft: '0.16rem' }}>邀请好友帮你增加影响力</span>
             </ItemWrapper>
           </Item>

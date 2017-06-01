@@ -88,6 +88,8 @@ module.exports = (options) => ({
       },
     }),
     new webpack.NamedModulesPlugin(),
+    new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /zh-cn/),
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
   ]),
   resolve: {
     modules: ['app', 'node_modules', path.join(__dirname, './node_modules')],

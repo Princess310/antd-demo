@@ -50,7 +50,7 @@ export class SelectAddress extends React.PureComponent { // eslint-disable-line 
     const { saveUserInfo } = this.props;
 
     saveUserInfo({
-      city_location: cityName,
+      company_locate: cityName,
     });
   }
 
@@ -91,15 +91,15 @@ export class SelectAddress extends React.PureComponent { // eslint-disable-line 
           renderHeader={() => (
             <div>
               <div>当前选择城市</div>
-              {currentUser.city_location !== '' &&
+              {currentUser.company_locate !== '' &&
                 <Button
                   className="btn"
                   size="small"
                   style={{marginTop: '0.18rem'}}
                   inline
-                  onClick={() => this.handleSave(currentUser.city_location)}
+                  onClick={() => this.handleSave(currentUser.company_locate)}
                 >
-                  {currentUser.city_location}
+                  {currentUser.company_locate}
                 </Button>
               }
             </div>

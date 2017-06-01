@@ -62,7 +62,7 @@ function userBlackListReducer(state = initialState, action) {
       const list = state.get('list');
 
       const newList = list.filter((user) => {
-        user.id !== id
+        return user.id !== id
       });
 
       return state.set('list', newList);

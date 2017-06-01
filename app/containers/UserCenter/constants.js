@@ -17,3 +17,15 @@ export const SVAE_BUSINESS_INFO = 'app/UserCenter/SVAE_BUSINESS_INFO';
 
 export const FETCH_CITY_INFO = 'app/UserCenter/FETCH_CITY_INFO';
 export const LAOD_CITY_INFO = 'app/UserCenter/LAOD_CITY_INFO';
+
+export const FETCH_USER_VISITOR = 'app/UserCenter/FETCH_USER_VISITOR';
+export const LOAD_USER_VISITOR = 'app/UserCenter/LOAD_USER_VISITOR';
+export const LOAD_USER_VISITOR_REFRESH = 'app/UserCenter/LOAD_USER_VISITOR_REFRESH';
+export const LOAD_USER_VISITOR_LOADING = 'app/UserCenter/LOAD_USER_VISITOR_LOADING';
+
+export const FETCH_USER_COLLECTS= 'app/UserCenter/FETCH_USER_COLLECTS';
+export const LOAD_USER_COLLECTS = 'app/UserCenter/LOAD_USER_COLLECTS';
+export const LOAD_USER_COLLECTS_REFRESH = 'app/UserCenter/LOAD_USER_COLLECTS_REFRESH';
+export const LOAD_USER_COLLECTS_LOADING = 'app/UserCenter/LOAD_USER_COLLECTS_LOADING';
+export const DELETE_USER_COLLECT = 'app/UserCenter/DELETE_USER_COLLECT';
+export const REMOVE_USER_COLLECT = 'app/UserCenter/REMOVE_USER_COLLECT';
