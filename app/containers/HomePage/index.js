@@ -12,16 +12,13 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { FormattedMessage } from 'react-intl';
 import { browserHistory } from 'react-router';
 import { TabBar, Icon } from 'antd-mobile';
 
-import messages from './messages';
 import { makeSelectCurrentUser } from './selectors';
 import {
   fetchUser,
 } from './actions';
-import styles from './styles.scss';
 
 import UserCenter from '../UserCenter';
 
@@ -54,7 +51,13 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
     return (
       <div style={{ backgroundColor: 'white', height: '100%', textAlign: 'center' }}>
         <div style={{ paddingTop: 60 }}>你已点击“{pageText}” tab， 当前展示“{pageText}”信息</div>
-        <a style={{ display: 'block', marginTop: 40, marginBottom: 600, color: '#108ee9' }}
+        <a
+          style={{
+            display: 'block',
+            marginTop: 40,
+            marginBottom: 600,
+            color: '#108ee9',
+          }}
           onClick={(e) => {
             e.preventDefault();
             this.setState({
@@ -83,17 +86,23 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
           <TabBar.Item
             title="生活"
             key="生活"
-            icon={<div style={{
-              width: '0.44rem',
-              height: '0.44rem',
-              background: 'url(https://zos.alipayobjects.com/rmsportal/sifuoDUQdAFKAVcFGROC.svg) center center /  0.42rem 0.42rem no-repeat' }}
-            />
+            icon={
+              <div
+                style={{
+                  width: '0.44rem',
+                  height: '0.44rem',
+                  background: 'url(https://zos.alipayobjects.com/rmsportal/sifuoDUQdAFKAVcFGROC.svg) center center /  0.42rem 0.42rem no-repeat',
+                }}
+              />
             }
-            selectedIcon={<div style={{
-              width: '0.44rem',
-              height: '0.44rem',
-              background: 'url(https://zos.alipayobjects.com/rmsportal/iSrlOTqrKddqbOmlvUfq.svg) center center /  0.42rem 0.42rem no-repeat' }}
-            />
+            selectedIcon={
+              <div
+                style={{
+                  width: '0.44rem',
+                  height: '0.44rem',
+                  background: 'url(https://zos.alipayobjects.com/rmsportal/iSrlOTqrKddqbOmlvUfq.svg) center center /  0.42rem 0.42rem no-repeat',
+                }}
+              />
             }
             selected={this.state.selectedTab === 'blueTab'}
             badge={120}
@@ -124,17 +133,21 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
           </TabBar.Item>
           <TabBar.Item
             icon={
-              <div style={{
-                width: '0.44rem',
-                height: '0.44rem',
-                background: 'url(https://zos.alipayobjects.com/rmsportal/psUFoAMjkCcjqtUCNPxB.svg) center center /  0.42rem 0.42rem no-repeat' }}
+              <div
+                style={{
+                  width: '0.44rem',
+                  height: '0.44rem',
+                  background: 'url(https://zos.alipayobjects.com/rmsportal/psUFoAMjkCcjqtUCNPxB.svg) center center /  0.42rem 0.42rem no-repeat',
+                }}
               />
             }
             selectedIcon={
-              <div style={{
-                width: '0.44rem',
-                height: '0.44rem',
-                background: 'url(https://zos.alipayobjects.com/rmsportal/IIRLrXXrFAhXVdhMWgUI.svg) center center /  0.42rem 0.42rem no-repeat' }}
+              <div
+                style={{
+                  width: '0.44rem',
+                  height: '0.44rem',
+                  background: 'url(https://zos.alipayobjects.com/rmsportal/IIRLrXXrFAhXVdhMWgUI.svg) center center /  0.42rem 0.42rem no-repeat',
+                }}
               />
             }
             title="朋友"
@@ -174,12 +187,13 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
 HomePage.propTypes = {
   getUser: PropTypes.func,
   currentUser: PropTypes.object,
+  location: PropTypes.object,
+  children: PropTypes.node,
 };
 
 export function mapDispatchToProps(dispatch) {
   return {
     getUser: () => dispatch(fetchUser()),
-    getIndustry: () => dispatch(fetchIndustry()),
   };
 }
 

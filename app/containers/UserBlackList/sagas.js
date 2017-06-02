@@ -35,8 +35,8 @@ export function* deleteBlack(action) {
 }
 
 export function* defaultSaga() {
-   const watcher = yield takeLatest(FETCH_LIST, fetchList);
-   const watcherDelete = yield takeLatest(DELETE_BLACK, deleteBlack);
+  const watcher = yield takeLatest(FETCH_LIST, fetchList);
+  const watcherDelete = yield takeLatest(DELETE_BLACK, deleteBlack);
 
   // Suspend execution until location changes
   yield take(LOCATION_CHANGE);

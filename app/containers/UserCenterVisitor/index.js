@@ -6,7 +6,6 @@
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { browserHistory } from 'react-router';
 
@@ -14,15 +13,12 @@ import UserHeaderBar from 'components/UserHeaderBar';
 import DateInfo from 'components/DateInfo';
 import UserSubInfoBar from 'components/UserSubInfoBar';
 import AppContent from 'components/AppContent';
-import { NavBar, Tabs, ListView, RefreshControl, List, WhiteSpace, } from 'antd-mobile';
+import { NavBar, Tabs, ListView, RefreshControl } from 'antd-mobile';
 
 import { fetchVistor } from 'containers/UserCenter/actions';
 import { makeSelectUserVisitorUsers, makeSelectUserVisitorMine } from 'containers/UserCenter/selectors';
-import messages from './messages';
 
 const TabPane = Tabs.TabPane;
-const Item = List.Item;
-const Brief = Item.Brief;
 export class UserCenterVisitor extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
     super(props);
@@ -46,7 +42,7 @@ export class UserCenterVisitor extends React.PureComponent { // eslint-disable-l
         page: 1,
         dataSourceMine: dataSourceMine.cloneWithRows(this.initData),
       },
-      mineLoaded: false,
+      usersLoaded: false,
     };
   }
 
@@ -56,39 +52,6 @@ export class UserCenterVisitor extends React.PureComponent { // eslint-disable-l
     getVisitor(1);
   }
 
-  callback = (key) => {
-    const { visitorMine, getVisitor }= this.props;
-    const { mineLoaded } = this.state;
-
-    if (Number(key) === 0 && !mineLoaded) {
-      getVisitor(0);
-      this.setState({
-        mineLoaded: true,
-        type: key,
-      });
-    } else {
-      this.setState({
-        type: key,
-      });
-    }
-  }
-
-  handleTabClick = (key) => {
-    const { visitorMine, getVisitor }= this.props;
-    const { mineLoaded } = this.state;
-
-    if (Number(key) === 0 && !mineLoaded) {
-      getVisitor(0);
-      this.setState({
-        mineLoaded: true,
-        type: key,
-      });
-    } else {
-      this.setState({
-        type: key,
-      });
-    }
-  }
   onRefresh = (type) => {
     const { startPage } = this.state;
     const { getVisitor } = this.props;
@@ -96,7 +59,7 @@ export class UserCenterVisitor extends React.PureComponent { // eslint-disable-l
     getVisitor(type, startPage);
   }
 
-  onEndReached = (event) => {
+  onEndReached = () => {
     const { type, users, mine } = this.state;
     const { visitorUsers, visitorMine, getVisitor } = this.props;
 
@@ -109,8 +72,8 @@ export class UserCenterVisitor extends React.PureComponent { // eslint-disable-l
       this.setState({
         users: {
           ...users,
-          page: users.page + 1
-        }
+          page: users.page + 1,
+        },
       });
     } else {
       if (visitorMine.loading || !visitorMine.hasNext) {
@@ -121,35 +84,67 @@ export class UserCenterVisitor extends React.PureComponent { // eslint-disable-l
       this.setState({
         mine: {
           ...mine,
-          page: mine.page + 1
-        }
+          page: mine.page + 1,
+        },
       });
     }
   }
-  
-  render() {
-    const { visitorUsers, visitorMine }= this.props;
 
-    const row = (user, sectionID, rowID) => {
-      return (
-        <div>
-          <UserHeaderBar
-            user={user}
-            rightContent={
-              <DateInfo time={user.created_at} style={{ alignSelf: 'flex-end' }} />
-            }
-          />
-          <UserSubInfoBar
-            influence={user.influence}
-            progress={user.integrity_progress}
-            level={user.integrity_level}
-            distance={user.distance}
-            city={user.city_name}
-            style={{ marginBottom: '0.16rem' }}
-          />
-        </div>
-      );
+  callback = (key) => {
+    const { getVisitor } = this.props;
+    const { usersLoaded } = this.state;
+
+    if (Number(key) === 0 && !usersLoaded) {
+      getVisitor(0);
+      this.setState({
+        usersLoaded: true,
+        type: key,
+      });
+    } else {
+      this.setState({
+        type: key,
+      });
     }
+  }
+
+  handleTabClick = (key) => {
+    const { getVisitor } = this.props;
+    const { usersLoaded } = this.state;
+
+    if (Number(key) === 0 && !usersLoaded) {
+      getVisitor(0);
+      this.setState({
+        usersLoaded: true,
+        type: key,
+      });
+    } else {
+      this.setState({
+        type: key,
+      });
+    }
+  }
+
+  render() {
+    const { visitorUsers, visitorMine } = this.props;
+
+    const row = (user) => (
+      <div>
+        <UserHeaderBar
+          user={user}
+          rightContent={
+            <DateInfo time={user.created_at} style={{ alignSelf: 'flex-end' }} />
+          }
+        />
+        <UserSubInfoBar
+          influence={user.influence}
+          progress={user.integrity_progress}
+          level={user.integrity_level}
+          distance={user.distance}
+          city={user.city_name}
+          style={{ marginBottom: '0.16rem' }}
+        />
+      </div>
+    );
 
     return (
       <div>

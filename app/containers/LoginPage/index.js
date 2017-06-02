@@ -6,15 +6,13 @@
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import styled from 'styled-components';
 
-import { List, InputItem, WhiteSpace, Button } from 'antd-mobile';
+import { List, InputItem, Button } from 'antd-mobile';
 
 import makeSelectLoginPage from './selectors';
-import messages from './messages';
-import { doLogin, loadLoginError } from './actions';
+import { doLogin } from './actions';
 
 const BtnWrapper = styled.div`
   margin: 0.64rem 0.16rem 0;
@@ -81,7 +79,6 @@ export class LoginPage extends React.PureComponent { // eslint-disable-line reac
 
 LoginPage.propTypes = {
   doLogin: PropTypes.func,
-  setLoadingError: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -91,7 +88,6 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     doLogin: (u, p) => dispatch(doLogin(u, p)),
-    setLoadingError: (b, d) => dispatch(loadLoginError(b, d)),
   };
 }
 

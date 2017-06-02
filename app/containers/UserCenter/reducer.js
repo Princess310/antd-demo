@@ -11,7 +11,6 @@ import {
   LOAD_BUSINESS_INFO,
   LAOD_CITY_INFO,
   LOAD_USER_VISITOR,
-  LOAD_MINE_VISITOR,
   LOAD_USER_VISITOR_REFRESH,
   LOAD_USER_VISITOR_LOADING,
 
@@ -77,13 +76,13 @@ function userCenterReducer(state = initialState, action) {
       let hasNext = true;
 
       if (page) {
-        if(page.current_page === 1){
+        if (page.current_page === 1) {
           newList = list;
-        } else if(page.current_page <= page.page_count){
+        } else if (page.current_page <= page.page_count) {
           newList = [...newList, ...list];
         }
 
-        if(page.current_page >= page.page_count){
+        if (page.current_page >= page.page_count) {
           hasNext = false;
         }
       } else {
@@ -120,13 +119,13 @@ function userCenterReducer(state = initialState, action) {
       let hasNext = true;
 
       if (page) {
-        if(page.current_page === 1){
+        if (page.current_page === 1) {
           newList = list;
-        } else if(page.current_page <= page.page_count){
+        } else if (page.current_page <= page.page_count) {
           newList = [...newList, ...list];
         }
 
-        if(page.current_page >= page.page_count){
+        if (page.current_page >= page.page_count) {
           hasNext = false;
         }
       } else {
@@ -149,7 +148,7 @@ function userCenterReducer(state = initialState, action) {
     }
     case LOAD_USER_COLLECTS_LOADING: {
       const { loading } = action.payload;
-      
+
       const info = state.get('collects');
 
       const result = info.set('loading', loading);
@@ -160,9 +159,7 @@ function userCenterReducer(state = initialState, action) {
       const info = state.get('collects');
       const list = info.get('list');
 
-      const newList = list.filter((moment) => {
-        return moment.id !== id
-      });
+      const newList = list.filter((moment) => (moment.id !== id));
 
       const result = info.set('list', newList);
       return state.set('collects', result);

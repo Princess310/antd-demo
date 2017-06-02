@@ -6,15 +6,12 @@
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import request from 'utils/request';
 import pallete from 'styles/colors';
 
 import { browserHistory } from 'react-router';
 import { NavBar, List, InputItem, Icon, WhiteSpace, WingBlank, Button, Toast } from 'antd-mobile';
-
-import messages from './messages';
 
 let timer = null;
 export class ResetPassword extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
@@ -34,44 +31,20 @@ export class ResetPassword extends React.PureComponent { // eslint-disable-line 
     }
   }
 
-  changeInputType = () => {
-    this.setState({
-      pwdInputType: this.state.pwdInputType === 'text' ? 'password' : 'text',
-    });
-  }
-
-  handlePhone = (value) => {
-    this.setState({
-      phone: value,
-    });
-  }
-
-  handleCode = (value) => {
-    this.setState({
-      code: value,
-    });
-  }
-
-  handlePassword = (value) => {
-    this.setState({
-      password: value,
-    });
-  }
-
   getCode = () => {
     const { phone, time, startTime } = this.state;
 
     if (time < startTime) {
       return;
     }
-    
+
     const self = this;
     request.doGet('code/getcode', {
       type: 1,
       username: phone.replace(/\s/g, ''),
     }).then(() => {
       Toast.success('验证码已发送', 1);
-      
+
       timer = setInterval(() => {
         self.setState({
           time: (this.state.time - 1),
@@ -88,8 +61,32 @@ export class ResetPassword extends React.PureComponent { // eslint-disable-line 
     });
   }
 
+  handleCode = (value) => {
+    this.setState({
+      code: value,
+    });
+  }
+
+  handlePhone = (value) => {
+    this.setState({
+      phone: value,
+    });
+  }
+
+  handlePassword = (value) => {
+    this.setState({
+      password: value,
+    });
+  }
+
+  changeInputType = () => {
+    this.setState({
+      pwdInputType: this.state.pwdInputType === 'text' ? 'password' : 'text',
+    });
+  }
+
   savePassword = () => {
-    const {phone, code, password} = this.state;
+    const { phone, code, password } = this.state;
 
     request.doPost('user/reset-password', {
       username: phone.replace(/\s/g, ''),

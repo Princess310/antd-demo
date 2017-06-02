@@ -24,7 +24,7 @@ import {
   loadUserVistor,
   loadVisitorRefresh,
   loadVisitorLoading,
-  
+
   loadCollects,
   loadCollectsRefresh,
   loadCollectsLoading,
@@ -49,7 +49,7 @@ export function* fetchIndustry() {
   try {
     const res = yield request.doGet('industry/industry-lists');
 
-    const { list } = res
+    const { list } = res;
     // industry list set in first child for back data
     const { children } = list[0];
     yield put(loadIndustry(children));
@@ -86,7 +86,7 @@ export function* fetchBusiness() {
 export function* saveBusiness(action) {
   try {
     const { params } = action.payload;
-    const res = yield request.doPut('user/business', params);
+    yield request.doPut('user/business', params);
 
     browserHistory.goBack();
   } catch (err) {
@@ -171,7 +171,7 @@ export function* defaultSaga() {
   yield cancel(watcherIndustry);
   yield cancel(watcherService);
   yield cancel(watcherBusiness);
-  yield cancel(watcherSaveBusiness)
+  yield cancel(watcherSaveBusiness);
   yield cancel(watcherCity);
   yield cancel(watcherVisitor);
   yield cancel(watcherCollects);

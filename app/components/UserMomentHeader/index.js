@@ -20,18 +20,18 @@ const Wrapper = styled(FlexRow)`
   display: flex;
   padding: 0.24rem;
   background-color: ${pallete.white};
-`
+`;
 const ItemWrapper = styled.div`
   margin-Left: 0.12rem;
   font-size: 0.24rem;
   color: ${pallete.text.words};
-`
+`;
 
 const SubInfoWrapper = styled.div`
   margin-top: 0.04rem;
   font-size: 0.24rem;
   color: ${pallete.text.words};
-`
+`;
 
 class UserMomentHeader extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   static defaultProps = {
@@ -41,21 +41,21 @@ class UserMomentHeader extends React.PureComponent { // eslint-disable-line reac
 
   render() {
     const { user, avatarSize, style, rightContent } = this.props;
-    
+
     return (
       <Wrapper style={style}>
         <Avatar
           size={avatarSize ? avatarSize : '0.72rem'}
           id={user.id}
           avatar={user.avatar}
-          isVip={user.verify_status == 2}
+          isVip={Number(user.verify_status) === 2}
           linkUser={true}
         />
         <FlexSB style={{ width: '100%' }}>
           {
             String(user.source_type) === '1' ?
             (
-               <FlexColumn style={{ padding: '0.04rem 0.24rem' }}>
+              <FlexColumn style={{ padding: '0.04rem 0.24rem' }}>
                 <FlexRowCenter>
                   <section style={{ fontSize: '0.28rem' }}>{user.nickname}</section>
                   <LevelTag>{user.tag_identity_name}</LevelTag>

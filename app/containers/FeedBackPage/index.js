@@ -6,16 +6,14 @@
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
-import makeSelectFeedBackPage from './selectors';
 import { browserHistory } from 'react-router';
 
 import { NavBar, List, TextareaItem, WhiteSpace, ImagePicker, Toast } from 'antd-mobile';
 import MenuBtn from 'components/MenuBtn';
 
-import messages from './messages';
 import { saveInfo } from './actions';
+import makeSelectFeedBackPage from './selectors';
 
 export class FeedBackPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   state = {
@@ -24,17 +22,17 @@ export class FeedBackPage extends React.PureComponent { // eslint-disable-line r
     filesMax: 9,
   }
 
+  onChange = (files) => {
+    this.setState({
+      files,
+    });
+  };
+
   handleMessage = (value) => {
     this.setState({
       message: value,
     });
   }
-
-  onChange = (files, type, index) => {
-    this.setState({
-      files,
-    });
-  };
 
   handleSave = () => {
     const { message, files } = this.state;
@@ -58,7 +56,7 @@ export class FeedBackPage extends React.PureComponent { // eslint-disable-line r
           mode="light"
           onLeftClick={() => browserHistory.goBack()}
           rightContent={[
-            <MenuBtn key="0" onClick={this.handleSave}>发送</MenuBtn>
+            <MenuBtn key="0" onClick={this.handleSave}>发送</MenuBtn>,
           ]}
         >
           意见反馈
@@ -76,7 +74,6 @@ export class FeedBackPage extends React.PureComponent { // eslint-disable-line r
         <ImagePicker
           files={files}
           onChange={this.onChange}
-          onImageClick={(index, fs) => console.log(index, fs)}
           selectable={files.length < filesMax}
         />
       </div>

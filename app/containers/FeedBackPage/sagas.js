@@ -1,4 +1,4 @@
-import { take, cancel, put, takeLatest } from 'redux-saga/effects';
+import { take, cancel, takeLatest } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { browserHistory } from 'react-router';
 
@@ -11,10 +11,10 @@ import { SAVE_INFO } from './constants';
 export function* saveInfo(action) {
   try {
     const { message, files } = action.payload;
-    let pics = [];
+    const pics = [];
 
     // compress images and upload to oss
-    for (let i = 0; i < files.length; i++) {
+    for (let i = 0; i < files.length; i += 1) {
       const url = yield uploadFile(files[i].file, oss.getFolderPath('moments', '1'));
       pics.push(url);
     }

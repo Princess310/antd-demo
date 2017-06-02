@@ -4,7 +4,7 @@ module.exports = {
   plugins: [
     pxtorem({
       rootValue: 100,
-      propWhiteList: []
-    })
+      propWhiteList: [],
+    }),
   ],
 };

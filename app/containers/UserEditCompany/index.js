@@ -6,7 +6,6 @@
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { makeSelectCurrentUser } from 'containers/HomePage/selectors';
 
@@ -15,7 +14,6 @@ import { NavBar, List, TextareaItem, WhiteSpace } from 'antd-mobile';
 import MenuBtn from 'components/MenuBtn';
 
 import { saveUser } from 'containers/UserCenter/actions';
-import messages from './messages';
 
 export class UserEditCompany extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
@@ -24,7 +22,7 @@ export class UserEditCompany extends React.PureComponent { // eslint-disable-lin
     const { currentUser } = props;
     this.state = {
       address: currentUser.address,
-    }
+    };
   }
 
   componentWillReceiveProps(nextProps) {
@@ -32,7 +30,7 @@ export class UserEditCompany extends React.PureComponent { // eslint-disable-lin
 
     this.setState({
       address: currentUser.address,
-    })
+    });
   }
 
   handleChange = (value) => {
@@ -43,7 +41,7 @@ export class UserEditCompany extends React.PureComponent { // eslint-disable-lin
 
   handleSave = () => {
     const { saveUserInfo } = this.props;
-    const { address} = this.state;
+    const { address } = this.state;
 
     saveUserInfo({
       address,
@@ -52,7 +50,7 @@ export class UserEditCompany extends React.PureComponent { // eslint-disable-lin
 
   render() {
     const { address } = this.state;
-    
+
     return (
       <div>
         <NavBar
@@ -60,7 +58,7 @@ export class UserEditCompany extends React.PureComponent { // eslint-disable-lin
           mode="light"
           onLeftClick={() => browserHistory.goBack()}
           rightContent={[
-            <MenuBtn key="0" onClick={this.handleSave}>保存</MenuBtn>
+            <MenuBtn key="0" onClick={this.handleSave}>保存</MenuBtn>,
           ]}
         >
           公司地址

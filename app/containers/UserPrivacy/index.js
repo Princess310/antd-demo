@@ -6,12 +6,9 @@
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
 
 import { browserHistory } from 'react-router';
-import { NavBar, List, WhiteSpace, } from 'antd-mobile';
-
-import messages from './messages';
+import { NavBar, List, WhiteSpace } from 'antd-mobile';
 
 const Item = List.Item;
 export class UserPrivacy extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function

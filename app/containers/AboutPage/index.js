@@ -6,15 +6,13 @@
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
 import { browserHistory } from 'react-router';
 
-import { NavBar, List, WhiteSpace, } from 'antd-mobile';
+import { NavBar, List, WhiteSpace } from 'antd-mobile';
 import Avatar from 'components/Avatar';
 import FlexCenter from 'components/FlexCenter';
 
 import logo from 'assets/images/logo-icon.png';
-import messages from './messages';
 
 const Item = List.Item;
 export class AboutPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
@@ -30,7 +28,7 @@ export class AboutPage extends React.PureComponent { // eslint-disable-line reac
         </NavBar>
         <WhiteSpace size="md" />
         <FlexCenter>
-          <Avatar id='' avatar={logo} />
+          <Avatar id="" avatar={logo} />
         </FlexCenter>
         <WhiteSpace size="md" />
         <FlexCenter style={{ fontSize: '0.24rem' }}>V1.5.0</FlexCenter>
@@ -44,7 +42,7 @@ export class AboutPage extends React.PureComponent { // eslint-disable-line reac
                 state: {
                   link: 'http://djkwlw.com/app_help.html',
                   title: '常见问题与帮助',
-                }
+                },
               });
             }}
           >常见问题与帮助</Item>

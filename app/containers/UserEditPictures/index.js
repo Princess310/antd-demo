@@ -6,7 +6,6 @@
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 
 import { makeSelectCurrentUser } from 'containers/HomePage/selectors';
@@ -15,10 +14,8 @@ import { fetchBusiness, saveBusiness } from 'containers/UserCenter/actions';
 import oss from 'utils/oss';
 
 import { browserHistory } from 'react-router';
-import { NavBar, WhiteSpace, ImagePicker } from 'antd-mobile';
+import { NavBar, ImagePicker } from 'antd-mobile';
 import MenuBtn from 'components/MenuBtn';
-
-import messages from './messages';
 
 export class UserEditPictures extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
@@ -26,13 +23,11 @@ export class UserEditPictures extends React.PureComponent { // eslint-disable-li
 
     const { businessInfo, getBusiness } = props;
     this.state = {
-      files: businessInfo ? businessInfo.pictures.map((file) => {
-        return {
-          url: file,
-        };
-      }) : [],
+      files: businessInfo ? businessInfo.pictures.map((file) => ({
+        url: file,
+      })) : [],
       filesMax: 9,
-    }
+    };
 
     getBusiness();
   }
@@ -41,18 +36,16 @@ export class UserEditPictures extends React.PureComponent { // eslint-disable-li
     const { businessInfo } = nextProps;
 
     this.setState({
-      files: businessInfo ? businessInfo.pictures.map((file) => {
-        return {
-          url: file,
-        };
-      }) : [],
-    })
+      files: businessInfo ? businessInfo.pictures.map((file) => ({
+        url: file,
+      })) : [],
+    });
   }
 
-  onChange = (files, type, index) => {
+  onChange = (files) => {
     // when do select picture, we upload the file to the OSS
     const file = files[files.length - 1].file;
-    const { currentUser: { id } }= this.props;
+    const { currentUser: { id } } = this.props;
 
     if (file) {
       const { name, size } = file;
@@ -84,10 +77,8 @@ export class UserEditPictures extends React.PureComponent { // eslint-disable-li
   handleSave = () => {
     const { files } = this.state;
     const { saveBusinessInfo } = this.props;
-    const filesResult = files.map((file) => {
-      return oss.getImgSourcePath(file.url);
-    });
-    
+    const filesResult = files.map((file) => oss.getImgSourcePath(file.url));
+
     saveBusinessInfo({
       pictures: JSON.stringify(filesResult),
     });
@@ -111,7 +102,7 @@ export class UserEditPictures extends React.PureComponent { // eslint-disable-li
           mode="light"
           onLeftClick={() => browserHistory.goBack()}
           rightContent={[
-            <MenuBtn key="0" onClick={this.handleSave}>保存</MenuBtn>
+            <MenuBtn key="0" onClick={this.handleSave}>保存</MenuBtn>,
           ]}
         >
           展示图片
@@ -119,7 +110,6 @@ export class UserEditPictures extends React.PureComponent { // eslint-disable-li
         <ImagePicker
           files={suitableFiles}
           onChange={this.onChange}
-          onImageClick={(index, fs) => console.log(index, fs)}
           selectable={files.length < filesMax}
         />
       </div>

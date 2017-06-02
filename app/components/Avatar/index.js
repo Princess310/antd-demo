@@ -36,7 +36,6 @@ class Avatar extends React.PureComponent { // eslint-disable-line react/prefer-s
     avatar: defaultAvatar,
     isVip: false,
     size: '1.04rem',
-    alt: '',
     linkUser: false,
   }
 
@@ -46,6 +45,7 @@ class Avatar extends React.PureComponent { // eslint-disable-line react/prefer-s
     return (
       <Wrapper>
         <img
+          role="presentation"
           style={{
             width: size,
             height: size,
@@ -73,7 +73,6 @@ Avatar.propTypes = {
   avatar: PropTypes.string,
   isVip: PropTypes.bool,
   size: PropTypes.string,
-  alt: PropTypes.string,
   linkUser: PropTypes.bool,
 };
 

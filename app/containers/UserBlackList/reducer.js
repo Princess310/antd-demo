@@ -28,13 +28,13 @@ function userBlackListReducer(state = initialState, action) {
       let hasNext = true;
 
       if (page) {
-        if(page.current_page === 1){
+        if (page.current_page === 1) {
           newList = list;
-        } else if(page.current_page <= page.page_count){
+        } else if (page.current_page <= page.page_count) {
           newList = [...newList, ...list];
         }
 
-        if(page.current_page >= page.page_count){
+        if (page.current_page >= page.page_count) {
           hasNext = false;
         }
       } else {
@@ -61,9 +61,7 @@ function userBlackListReducer(state = initialState, action) {
       const { id } = action.payload;
       const list = state.get('list');
 
-      const newList = list.filter((user) => {
-        return user.id !== id
-      });
+      const newList = list.filter((user) => (user.id !== id));
 
       return state.set('list', newList);
     }

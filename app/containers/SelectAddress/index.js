@@ -6,15 +6,13 @@
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
 import { browserHistory } from 'react-router';
 import { createStructuredSelector } from 'reselect';
 import { makeSelectCurrentUser } from 'containers/HomePage/selectors';
 import { makeSelectUserCenterCity } from 'containers/UserCenter/selectors';
 
-import { NavBar, ListView, List, WhiteSpace, Button } from 'antd-mobile';
+import { NavBar, ListView, List, Button } from 'antd-mobile';
 import { fetchCity, saveUser } from 'containers/UserCenter/actions';
-import messages from './messages';
 
 const Item = List.Item;
 export class SelectAddress extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
@@ -59,14 +57,14 @@ export class SelectAddress extends React.PureComponent { // eslint-disable-line 
     const dataBlob = {};
     const sectionIDs = [];
     const rowIDs = [];
-    
+
     if (normal_city) {
       normal_city.forEach((item, index) => {
-        const { id, name, list } = item;
+        const { list } = item;
 
         if (item && item.id) {
-          sectionIDs.push('section_' + index);
-          dataBlob['section_' + index] = item.name;
+          sectionIDs.push(`section_${index}`);
+          dataBlob[`section_${index}`] = item.name;
           rowIDs[index] = [];
 
           list.forEach((city) => {
@@ -95,7 +93,7 @@ export class SelectAddress extends React.PureComponent { // eslint-disable-line 
                 <Button
                   className="btn"
                   size="small"
-                  style={{marginTop: '0.18rem'}}
+                  style={{ marginTop: '0.18rem' }}
                   inline
                   onClick={() => this.handleSave(currentUser.company_locate)}
                 >
@@ -104,8 +102,8 @@ export class SelectAddress extends React.PureComponent { // eslint-disable-line 
               }
             </div>
           )}
-          renderSectionHeader={sectionData => (<div className="ih">{sectionData}</div>)}
-          renderRow={rowData => (<Item onClick={() => this.handleSave(rowData)}>{rowData}</Item>)}
+          renderSectionHeader={(sectionData) => (<div className="ih">{sectionData}</div>)}
+          renderRow={(rowData) => (<Item onClick={() => this.handleSave(rowData)}>{rowData}</Item>)}
           className="fortest"
           style={{
             height: document.documentElement.clientHeight,

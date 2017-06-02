@@ -8,8 +8,8 @@ const AppContent = styled.div`
   right: 0;
   bottom: 0;
   overflow-y: scroll;
-	overflow-x: hidden;
-	-webkit-overflow-scrolling: touch;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
   & .am-list-body {
     background-color: ${pallete.background.antd};
   }

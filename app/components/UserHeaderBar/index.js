@@ -17,14 +17,14 @@ const Wrapper = styled(FlexRow)`
   display: flex;
   padding: 0.24rem;
   background-color: ${pallete.white};
-`
+`;
 const ItemWrapper = styled.div`
   marginLeft: 0.12rem;
   paddingLeft: 0.12rem;
   font-size: 0.24rem;
   color: ${pallete.text.words};
   borderLeft: 1px ${pallete.border.normal} solid;
-`
+`;
 
 class UserHeaderBar extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   static defaultProps = {
@@ -40,7 +40,7 @@ class UserHeaderBar extends React.PureComponent { // eslint-disable-line react/p
           size={avatarSize ? avatarSize : '0.72rem'}
           id={user.id}
           avatar={user.avatar}
-          isVip={user.verify_status == 2}
+          isVip={Number(user.verify_status) === 2}
           linkUser={true}
         />
         <FlexSB style={{ width: '100%' }}>
@@ -50,11 +50,13 @@ class UserHeaderBar extends React.PureComponent { // eslint-disable-line react/p
               {user.company && <ItemWrapper>{user.company}</ItemWrapper>}
               {user.position && <ItemWrapper>{user.position}</ItemWrapper>}
             </FlexRow>
-            <section style={{
-              marginTop: '0.04rem',
-              color: pallete.text.words,
-              fontSize: '0.24rem',
-            }}>{user.tag_identity_name}</section>
+            <section
+              style={{
+                marginTop: '0.04rem',
+                color: pallete.text.words,
+                fontSize: '0.24rem',
+              }}
+            >{user.tag_identity_name}</section>
           </FlexColumn>
           {rightContent && rightContent}
         </FlexSB>

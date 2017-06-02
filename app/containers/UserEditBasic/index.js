@@ -7,7 +7,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { makeSelectCurrentUser } from 'containers/HomePage/selectors';
 import { browserHistory } from 'react-router';
@@ -18,9 +17,6 @@ import MenuBtn from 'components/MenuBtn';
 
 import { saveUser } from 'containers/UserCenter/actions';
 import oss from 'utils/oss';
-
-import messages from './messages';
-import styles from './styles.scss';
 
 const FileItem = styled.input`
   position: absolute;
@@ -51,7 +47,7 @@ export class UserEditBasic extends React.PureComponent { // eslint-disable-line 
       nickname: currentUser.nickname,
       company: currentUser.company,
       position: currentUser.position,
-    }
+    };
   }
 
   componentWillReceiveProps(nextProps) {
@@ -64,7 +60,7 @@ export class UserEditBasic extends React.PureComponent { // eslint-disable-line 
       nickname: currentUser.nickname,
       company: currentUser.company,
       position: currentUser.position,
-    })
+    });
   }
 
   handleNickname = (value) => {
@@ -88,7 +84,6 @@ export class UserEditBasic extends React.PureComponent { // eslint-disable-line 
   handleFileChange = (e) => {
     const { id } = this.state;
     const file = e.target.files[0];
-    const self = this;
 
     if (file) {
       const { name, size } = file;
@@ -128,7 +123,7 @@ export class UserEditBasic extends React.PureComponent { // eslint-disable-line 
           mode="light"
           onLeftClick={() => browserHistory.goBack()}
           rightContent={[
-            <MenuBtn key="0" onClick={this.handleSave}>保存</MenuBtn>
+            <MenuBtn key="0" onClick={this.handleSave}>保存</MenuBtn>,
           ]}
         >
           基本资料
@@ -140,7 +135,7 @@ export class UserEditBasic extends React.PureComponent { // eslint-disable-line 
               <Avatar
                 id={id}
                 avatar={avatar}
-                isVip={verify_status == 2}
+                isVip={Number(verify_status) === 2}
               />
               <FileItem type="file" accept="image/jpg,image/jpeg,image/png,image/gif" onChange={this.handleFileChange} />
             </div>}

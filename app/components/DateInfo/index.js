@@ -8,12 +8,12 @@ import React, { PropTypes } from 'react';
 import pallete from 'styles/colors';
 import date from 'utils/date';
 
-class DataInfo extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+class DateInfo extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   render() {
     const { time, style } = this.props;
     const rootStyle = {
       fontSize: '0.24rem',
-      color: pallete.text.words
+      color: pallete.text.words,
     };
 
     return (
@@ -24,7 +24,7 @@ class DataInfo extends React.PureComponent { // eslint-disable-line react/prefer
   }
 }
 
-DataInfo.propTypes = {
+DateInfo.propTypes = {
   time: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number,
@@ -32,4 +32,4 @@ DataInfo.propTypes = {
   style: PropTypes.object,
 };
 
-export default DataInfo;
+export default DateInfo;

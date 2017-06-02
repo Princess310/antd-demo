@@ -6,7 +6,6 @@
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { browserHistory } from 'react-router';
 
@@ -14,7 +13,6 @@ import { NavBar, List, WhiteSpace, Modal } from 'antd-mobile';
 
 import { loadUser } from 'containers/App/actions';
 import makeSelectUserSettingPage from './selectors';
-import messages from './messages';
 
 const Item = List.Item;
 const alert = Modal.alert;
@@ -52,7 +50,7 @@ export class UserSettingPage extends React.PureComponent { // eslint-disable-lin
           <Item
             arrow="horizontal"
             onClick={() => {
-              browserHistory.push('/feedBack')
+              browserHistory.push('/feedBack');
             }}
           >意见反馈</Item>
         </List>
@@ -61,13 +59,17 @@ export class UserSettingPage extends React.PureComponent { // eslint-disable-lin
           <Item
             onClick={() => {
               alert('确定退出？', '', [
-                { text: '取消', onPress: () => console.log('cancel') },
-                { text: '确定', onPress: () => {
-                  // clear user info
-                  localStorage.setItem('access_token', '');
-                  this.props.setUser({});
-                  browserHistory.push('/login');
-                }, style: { fontWeight: 'bold' } },
+                { text: '取消' },
+                {
+                  text: '确定',
+                  onPress: () => {
+                    // clear user info
+                    localStorage.setItem('access_token', '');
+                    this.props.setUser({});
+                    browserHistory.push('/login');
+                  },
+                  style: { fontWeight: 'bold' },
+                },
               ]);
             }}
           >

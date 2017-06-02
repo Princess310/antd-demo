@@ -51,12 +51,12 @@ module.exports = require('./webpack.base.babel')({
     presets: ['babel-preset-react-hmre'].map(require.resolve),
     plugins: [
       [
-        "import",
+        'import',
         {
-          "style": "css",
-          "libraryName": "antd-mobile"
-        }
-      ]
+          style: 'css',
+          libraryName: 'antd-mobile',
+        },
+      ],
     ],
   },
 

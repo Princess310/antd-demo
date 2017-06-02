@@ -21,13 +21,11 @@ const makeSelectUserBlackList = () => createSelector(
 
 const makeSelectListStatus = () => createSelector(
   selectUserBlackListDomain(),
-  (substate) => {
-    return {
-      refresh: substate.get('refresh'),
-      hasNext: substate.get('hasNext'),
-      loading: substate.get('loading'),
-    }
-  }
+  (substate) => ({
+    refresh: substate.get('refresh'),
+    hasNext: substate.get('hasNext'),
+    loading: substate.get('loading'),
+  })
 );
 
 export {

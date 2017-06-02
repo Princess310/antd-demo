@@ -6,11 +6,8 @@
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
 import { browserHistory } from 'react-router';
 import { NavBar } from 'antd-mobile';
-
-import messages from './messages';
 
 export class BrowserPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   render() {
@@ -30,7 +27,7 @@ export class BrowserPage extends React.PureComponent { // eslint-disable-line re
           width="100%"
           scrolling="no"
           height="100%"
-          className='app-browser'
+          className="app-browser"
         />
       </div>
     );
@@ -38,13 +35,12 @@ export class BrowserPage extends React.PureComponent { // eslint-disable-line re
 }
 
 BrowserPage.propTypes = {
-  dispatch: PropTypes.func.isRequired,
+  location: PropTypes.object,
 };
 
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps() {
   return {
-    dispatch,
   };
 }
 

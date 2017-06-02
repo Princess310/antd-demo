@@ -6,7 +6,6 @@
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { browserHistory } from 'react-router';
 import pallete from 'styles/colors';
@@ -15,7 +14,6 @@ import Avatar from 'components/Avatar';
 import AppContent from 'components/AppContent';
 
 import { makeSelectCurrentUser } from './selectors';
-import messages from './messages';
 
 const briefStyle = {
   overflow: 'auto',
@@ -45,7 +43,7 @@ export class UserEdit extends React.PureComponent { // eslint-disable-line react
               thumb={<Avatar
                 id={currentUser.id}
                 avatar={currentUser.avatar}
-                isVip={currentUser.verify_status == 2}
+                isVip={Number(currentUser.verify_status) === 2}
               />}
               multipleLine
               arrow="horizontal"
@@ -56,14 +54,17 @@ export class UserEdit extends React.PureComponent { // eslint-disable-line react
               <div>{currentUser.nickname}</div>
               <Brief>
                 <section style={{ marginTop: '0.04rem' }}>
-                    {currentUser.position !== '' && <span>{currentUser.position}</span>}
-                    {currentUser.company !== '' && <span style={{
+                  {currentUser.position !== '' && <span>{currentUser.position}</span>}
+                  {currentUser.company !== '' &&
+                  <span
+                    style={{
                       display: 'inline-block',
                       marginLeft: '0.24rem',
                       paddingLeft: '0.24rem',
                       borderLeft: `1px ${pallete.border.normal} solid`,
-                    }}>{currentUser.company}</span>}
-                  </section>
+                    }}
+                  >{currentUser.company}</span>}
+                </section>
               </Brief>
             </Item>
           </List>

@@ -36,6 +36,17 @@ injectGlobal`
     bottom: 0;
   }
 
+  .home-container {
+    height: 100%;
+    padding-bottom: 1rem;
+  }
+
+  .user-edit-basic {
+    .am-list-item .am-input-control input {
+      text-align: right;
+    }
+  }
+
   .t-l {
     text-align: left;
   }

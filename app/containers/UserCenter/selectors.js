@@ -3,7 +3,7 @@ import { createSelector } from 'reselect';
 /**
  * Direct selector to the userCenter state domain
  */
- const selectUserCenter = (state) => state.get('userCenter');
+const selectUserCenter = (state) => state.get('userCenter');
 
 /**
  * Other specific selectors

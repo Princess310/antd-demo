@@ -37,7 +37,7 @@ export default function createRoutes(store) {
           reducer, sagas,
           userCenterReducer, userCenterSagas,
           component,
-        ]) =>{
+        ]) => {
           injectReducer('home', reducer.default);
           injectSagas(sagas.default);
 
@@ -270,8 +270,16 @@ export default function createRoutes(store) {
               .then(loadModule(cb))
               .catch(errorLoading);
           },
+        }, {
+          path: 'userAuthorize',
+          name: 'userAuthorize',
+          getComponent(location, cb) {
+            import('containers/UserAuthorize')
+              .then(loadModule(cb))
+              .catch(errorLoading);
+          },
         },
-      ]
+      ],
     }, {
       path: 'login',
       name: 'loginPage',

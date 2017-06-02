@@ -4,7 +4,7 @@ import { browserHistory } from 'react-router';
 
 import { loadUser } from 'containers/App/actions';
 import request from 'utils/request';
-import im from 'utils/im';
+// import im from 'utils/im';
 
 import { DO_LOGIN } from './constants';
 import { loadLoginError } from './actions';
@@ -18,7 +18,7 @@ export function* doLogin(action) {
     // yield im.login(res.data.chat.userid, res.data.chat.password);
     yield put(loadUser(res.data));
 
-    browserHistory.push("/");
+    browserHistory.push('/');
   } catch (err) {
     yield put(loadLoginError(true, err));
   }

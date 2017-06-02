@@ -6,7 +6,6 @@
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import request from 'utils/request';
 import pallete from 'styles/colors';
@@ -15,7 +14,6 @@ import { browserHistory } from 'react-router';
 import { NavBar, List, InputItem, Icon, WhiteSpace, WingBlank, Button, Toast } from 'antd-mobile';
 
 import { makeSelectCurrentUser } from 'containers/HomePage/selectors';
-import messages from './messages';
 
 let timer = null;
 export class ResetMobile extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
@@ -34,31 +32,6 @@ export class ResetMobile extends React.PureComponent { // eslint-disable-line re
       clearInterval(timer);
     }
   }
-
-  changeInputType = () => {
-    this.setState({
-      pwdInputType: this.state.pwdInputType === 'text' ? 'password' : 'text',
-    });
-  }
-
-  handlePhone = (value) => {
-    this.setState({
-      phone: value,
-    });
-  }
-
-  handleCode = (value) => {
-    this.setState({
-      code: value,
-    });
-  }
-
-  handlePassword = (value) => {
-    this.setState({
-      password: value,
-    });
-  }
-  
 
   getCode = () => {
     const { phone, time, startTime } = this.state;
@@ -90,8 +63,32 @@ export class ResetMobile extends React.PureComponent { // eslint-disable-line re
     });
   }
 
+  handleCode = (value) => {
+    this.setState({
+      code: value,
+    });
+  }
+
+  handlePhone = (value) => {
+    this.setState({
+      phone: value,
+    });
+  }
+
+  handlePassword = (value) => {
+    this.setState({
+      password: value,
+    });
+  }
+
+  changeInputType = () => {
+    this.setState({
+      pwdInputType: this.state.pwdInputType === 'text' ? 'password' : 'text',
+    });
+  }
+
   saveMobile = () => {
-    const {phone, code, password} = this.state;
+    const { phone, code, password } = this.state;
 
     request.doPost('user/bind-mobile', {
       mobile: phone.replace(/\s/g, ''),

@@ -6,17 +6,15 @@
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { makeSelectCurrentUser } from 'containers/HomePage/selectors';
 import { makeSelectUserCenterIndustry, makeSelectUserCenterService } from 'containers/UserCenter/selectors';
 
 import { browserHistory } from 'react-router';
-import { NavBar, List, Radio, TextareaItem, WhiteSpace } from 'antd-mobile';
+import { NavBar, List, Radio, WhiteSpace } from 'antd-mobile';
 import MenuBtn from 'components/MenuBtn';
 
 import { saveUser, fetchIndustry, fetchService } from 'containers/UserCenter/actions';
-import messages from './messages';
 
 const RadioItem = Radio.RadioItem;
 export class UserEditIdentity extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
@@ -26,7 +24,7 @@ export class UserEditIdentity extends React.PureComponent { // eslint-disable-li
     const { currentUser, getIndustry, industryList, serviceList } = props;
     let serviceId = '';
     if (serviceList && serviceList.length > 0) {
-      const serviceId = serviceList[0].id;
+      serviceId = serviceList[0].id;
     }
 
     this.state = {
@@ -34,7 +32,7 @@ export class UserEditIdentity extends React.PureComponent { // eslint-disable-li
       industry_son_id: currentUser.industry_son_id,
       tag_identity_id: currentUser.tag_identity_id,
       main_service_id: serviceId,
-    }
+    };
 
     // fetch industry list here
     if (!industryList) {
@@ -49,13 +47,13 @@ export class UserEditIdentity extends React.PureComponent { // eslint-disable-li
       const serviceId = serviceList[0].id;
 
       this.setState({
-        main_service_id: serviceId
+        main_service_id: serviceId,
       });
     } else {
       this.setState({
         industry_son_id: currentUser.industry_son_id,
         tag_identity_id: currentUser.tag_identity_id,
-      })
+      });
     }
   }
 
@@ -78,7 +76,7 @@ export class UserEditIdentity extends React.PureComponent { // eslint-disable-li
   }
 
   handleSave = () => {
-    const { saveUserInfo, serviceList } = this.props;
+    const { saveUserInfo } = this.props;
     const { industry_son_id, tag_identity_id, main_service_id } = this.state;
 
     saveUserInfo({
@@ -92,29 +90,25 @@ export class UserEditIdentity extends React.PureComponent { // eslint-disable-li
     const { industryList, serviceList } = this.props;
     const { action, tag_identity_id, main_service_id } = this.state;
 
-    const listView = industryList ? industryList.map((industry) => {
-      return (
-        <RadioItem
-          key={industry.id}
-          checked={Number(tag_identity_id) === Number(industry.id)}
-          onChange={() => this.handleChangeIndustry(industry.id)}
-        >
-          {industry.name}
-        </RadioItem>
-      );
-    }) : null;
+    const listView = industryList ? industryList.map((industry) => (
+      <RadioItem
+        key={industry.id}
+        checked={Number(tag_identity_id) === Number(industry.id)}
+        onChange={() => this.handleChangeIndustry(industry.id)}
+      >
+        {industry.name}
+      </RadioItem>
+    )) : null;
 
-    const serviceListView = serviceList ? serviceList.map((service) => {
-      return (
-        <RadioItem
-          key={service.id}
-          checked={Number(main_service_id) === Number(service.id)}
-          onChange={() => this.handleChangeService(service.id)}
-        >
-          {service.name}
-        </RadioItem>
-      );
-    }) : null;
+    const serviceListView = serviceList ? serviceList.map((service) => (
+      <RadioItem
+        key={service.id}
+        checked={Number(main_service_id) === Number(service.id)}
+        onChange={() => this.handleChangeService(service.id)}
+      >
+        {service.name}
+      </RadioItem>
+    )) : null;
 
     return (
       <div>
@@ -122,8 +116,8 @@ export class UserEditIdentity extends React.PureComponent { // eslint-disable-li
           leftContent="back"
           mode="light"
           onLeftClick={() => {
-            if (action === 'industry' ) {
-              browserHistory.goBack()
+            if (action === 'industry') {
+              browserHistory.goBack();
             } else {
               this.setState({
                 action: 'industry',
@@ -131,7 +125,7 @@ export class UserEditIdentity extends React.PureComponent { // eslint-disable-li
             }
           }}
           rightContent={[
-            action === 'service' && <MenuBtn key="0" onClick={this.handleSave}>保存</MenuBtn>
+            action === 'service' && <MenuBtn key="0" onClick={this.handleSave}>保存</MenuBtn>,
           ]}
         >
           行业角色

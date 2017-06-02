@@ -8,7 +8,6 @@ import React, { PropTypes } from 'react';
 import styled from 'styled-components';
 import pallete from 'styles/colors';
 
-const barWidth = 40;
 const Wrapper = styled.div`
   display: inline-block;
   position: relative;

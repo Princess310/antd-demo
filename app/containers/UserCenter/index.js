@@ -6,7 +6,6 @@
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { browserHistory } from 'react-router';
 
@@ -21,11 +20,6 @@ import FlexRow from 'components/FlexRow';
 import { List, Icon, WhiteSpace, Button, ActionSheet } from 'antd-mobile';
 import userBg from 'assets/images/person-bg.png';
 import { makeSelectCurrentUser } from 'containers/HomePage/selectors';
-import messages from './messages';
-
-import {
-  fetchIndustry,
-} from './actions';
 
 import './styles.scss';
 
@@ -72,20 +66,50 @@ const shareIconList = [
   { icon: <Icon type={require('icons/share/QQicon.svg')} color={pallete.theme} />, title: 'QQ' },
 ];
 
+const verifyStyle = {
+  marginLeft: '0.12rem',
+  color: pallete.text.yellow,
+};
 const Item = List.Item;
 export class UserCenter extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   showShareActionSheet = () => {
     ActionSheet.showShareActionSheetWithOptions({
       options: shareIconList,
       message: '邀请好友帮你增加影响力',
-    },
-    (buttonIndex) => {
-      console.log('buttonIndex', buttonIndex);
     });
   }
 
   render() {
     const { currentUser } = this.props;
+
+    let verifyItem = null;
+    switch (currentUser.verify_status) {
+      case 0:
+        verifyItem = (
+          <FlexRow style={{ justifyContent: 'flex-end' }}>
+            <Icon type={require('icons/ali/感叹号提示.svg')} color={pallete.text.yellow} />
+            <span style={verifyStyle}>未认证</span>
+          </FlexRow>
+        );
+        break;
+      case -1:
+        verifyItem = (
+          <span style={verifyStyle}>认证失败</span>
+        );
+        break;
+      case 1:
+        verifyItem = (
+          <span style={verifyStyle}>认证中</span>
+        );
+        break;
+      case 2:
+        verifyItem = (
+          <span style={verifyStyle}>认证成功</span>
+        );
+        break;
+      default:
+        break;
+    }
 
     return (
       <div className="user-center">
@@ -102,36 +126,46 @@ export class UserCenter extends React.PureComponent { // eslint-disable-line rea
           </div>
           <FlexSB>
             <FlexRow>
-              <Avatar id={currentUser.id} avatar={currentUser.avatar} isVip={currentUser.verify_status == 2} />
+              <Avatar id={currentUser.id} avatar={currentUser.avatar} isVip={Number(currentUser.verify_status) === 2} />
               <InfoWrapper>
                 <section>{currentUser.nickname}</section>
                 <section style={{ marginTop: '0.04rem' }}>
                   {currentUser.position !== '' && <span>{currentUser.position}</span>}
-                  {currentUser.company !== '' && <span style={{
-                    display: 'inline-block',
-                    marginLeft: '0.24rem',
-                    paddingLeft: '0.24rem',
-                    borderLeft: `1px ${pallete.white} solid`,
-                  }}>{currentUser.company}</span>}
+                  {currentUser.company !== '' &&
+                    <span
+                      style={{
+                        display: 'inline-block',
+                        marginLeft: '0.24rem',
+                        paddingLeft: '0.24rem',
+                        borderLeft: `1px ${pallete.white} solid`,
+                      }}
+                    >
+                      {currentUser.company}
+                    </span>
+                  }
                   <LevelProgress progress={'0.25'} />
                 </section>
               </InfoWrapper>
             </FlexRow>
-            <Button inline size="small" onClick={() => {
-              browserHistory.push('/userEdit');
-            }}>编辑资料</Button>
+            <Button
+              inline
+              size="small"
+              onClick={() => {
+                browserHistory.push('/userEdit');
+              }}
+            >编辑资料</Button>
           </FlexSB>
         </UserWrapper>
         <List>
-        <SubInfoWrapper>
-          <SubInfo className="user-sub-info-item">
-            活跃度：<span style={{color: pallete.theme}}>{currentUser.influence}</span>
-          </SubInfo>
-          <SubInfo className="user-sub-info-item">
-            影响力：<ExpProgress progress={currentUser.integrity_progress} />
-            <span style={{ marginLeft: '0.08rem', color: pallete.text.yellow }}>V{currentUser.integrity_level}</span>
-          </SubInfo>
-        </SubInfoWrapper>
+          <SubInfoWrapper>
+            <SubInfo className="user-sub-info-item">
+              活跃度：<span style={{ color: pallete.theme }}>{currentUser.influence}</span>
+            </SubInfo>
+            <SubInfo className="user-sub-info-item">
+              影响力：<ExpProgress progress={currentUser.integrity_progress} />
+              <span style={{ marginLeft: '0.08rem', color: pallete.text.yellow }}>V{currentUser.integrity_level}</span>
+            </SubInfo>
+          </SubInfoWrapper>
         </List>
         <WhiteSpace size="md" />
         <List>
@@ -170,7 +204,12 @@ export class UserCenter extends React.PureComponent { // eslint-disable-line rea
           <Item
             thumb={<Icon type={require('icons/ali/感叹号.svg')} color={pallete.theme} />}
             arrow="horizontal"
-            onClick={() => {}}
+            extra={
+              verifyItem
+            }
+            onClick={() => {
+              browserHistory.push('/userAuthorize');
+            }}
           >成为认证用户</Item>
         </List>
         <WhiteSpace size="md" />
@@ -191,7 +230,6 @@ export class UserCenter extends React.PureComponent { // eslint-disable-line rea
 }
 
 UserCenter.propTypes = {
-  dispatch: PropTypes.func,
   currentUser: PropTypes.object,
 };
 
@@ -199,9 +237,8 @@ const mapStateToProps = createStructuredSelector({
   currentUser: makeSelectCurrentUser(),
 });
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps() {
   return {
-    dispatch,
   };
 }
 
