@@ -29,3 +29,11 @@ export const LOAD_USER_COLLECTS_REFRESH = 'app/UserCenter/LOAD_USER_COLLECTS_REF
 export const LOAD_USER_COLLECTS_LOADING = 'app/UserCenter/LOAD_USER_COLLECTS_LOADING';
 export const DELETE_USER_COLLECT = 'app/UserCenter/DELETE_USER_COLLECT';
 export const REMOVE_USER_COLLECT = 'app/UserCenter/REMOVE_USER_COLLECT';
+
+export const FETCH_USER_MOMENTS = 'app/UserCenter/FETCH_USER_MOMENTS';
+export const LOAD_USER_MOMENTS = 'app/UserCenter/LOAD_USER_MOMENTS';
+export const LOAD_USER_MOMENTS_REFRESH = 'app/UserCenter/LOAD_USER_MOMENTS_REFRESH';
+export const LOAD_USER_MOMENTS_LOADING = 'app/UserCenter/LOAD_USER_MOMENTS_LOADING';
+
+export const FETCH_USER_AUTH_INFO = 'app/UserCenter/FETCH_USER_AUTH_INFO';
+export const LOAD_USER_AUTH_INFO = 'app/UserCenter/LOAD_USER_AUTH_INFO';

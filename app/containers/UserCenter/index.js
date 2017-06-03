@@ -179,7 +179,9 @@ export class UserCenter extends React.PureComponent { // eslint-disable-line rea
           <Item
             thumb={<Icon type={require('icons/ali/我的需求.svg')} color={pallete.theme} />}
             arrow="horizontal"
-            onClick={() => {}}
+            onClick={() => {
+              browserHistory.push('/userMoments');
+            }}
           >我的供求</Item>
           <Item
             thumb={<Icon type={require('icons/ali/朋友圈.svg')} color={pallete.theme} />}
@@ -193,11 +195,11 @@ export class UserCenter extends React.PureComponent { // eslint-disable-line rea
               browserHistory.push('/userCenterCollects');
             }}
           >我的收藏</Item>
-          <Item
+          {/*<Item
             thumb={<Icon type={require('icons/ali/我的钱包.svg')} color={pallete.theme} />}
             arrow="horizontal"
             onClick={() => {}}
-          >我的钱包</Item>
+          >我的钱包</Item>*/}
         </List>
         <WhiteSpace size="md" />
         <List>

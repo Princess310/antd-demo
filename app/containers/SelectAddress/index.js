@@ -15,6 +15,7 @@ import { NavBar, ListView, List, Button } from 'antd-mobile';
 import { fetchCity, saveUser } from 'containers/UserCenter/actions';
 
 const Item = List.Item;
+const IndexList = ListView.IndexedList;
 export class SelectAddress extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
     super(props);
@@ -84,7 +85,7 @@ export class SelectAddress extends React.PureComponent { // eslint-disable-line 
         >
           选择工作地区
         </NavBar>
-        <ListView.IndexedList
+        <IndexList
           dataSource={this.state.dataSource.cloneWithRowsAndSections(dataBlob, sectionIDs, rowIDs)}
           renderHeader={() => (
             <div>

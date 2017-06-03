@@ -68,6 +68,18 @@ module.exports = require('./webpack.base.babel')({
     }),
   ],
 
+  babelQuery: {
+    plugins: [
+      [
+        'import',
+        {
+          style: 'css',
+          libraryName: 'antd-mobile',
+        },
+      ],
+    ],
+  },
+
   performance: {
     assetFilter: (assetFilename) => !(/(\.map$)|(^(main\.|favicon\.))/.test(assetFilename)),
   },

@@ -22,6 +22,7 @@ import {
 
 import UserCenter from '../UserCenter';
 
+const TabItem = TabBar.Item;
 export class HomePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
     super(props);
@@ -83,7 +84,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
           barTintColor="white"
           hidden={hideTabs}
         >
-          <TabBar.Item
+          <TabItem
             title="生活"
             key="生活"
             icon={
@@ -114,8 +115,8 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
             data-seed="logId"
           >
             {!hideTabs && this.renderContent('生活')}
-          </TabBar.Item>
-          <TabBar.Item
+          </TabItem>
+          <TabItem
             icon={<Icon type="koubei-o" size="md" />}
             selectedIcon={<Icon type="koubei" size="md" />}
             title="口碑"
@@ -130,8 +131,8 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
             data-seed="logId1"
           >
             {!hideTabs && this.renderContent('口碑')}
-          </TabBar.Item>
-          <TabBar.Item
+          </TabItem>
+          <TabItem
             icon={
               <div
                 style={{
@@ -161,8 +162,8 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
             }}
           >
             {!hideTabs && this.renderContent('朋友')}
-          </TabBar.Item>
-          <TabBar.Item
+          </TabItem>
+          <TabItem
             icon={<Icon type={require('icons/title-bar/user.svg')} />}
             selectedIcon={<Icon type={require('icons/title-bar/user.svg')} />}
             title="我的"
@@ -177,7 +178,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
             <div className="home-container">
               {!hideTabs && <UserCenter />}
             </div>
-          </TabBar.Item>
+          </TabItem>
         </TabBar>
       </div>
     );

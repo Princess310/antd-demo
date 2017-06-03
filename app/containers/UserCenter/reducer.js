@@ -18,6 +18,12 @@ import {
   LOAD_USER_COLLECTS_REFRESH,
   LOAD_USER_COLLECTS_LOADING,
   REMOVE_USER_COLLECT,
+
+  LOAD_USER_MOMENTS,
+  LOAD_USER_MOMENTS_REFRESH,
+  LOAD_USER_MOMENTS_LOADING,
+
+  LOAD_USER_AUTH_INFO,
 } from './constants';
 
 const initialState = fromJS({
@@ -25,6 +31,7 @@ const initialState = fromJS({
   service: false,
   business: false,
   city: false,
+  authInfo: false,
   visitorUsers: {
     refresh: false,
     loading: false,
@@ -38,6 +45,18 @@ const initialState = fromJS({
     hasNext: false,
   },
   collects: {
+    refresh: false,
+    loading: false,
+    list: false,
+    hasNext: false,
+  },
+  momentsSupplier: {
+    refresh: false,
+    loading: false,
+    list: false,
+    hasNext: false,
+  },
+  momentsDemand: {
     refresh: false,
     loading: false,
     list: false,
@@ -163,6 +182,54 @@ function userCenterReducer(state = initialState, action) {
 
       const result = info.set('list', newList);
       return state.set('collects', result);
+    }
+    case LOAD_USER_MOMENTS: {
+      const { type, list, page } = action.payload;
+      const info = type === 1 ? state.get('momentsSupplier') : state.get('momentsDemand');
+
+      const oldList = info.get('list');
+      let newList = oldList ? oldList : [];
+      let hasNext = true;
+
+      if (page) {
+        if (page.current_page === 1) {
+          newList = list;
+        } else if (page.current_page <= page.page_count) {
+          newList = [...newList, ...list];
+        }
+
+        if (page.current_page >= page.page_count) {
+          hasNext = false;
+        }
+      } else {
+        hasNext = false;
+      }
+
+      const result = info.set('list', newList)
+        .set('hasNext', hasNext)
+        .set('refresh', false)
+        .set('loading', false);
+
+      return type === 1 ? state.set('momentsSupplier', result) : state.set('momentsDemand', result);
+    }
+    case LOAD_USER_MOMENTS_REFRESH: {
+      const { type, refresh } = action.payload;
+      const info = type === 1 ? state.get('momentsSupplier') : state.get('momentsDemand');
+
+      const result = info.set('refresh', refresh);
+      return type === 1 ? state.set('momentsSupplier', result) : state.set('momentsDemand', result);
+    }
+    case LOAD_USER_MOMENTS_LOADING: {
+      const { type, loading } = action.payload;
+      const info = type === 1 ? state.get('momentsSupplier') : state.get('momentsDemand');
+
+      const result = info.set('loading', loading);
+      return type === 1 ? state.set('momentsSupplier', result) : state.set('momentsDemand', result);
+    }
+    case LOAD_USER_AUTH_INFO: {
+      const { data } = action.payload;
+
+      return state.set('authInfo', data);
     }
     default:
       return state;

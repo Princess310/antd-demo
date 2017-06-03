@@ -6,14 +6,22 @@ import { loadUser } from 'containers/App/actions';
 
 import {
   SAVE_USER,
+
   FETCH_INDUSTRY,
   FETCH_SERVICE,
+
   FETCH_BUSINESS_INFO,
   SVAE_BUSINESS_INFO,
+
   FETCH_CITY_INFO,
   FETCH_USER_VISITOR,
+
   FETCH_USER_COLLECTS,
   DELETE_USER_COLLECT,
+
+  FETCH_USER_MOMENTS,
+
+  FETCH_USER_AUTH_INFO,
 } from './constants';
 
 import {
@@ -29,6 +37,12 @@ import {
   loadCollectsRefresh,
   loadCollectsLoading,
   removeCollect,
+
+  loadUserMoments,
+  loadUserMomentsRefresh,
+  loadUserMomentsLoading,
+
+  loadAuthInfo,
 } from './actions';
 
 export function* saveUser(action) {
@@ -154,6 +168,36 @@ export function* delCollect(action) {
   }
 }
 
+export function* fetchUserMoments(action) {
+  try {
+    const { type, page } = action.payload;
+    // add refresh status
+    if (page === 1) {
+      yield put(loadUserMomentsRefresh(type, true));
+    } else {
+      yield put(loadUserMomentsLoading(type, true));
+    }
+
+    const res = yield request.doGet('moments/my-supplier-demand', { reward_as: type, page });
+
+    const { list, page: resPage } = res;
+    yield put(loadUserMomentsLoading(type, list, resPage));
+  } catch (err) {
+    // console.log(err);
+  }
+}
+
+export function* fetchUserAuth() {
+  try {
+    const res = yield request.doGet('user/auth-info');
+
+    const { data } = res;
+    yield put(loadAuthInfo(data));
+  } catch (err) {
+    // console.log(err);
+  }
+}
+
 export function* defaultSaga() {
   const watcher = yield takeLatest(SAVE_USER, saveUser);
   const watcherIndustry = yield takeLatest(FETCH_INDUSTRY, fetchIndustry);
@@ -164,6 +208,8 @@ export function* defaultSaga() {
   const watcherVisitor = yield takeLatest(FETCH_USER_VISITOR, fetchVisitor);
   const watcherCollects = yield takeLatest(FETCH_USER_COLLECTS, fetchCollects);
   const watcherDelCollect = yield takeLatest(DELETE_USER_COLLECT, delCollect);
+  const watcherUserMoments = yield takeLatest(FETCH_USER_MOMENTS, fetchUserMoments);
+  const watcherUserAuth = yield takeLatest(FETCH_USER_AUTH_INFO, fetchUserAuth);
 
   // Suspend execution until location changes
   yield take(LOCATION_CHANGE);
@@ -176,6 +222,8 @@ export function* defaultSaga() {
   yield cancel(watcherVisitor);
   yield cancel(watcherCollects);
   yield cancel(watcherDelCollect);
+  yield cancel(watcherUserMoments);
+  yield cancel(watcherUserAuth);
 }
 
 // All sagas to be loaded

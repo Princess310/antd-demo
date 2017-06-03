@@ -278,6 +278,14 @@ export default function createRoutes(store) {
               .then(loadModule(cb))
               .catch(errorLoading);
           },
+        }, {
+          path: 'userMoments',
+          name: 'userMoments',
+          getComponent(location, cb) {
+            import('containers/UserMoments')
+              .then(loadModule(cb))
+              .catch(errorLoading);
+          },
         },
       ],
     }, {

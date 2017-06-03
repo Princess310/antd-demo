@@ -73,6 +73,11 @@ const makeSelectUserCollects = () => createSelector(
   }
 );
 
+const makeSelectUserAuthInfo = () => createSelector(
+   selectUserCenter,
+  (substate) => substate.get('authInfo')
+);
+
 export {
   makeSelectUserCenterIndustry,
   makeSelectUserCenterService,
@@ -81,4 +86,5 @@ export {
   makeSelectUserVisitorUsers,
   makeSelectUserVisitorMine,
   makeSelectUserCollects,
+  makeSelectUserAuthInfo,
 };
