@@ -14,8 +14,8 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 5.6rem;
-  height: 2.8rem;
+  width: 4.2rem;
+  height: 2.4rem;
   border: 1px dashed #abacad;
 
   &:before {
@@ -43,7 +43,7 @@ const Wrapper = styled.div`
 
 class UploadGrid extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   render() {
-    const { url, style } = this.props;
+    const { url, style, onClick, children } = this.props;
     const rootStyle = {
       height: 'auto',
       backgroundColor: pallete.white,
@@ -51,9 +51,10 @@ class UploadGrid extends React.PureComponent { // eslint-disable-line react/pref
     };
 
     return (
-      <FlexCenter style={Object.assign(rootStyle, style)}>
+      <FlexCenter style={Object.assign(rootStyle, style)} onClick={onClick}>
         <Wrapper>
-          {url !== '' && <img role="presentation" src={url} />}
+          {url !== '' && <img role="presentation" src={url} style={{ width: '100%', height: '100%' }} />}
+          {React.Children.toArray(children)}
         </Wrapper>
       </FlexCenter>
     );
@@ -63,6 +64,8 @@ class UploadGrid extends React.PureComponent { // eslint-disable-line react/pref
 UploadGrid.propTypes = {
   url: PropTypes.string,
   style: PropTypes.object,
+  onClick: PropTypes.func,
+  children: PropTypes.node,
 };
 
 export default UploadGrid;

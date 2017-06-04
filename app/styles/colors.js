@@ -15,6 +15,7 @@ const pallete = {
     yellow: '#ffb501',
     deepBlue: '#196096',
     content: '#1A2126',
+    red: '#ff2b2d',
   },
   border: {
     normal: '#f0f0f0',

@@ -35,7 +35,7 @@ const makeSelectUserCenterCity = () => createSelector(
 );
 
 const makeSelectUserVisitorUsers = () => createSelector(
-   selectUserCenter,
+  selectUserCenter,
   (substate) => {
     const info = substate.get('visitorUsers');
     return {
@@ -48,7 +48,7 @@ const makeSelectUserVisitorUsers = () => createSelector(
 );
 
 const makeSelectUserVisitorMine = () => createSelector(
-   selectUserCenter,
+  selectUserCenter,
   (substate) => {
     const info = substate.get('visitorMine');
     return {
@@ -61,7 +61,7 @@ const makeSelectUserVisitorMine = () => createSelector(
 );
 
 const makeSelectUserCollects = () => createSelector(
-   selectUserCenter,
+  selectUserCenter,
   (substate) => {
     const info = substate.get('collects');
     return {
@@ -74,8 +74,13 @@ const makeSelectUserCollects = () => createSelector(
 );
 
 const makeSelectUserAuthInfo = () => createSelector(
-   selectUserCenter,
+  selectUserCenter,
   (substate) => substate.get('authInfo')
+);
+
+const makeSelectUserAuthFiles = () => createSelector(
+  selectUserCenter,
+  (substate) => substate.get('authFiles')
 );
 
 export {
@@ -87,4 +92,5 @@ export {
   makeSelectUserVisitorMine,
   makeSelectUserCollects,
   makeSelectUserAuthInfo,
+  makeSelectUserAuthFiles,
 };

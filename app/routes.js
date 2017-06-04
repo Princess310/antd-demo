@@ -286,6 +286,14 @@ export default function createRoutes(store) {
               .then(loadModule(cb))
               .catch(errorLoading);
           },
+        }, {
+          path: 'userAuthorizeFiles',
+          name: 'userAuthorizeFiles',
+          getComponent(location, cb) {
+            import('containers/UserAuthorizeFiles')
+              .then(loadModule(cb))
+              .catch(errorLoading);
+          },
         },
       ],
     }, {

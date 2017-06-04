@@ -6,6 +6,7 @@
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
+import styled from 'styled-components';
 import { createStructuredSelector } from 'reselect';
 import { browserHistory } from 'react-router';
 import pallete from 'styles/colors';
@@ -15,8 +16,8 @@ import Avatar from 'components/Avatar';
 import FlexRow from 'components/FlexRow';
 import UploadGrid from 'components/UploadGrid';
 import { NavBar, Result, List, Icon, WhiteSpace, Button } from 'antd-mobile';
-import { makeSelectUserAuthInfo } from 'containers/UserCenter/selectors';
-import { fetchAuthInfo } from 'containers/UserCenter/actions';
+import { makeSelectUserAuthInfo, makeSelectUserAuthFiles } from 'containers/UserCenter/selectors';
+import { fetchAuthInfo, loadAuthFiles, saveAuthInfo } from 'containers/UserCenter/actions';
 
 const verifyStyle = {
   marginLeft: '0.12rem',
@@ -40,12 +41,32 @@ export class UserAuthorize extends React.PureComponent { // eslint-disable-line 
     getAuthInfo();
   }
 
+  componentWillUnmount() {
+    this.props.saveAuthFiles(false);
+  }
+
+  handleSave = () => {
+    const { authFiles, saveAuth } = this.props;
+
+    if (authFiles) {
+      const info = authFiles[authFiles.length - 1];
+
+      saveAuth({
+        uids: '',
+        ...info,
+      });
+    }
+  }
+
   render() {
-    const { authInfo } = this.props;
+    const { authInfo, authFiles } = this.props;
     let contentView = null;
 
     if (authInfo) {
       const { auth, user_info } = authInfo;
+      const { friend, material } = auth;
+      const materialInfo = material[0];
+
       let verifyItem = null;
       switch (Number(user_info.verify_status)) {
         case 0:
@@ -93,6 +114,21 @@ export class UserAuthorize extends React.PureComponent { // eslint-disable-line 
               <Brief>{user_info.tag_identity_name}</Brief>
             </Item>
           </List>
+          <WhiteSpace size="md" />
+          <Result
+            title={<div style={{ fontSize: '0.32rem' }}>上传身份证明</div>}
+            message="可上传工牌 身份证 名片"
+          />
+          <UploadGrid 
+            style={{ position: 'relative', top: '-2px', paddingBottom: '1.2rem' }}
+            url={authFiles ? authFiles[authFiles.length -1].url : (materialInfo ? materialInfo.url : '')}
+            onClick={() => {
+              //if (!materialInfo || Number(materialInfo.status) !== 0) {
+                browserHistory.push('/userAuthorizeFiles');
+              //}
+            }}
+          >
+          </UploadGrid>
         </div>
       );
     }
@@ -114,16 +150,8 @@ export class UserAuthorize extends React.PureComponent { // eslint-disable-line 
           />
           <WhiteSpace size="md" />
           {contentView}
-          <WhiteSpace size="md" />
-          <Result
-            title={<div style={{ fontSize: '0.32rem' }}>上传身份证明</div>}
-            message="可上传工牌 身份证 名片"
-          />
-          <UploadGrid 
-            style={{ position: 'relative', top: '-2px', paddingBottom: '1.2rem' }}
-          />
-          <Button className="btn" style={btnStyle} type="primary" disabled={true}>提交</Button>
         </AppContent>
+        <Button className="btn" style={btnStyle} type="primary" disabled={!authFiles} onClick={this.handleSave}>提交</Button>
       </div>
     );
   }
@@ -134,16 +162,25 @@ UserAuthorize.propTypes = {
     PropTypes.object,
     PropTypes.bool,
   ]),
+  authFiles: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.bool,
+  ]),
   getAuthInfo: PropTypes.func,
+  saveAuthFiles: PropTypes.func,
+  saveAuth: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
   authInfo: makeSelectUserAuthInfo(),
+  authFiles: makeSelectUserAuthFiles(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     getAuthInfo: () => dispatch(fetchAuthInfo()),
+    saveAuthFiles: (files) => dispatch(loadAuthFiles(files)),
+    saveAuth: (params) => dispatch(saveAuthInfo(params)),
   };
 }
 

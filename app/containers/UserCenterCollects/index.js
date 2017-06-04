@@ -167,7 +167,7 @@ export class UserCenterCollects extends React.PureComponent { // eslint-disable-
               <div>
                 <WhiteSpace size="xs" />
                 <Result
-                  img={<img role="presentation" src={noResultPage} />}
+                  img={<img role="presentation" src={noResultPage} style={{ height: '100%', width: 'auto' }} />}
                   message="暂无收藏"
                 />
               </div>

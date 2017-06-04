@@ -37,3 +37,5 @@ export const LOAD_USER_MOMENTS_LOADING = 'app/UserCenter/LOAD_USER_MOMENTS_LOADI
 
 export const FETCH_USER_AUTH_INFO = 'app/UserCenter/FETCH_USER_AUTH_INFO';
 export const LOAD_USER_AUTH_INFO = 'app/UserCenter/LOAD_USER_AUTH_INFO';
+export const SAVE_USER_AUTH_INFO = 'app/UserCenter/SAVE_USER_AUTH_INFO';
+export const LOAD_USER_AUTH_FILES = 'app/UserCenter/LOAD_USER_AUTH_FILES';

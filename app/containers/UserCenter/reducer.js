@@ -24,6 +24,7 @@ import {
   LOAD_USER_MOMENTS_LOADING,
 
   LOAD_USER_AUTH_INFO,
+  LOAD_USER_AUTH_FILES,
 } from './constants';
 
 const initialState = fromJS({
@@ -32,6 +33,7 @@ const initialState = fromJS({
   business: false,
   city: false,
   authInfo: false,
+  authFiles: false,
   visitorUsers: {
     refresh: false,
     loading: false,
@@ -230,6 +232,11 @@ function userCenterReducer(state = initialState, action) {
       const { data } = action.payload;
 
       return state.set('authInfo', data);
+    }
+    case LOAD_USER_AUTH_FILES: {
+      const { list } = action.payload;
+
+      return state.set('authFiles', list);
     }
     default:
       return state;

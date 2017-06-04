@@ -3,6 +3,7 @@ import { LOCATION_CHANGE } from 'react-router-redux';
 import { browserHistory } from 'react-router';
 import request from 'utils/request';
 import { loadUser } from 'containers/App/actions';
+import { Toast } from 'antd-mobile';
 
 import {
   SAVE_USER,
@@ -22,6 +23,7 @@ import {
   FETCH_USER_MOMENTS,
 
   FETCH_USER_AUTH_INFO,
+  SAVE_USER_AUTH_INFO,
 } from './constants';
 
 import {
@@ -43,6 +45,7 @@ import {
   loadUserMomentsLoading,
 
   loadAuthInfo,
+  loadAuthFiles,
 } from './actions';
 
 export function* saveUser(action) {
@@ -198,6 +201,19 @@ export function* fetchUserAuth() {
   }
 }
 
+export function* saveUserAuth(action) {
+  try {
+    const { params } = action.payload;
+    yield request.doPost('user/auth', params);
+
+    Toast.success('你的认证资料已提交', 1);
+    yield fetchUserAuth();
+    yield put(loadAuthFiles(false));
+  } catch (err) {
+    // console.log(err);
+  }
+}
+
 export function* defaultSaga() {
   const watcher = yield takeLatest(SAVE_USER, saveUser);
   const watcherIndustry = yield takeLatest(FETCH_INDUSTRY, fetchIndustry);
@@ -210,6 +226,7 @@ export function* defaultSaga() {
   const watcherDelCollect = yield takeLatest(DELETE_USER_COLLECT, delCollect);
   const watcherUserMoments = yield takeLatest(FETCH_USER_MOMENTS, fetchUserMoments);
   const watcherUserAuth = yield takeLatest(FETCH_USER_AUTH_INFO, fetchUserAuth);
+  const watcherSaveAuth = yield takeLatest(SAVE_USER_AUTH_INFO, saveUserAuth);
 
   // Suspend execution until location changes
   yield take(LOCATION_CHANGE);
@@ -224,6 +241,7 @@ export function* defaultSaga() {
   yield cancel(watcherDelCollect);
   yield cancel(watcherUserMoments);
   yield cancel(watcherUserAuth);
+  yield cancel(watcherSaveAuth);
 }
 
 // All sagas to be loaded

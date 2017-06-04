@@ -39,6 +39,8 @@ import {
 
   FETCH_USER_AUTH_INFO,
   LOAD_USER_AUTH_INFO,
+  SAVE_USER_AUTH_INFO,
+  LOAD_USER_AUTH_FILES,
 } from './constants';
 
 export function saveUser(params) {
@@ -270,6 +272,24 @@ export function loadAuthInfo(data) {
     type: LOAD_USER_AUTH_INFO,
     payload: {
       data,
+    },
+  };
+}
+
+export function saveAuthInfo(params) {
+  return {
+    type: SAVE_USER_AUTH_INFO,
+    payload: {
+      params,
+    },
+  };
+}
+
+export function loadAuthFiles(list) {
+  return {
+    type: LOAD_USER_AUTH_FILES,
+    payload: {
+      list,
     },
   };
 }
