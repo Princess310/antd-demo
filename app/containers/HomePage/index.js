@@ -27,7 +27,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
   constructor(props) {
     super(props);
     this.state = {
-      selectedTab: 'redTab',
+      selectedTab: 'communicate',
       hidden: false,
     };
   }
@@ -48,30 +48,6 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
     }
   }
 
-  renderContent(pageText) {
-    return (
-      <div style={{ backgroundColor: 'white', height: '100%', textAlign: 'center' }}>
-        <div style={{ paddingTop: 60 }}>你已点击“{pageText}” tab， 当前展示“{pageText}”信息</div>
-        <a
-          style={{
-            display: 'block',
-            marginTop: 40,
-            marginBottom: 600,
-            color: '#108ee9',
-          }}
-          onClick={(e) => {
-            e.preventDefault();
-            this.setState({
-              hidden: !this.state.hidden,
-            });
-          }}
-        >
-          点击切换 tab-bar 显示/隐藏
-        </a>
-      </div>
-    );
-  }
-
   render() {
     const { location, children } = this.props;
     const hideTabs = location.pathname !== '/';
@@ -85,87 +61,51 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
           hidden={hideTabs}
         >
           <TabItem
-            title="生活"
-            key="生活"
-            icon={
-              <div
-                style={{
-                  width: '0.44rem',
-                  height: '0.44rem',
-                  background: 'url(https://zos.alipayobjects.com/rmsportal/sifuoDUQdAFKAVcFGROC.svg) center center /  0.42rem 0.42rem no-repeat',
-                }}
-              />
-            }
-            selectedIcon={
-              <div
-                style={{
-                  width: '0.44rem',
-                  height: '0.44rem',
-                  background: 'url(https://zos.alipayobjects.com/rmsportal/iSrlOTqrKddqbOmlvUfq.svg) center center /  0.42rem 0.42rem no-repeat',
-                }}
-              />
-            }
-            selected={this.state.selectedTab === 'blueTab'}
-            badge={120}
+            title="交流"
+            key="交流"
+            icon={<Icon type={require('icons/ali/交流.svg')} />}
+            selectedIcon={<Icon type={require('icons/ali/交流.svg')} />}
+            selected={this.state.selectedTab === 'communicate'}
             onPress={() => {
               this.setState({
-                selectedTab: 'blueTab',
+                selectedTab: 'communicate',
               });
             }}
-            data-seed="logId"
           >
-            {!hideTabs && this.renderContent('生活')}
+            {!hideTabs && <div>交流</div>}
           </TabItem>
           <TabItem
-            icon={<Icon type="koubei-o" size="md" />}
-            selectedIcon={<Icon type="koubei" size="md" />}
-            title="口碑"
-            key="口碑"
-            badge={'new'}
-            selected={this.state.selectedTab === 'redTab'}
+            icon={<Icon type={require('icons/ali/生意.svg')} />}
+            selectedIcon={<Icon type={require('icons/ali/生意.svg')} />}
+            title="生意"
+            key="生意"
+            selected={this.state.selectedTab === 'business'}
             onPress={() => {
               this.setState({
-                selectedTab: 'redTab',
+                selectedTab: 'business',
               });
             }}
-            data-seed="logId1"
           >
-            {!hideTabs && this.renderContent('口碑')}
+            {!hideTabs && <div>生意</div>}
           </TabItem>
           <TabItem
-            icon={
-              <div
-                style={{
-                  width: '0.44rem',
-                  height: '0.44rem',
-                  background: 'url(https://zos.alipayobjects.com/rmsportal/psUFoAMjkCcjqtUCNPxB.svg) center center /  0.42rem 0.42rem no-repeat',
-                }}
-              />
-            }
-            selectedIcon={
-              <div
-                style={{
-                  width: '0.44rem',
-                  height: '0.44rem',
-                  background: 'url(https://zos.alipayobjects.com/rmsportal/IIRLrXXrFAhXVdhMWgUI.svg) center center /  0.42rem 0.42rem no-repeat',
-                }}
-              />
-            }
-            title="朋友"
-            key="朋友"
+            icon={<Icon type={require('icons/ali/消息.svg')} />}
+            selectedIcon={<Icon type={require('icons/ali/消息.svg')} />}
+            title="消息"
+            key="消息"
             dot
-            selected={this.state.selectedTab === 'greenTab'}
+            selected={this.state.selectedTab === 'message'}
             onPress={() => {
               this.setState({
-                selectedTab: 'greenTab',
+                selectedTab: 'message',
               });
             }}
           >
-            {!hideTabs && this.renderContent('朋友')}
+            {!hideTabs && <div>消息</div>}
           </TabItem>
           <TabItem
-            icon={<Icon type={require('icons/title-bar/user.svg')} />}
-            selectedIcon={<Icon type={require('icons/title-bar/user.svg')} />}
+            icon={<Icon type={require('icons/ali/我的.svg')} />}
+            selectedIcon={<Icon type={require('icons/ali/我的.svg')} />}
             title="我的"
             key="我的"
             selected={this.state.selectedTab === 'mine'}

@@ -16,6 +16,7 @@ const pallete = {
     deepBlue: '#196096',
     content: '#1A2126',
     red: '#ff2b2d',
+    tag: '#A4A9B8',
   },
   border: {
     normal: '#f0f0f0',

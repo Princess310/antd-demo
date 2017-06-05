@@ -72,15 +72,19 @@ const oss = {
     const checkPicSize = 150 * 1024;
     let resizePercent = 100;
 
-    if (Number(size) > checkPicSize) {
-      resizePercent = Math.round(checkPicSize / (size * 100));
+    if (path.indexOf("__") >= 0) {
+      if (Number(size) > checkPicSize) {
+        resizePercent = Math.round(checkPicSize / (size * 100));
 
-      if (resizePercent === 0) {
-        resizePercent = 1;
+        if (resizePercent === 0) {
+          resizePercent = 1;
+        }
       }
+
+      return `${path}@${resizePercent}p`;
     }
 
-    return `${path}@${resizePercent}p`;
+    return path;
   },
   // 将缩小的图片地址转换成原有地址
   getImgSourcePath: (path) => {

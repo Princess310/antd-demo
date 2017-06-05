@@ -8,6 +8,7 @@ import React, { PropTypes } from 'react';
 import styled from 'styled-components';
 import pallete from 'styles/colors';
 import { browserHistory } from 'react-router';
+import oss from 'utils/oss';
 import defaultAvatar from 'assets/images/default-logo.png';
 
 const Wrapper = styled.div`
@@ -40,7 +41,7 @@ class Avatar extends React.PureComponent { // eslint-disable-line react/prefer-s
   }
 
   render() {
-    const { id, avatar, isVip, size, linkUser } = this.props;
+    const { id, avatar, isVip, size, linkUser, linkParmas } = this.props;
 
     return (
       <Wrapper>
@@ -51,12 +52,18 @@ class Avatar extends React.PureComponent { // eslint-disable-line react/prefer-s
             height: size,
             borderRadius: '0.08rem',
           }}
-          src={avatar}
-          onClick={() => {
-            linkUser && browserHistory.push({
-              pathname: 'userInfo',
-              query: { id },
-            });
+          src={oss.getImgSuitablePath(avatar)}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (linkParmas) {
+              browserHistory.push(linkParmas);
+            } else {
+              linkUser && browserHistory.push({
+                pathname: 'userInfo',
+                query: { id },
+              });
+            }
           }}
         />
         {isVip && <Vip>V</Vip>}
@@ -74,6 +81,7 @@ Avatar.propTypes = {
   isVip: PropTypes.bool,
   size: PropTypes.string,
   linkUser: PropTypes.bool,
+  linkParmas: PropTypes.object,
 };
 
 export default Avatar;

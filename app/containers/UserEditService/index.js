@@ -23,6 +23,7 @@ export class UserEditService extends React.PureComponent { // eslint-disable-lin
 
     const { currentUser, getService } = props;
     this.state = {
+      tag_identity_id: currentUser.tag_identity_id,
       main_service_id: currentUser.main_service_id,
     };
 
@@ -36,6 +37,7 @@ export class UserEditService extends React.PureComponent { // eslint-disable-lin
     const { currentUser, getService, serviceList } = nextProps;
 
     this.setState({
+      tag_identity_id: currentUser.tag_identity_id,
       main_service_id: currentUser.main_service_id,
     });
 
@@ -53,9 +55,10 @@ export class UserEditService extends React.PureComponent { // eslint-disable-lin
 
   handleSave = () => {
     const { saveUserInfo } = this.props;
-    const { main_service_id } = this.state;
+    const { tag_identity_id, main_service_id } = this.state;
 
     saveUserInfo({
+      tag_identity_id,
       main_service_id,
     });
   }

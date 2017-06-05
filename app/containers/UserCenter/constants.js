@@ -39,3 +39,11 @@ export const FETCH_USER_AUTH_INFO = 'app/UserCenter/FETCH_USER_AUTH_INFO';
 export const LOAD_USER_AUTH_INFO = 'app/UserCenter/LOAD_USER_AUTH_INFO';
 export const SAVE_USER_AUTH_INFO = 'app/UserCenter/SAVE_USER_AUTH_INFO';
 export const LOAD_USER_AUTH_FILES = 'app/UserCenter/LOAD_USER_AUTH_FILES';
+
+export const FETCH_USER_COMMUNICATION = 'app/UserCenter/FETCH_USER_COMMUNICATION';
+export const LOAD_USER_COMMUNICATION = 'app/UserCenter/LOAD_USER_COMMUNICATION';
+export const LOAD_USER_COMMUNICATION_REFRESH = 'app/UserCenter/LOAD_USER_COMMUNICATION_REFRESH';
+export const LOAD_USER_COMMUNICATION_LOADING = 'app/UserCenter/LOAD_USER_COMMUNICATION_LOADING';
+
+export const FETCH_USER_INFO = 'app/UserCenter/FETCH_USER_INFO';
+export const LOAD_USER_INFO = 'app/UserCenter/LOAD_USER_INFO';

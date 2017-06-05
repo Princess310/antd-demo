@@ -12,6 +12,8 @@ import Avatar from 'components/Avatar';
 import FlexRow from 'components/FlexRow';
 import FlexSB from 'components/FlexSB';
 import FlexColumn from 'components/FlexColumn';
+import LevelTag from 'components/LevelTag';
+import ExpTag from 'components/ExpTag';
 
 const Wrapper = styled(FlexRow)`
   display: flex;
@@ -49,6 +51,8 @@ class UserHeaderBar extends React.PureComponent { // eslint-disable-line react/p
               <section style={{ fontSize: '0.28rem' }}>{user.nickname}</section>
               {user.company && <ItemWrapper>{user.company}</ItemWrapper>}
               {user.position && <ItemWrapper>{user.position}</ItemWrapper>}
+              {user.integrity_level && <LevelTag>LV{user.integrity_level}</LevelTag>}
+              {user.influence && <ExpTag>{user.influence}</ExpTag>}
             </FlexRow>
             <section
               style={{

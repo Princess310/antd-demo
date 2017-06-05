@@ -25,6 +25,9 @@ export default function createRoutes(store) {
           import('containers/HomePage/reducer'),
           import('containers/HomePage/sagas'),
 
+          import('containers/BusinessPage/reducer'),
+          import('containers/BusinessPage/sagas'),
+
           import('containers/UserCenter/reducer'),
           import('containers/UserCenter/sagas'),
 
@@ -35,11 +38,15 @@ export default function createRoutes(store) {
 
         importModules.then(([
           reducer, sagas,
+          businessReducer, businessSagas,
           userCenterReducer, userCenterSagas,
           component,
         ]) => {
           injectReducer('home', reducer.default);
           injectSagas(sagas.default);
+
+          injectReducer('business', businessReducer.default);
+          injectSagas(businessSagas.default);
 
           injectReducer('userCenter', userCenterReducer.default);
           injectSagas(userCenterSagas.default);
@@ -291,6 +298,30 @@ export default function createRoutes(store) {
           name: 'userAuthorizeFiles',
           getComponent(location, cb) {
             import('containers/UserAuthorizeFiles')
+              .then(loadModule(cb))
+              .catch(errorLoading);
+          },
+        }, {
+          path: 'userCommunicate',
+          name: 'userCommunication',
+          getComponent(location, cb) {
+            import('containers/UserCommunication')
+              .then(loadModule(cb))
+              .catch(errorLoading);
+          },
+        }, {
+          path: 'momentDetail',
+          name: 'momentDetail',
+          getComponent(location, cb) {
+            import('containers/MomentDetail')
+              .then(loadModule(cb))
+              .catch(errorLoading);
+          },
+        }, {
+          path: 'userInfo',
+          name: 'userInfo',
+          getComponent(location, cb) {
+            import('containers/UserInfo')
               .then(loadModule(cb))
               .catch(errorLoading);
           },

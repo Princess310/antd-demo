@@ -123,9 +123,9 @@ export class UserAuthorize extends React.PureComponent { // eslint-disable-line 
             style={{ position: 'relative', top: '-2px', paddingBottom: '1.2rem' }}
             url={authFiles ? authFiles[authFiles.length -1].url : (materialInfo ? materialInfo.url : '')}
             onClick={() => {
-              //if (!materialInfo || Number(materialInfo.status) !== 0) {
+              if (!materialInfo || Number(materialInfo.status) !== 0) {
                 browserHistory.push('/userAuthorizeFiles');
-              //}
+              }
             }}
           >
           </UploadGrid>

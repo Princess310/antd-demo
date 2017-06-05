@@ -24,6 +24,10 @@ import {
 
   FETCH_USER_AUTH_INFO,
   SAVE_USER_AUTH_INFO,
+
+  FETCH_USER_COMMUNICATION,
+
+  FETCH_USER_INFO
 } from './constants';
 
 import {
@@ -46,6 +50,12 @@ import {
 
   loadAuthInfo,
   loadAuthFiles,
+
+  loadCommunication,
+  loadCommunicationRefresh,
+  loadCommunicationLoading,
+
+  loadUserInfo,
 } from './actions';
 
 export function* saveUser(action) {
@@ -184,7 +194,7 @@ export function* fetchUserMoments(action) {
     const res = yield request.doGet('moments/my-supplier-demand', { reward_as: type, page });
 
     const { list, page: resPage } = res;
-    yield put(loadUserMomentsLoading(type, list, resPage));
+    yield put(loadUserMoments(type, list, resPage));
   } catch (err) {
     // console.log(err);
   }
@@ -214,6 +224,38 @@ export function* saveUserAuth(action) {
   }
 }
 
+export function* fetchCommunication(action) {
+  try {
+    const { page } = action.payload;
+    // add refresh status
+    if (page === 1) {
+      yield put(loadCommunicationRefresh(true));
+    } else {
+      yield put(loadCommunicationLoading(true));
+    }
+
+    const res = yield request.doGet('moments/my-communication', { page });
+
+    const { list, page: resPage } = res;
+    yield put(loadCommunication(list, resPage));
+  } catch (err) {
+    // console.log(err);
+  }
+}
+
+export function* fetchUserInfo(action) {
+  try {
+    const { id } = action.payload;
+
+    const res = yield request.doGet('match/view', { id });
+    const { data } = res;
+
+    yield put(loadUserInfo(data));
+  } catch (err) {
+    // console.log(err);
+  }
+}
+
 export function* defaultSaga() {
   const watcher = yield takeLatest(SAVE_USER, saveUser);
   const watcherIndustry = yield takeLatest(FETCH_INDUSTRY, fetchIndustry);
@@ -227,6 +269,8 @@ export function* defaultSaga() {
   const watcherUserMoments = yield takeLatest(FETCH_USER_MOMENTS, fetchUserMoments);
   const watcherUserAuth = yield takeLatest(FETCH_USER_AUTH_INFO, fetchUserAuth);
   const watcherSaveAuth = yield takeLatest(SAVE_USER_AUTH_INFO, saveUserAuth);
+  const watcherCommunication = yield takeLatest(FETCH_USER_COMMUNICATION, fetchCommunication);
+  const watcherUserInfo = yield takeLatest(FETCH_USER_INFO, fetchUserInfo);
 
   // Suspend execution until location changes
   yield take(LOCATION_CHANGE);
@@ -242,6 +286,8 @@ export function* defaultSaga() {
   yield cancel(watcherUserMoments);
   yield cancel(watcherUserAuth);
   yield cancel(watcherSaveAuth);
+  yield cancel(watcherCommunication);
+  yield cancel(watcherUserInfo);
 }
 
 // All sagas to be loaded

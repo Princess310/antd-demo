@@ -41,6 +41,14 @@ import {
   LOAD_USER_AUTH_INFO,
   SAVE_USER_AUTH_INFO,
   LOAD_USER_AUTH_FILES,
+
+  FETCH_USER_COMMUNICATION,
+  LOAD_USER_COMMUNICATION,
+  LOAD_USER_COMMUNICATION_REFRESH,
+  LOAD_USER_COMMUNICATION_LOADING,
+
+  FETCH_USER_INFO,
+  LOAD_USER_INFO,
 } from './constants';
 
 export function saveUser(params) {
@@ -290,6 +298,61 @@ export function loadAuthFiles(list) {
     type: LOAD_USER_AUTH_FILES,
     payload: {
       list,
+    },
+  };
+}
+
+export function fetchCommunication(page) {
+  return {
+    type: FETCH_USER_COMMUNICATION,
+    payload: {
+      page,
+    },
+  };
+}
+
+export function loadCommunication(list, page) {
+  return {
+    type: LOAD_USER_COMMUNICATION,
+    payload: {
+      list,
+      page,
+    },
+  };
+}
+
+export function loadCommunicationRefresh(refresh) {
+  return {
+    type: LOAD_USER_COMMUNICATION_REFRESH,
+    payload: {
+      refresh,
+    },
+  };
+}
+
+export function loadCommunicationLoading(loading) {
+  return {
+    type: LOAD_USER_COMMUNICATION_LOADING,
+    payload: {
+      loading,
+    },
+  };
+}
+
+export function fetchUserInfo(id) {
+  return {
+    type: FETCH_USER_INFO,
+    payload: {
+      id,
+    },
+  };
+}
+
+export function loadUserInfo(data) {
+  return {
+    type: LOAD_USER_INFO,
+    payload: {
+      data,
     },
   };
 }

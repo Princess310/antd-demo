@@ -73,6 +73,46 @@ const makeSelectUserCollects = () => createSelector(
   }
 );
 
+
+const makeSelectUserMomentDemand = () => createSelector(
+  selectUserCenter,
+  (substate) => {
+    const info = substate.get('momentsDemand');
+    return {
+      refresh: info.get('refresh'),
+      loading: info.get('loading'),
+      list: info.get('list'),
+      hasNext: info.get('hasNext'),
+    };
+  }
+);
+
+const makeSelectUserMomentSupplier = () => createSelector(
+  selectUserCenter,
+  (substate) => {
+    const info = substate.get('momentsSupplier');
+    return {
+      refresh: info.get('refresh'),
+      loading: info.get('loading'),
+      list: info.get('list'),
+      hasNext: info.get('hasNext'),
+    };
+  }
+);
+
+const makeSelectUserCommunication = () => createSelector(
+  selectUserCenter,
+  (substate) => {
+    const info = substate.get('communication');
+    return {
+      refresh: info.get('refresh'),
+      loading: info.get('loading'),
+      list: info.get('list'),
+      hasNext: info.get('hasNext'),
+    };
+  }
+);
+
 const makeSelectUserAuthInfo = () => createSelector(
   selectUserCenter,
   (substate) => substate.get('authInfo')
@@ -83,6 +123,11 @@ const makeSelectUserAuthFiles = () => createSelector(
   (substate) => substate.get('authFiles')
 );
 
+const makeSelectUserInfo = () => createSelector(
+  selectUserCenter,
+  (substate) => substate.get('userInfo')
+);
+
 export {
   makeSelectUserCenterIndustry,
   makeSelectUserCenterService,
@@ -90,7 +135,11 @@ export {
   makeSelectUserCenterCity,
   makeSelectUserVisitorUsers,
   makeSelectUserVisitorMine,
+  makeSelectUserMomentDemand,
+  makeSelectUserMomentSupplier,
   makeSelectUserCollects,
   makeSelectUserAuthInfo,
   makeSelectUserAuthFiles,
+  makeSelectUserCommunication,
+  makeSelectUserInfo,
 };

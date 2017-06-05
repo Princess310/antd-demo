@@ -125,7 +125,7 @@ export class UserCenter extends React.PureComponent { // eslint-disable-line rea
             />
           </div>
           <FlexSB>
-            <FlexRow>
+            <FlexRow style={{ alignItems: 'flex-end' }}>
               <Avatar id={currentUser.id} avatar={currentUser.avatar} isVip={Number(currentUser.verify_status) === 2} />
               <InfoWrapper>
                 <section>{currentUser.nickname}</section>
@@ -143,7 +143,6 @@ export class UserCenter extends React.PureComponent { // eslint-disable-line rea
                       {currentUser.company}
                     </span>
                   }
-                  <LevelProgress progress={'0.25'} />
                 </section>
               </InfoWrapper>
             </FlexRow>
@@ -186,7 +185,9 @@ export class UserCenter extends React.PureComponent { // eslint-disable-line rea
           <Item
             thumb={<Icon type={require('icons/ali/朋友圈.svg')} color={pallete.theme} />}
             arrow="horizontal"
-            onClick={() => {}}
+            onClick={() => {
+              browserHistory.push('/userCommunicate');
+            }}
           >我的交流</Item>
           <Item
             thumb={<Icon type={require('icons/ali/收藏.svg')} color={pallete.theme} />}

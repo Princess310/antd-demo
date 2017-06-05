@@ -47,6 +47,18 @@ injectGlobal`
     }
   }
 
+  .moment-detail-tabs {
+    .am-tabs-bar {
+      padding-right: 3rem;
+      background-color: #fff;
+      border-bottom: 1PX solid #ddd;
+
+      .am-tabs-tab {
+        border-bottom: none;
+      }
+    }
+  }
+
   .t-l {
     text-align: left;
   }

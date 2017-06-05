@@ -40,7 +40,10 @@ class ExpProgress extends React.PureComponent { // eslint-disable-line react/pre
 }
 
 ExpProgress.propTypes = {
-  progress: PropTypes.string,
+  progress: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
+  ]),
 };
 
 export default ExpProgress;
