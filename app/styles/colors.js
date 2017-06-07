@@ -35,6 +35,8 @@ const pallete = {
     progress: '#dfdce0',
     collect: '#f2f2f2',
     antd: '#f5f5f9',
+    grey: '#EAEAEA',
+    lightBule: '#DDF0FF',
   },
   button: {
     default: {

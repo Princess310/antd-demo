@@ -25,6 +25,9 @@ export default function createRoutes(store) {
           import('containers/HomePage/reducer'),
           import('containers/HomePage/sagas'),
 
+          import('containers/Communicate/reducer'),
+          import('containers/Communicate/sagas'),
+
           import('containers/BusinessPage/reducer'),
           import('containers/BusinessPage/sagas'),
 
@@ -38,12 +41,16 @@ export default function createRoutes(store) {
 
         importModules.then(([
           reducer, sagas,
+          communicateReducer, communicateSagas,
           businessReducer, businessSagas,
           userCenterReducer, userCenterSagas,
           component,
         ]) => {
           injectReducer('home', reducer.default);
           injectSagas(sagas.default);
+
+          injectReducer('communicate', communicateReducer.default);
+          injectSagas(communicateSagas.default);
 
           injectReducer('business', businessReducer.default);
           injectSagas(businessSagas.default);

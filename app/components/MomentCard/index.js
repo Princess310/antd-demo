@@ -31,7 +31,8 @@ const WordsWrapper = styled.div`
 `;
 
 const PicWrapper = styled.div`
-  padding-right: 1.52rem;
+  padding-right: 1.24rem;
+  margin-bottom: 0.12rem;
   display: flex;
   flex-wrap: wrap;
 `;
@@ -129,35 +130,42 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
     };
     const contentStyle = Number(source_type) === 1 ? {
       paddingLeft: 0,
+      paddingRight: 0,
     } : {};
 
-    const picLength = pictures.length === 0 ? '100%' : ((pictures.length === 4 || pictures.length === 2) ? '2.2rem' : '1.45rem')
+    const picLength = pictures.length === 1 ? '3.5rem' : ((pictures.length === 4 || pictures.length === 2) ? '2.2rem' : '1.45rem')
     const picturesView = pictures.map((pic, i) => (
-      <img key={i} role="presentation" src={oss.getImgSuitablePath(pic)} style={{ width: picLength, height: picLength, marginTop: '0.06rem', marginRight: '0.06rem' }} />
+      <img
+        key={i}
+        role="presentation"
+        src={oss.getImgSuitablePath(pic)}
+        style={{
+          width: (Number(source_type) === 1 ? '100%' : picLength),
+          height: picLength,
+          marginTop: '0.06rem',
+          marginRight: '0.06rem'
+        }} />
     ));
 
     return (
       <div
         style={Object.assign(rootStyle, style)}
         onClick={() => {
-          if (Number(source_type) === 1) {
-            browserHistory.push('/service');
-          } else {
-            if (from === 'list') {
-              browserHistory.push({
-                pathname: 'momentDetail',
-                query: {
-                  id,
-                },
-                state: {
-                  type,
-                },
-              });
-            }
+          if (from === 'list') {
+            browserHistory.push({
+              pathname: 'momentDetail',
+              query: {
+                id,
+              },
+              state: {
+                type,
+              },
+            });
           }
         }}
       >
         <div style={{ padding: '0.15rem', borderBottom: `0.01rem ${pallete.border.deep} solid` }}>
+          {(Number(source_type) !== 1 || from === 'list') &&
           <MomentHeader
             user={{
               id: uid,
@@ -168,8 +176,8 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
               main_service_name,
               company,
               position,
-              type,
             }}
+            type={type}
             source_type={source_type}
             {...other}
             rightContent={(
@@ -181,7 +189,7 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
                 />
               </div>
             )}
-          />
+          />}
           <ContentWrapper style={contentStyle}>
             {moreContent ?
               (
@@ -203,11 +211,19 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
                   }
                 </div>
               ) : (
-                <div style={{ marginBottom: '0.12rem' }}>{content}</div>
+                Number(source_type) === 1 ? (
+                  <div dangerouslySetInnerHTML={{__html: content}} />
+                ) : (
+                  <div style={{ marginBottom: '0.12rem' }}>{content}</div>
+                )
               )
             }
-            <PicWrapper>{picturesView}</PicWrapper>
-            {Number(hits) > 0 && <div style={{ fontSize: '0.26rem', color: pallete.text.help }}>{hits}人看过</div>}
+            {(Number(source_type) !== 1 || from === 'list') && <PicWrapper style={contentStyle}>{picturesView}</PicWrapper>}
+            {(Number(source_type) === 1 && from === 'detail') ? (
+              Number(hits) > 0 && <div style={{ paddingTop: '0.24rem', fontSize: '0.26rem', color: pallete.text.words, borderTop: `0.01rem ${pallete.border.normal} solid` }}>阅读{hits}</div>
+            ) : (
+              Number(hits) > 0 && <div style={{ fontSize: '0.26rem', color: pallete.text.help }}>{hits}人看过</div>
+            )}
           </ContentWrapper>
           {from === 'list' && 
             <FlexSB style={{ paddingLeft: (type === 'business' ? '2.6rem' : '3.6rem'), paddingRight: '0.12rem', fontSize: '0.28rem', color: pallete.text.help }}>

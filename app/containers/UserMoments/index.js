@@ -77,7 +77,7 @@ export class UserMoments extends React.PureComponent { // eslint-disable-line re
         return;
       }
 
-      getVisitor(type, demand.page + 1);
+      getMoments(type, demand.page + 1);
       this.setState({
         demand: {
           ...mindemande,
@@ -117,6 +117,8 @@ export class UserMoments extends React.PureComponent { // eslint-disable-line re
       <MomentCard
         moment={moment}
         currentUser={currentUser}
+        from="list"
+        type="business"
         style={{ marginTop: '0.12rem' }}
       />
     );

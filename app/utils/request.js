@@ -79,11 +79,15 @@ const fetchDao = {
       }
     }
 
+    Toast.loading('加载中...', 10);
     return new Promise((resolve, reject) => {
       fetch(url, config)
       .then(self.checkStatus)
       .then(self.parseJSON)
       .then((data) => {
+        // remove the toast after responded
+        Toast.hide();
+
         if (data && data.code !== 200) {
           if (data.code === 603) {
             // TODO: do relogin rediction

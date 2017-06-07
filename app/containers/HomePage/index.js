@@ -20,6 +20,8 @@ import {
   fetchUser,
 } from './actions';
 
+import Communicate from '../Communicate';
+import BusinessPage from '../BusinessPage';
 import UserCenter from '../UserCenter';
 
 const TabItem = TabBar.Item;
@@ -72,7 +74,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
               });
             }}
           >
-            {!hideTabs && <div>交流</div>}
+            {!hideTabs && <Communicate />}
           </TabItem>
           <TabItem
             icon={<Icon type={require('icons/ali/生意.svg')} />}
@@ -86,7 +88,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
               });
             }}
           >
-            {!hideTabs && <div>生意</div>}
+            {!hideTabs && <BusinessPage />}
           </TabItem>
           <TabItem
             icon={<Icon type={require('icons/ali/消息.svg')} />}

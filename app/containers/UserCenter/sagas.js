@@ -27,7 +27,7 @@ import {
 
   FETCH_USER_COMMUNICATION,
 
-  FETCH_USER_INFO
+  FETCH_USER_INFO,
 } from './constants';
 
 import {

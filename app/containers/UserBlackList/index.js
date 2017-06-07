@@ -8,6 +8,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { browserHistory } from 'react-router';
+import AppContent from 'components/AppContent';
 import { NavBar, RefreshControl, ListView, List, WhiteSpace, Button } from 'antd-mobile';
 
 import Avatar from 'components/Avatar';
@@ -106,32 +107,39 @@ export class UserBlackList extends React.PureComponent { // eslint-disable-line 
         >
           黑名单
         </NavBar>
-        <WhiteSpace size="md" />
-        {
-          (userBlackList && userBlackList.length > 0) &&
-          <ListView
-            dataSource={this.state.dataSource.cloneWithRows(userBlackList)}
-            renderRow={row}
-            renderFooter={() => (<div style={{ padding: '0.3rem', textAlign: 'center' }}>
-              {listStatus.loading ? 'Loading...' : 'Loaded'}
-            </div>)}
-            initialListSize={10}
-            pageSize={10}
-            scrollRenderAheadDistance={200}
-            scrollEventThrottle={20}
-            onScroll={this.onScroll}
-            style={{
-              height: document.documentElement.clientHeight,
-            }}
-            scrollerOptions={{ scrollbars: true }}
-            refreshControl={<RefreshControl
-              refreshing={listStatus.refresh}
-              onRefresh={this.onRefresh}
-            />}
-            onEndReached={this.onEndReached}
-            onEndReachedThreshold={10}
-          />
-        }
+        <AppContent>
+          <WhiteSpace size="md" />
+          {
+            (userBlackList && userBlackList.length > 0) &&
+            <ListView
+              dataSource={this.state.dataSource.cloneWithRows(userBlackList)}
+              renderRow={row}
+              renderFooter={() => (<div style={{ padding: '0.3rem', textAlign: 'center' }}>
+                {listStatus.loading ? 'Loading...' : 'Loaded'}
+              </div>)}
+              initialListSize={10}
+              pageSize={10}
+              scrollRenderAheadDistance={200}
+              scrollEventThrottle={20}
+              onScroll={this.onScroll}
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                WebkitOverflowScrolling: 'touch',
+              }}
+              scrollerOptions={{ scrollbars: true }}
+              refreshControl={<RefreshControl
+                refreshing={listStatus.refresh}
+                onRefresh={this.onRefresh}
+              />}
+              onEndReached={this.onEndReached}
+              onEndReachedThreshold={10}
+            />
+          }
+        </AppContent>
       </div>
     );
   }

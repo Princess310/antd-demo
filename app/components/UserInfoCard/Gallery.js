@@ -11,8 +11,6 @@ import oss from 'utils/oss';
 
 import FlexColumn from 'components/FlexColumn';
 import FlexCenter from 'components/FlexCenter';
-import ExpProgress from 'components/ExpProgress';
-import { Icon } from 'antd-mobile';
 import Swiper from 'swiper';
 import swiperLeft from 'assets/images/swiper-left.png';
 import swiperRight from 'assets/images/swiper-right.png';
@@ -40,13 +38,14 @@ class Gallery extends React.PureComponent { // eslint-disable-line react/prefer-
     const { title, pictures, style } = this.props;
 
     const rootStyle = {
+      paddingBottom: '0.24rem',
       backgroundColor: pallete.white,
     };
 
     return (
       <div style={Object.assign(rootStyle, style)}>
         <FlexCenter style={{ fontSize: '0.28rem', padding: '0.24rem' }}>{title}</FlexCenter>
-        <div className="company-pictures" style={{ position: 'relative', paddingBottom: '0.24rem' }}>
+        <div className="company-pictures" style={{ position: 'relative', overflowX: 'hidden' }}>
           <div className="swiper-wrapper">
             {pictures.map((p, i) => (
               <div className="swiper-slide" style={{ width: '2.4rem', height: '2.4rem' }} key={i}>

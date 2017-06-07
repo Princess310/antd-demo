@@ -1,22 +1,24 @@
 /*
  *
- * UserCommunication
+ * Communicate
  *
  */
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { browserHistory } from 'react-router';
+import pallete from 'styles/colors';
 
 import AppContent from 'components/AppContent';
+import SearchBar from 'components/SearchBar';
 import MomentCard from 'components/MomentCard';
-import { NavBar, SegmentedControl, Tabs, ListView, RefreshControl } from 'antd-mobile';
-import { makeSelectUserCommunication } from 'containers/UserCenter/selectors';
-import { makeSelectCurrentUser } from 'containers/HomePage/selectors';
-import { fetchCommunication } from 'containers/UserCenter/actions';
+import { NavBar, Icon, ListView, RefreshControl } from 'antd-mobile';
 
-export class UserCommunication extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+import { makeSelectCurrentUser } from 'containers/HomePage/selectors';
+import { makeSelectCommunicate } from './selectors';
+import { fetchCommunicate } from './actions';
+
+export class Communicate extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
     super(props);
     const dataSource = new ListView.DataSource({
@@ -76,13 +78,18 @@ export class UserCommunication extends React.PureComponent { // eslint-disable-l
     return (
       <div>
         <NavBar
-          leftContent="back"
+          iconName={false}
           mode="light"
-          onLeftClick={() => browserHistory.goBack()}
+          rightContent={[
+            <div key={1} onClick={() => this.onRefresh()}><Icon key={1} type={require('icons/ali/编辑.svg')} color={pallete.theme} /></div>,
+          ]}
         >
-          我的交流
+          交流
         </NavBar>
-        <AppContent>
+        <div onClick={() => console.log('in')}>
+          <SearchBar title="搜索动态" />
+        </div>
+        <AppContent style={{ top: '1.85rem' }}>
           {(communicationList.list && communicationList.list.length > 0) &&
             <ListView
               dataSource={this.state.dataSource.cloneWithRows(communicationList.list)}
@@ -90,13 +97,18 @@ export class UserCommunication extends React.PureComponent { // eslint-disable-l
               renderFooter={() => (<div style={{ padding: '0.3rem', textAlign: 'center' }}>
                 {communicationList.loading ? 'Loading...' : 'Loaded'}
               </div>)}
-              initialListSize={10}
-              pageSize={10}
+              initialListSize={20}
+              pageSize={20}
               scrollRenderAheadDistance={200}
               scrollEventThrottle={20}
               onScroll={this.onScroll}
               style={{
-                height: document.documentElement.clientHeight,
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                WebkitOverflowScrolling: 'touch',
               }}
               refreshControl={<RefreshControl
                 refreshing={communicationList.refresh}
@@ -112,21 +124,21 @@ export class UserCommunication extends React.PureComponent { // eslint-disable-l
   }
 }
 
-UserCommunication.propTypes = {
+Communicate.propTypes = {
   communicationList: PropTypes.object,
   getList: PropTypes.func,
   currentUser: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
-  communicationList: makeSelectUserCommunication(),
+  communicationList: makeSelectCommunicate(),
   currentUser: makeSelectCurrentUser(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
-    getList: (page) => dispatch(fetchCommunication(page)),
+    getList: (page) => dispatch(fetchCommunicate(page)),
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserCommunication);
+export default connect(mapStateToProps, mapDispatchToProps)(Communicate);

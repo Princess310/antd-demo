@@ -72,7 +72,7 @@ class MomentHeader extends React.PureComponent { // eslint-disable-line react/pr
           {
             Number(source_type) === 1 ?
             (
-              <FlexColumn style={{ padding: '0.04rem 0.12rem' }}>
+              <FlexColumn style={{ padding: '0.04rem 0.12rem', width: '100%' }}>
                 <FlexSB>
                   <FlexRow>
                     <section style={{ fontSize: '0.28rem' }}>{user.nickname}</section>
@@ -90,11 +90,6 @@ class MomentHeader extends React.PureComponent { // eslint-disable-line react/pr
                     marginTop: '0.04rem',
                   }}
                 />
-                <LineTag style={{
-                  position: 'absolute',
-                  top: '0.96rem',
-                  right:'0.32rem',
-                }}>{user.main_service_name}</LineTag>
               </FlexColumn>
             ) :
             (
@@ -118,14 +113,14 @@ class MomentHeader extends React.PureComponent { // eslint-disable-line react/pr
                     marginTop: '0.04rem',
                   }}
                 />
-                {(source_type_name && type === 'communication') && <LineTag style={{
-                  position: 'absolute',
-                  top: '0.96rem',
-                  right:'0.32rem',
-                }}>{source_type_name}</LineTag>}
               </FlexColumn>
             )
           }
+          {(source_type_name && type === 'communication') && <LineTag style={{
+            position: 'absolute',
+            top: '0.76rem',
+            right:'0.15rem',
+          }}>{source_type_name}</LineTag>}
         </FlexSB>
       </Wrapper>
     );
@@ -137,6 +132,7 @@ MomentHeader.propTypes = {
   user: PropTypes.object.isRequired,
   avatarSize: PropTypes.string,
   from: PropTypes.string,
+  type: PropTypes.string,
   rightContent: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.node,

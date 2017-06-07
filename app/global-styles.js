@@ -71,6 +71,10 @@ injectGlobal`
     text-align: right;
   }
 
+  .am-navbar {
+    border-bottom: 0.01rem #f0f0f0 solid;
+  }
+
   .am-result .am-result-pic {
     display: flex;
     align-items: cener;

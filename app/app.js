@@ -27,7 +27,7 @@ import { makeSelectLocationState } from 'containers/App/selectors';
 import LanguageProvider from 'containers/LanguageProvider';
 
 // Import Swiper css
-import 'styles/swiper.scss';
+// import 'styles/swiper.scss';
 
 // Import fast click
 import FastClick from 'assets/lib/fastclick';

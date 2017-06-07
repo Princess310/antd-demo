@@ -33,7 +33,7 @@ class ExpandContent extends React.PureComponent { // eslint-disable-line react/p
     super(props);
     const { content } = this.props;
 
-    const moreContent = content.length > 60;
+    const moreContent = content.length > 120;
     this.state = {
       moreContent,
       expanded: false,
