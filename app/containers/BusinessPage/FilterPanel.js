@@ -20,7 +20,7 @@ const MaskWrapper = styled.div`
   left: 0;
   bottom: 0;
   height: 100%;
-  z-index: 20;
+  z-index: 102;
   background-color: rgba(0, 0, 0, 0.4);
 `;
 
@@ -33,6 +33,7 @@ const ContentWrapper = styled.div`
 `;
 
 const buttonStyle = {
+  padding: 0,
   margin: '0.04rem 0.025rem',
   width: '1.72rem',
   height: '0.62rem',
@@ -66,6 +67,7 @@ class FilterPanel extends React.PureComponent { // eslint-disable-line react/pre
   static defaultProps = {
     value: 1,
     onSelect: () => {},
+    selectTotalName: '全部',
   }
 
   handleExpand = (e) => {
@@ -74,11 +76,13 @@ class FilterPanel extends React.PureComponent { // eslint-disable-line react/pre
     this.setState({
       expanded: !this.state.expanded,
     });
+
+    this.props.onExpand && this.props.onExpand();
   }
 
   render() {
     const { expanded } = this.state;
-    const { defaultTitle, field, value, items, style, contentStyle, onSelect } = this.props;
+    const { defaultTitle, field, value, items, style, contentStyle, onSelect, selectTotalName } = this.props;
 
     return (
       <div style={{ width: '100%', position: 'relative' }}>
@@ -104,9 +108,12 @@ class FilterPanel extends React.PureComponent { // eslint-disable-line react/pre
           {expanded &&
             <MaskWrapper onClick={this.handleExpand}>
               <ContentWrapper>
+                <Button key={0} className="btn" inline style={value === 0 ? {...buttonStyle, ...buttonActiveStyle} : buttonStyle} activeStyle={buttonActiveStyle} onClick={() => onSelect({ id: 0, [field]: '' })}>
+                  {selectTotalName}
+                </Button>
                 {items && items.map((item, i) => (
-                  <Button key={i} className="btn" inline style={item.id === value ? {...buttonStyle, ...buttonActiveStyle} : buttonStyle} activeStyle={buttonActiveStyle} onClick={() => onSelect(item)}>
-                    {item.value === '' ? '全部' : item.value }
+                  item[field] !== '' && <Button key={i} className="btn" inline style={item.id === value ? {...buttonStyle, ...buttonActiveStyle} : buttonStyle} activeStyle={buttonActiveStyle} onClick={() => onSelect(item)}>
+                    {item[field]}{item.unit ? item.unit : ''}
                   </Button>
                 ))}
               </ContentWrapper>
@@ -121,6 +128,7 @@ class FilterPanel extends React.PureComponent { // eslint-disable-line react/pre
 FilterPanel.propTypes = {
   defaultTitle: PropTypes.string,
   field: PropTypes.string,
+  selectTotalName: PropTypes.string,
   value: PropTypes.oneOfType([
     PropTypes.number,
     PropTypes.string,
@@ -132,6 +140,7 @@ FilterPanel.propTypes = {
   style: PropTypes.object,
   contentStyle: PropTypes.object,
   onSelect: PropTypes.func,
+  onExpand: PropTypes.func,
 };
 
 export default FilterPanel;

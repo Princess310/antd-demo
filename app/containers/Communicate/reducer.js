@@ -26,15 +26,15 @@ function communicateReducer(state = initialState, action) {
       const { list, page } = action.payload;
       const info = state.get('communication');
 
-      const oldList = info.get('list');
-      let newList = oldList ? oldList : [];
+      const oldList = info.get('list') ? info.get('list') : [];
+      let newList = [];
       let hasNext = true;
 
       if (page) {
         if (page.current_page === 1) {
           newList = list;
         } else if (page.current_page <= page.page_count) {
-          newList = [...newList, ...list];
+          newList = [...oldList, ...list];
         }
 
         if (page.current_page >= page.page_count) {

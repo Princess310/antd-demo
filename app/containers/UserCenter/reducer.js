@@ -105,15 +105,15 @@ function userCenterReducer(state = initialState, action) {
       const { type, list, page } = action.payload;
       const info = type === 0 ? state.get('visitorUsers') : state.get('visitorMine');
 
-      const oldList = info.get('list');
-      let newList = oldList ? oldList : [];
+      const oldList = info.get('list') ? info.get('list') : [];
+      let newList = [];
       let hasNext = true;
 
       if (page) {
         if (page.current_page === 1) {
           newList = list;
         } else if (page.current_page <= page.page_count) {
-          newList = [...newList, ...list];
+          newList = [...oldList, ...list];
         }
 
         if (page.current_page >= page.page_count) {
@@ -148,15 +148,15 @@ function userCenterReducer(state = initialState, action) {
       const { list, page } = action.payload;
       const info = state.get('collects');
 
-      const oldList = info.get('list');
-      let newList = oldList ? oldList : [];
+      const oldList = info.get('list') ? info.get('list') : [];
+      let newList = [];
       let hasNext = true;
 
       if (page) {
         if (page.current_page === 1) {
           newList = list;
         } else if (page.current_page <= page.page_count) {
-          newList = [...newList, ...list];
+          newList = [...oldList, ...list];
         }
 
         if (page.current_page >= page.page_count) {
@@ -202,15 +202,15 @@ function userCenterReducer(state = initialState, action) {
       const { type, list, page } = action.payload;
       const info = type === 1 ? state.get('momentsSupplier') : state.get('momentsDemand');
 
-      const oldList = info.get('list');
-      let newList = oldList ? oldList : [];
+      const oldList = info.get('list') ? info.get('list') : [];
+      let newList = [];
       let hasNext = true;
 
       if (page) {
         if (page.current_page === 1) {
           newList = list;
         } else if (page.current_page <= page.page_count) {
-          newList = [...newList, ...list];
+          newList = [...oldList, ...list];
         }
 
         if (page.current_page >= page.page_count) {
@@ -255,15 +255,15 @@ function userCenterReducer(state = initialState, action) {
       const { list, page } = action.payload;
       const info = state.get('communication');
 
-      const oldList = info.get('list');
-      let newList = oldList ? oldList : [];
+      const oldList = info.get('list') ? info.get('list') : [];
+      let newList = [];
       let hasNext = true;
 
       if (page) {
         if (page.current_page === 1) {
           newList = list;
         } else if (page.current_page <= page.page_count) {
-          newList = [...newList, ...list];
+          newList = [...oldList, ...list];
         }
 
         if (page.current_page >= page.page_count) {

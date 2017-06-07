@@ -332,6 +332,38 @@ export default function createRoutes(store) {
               .then(loadModule(cb))
               .catch(errorLoading);
           },
+        }, {
+          path: 'businessPublish',
+          name: 'businessPublish',
+          getComponent(location, cb) {
+            import('containers/BusinessPublish')
+              .then(loadModule(cb))
+              .catch(errorLoading);
+          },
+        }, {
+          path: 'businessPublishSupplier',
+          name: 'businessPublishSupplier',
+          getComponent(location, cb) {
+            import('containers/BusinessPublishSupplier')
+              .then(loadModule(cb))
+              .catch(errorLoading);
+          },
+        },  {
+          path: 'communicatePublish',
+          name: 'communicatePublish',
+          getComponent(location, cb) {
+            import('containers/CommunicatePublish')
+              .then(loadModule(cb))
+              .catch(errorLoading);
+          },
+        }, {
+          path: 'businessSearch',
+          name: 'businessSearch',
+          getComponent(location, cb) {
+            import('containers/BusinessSearch')
+              .then(loadModule(cb))
+              .catch(errorLoading);
+          },
         },
       ],
     }, {

@@ -15,6 +15,9 @@ import {
   LOAD_BUSINESS_PRICE,
   LOAD_BUSINESS_NUMBER,
   LOAD_BUSINESS_UNITS,
+  LOAD_BUSINESS_REWARD,
+
+  LOAD_BUSINESS_SEARCH_PARAMS,
 } from './constants';
 
 const initialState = fromJS({
@@ -22,6 +25,7 @@ const initialState = fromJS({
   price: false,
   number: false,
   units: false,
+  reward: false,
   businessSupplier: {
     refresh: false,
     loading: false,
@@ -47,15 +51,15 @@ function businessPageReducer(state = initialState, action) {
       const { type, list, page } = action.payload;
       const info = type === 1 ? state.get('businessSupplier') : state.get('businessDemand');
 
-      const oldList = info.get('list');
-      let newList = oldList ? oldList : [];
+      const oldList = info.get('list') ? info.get('list') : [];
+      let newList = [];
       let hasNext = true;
 
       if (page) {
         if (page.current_page === 1) {
           newList = list;
         } else if (page.current_page <= page.page_count) {
-          newList = [...newList, ...list];
+          newList = [...oldList, ...list];
         }
 
         if (page.current_page >= page.page_count) {
@@ -100,6 +104,11 @@ function businessPageReducer(state = initialState, action) {
       const { list } = action.payload;
 
       return state.set('units', list);
+    }
+    case LOAD_BUSINESS_REWARD: {
+      const { list } = action.payload;
+
+      return state.set('reward', list);
     }
     default:
       return state;

@@ -52,6 +52,7 @@ const makeSelectBusinessFilter = () => createSelector(
       price: substate.get('price'),
       number: substate.get('number'),
       units: substate.get('units'),
+      reward: substate.get('reward'),
     };
   }
 );

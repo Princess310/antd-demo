@@ -8,6 +8,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import pallete from 'styles/colors';
+import { browserHistory } from 'react-router';
 
 import AppContent from 'components/AppContent';
 import SearchBar from 'components/SearchBar';
@@ -81,7 +82,11 @@ export class Communicate extends React.PureComponent { // eslint-disable-line re
           iconName={false}
           mode="light"
           rightContent={[
-            <div key={1} onClick={() => this.onRefresh()}><Icon key={1} type={require('icons/ali/编辑.svg')} color={pallete.theme} /></div>,
+            <div key={1} onClick={() => {
+              browserHistory.push('/communicatePublish');
+            }}>
+              <Icon key={1} type={require('icons/ali/编辑.svg')} color={pallete.theme} />
+            </div>,
           ]}
         >
           交流

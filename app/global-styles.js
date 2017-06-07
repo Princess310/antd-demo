@@ -80,4 +80,9 @@ injectGlobal`
     align-items: cener;
     justify-content: center;
   }
+
+  .am-search .am-search-input .am-search-clear {
+    top: 0.12rem;
+    right: 0.12rem;
+  }
 `;

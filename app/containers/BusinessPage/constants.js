@@ -12,7 +12,14 @@ export const LOAD_BUSINESS = 'app/BusinessPage/LOAD_BUSINESS';
 export const LOAD_BUSINESS_REFRESH = 'app/BusinessPage/LOAD_BUSINESS_REFRESH';
 export const LOAD_BUSINESS_LOADING = 'app/BusinessPage/LOAD_BUSINESS_LOADING';
 
-export const FETCH_BUSINESS_FILTER = 'app/BusinessPage/FETCH_BUSINESS_FILTER';
+export const FETCH_BUSINESS_PRICE = 'app/BusinessPage/FETCH_BUSINESS_PRICE';
 export const LOAD_BUSINESS_PRICE = 'app/BusinessPage/LOAD_BUSINESS_PRICE';
+
+export const FETCH_BUSINESS_NUMBER = 'app/BusinessPage/FETCH_BUSINESS_NUMBER';
 export const LOAD_BUSINESS_NUMBER = 'app/BusinessPage/LOAD_BUSINESS_NUMBER';
+
+export const FETCH_BUSINESS_UNITS = 'app/BusinessPage/FETCH_BUSINESS_UNITS';
 export const LOAD_BUSINESS_UNITS = 'app/BusinessPage/LOAD_BUSINESS_UNITS';
+
+export const FETCH_BUSINESS_REWARD = 'app/BusinessPage/FETCH_BUSINESS_REWARD';
+export const LOAD_BUSINESS_REWARD = 'app/BusinessPage/LOAD_BUSINESS_REWARD';

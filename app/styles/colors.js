@@ -17,6 +17,7 @@ const pallete = {
     content: '#1A2126',
     red: '#ff2b2d',
     tag: '#A4A9B8',
+    message: '#A0A5B5',
   },
   border: {
     normal: '#f0f0f0',

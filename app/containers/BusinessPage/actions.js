@@ -13,10 +13,17 @@ import {
   LOAD_BUSINESS_REFRESH,
   LOAD_BUSINESS_LOADING,
 
-  FETCH_BUSINESS_FILTER,
+  FETCH_BUSINESS_PRICE,
   LOAD_BUSINESS_PRICE,
+
+  FETCH_BUSINESS_NUMBER,
   LOAD_BUSINESS_NUMBER,
+
+  FETCH_BUSINESS_UNITS,
   LOAD_BUSINESS_UNITS,
+
+  FETCH_BUSINESS_REWARD,
+  LOAD_BUSINESS_REWARD,
 } from './constants';
 
 export function fetchMomentDetail(id) {
@@ -37,15 +44,13 @@ export function loadMomentDetail(data) {
   };
 }
 
-export function fetchBusiness(type, page, searchParams, doGetFilter) {
+export function fetchBusiness(type, page, searchParams) {
   return {
     type: FETCH_BUSINESS,
     payload: {
       type,
       page,
       searchParams,
-      // doGetFilter, try to get filters when needed
-      doGetFilter,
     },
   };
 }
@@ -81,9 +86,9 @@ export function loadBusienssLoading(type, loading) {
   };
 }
 
-export function fetchBusinessFilter() {
+export function fetchBusinessPrice() {
   return {
-    type: FETCH_BUSINESS_FILTER,
+    type: FETCH_BUSINESS_PRICE,
   };
 }
 
@@ -96,6 +101,12 @@ export function loadBusinessPrice(list) {
   };
 }
 
+export function fetchBusinessNumber() {
+  return {
+    type: FETCH_BUSINESS_NUMBER,
+  };
+}
+
 export function loadBusinessNumber(list) {
   return {
     type: LOAD_BUSINESS_NUMBER,
@@ -105,9 +116,30 @@ export function loadBusinessNumber(list) {
   };
 }
 
+export function fetchBusinessUnits() {
+  return {
+    type: FETCH_BUSINESS_UNITS,
+  };
+}
+
 export function loadBusinessUnits(list) {
   return {
     type: LOAD_BUSINESS_UNITS,
+    payload: {
+      list,
+    },
+  };
+}
+
+export function fetchReward() {
+  return {
+    type: FETCH_BUSINESS_REWARD,
+  };
+}
+
+export function loadReward(list) {
+  return {
+    type: LOAD_BUSINESS_REWARD,
     payload: {
       list,
     },
