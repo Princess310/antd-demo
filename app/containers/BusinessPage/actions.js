@@ -24,6 +24,10 @@ import {
 
   FETCH_BUSINESS_REWARD,
   LOAD_BUSINESS_REWARD,
+
+  FETCH_BUSINESS_SEARCH,
+  LOAD_BUSINESS_SEARCH_PANEL,
+  LOAD_BUSINESS_SEARCH_ALL,
 } from './constants';
 
 export function fetchMomentDetail(id) {
@@ -143,5 +147,36 @@ export function loadReward(list) {
     payload: {
       list,
     },
+  };
+}
+
+export function fetchSearch(panel, keyword, reward_as, page) {
+  return {
+    type: FETCH_BUSINESS_SEARCH,
+    payload: {
+      panel,
+      keyword,
+      reward_as,
+      page,
+    },
+  };
+}
+
+export function loadSearchPanel(data) {
+  return {
+    type: LOAD_BUSINESS_SEARCH_PANEL,
+    payload: {
+      data,
+    },
+  };
+}
+
+export function loadSearchAll(list, page) {
+  return {
+    type: LOAD_BUSINESS_SEARCH_ALL,
+    payload: {
+      list,
+      page,
+    }
   };
 }

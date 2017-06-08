@@ -10,7 +10,8 @@ import { createStructuredSelector } from 'reselect';
 import pallete from 'styles/colors';
 import { browserHistory } from 'react-router';
 
-import AppContent from 'components/AppContent';
+import { ScrollContainer } from 'react-router-scroll';
+import TouchLoader from 'components/TouchLoader';
 import SearchBar from 'components/SearchBar';
 import MomentCard from 'components/MomentCard';
 import { NavBar, Icon, ListView, RefreshControl } from 'antd-mobile';
@@ -22,15 +23,10 @@ import { fetchCommunicate } from './actions';
 export class Communicate extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
     super(props);
-    const dataSource = new ListView.DataSource({
-      rowHasChanged: (row1, row2) => row1 !== row2,
-    });
 
-    this.initData = [];
     this.state = {
       startPage: 1,
       page: 1,
-      dataSource: dataSource.cloneWithRows(this.initData),
     };
   }
 
@@ -66,15 +62,16 @@ export class Communicate extends React.PureComponent { // eslint-disable-line re
   render() {
     const { communicationList, currentUser } = this.props;
 
-    const row = (moment) => (
+    const listView = communicationList.list ? communicationList.list.map((moment) => (
       <MomentCard
+        key={moment.id}
         moment={moment}
         currentUser={currentUser}
         from="list"
         type="communication"
         style={{ marginTop: '0.12rem' }}
       />
-    );
+    )) : null;
 
     return (
       <div>
@@ -94,36 +91,21 @@ export class Communicate extends React.PureComponent { // eslint-disable-line re
         <div onClick={() => console.log('in')}>
           <SearchBar title="搜索动态" />
         </div>
-        <AppContent style={{ top: '1.85rem' }}>
-          {(communicationList.list && communicationList.list.length > 0) &&
-            <ListView
-              dataSource={this.state.dataSource.cloneWithRows(communicationList.list)}
-              renderRow={row}
-              renderFooter={() => (<div style={{ padding: '0.3rem', textAlign: 'center' }}>
-                {communicationList.loading ? 'Loading...' : 'Loaded'}
-              </div>)}
-              initialListSize={20}
-              pageSize={20}
-              scrollRenderAheadDistance={200}
-              scrollEventThrottle={20}
-              onScroll={this.onScroll}
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                WebkitOverflowScrolling: 'touch',
-              }}
-              refreshControl={<RefreshControl
-                refreshing={communicationList.refresh}
-                onRefresh={this.onRefresh}
-              />}
-              onEndReached={this.onEndReached}
-              onEndReachedThreshold={10}
-            />
-          }
-        </AppContent>
+        <ScrollContainer scrollKey="communicate">
+          <TouchLoader
+            initializing={0}
+            refreshing={communicationList.refresh}
+            onRefresh={this.onRefresh}
+            hasMore={communicationList.hasNext}
+            loading={communicationList.loading}
+            onLoadMore={this.onEndReached}
+            autoLoadMore={true}
+            className="tloader app-content"
+            style={{ top: '1.9rem', bottom: '1rem' }}
+          >
+            {listView}
+          </TouchLoader>
+        </ScrollContainer>
       </div>
     );
   }

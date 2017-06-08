@@ -83,13 +83,13 @@ class MomentHeader extends React.PureComponent { // eslint-disable-line react/pr
                 <FlexRow>
                   {user.main_service_name && <ItemWrapper>{user.main_service_name}</ItemWrapper>}
                 </FlexRow>
-                <DateInfo
+                {created_at && <DateInfo
                   time={created_at}
                   style={{
                     color: pallete.text.help,
                     marginTop: '0.04rem',
                   }}
-                />
+                />}
               </FlexColumn>
             ) :
             (
@@ -106,13 +106,13 @@ class MomentHeader extends React.PureComponent { // eslint-disable-line react/pr
                   {user.company && <ItemWrapper>{user.company}</ItemWrapper>}
                   {user.position && <ItemWrapper>{user.position}</ItemWrapper>}
                 </FlexRow>
-                <DateInfo
+                {created_at && <DateInfo
                   time={created_at}
                   style={{
                     color: pallete.text.help,
                     marginTop: '0.04rem',
                   }}
-                />
+                />}
               </FlexColumn>
             )
           }

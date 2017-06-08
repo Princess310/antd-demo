@@ -83,12 +83,24 @@ class FilterPanel extends React.PureComponent { // eslint-disable-line react/pre
   render() {
     const { expanded } = this.state;
     const { defaultTitle, field, value, items, style, contentStyle, onSelect, selectTotalName } = this.props;
+    let currentItemTitle = defaultTitle;
+
+    const itemsView = items ? items.map((item, i) => {
+      if (item.id === value) {
+        currentItemTitle = item[field];
+      }
+      return (
+        item[field] !== '' && <Button key={i} className="btn" inline style={item.id === value ? {...buttonStyle, ...buttonActiveStyle} : buttonStyle} activeStyle={buttonActiveStyle} onClick={() => onSelect(item)}>
+          {item[field]}{item.unit ? item.unit : ''}
+        </Button>
+      )
+    }) : null
 
     return (
       <div style={{ width: '100%', position: 'relative' }}>
         <div style={Object.assign(rootStyle, style)}>
           <FlexCenter style={contentStyle} onClick={this.handleExpand}>
-            <div>{defaultTitle}</div>
+            <div>{currentItemTitle}</div>
             <div style={{ marginLeft: '0.08rem' }}>
               {
                 expanded ?
@@ -111,11 +123,7 @@ class FilterPanel extends React.PureComponent { // eslint-disable-line react/pre
                 <Button key={0} className="btn" inline style={value === 0 ? {...buttonStyle, ...buttonActiveStyle} : buttonStyle} activeStyle={buttonActiveStyle} onClick={() => onSelect({ id: 0, [field]: '' })}>
                   {selectTotalName}
                 </Button>
-                {items && items.map((item, i) => (
-                  item[field] !== '' && <Button key={i} className="btn" inline style={item.id === value ? {...buttonStyle, ...buttonActiveStyle} : buttonStyle} activeStyle={buttonActiveStyle} onClick={() => onSelect(item)}>
-                    {item[field]}{item.unit ? item.unit : ''}
-                  </Button>
-                ))}
+                {itemsView}
               </ContentWrapper>
             </MaskWrapper>
           }

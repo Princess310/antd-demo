@@ -12,6 +12,8 @@ import {
   FETCH_BUSINESS_NUMBER,
   FETCH_BUSINESS_UNITS,
   FETCH_BUSINESS_REWARD,
+
+  FETCH_BUSINESS_SEARCH,
 } from './constants';
 
 import {
@@ -25,6 +27,9 @@ import {
   loadBusinessNumber,
   loadBusinessUnits,
   loadReward,
+
+  loadSearchPanel,
+  loadSearchAll,
 } from './actions';
 
 export function* fetchMomentDetail(action) {
@@ -102,6 +107,39 @@ export function* fetchBusinessReward() {
   }
 }
 
+export function* fetchBusinessSearch(action) {
+  try {
+    const { panel, keyword, reward_as, page } = action.payload;
+
+    if (panel === '7' || reward_as) {
+      const res = yield request.doGet('moments/search', {
+        panel,
+        keyword,
+        reward_as,
+        page,
+      });
+
+      if (panel === '7') {
+        yield put(loadSearchPanel(res));
+      } else {
+        const { list, page: resPage } = res;
+        yield put(loadSearchAll(list, resPage));
+      }
+    } else {
+      const res = yield request.doGet('follow/search-friend', {
+        type: 0,
+        search: keyword,
+        page,
+      });
+
+      const { list, page: resPage } = res;
+      yield put(loadSearchAll(list, resPage));
+    }
+  } catch (err) {
+    // console.log(err);
+  }
+}
+
 export function* defaultSaga() {
   const watcher = yield takeLatest(FETCH_MOMENT_DETAIL, fetchMomentDetail);
   const watcherBusiness = yield takeLatest(FETCH_BUSINESS, fetchBusiness);
@@ -109,6 +147,7 @@ export function* defaultSaga() {
   const watcherBusinessNumber = yield takeLatest(FETCH_BUSINESS_NUMBER, fetchBusinessNumber);
   const watcherBusinessUnits = yield takeLatest(FETCH_BUSINESS_UNITS, fetchBusinessUnits);
   const watcherBusinessReward = yield takeLatest(FETCH_BUSINESS_REWARD, fetchBusinessReward);
+  const watcherBusinessSearch = yield takeLatest(FETCH_BUSINESS_SEARCH, fetchBusinessSearch);
 
   // Suspend execution until location changes
   yield take(LOCATION_CHANGE);
@@ -118,6 +157,7 @@ export function* defaultSaga() {
   yield cancel(watcherBusinessNumber);
   yield cancel(watcherBusinessUnits);
   yield cancel(watcherBusinessReward);
+  yield cancel(watcherBusinessSearch);
 }
 
 // All sagas to be loaded

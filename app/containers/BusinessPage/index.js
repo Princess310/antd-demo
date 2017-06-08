@@ -10,7 +10,8 @@ import { createStructuredSelector } from 'reselect';
 import pallete from 'styles/colors';
 import { browserHistory } from 'react-router';
 
-import AppContent from 'components/AppContent';
+import { ScrollContainer } from 'react-router-scroll';
+import TouchLoader from 'components/TouchLoader';
 import MomentCard from 'components/MomentCard';
 import FlexColumnCenter from 'components/FlexColumnCenter';
 import FlexRow from 'components/FlexRow';
@@ -38,14 +39,8 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
     this.state = {
       type: 2, // type-> 1: 我的供应, 2:我的需求
       startPage: 1,
-      supplier: {
-        page: 1,
-        dataSourceSupplier: dataSourceSupplier.cloneWithRows(this.initData),
-      },
-      demand: {
-        page: 1,
-        dataSourceDemand: dataSourceDemand.cloneWithRows(this.initData),
-      },
+      supplierPage: 1,
+      demandPage: 1,
       supplierLoaded: false,
       priceFilter: {
         id: 0,
@@ -75,57 +70,47 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
     }
   }
 
-  getList() {
-    const { getBusiness } = this.props;
-    const { type, demand, supplier, startPage, priceFilter, numberFilter, rewardDemandFilter, rewardSupplierFilter } = this.state; 
+  getSearchParams = () => {
+    const { type, priceFilter, numberFilter, rewardDemandFilter, rewardSupplierFilter } = this.state; 
     let searchParams = {};
-    let page = startPage;
 
     if (type === 1) {
       searchParams = {
         reward_item: rewardSupplierFilter.id,
         section: priceFilter.value,
       };
-
-      page = supplier.page;
     } else {
       searchParams = {
         reward_item: rewardDemandFilter.id,
         section: numberFilter.value,
       };
-
-      page = demand.page;
     }
 
-    // do the filter for business
-    getBusiness(type, page, searchParams);
+    return searchParams;
   }
 
   onRefresh = () => {
-    const { type, startPage, demand, supplier } = this.state;
+    const { getBusiness } = this.props;
+    const { type, startPage } = this.state;
+    const searchParams = this.getSearchParams();
     
     if (type === 1) {
       this.setState({
-        supplier: {
-          ...supplier,
-          page: startPage,
-        },
+        supplierPage: startPage,
       });
     } else {
       this.setState({
-        demand: {
-          ...demand,
-          page: startPage,
-        },
+        demandPage: startPage,
       });
     }
 
-    this.getList();
+    getBusiness(type, startPage, searchParams);
   }
 
   onEndReached = () => {
-    const { type, demand, supplier } = this.state;
+    const { type, supplierPage, demandPage } = this.state;
     const { businessDemand, businessSupplier, getBusiness } = this.props;
+    const searchParams = this.getSearchParams();
 
     if (type === 1) {
       if (businessSupplier.loading || !businessSupplier.hasNext) {
@@ -133,25 +118,21 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
       }
 
       this.setState({
-        supplier: {
-          ...supplier,
-          page: supplier.page + 1,
-        },
+        supplierPage: supplierPage + 1,
       });
+
+      getBusiness(type, supplierPage + 1, searchParams);
     } else {
       if (businessDemand.loading || !businessDemand.hasNext) {
         return;
       }
 
       this.setState({
-        demand: {
-          ...demand,
-          page: demand.page + 1,
-        },
+        demandPage: demandPage + 1,
       });
-    }
 
-    this.getList();
+      getBusiness(type, demandPage + 1, searchParams);
+    }
   }
 
   onChangeTitle = (e) => {
@@ -178,14 +159,12 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
 
   handleFilter = (filter, item) => {
     const { getBusiness } = this.props;
-    const { type, demand, supplier, startPage } = this.state; 
+    const { type, startPage, priceFilter, numberFilter, rewardDemandFilter, rewardSupplierFilter } = this.state; 
+    let searchParams = this.getSearchParams();
 
     if (type === 1) {
       this.setState({
-        supplier: {
-          ...supplier,
-          page: startPage,
-        },
+        supplierPage: startPage,
         [filter]: {
           id: item.id,
           value: item.value,
@@ -193,10 +172,7 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
       });
     } else {
       this.setState({
-        demand: {
-          ...demand,
-          page: startPage,
-        },
+        demandPage: startPage,
         [filter]: {
           id: item.id,
           value: item.value,
@@ -204,8 +180,14 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
       });
     }
 
+    if (filter === 'priceFilter' || filter === 'numberFilter') {
+      searchParams.section = item.value;
+    } else {
+      searchParams.reward_item = item.id;
+    }
+
     // do the filter for business
-    this.getList();
+    getBusiness(type, startPage, searchParams);
   }
   
 
@@ -213,15 +195,6 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
     const { type, priceFilter, numberFilter, rewardDemandFilter, rewardSupplierFilter, showPublishMenu } = this.state;
     const { businessDemand, businessSupplier, currentUser, filters } = this.props;
     const { price, number, reward } = filters;
-    const row = (moment) => (
-      <MomentCard
-        moment={moment}
-        currentUser={currentUser}
-        from="list"
-        type="business"
-        style={{ marginTop: '0.12rem' }}
-      />
-    );
 
     return (
       <div>
@@ -306,62 +279,59 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
               </FlexRow>
           )
         }
-        <AppContent style={{ top: '1.8rem' }}>
-          {(type === 2 && businessDemand.list && businessDemand.list.length > 0) &&
-            <ListView
-              dataSource={this.state.demand.dataSourceDemand.cloneWithRows(businessDemand.list)}
-              renderRow={row}
-              renderFooter={() => (<div style={{ padding: '0.3rem', textAlign: 'center' }}>
-                {businessDemand.loading ? 'Loading...' : 'Loaded'}
-              </div>)}
-              initialListSize={20}
-              pageSize={20}
-              scrollRenderAheadDistance={200}
-              scrollEventThrottle={20}
-              onScroll={this.onScroll}
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                WebkitOverflowScrolling: 'touch',
-              }}
-              scrollerOptions={{ scrollbars: true }}
-              refreshControl={<RefreshControl
-                refreshing={businessDemand.refresh}
-                onRefresh={() => this.onRefresh()}
-              />}
-              onEndReached={this.onEndReached}
-              onEndReachedThreshold={10}
-            />
-          }
+        {(type === 2 && businessDemand.list && businessDemand.list.length > 0) &&
+          <ScrollContainer scrollKey="business_demand">
+            <TouchLoader
+              initializing={0}
+              refreshing={businessDemand.refresh}
+              onRefresh={this.onRefresh}
+              hasMore={businessDemand.hasNext}
+              loading={businessDemand.loading}
+              onLoadMore={this.onEndReached}
+              autoLoadMore={true}
+              className="tloader app-content"
+              style={{ top: '1.8rem', bottom: '1rem' }}
+            >
+              {businessDemand.list.map((moment) => (
+                <MomentCard
+                  key={moment.id}
+                  moment={moment}
+                  currentUser={currentUser}
+                  from="list"
+                  type="business"
+                  style={{ marginTop: '0.12rem' }}
+                />
+              ))}
+            </TouchLoader>
+          </ScrollContainer>
+        }
 
-          {(type === 1 && businessSupplier.list && businessSupplier.list.length > 0) &&
-            <ListView
-              dataSource={this.state.supplier.dataSourceSupplier.cloneWithRows(businessSupplier.list)}
-              renderRow={row}
-              renderFooter={() => (<div style={{ padding: '0.3rem', textAlign: 'center' }}>
-                {businessSupplier.loading ? 'Loading...' : 'Loaded'}
-              </div>)}
-              initialListSize={10}
-              pageSize={10}
-              scrollRenderAheadDistance={200}
-              scrollEventThrottle={20}
-              onScroll={this.onScroll}
-              style={{
-                height: document.documentElement.clientHeight,
-              }}
-              scrollerOptions={{ scrollbars: true }}
-              refreshControl={<RefreshControl
-                refreshing={businessSupplier.refresh}
-                onRefresh={() => this.onRefresh()}
-              />}
-              onEndReached={this.onEndReached}
-              onEndReachedThreshold={10}
-            />
-          }
-        </AppContent>
+        {(type === 1 && businessSupplier.list && businessSupplier.list.length > 0) &&
+          <ScrollContainer scrollKey="business_supplier">
+            <TouchLoader
+              initializing={0}
+              refreshing={businessSupplier.refresh}
+              onRefresh={this.onRefresh}
+              hasMore={businessSupplier.hasNext}
+              loading={businessSupplier.loading}
+              onLoadMore={this.onEndReached}
+              autoLoadMore={true}
+              className="tloader app-content"
+              style={{ top: '1.8rem', bottom: '1rem' }}
+            >
+              {businessSupplier.list.map((moment) => (
+                <MomentCard
+                  key={moment.id}
+                  moment={moment}
+                  currentUser={currentUser}
+                  from="list"
+                  type="business"
+                  style={{ marginTop: '0.12rem' }}
+                />
+              ))}
+            </TouchLoader>
+          </ScrollContainer>
+        }
         {showPublishMenu && <PublishMenu onClose={() => {this.setState({
           showPublishMenu: false,
         })}} />}

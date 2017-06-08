@@ -23,3 +23,7 @@ export const LOAD_BUSINESS_UNITS = 'app/BusinessPage/LOAD_BUSINESS_UNITS';
 
 export const FETCH_BUSINESS_REWARD = 'app/BusinessPage/FETCH_BUSINESS_REWARD';
 export const LOAD_BUSINESS_REWARD = 'app/BusinessPage/LOAD_BUSINESS_REWARD';
+
+export const FETCH_BUSINESS_SEARCH = 'app/BusinessPage/FETCH_BUSINESS_SEARCH';
+export const LOAD_BUSINESS_SEARCH_PANEL = 'app/BusinessPage/LOAD_BUSINESS_SEARCH_PANEL';
+export const LOAD_BUSINESS_SEARCH_ALL = 'app/BusinessPage/LOAD_BUSINESS_SEARCH_ALL';

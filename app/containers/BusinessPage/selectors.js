@@ -57,9 +57,28 @@ const makeSelectBusinessFilter = () => createSelector(
   }
 );
 
+const makeSelectBusinessSearchPanel = () => createSelector(
+  selectBusiness,
+  (substate) => substate.get('searchPanel')
+);
+
+const makeSelectBusinessSearchAll = () => createSelector(
+  selectBusiness,
+  (substate) => {
+    const info = substate.get('searchAll');
+    return {
+      loading: info.get('loading'),
+      list: info.get('list'),
+      hasNext: info.get('hasNext'),
+    };
+  }
+);
+
 export {
   makeSelectBusinessDetail,
   makeSelectUserBusinessDemand,
   makeSelectUserBusinessSupplier,
   makeSelectBusinessFilter,
+  makeSelectBusinessSearchPanel,
+  makeSelectBusinessSearchAll,
 };

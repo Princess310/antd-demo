@@ -55,7 +55,7 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
     super(props);
     const { moment: { content }, from } = this.props;
 
-    const moreContent = (from === 'list' && content.length > 60);
+    const moreContent = (from !== 'detail' && content.length > 60);
     this.state = {
       moreContent,
       expanded: false,
@@ -181,7 +181,7 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
             source_type={source_type}
             {...other}
             rightContent={(
-              <div style={{ width: '0.48rem', height: '0.48rem', textAlign: 'right' }} onClick={this.showActionSheet}>
+              from !== 'search' && <div style={{ width: '0.48rem', height: '0.48rem', textAlign: 'right' }} onClick={this.showActionSheet}>
                 <Icon
                   type={require('icons/ali/下拉.svg')}
                   size="xs"
@@ -222,7 +222,7 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
             {(Number(source_type) === 1 && from === 'detail') ? (
               Number(hits) > 0 && <div style={{ paddingTop: '0.24rem', fontSize: '0.26rem', color: pallete.text.words, borderTop: `0.01rem ${pallete.border.normal} solid` }}>阅读{hits}</div>
             ) : (
-              Number(hits) > 0 && <div style={{ fontSize: '0.26rem', color: pallete.text.help }}>{hits}人看过</div>
+              (Number(hits) > 0 && from !== 'search') && <div style={{ fontSize: '0.26rem', color: pallete.text.help }}>{hits}人看过</div>
             )}
           </ContentWrapper>
           {from === 'list' && 
@@ -248,7 +248,7 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
             </FlexSB>
           }
         </div>
-        {(comments.length > 0 && from === 'list') && 
+        {(comments && comments.length > 0 && from === 'list') && 
           <MomentComment
             id={id}
             comments={comments}

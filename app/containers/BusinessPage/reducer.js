@@ -18,6 +18,9 @@ import {
   LOAD_BUSINESS_REWARD,
 
   LOAD_BUSINESS_SEARCH_PARAMS,
+
+  LOAD_BUSINESS_SEARCH_PANEL,
+  LOAD_BUSINESS_SEARCH_ALL,
 } from './constants';
 
 const initialState = fromJS({
@@ -26,6 +29,12 @@ const initialState = fromJS({
   number: false,
   units: false,
   reward: false,
+  searchPanel: false,
+  searchAll: {
+    loading: false,
+    list: false,
+    hasNext: false,
+  },
   businessSupplier: {
     refresh: false,
     loading: false,
@@ -109,6 +118,47 @@ function businessPageReducer(state = initialState, action) {
       const { list } = action.payload;
 
       return state.set('reward', list);
+    }
+    case LOAD_BUSINESS_SEARCH_PANEL: {
+      const { data: { demand_more, supplier_more, users_more, demand, supplier, users } } = action.payload;
+      const searchPanel = {
+        demand_more,
+        supplier_more,
+        users_more,
+        demand,
+        supplier,
+        users,
+      };
+
+      return state.set('searchPanel', searchPanel);
+    }
+    case LOAD_BUSINESS_SEARCH_ALL: {
+      const { list, page } = action.payload;
+      const info = state.get('searchAll');
+
+      const oldList = info.get('list') ? info.get('list') : [];
+      let newList = [];
+      let hasNext = true;
+
+      if (page) {
+        if (page.current_page === 1) {
+          newList = list;
+        } else if (page.current_page <= page.page_count) {
+          newList = [...oldList, ...list];
+        }
+
+        if (page.current_page >= page.page_count) {
+          hasNext = false;
+        }
+      } else {
+        hasNext = false;
+      }
+
+      const result = info.set('list', newList)
+        .set('hasNext', hasNext)
+        .set('loading', false);
+
+      return state.set('searchAll', result);
     }
     default:
       return state;
