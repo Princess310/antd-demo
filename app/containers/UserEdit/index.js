@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { browserHistory } from 'react-router';
 import pallete from 'styles/colors';
-import { NavBar, List, WhiteSpace } from 'antd-mobile';
+import { NavBar, List, WhiteSpace, Icon } from 'antd-mobile';
 import Avatar from 'components/Avatar';
 import AppContent from 'components/AppContent';
 
@@ -30,8 +30,9 @@ export class UserEdit extends React.PureComponent { // eslint-disable-line react
     return (
       <div>
         <NavBar
-          leftContent="back"
           mode="light"
+          iconName={false}
+          leftContent={<Icon type={require('icons/ali/返回.svg')} size="sm" color={pallete.theme} />}
           onLeftClick={() => browserHistory.goBack()}
         >
           {currentUser.nickname}

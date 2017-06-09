@@ -68,7 +68,7 @@ class SearchWithCancelBar extends React.PureComponent { // eslint-disable-line r
             placeholder={placeholder}
           />
         </FlexRowCenter>
-        <div style={{ width: '0.72rem', marginLeft: '0.24rem' }} onClick={() => {onCancel && onCancel()}}>取消</div>
+        <div style={{ width: '0.72rem', marginLeft: '0.24rem', height: '100%', lineHeight: '0.54rem' }} onClick={() => {onCancel && onCancel()}}>取消</div>
       </FlexRowCenter>
     );
   }

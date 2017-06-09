@@ -39,8 +39,9 @@ export class CommunicatePublish extends React.PureComponent { // eslint-disable-
     return (
       <div>
         <NavBar
-          leftContent="back"
           mode="light"
+          iconName={false}
+          leftContent={<Icon type={require('icons/ali/返回.svg')} size="sm" color={pallete.theme} />}
           onLeftClick={() => browserHistory.goBack()}
           rightContent={[
             <MenuBtn key="0" onClick={this.handleSave}>发送</MenuBtn>,

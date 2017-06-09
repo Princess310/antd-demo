@@ -11,7 +11,8 @@ import { makeSelectCurrentUser } from 'containers/HomePage/selectors';
 import { makeSelectUserCenterIndustry, makeSelectUserCenterService } from 'containers/UserCenter/selectors';
 
 import { browserHistory } from 'react-router';
-import { NavBar, List, Radio, WhiteSpace } from 'antd-mobile';
+import pallete from 'styles/colors';
+import { NavBar, List, Radio, WhiteSpace, Icon } from 'antd-mobile';
 import MenuBtn from 'components/MenuBtn';
 
 import { saveUser, fetchIndustry, fetchService } from 'containers/UserCenter/actions';
@@ -113,8 +114,9 @@ export class UserEditIdentity extends React.PureComponent { // eslint-disable-li
     return (
       <div>
         <NavBar
-          leftContent="back"
           mode="light"
+          iconName={false}
+          leftContent={<Icon type={require('icons/ali/返回.svg')} size="sm" color={pallete.theme} />}
           onLeftClick={() => {
             if (action === 'industry') {
               browserHistory.goBack();

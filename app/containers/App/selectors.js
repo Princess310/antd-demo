@@ -15,6 +15,15 @@ const makeSelectLocationState = () => {
   };
 };
 
+const makeSelectInitialState = () => {
+  return (state) => {
+    const initialState = state.get('initial'); // or state.route
+
+    return initialState.get('info');
+  };
+};
+
 export {
   makeSelectLocationState,
+  makeSelectInitialState,
 };

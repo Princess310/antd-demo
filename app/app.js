@@ -15,6 +15,7 @@ import { Provider } from 'react-redux';
 import { applyRouterMiddleware, Router, browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 import { useScroll } from 'react-router-scroll';
+import request from 'utils/request';
 import 'sanitize.css/sanitize.css';
 
 // Import root app
@@ -101,6 +102,18 @@ if (module.hot) {
   });
 }
 
+// try to init app initial data from backend to store
+export function initAppInfo() {
+  request.doGet('initialize/check').then((res) => {
+    store.dispatch({
+      type: 'LOAD_APP_INITIAL',
+      payload: {
+        data: res.data,
+      },
+    });
+  });
+}
+
 // Chunked polyfill for browsers without Intl support
 if (!window.Intl) {
   (new Promise((resolve) => {
@@ -109,12 +122,17 @@ if (!window.Intl) {
     .then(() => Promise.all([
       import('intl/locale-data/jsonp/en.js'),
     ]))
-    .then(() => render(translationMessages))
+    .then(() => {
+      render(translationMessages);
+      initAppInfo();
+    })
     .catch((err) => {
       throw err;
     });
 } else {
   render(translationMessages);
+
+  initAppInfo();
 }
 
 // Install ServiceWorker and AppCache in the end since

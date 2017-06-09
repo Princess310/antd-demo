@@ -8,10 +8,11 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { browserHistory } from 'react-router';
+import pallete from 'styles/colors';
 
 import AppContent from 'components/AppContent';
 import MomentCard from 'components/MomentCard';
-import { NavBar, SegmentedControl, Tabs, ListView, RefreshControl } from 'antd-mobile';
+import { NavBar, SegmentedControl, Tabs, ListView, RefreshControl, Icon } from 'antd-mobile';
 import { makeSelectUserCommunication } from 'containers/UserCenter/selectors';
 import { makeSelectCurrentUser } from 'containers/HomePage/selectors';
 import { fetchCommunication } from 'containers/UserCenter/actions';
@@ -76,8 +77,9 @@ export class UserCommunication extends React.PureComponent { // eslint-disable-l
     return (
       <div>
         <NavBar
-          leftContent="back"
           mode="light"
+          iconName={false}
+          leftContent={<Icon type={require('icons/ali/返回.svg')} size="sm" color={pallete.theme} />}
           onLeftClick={() => browserHistory.goBack()}
         >
           我的交流

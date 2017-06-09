@@ -7,11 +7,12 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
+import pallete from 'styles/colors';
 import { createStructuredSelector } from 'reselect';
 import { makeSelectCurrentUser } from 'containers/HomePage/selectors';
 import { makeSelectUserCenterCity } from 'containers/UserCenter/selectors';
 
-import { NavBar, ListView, List, Button } from 'antd-mobile';
+import { NavBar, ListView, List, Button, Icon } from 'antd-mobile';
 import { fetchCity, saveUser } from 'containers/UserCenter/actions';
 
 const Item = List.Item;
@@ -79,8 +80,9 @@ export class SelectAddress extends React.PureComponent { // eslint-disable-line 
     return (
       <div>
         <NavBar
-          leftContent="back"
           mode="light"
+          iconName={false}
+          leftContent={<Icon type={require('icons/ali/返回.svg')} size="sm" color={pallete.theme} />}
           onLeftClick={() => browserHistory.goBack()}
         >
           选择工作地区

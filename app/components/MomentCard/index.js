@@ -151,7 +151,7 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
       <div
         style={Object.assign(rootStyle, style)}
         onClick={() => {
-          if (from === 'list') {
+          if (from !== 'detail') {
             browserHistory.push({
               pathname: 'momentDetail',
               query: {

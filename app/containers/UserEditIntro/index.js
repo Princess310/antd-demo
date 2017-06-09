@@ -10,7 +10,8 @@ import { createStructuredSelector } from 'reselect';
 import { makeSelectCurrentUser } from 'containers/HomePage/selectors';
 
 import { browserHistory } from 'react-router';
-import { NavBar, List, TextareaItem, WhiteSpace } from 'antd-mobile';
+import pallete from 'styles/colors';
+import { NavBar, List, TextareaItem, WhiteSpace, Icon } from 'antd-mobile';
 import MenuBtn from 'components/MenuBtn';
 
 import { saveUser } from 'containers/UserCenter/actions';
@@ -54,8 +55,9 @@ export class UserEditIntro extends React.PureComponent { // eslint-disable-line 
     return (
       <div>
         <NavBar
-          leftContent="back"
           mode="light"
+          iconName={false}
+          leftContent={<Icon type={require('icons/ali/返回.svg')} size="sm" color={pallete.theme} />}
           onLeftClick={() => browserHistory.goBack()}
           rightContent={[
             <MenuBtn key="0" onClick={this.handleSave}>保存</MenuBtn>,

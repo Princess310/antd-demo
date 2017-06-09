@@ -1,22 +1,25 @@
 /*
  *
- * ResetMobile
+ * LoginPhonePage
  *
  */
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+
 import request from 'utils/request';
 import pallete from 'styles/colors';
-
 import { browserHistory } from 'react-router';
-import { NavBar, List, InputItem, Icon, WhiteSpace, WingBlank, Button, Toast } from 'antd-mobile';
 
-import { makeSelectCurrentUser } from 'containers/HomePage/selectors';
+import FlexCenter from 'components/FlexCenter';
+import CallPhone from 'components/CallPhone';
+import { NavBar, List, InputItem, WhiteSpace, WingBlank, Icon, Button, Toast } from 'antd-mobile';
+
+import { makeSelectInitialState } from 'containers/App/selectors';
 
 let timer = null;
-export class ResetMobile extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+export class LoginPhonePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   state = {
     pwdInputType: 'password',
     phone: '',
@@ -35,14 +38,13 @@ export class ResetMobile extends React.PureComponent { // eslint-disable-line re
 
   getCode = () => {
     const { phone, time, startTime } = this.state;
-
     if (time < startTime) {
       return;
     }
 
     const self = this;
     request.doGet('code/getcode', {
-      type: 2,
+      type: 6,
       username: phone.replace(/\s/g, ''),
     }).then(() => {
       Toast.success('验证码已发送', 1);
@@ -75,34 +77,22 @@ export class ResetMobile extends React.PureComponent { // eslint-disable-line re
     });
   }
 
-  handlePassword = (value) => {
-    this.setState({
-      password: value,
-    });
-  }
+  doLogin = () => {
+    const { phone, code } = this.state;
 
-  changeInputType = () => {
-    this.setState({
-      pwdInputType: this.state.pwdInputType === 'text' ? 'password' : 'text',
-    });
-  }
-
-  saveMobile = () => {
-    const { phone, code, password } = this.state;
-
-    request.doPost('user/bind-mobile', {
-      mobile: phone.replace(/\s/g, ''),
+    request.doPost('user/code-login', {
+      username: phone.replace(/\s/g, ''),
       code,
-      password,
-    }).then(() => {
-      browserHistory.go(-1);
+    }).then((res) => {
+      localStorage.setItem('access_token', res.data.access_token);
+      browserHistory.push('/');
     });
   }
 
   render() {
-    const { currentUser } = this.props;
-    const { pwdInputType, phone, code, password, startTime, time } = this.state;
-    const disableBtn = (phone === '' || code === '' || password === '');
+    const { phone, code, startTime, time } = this.state;
+    const { initialInfo } = this.props;
+    const disableBtn = (phone === '' || code === '');
 
     return (
       <div>
@@ -112,13 +102,13 @@ export class ResetMobile extends React.PureComponent { // eslint-disable-line re
           leftContent={<Icon type={require('icons/ali/返回.svg')} size="sm" color={pallete.theme} />}
           onLeftClick={() => browserHistory.goBack()}
         >
-          {currentUser.mobile === '' ? '绑定手机并设置密码' : '修改绑定手机号'}
+          手机快速登录
         </NavBar>
         <WhiteSpace size="md" />
         <List>
           <InputItem
             type="phone"
-            placeholder="手机号"
+            placeholder="手机号码"
             value={phone}
             onChange={this.handlePhone}
             labelNumber={2}
@@ -145,43 +135,33 @@ export class ResetMobile extends React.PureComponent { // eslint-disable-line re
               size="md"
             />
           </InputItem>
-          <InputItem
-            type={pwdInputType}
-            placeholder="密码 6-20位字符"
-            value={password}
-            onChange={this.handlePassword}
-            labelNumber={2}
-            extra={
-              <Icon
-                type={require('icons/ali/查看.svg')}
-                color={pwdInputType === 'password' ? pallete.button.grey.background : pallete.theme}
-                size="md"
-              />
-            }
-            onExtraClick={this.changeInputType}
-          >
-            <Icon
-              type={require('icons/ali/输入密码.svg')}
-              color={password === '' ? pallete.button.grey.background : pallete.theme}
-              size="md"
-            />
-          </InputItem>
         </List>
-        <WhiteSpace size="lg" />
+        <FlexCenter style={{ margin: '0.44rem 0', fontSize: '0.28rem', color: pallete.text.subHelp }}>
+          点击下一步即表示同意<span style={{ color: pallete.theme }} onClick={() => {
+          browserHistory.push({
+            pathname: 'browser',
+            state: {
+              link: `${request.getWebRoot()}agree_page.html`,
+              title: '用户协议',
+            },
+          });
+        }}>《用户协议》</span>
+        </FlexCenter>
         <WingBlank>
-          <Button className="btn" type="primary" disabled={disableBtn} onClick={this.saveMobile}>完成</Button>
+          <Button className="btn" type="primary" disabled={disableBtn} onClick={this.doLogin}>完成</Button>
         </WingBlank>
+         {initialInfo && <CallPhone phone={initialInfo.phone.data} />}
       </div>
     );
   }
 }
 
-ResetMobile.propTypes = {
-  currentUser: PropTypes.object,
+LoginPhonePage.propTypes = {
+  dispatch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
-  currentUser: makeSelectCurrentUser(),
+  initialInfo: makeSelectInitialState(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -190,4 +170,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ResetMobile);
+export default connect(mapStateToProps, mapDispatchToProps)(LoginPhonePage);

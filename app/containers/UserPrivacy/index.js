@@ -6,9 +6,9 @@
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-
+import pallete from 'styles/colors';
 import { browserHistory } from 'react-router';
-import { NavBar, List, WhiteSpace } from 'antd-mobile';
+import { NavBar, List, WhiteSpace, Icon } from 'antd-mobile';
 
 const Item = List.Item;
 export class UserPrivacy extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
@@ -16,8 +16,9 @@ export class UserPrivacy extends React.PureComponent { // eslint-disable-line re
     return (
       <div>
         <NavBar
-          leftContent="back"
           mode="light"
+          iconName={false}
+          leftContent={<Icon type={require('icons/ali/返回.svg')} size="sm" color={pallete.theme} />}
           onLeftClick={() => browserHistory.goBack()}
         >
           隐私设定

@@ -8,12 +8,13 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { browserHistory } from 'react-router';
+import pallete from 'styles/colors';
 
 import UserHeaderBar from 'components/UserHeaderBar';
 import DateInfo from 'components/DateInfo';
 import UserSubInfoBar from 'components/UserSubInfoBar';
 import AppContent from 'components/AppContent';
-import { NavBar, Tabs, ListView, RefreshControl } from 'antd-mobile';
+import { NavBar, Tabs, ListView, RefreshControl, Icon } from 'antd-mobile';
 
 import { fetchVistor } from 'containers/UserCenter/actions';
 import { makeSelectUserVisitorUsers, makeSelectUserVisitorMine } from 'containers/UserCenter/selectors';
@@ -149,8 +150,9 @@ export class UserCenterVisitor extends React.PureComponent { // eslint-disable-l
     return (
       <div>
         <NavBar
-          leftContent="back"
           mode="light"
+          iconName={false}
+          leftContent={<Icon type={require('icons/ali/返回.svg')} size="sm" color={pallete.theme} />}
           onLeftClick={() => browserHistory.goBack()}
         >
           访客

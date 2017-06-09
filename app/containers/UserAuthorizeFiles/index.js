@@ -15,7 +15,7 @@ import oss from 'utils/oss';
 import FlexCenter from 'components/FlexCenter';
 import AuthCard from 'components/AuthCard';
 import AppContent from 'components/AppContent';
-import { NavBar, Button } from 'antd-mobile';
+import { NavBar, Button, Icon } from 'antd-mobile';
 import { makeSelectUserAuthInfo } from 'containers/UserCenter/selectors';
 import { fetchAuthInfo, loadAuthFiles } from 'containers/UserCenter/actions';
 
@@ -237,8 +237,9 @@ export class UserAuthorizeFiles extends React.PureComponent { // eslint-disable-
     return (
       <div>
         <NavBar
-          leftContent="back"
           mode="light"
+          iconName={false}
+          leftContent={<Icon type={require('icons/ali/返回.svg')} size="sm" color={pallete.theme} />}
           onLeftClick={() => browserHistory.goBack()}
         >
           完善认证资料

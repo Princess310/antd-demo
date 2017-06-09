@@ -1,6 +1,6 @@
 /*
  *
- * ResetMobile
+ * RegisterPage
  *
  */
 
@@ -10,13 +10,15 @@ import { createStructuredSelector } from 'reselect';
 import request from 'utils/request';
 import pallete from 'styles/colors';
 
+import FlexCenter from 'components/FlexCenter';
+import CallPhone from 'components/CallPhone';
 import { browserHistory } from 'react-router';
 import { NavBar, List, InputItem, Icon, WhiteSpace, WingBlank, Button, Toast } from 'antd-mobile';
 
-import { makeSelectCurrentUser } from 'containers/HomePage/selectors';
+import { makeSelectInitialState } from 'containers/App/selectors';
 
 let timer = null;
-export class ResetMobile extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+export class RegisterPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   state = {
     pwdInputType: 'password',
     phone: '',
@@ -42,7 +44,7 @@ export class ResetMobile extends React.PureComponent { // eslint-disable-line re
 
     const self = this;
     request.doGet('code/getcode', {
-      type: 2,
+      type: 0,
       username: phone.replace(/\s/g, ''),
     }).then(() => {
       Toast.success('验证码已发送', 1);
@@ -87,21 +89,22 @@ export class ResetMobile extends React.PureComponent { // eslint-disable-line re
     });
   }
 
-  saveMobile = () => {
+  doRegister = () => {
     const { phone, code, password } = this.state;
 
-    request.doPost('user/bind-mobile', {
-      mobile: phone.replace(/\s/g, ''),
+    request.doPost('user/signup', {
+      username: phone.replace(/\s/g, ''),
       code,
       password,
-    }).then(() => {
-      browserHistory.go(-1);
+    }).then((res) => {
+      localStorage.setItem('access_token', res.data.access_token);
+      browserHistory.push('/');
     });
   }
 
   render() {
-    const { currentUser } = this.props;
     const { pwdInputType, phone, code, password, startTime, time } = this.state;
+    const { initialInfo } = this.props;
     const disableBtn = (phone === '' || code === '' || password === '');
 
     return (
@@ -112,13 +115,13 @@ export class ResetMobile extends React.PureComponent { // eslint-disable-line re
           leftContent={<Icon type={require('icons/ali/返回.svg')} size="sm" color={pallete.theme} />}
           onLeftClick={() => browserHistory.goBack()}
         >
-          {currentUser.mobile === '' ? '绑定手机并设置密码' : '修改绑定手机号'}
+          新用户注册
         </NavBar>
         <WhiteSpace size="md" />
         <List>
           <InputItem
             type="phone"
-            placeholder="手机号"
+            placeholder="手机号码"
             value={phone}
             onChange={this.handlePhone}
             labelNumber={2}
@@ -147,7 +150,7 @@ export class ResetMobile extends React.PureComponent { // eslint-disable-line re
           </InputItem>
           <InputItem
             type={pwdInputType}
-            placeholder="密码 6-20位字符"
+            placeholder="密码6-20位字符"
             value={password}
             onChange={this.handlePassword}
             labelNumber={2}
@@ -167,21 +170,38 @@ export class ResetMobile extends React.PureComponent { // eslint-disable-line re
             />
           </InputItem>
         </List>
-        <WhiteSpace size="lg" />
+        <FlexCenter style={{ margin: '0.44rem 0', fontSize: '0.28rem', color: pallete.text.subHelp }}>
+          点击注册即表示同意<span style={{ color: pallete.theme }} onClick={() => {
+          browserHistory.push({
+            pathname: 'browser',
+            state: {
+              link: `${request.getWebRoot()}agree_page.html`,
+              title: '用户协议',
+            },
+          });
+        }}>《用户协议》</span>
+        </FlexCenter>
         <WingBlank>
-          <Button className="btn" type="primary" disabled={disableBtn} onClick={this.saveMobile}>完成</Button>
+          <Button className="btn" type="primary" disabled={disableBtn} onClick={this.doRegister}>完成</Button>
         </WingBlank>
+        <FlexCenter style={{ marginTop: '0.24rem', fontSize: '0.28rem', color: pallete.text.subHelp }}>
+          已有账号？<span style={{ color: pallete.theme }} onClick={() => {
+            browserHistory.push('/login');
+          }}>登录</span>
+        </FlexCenter>
+        {initialInfo && <CallPhone phone={initialInfo.phone.data} />}
       </div>
     );
   }
 }
 
-ResetMobile.propTypes = {
-  currentUser: PropTypes.object,
+RegisterPage.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  initialInfo: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
-  currentUser: makeSelectCurrentUser(),
+  initialInfo: makeSelectInitialState(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -190,4 +210,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ResetMobile);
+export default connect(mapStateToProps, mapDispatchToProps)(RegisterPage);

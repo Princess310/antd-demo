@@ -387,6 +387,30 @@ export default function createRoutes(store) {
         importModules.catch(errorLoading);
       },
     }, {
+      path: 'preview',
+      name: 'previewPage',
+      getComponent(location, cb) {
+        import('containers/PreviewPage')
+          .then(loadModule(cb))
+          .catch(errorLoading);
+      },
+    }, {
+      path: 'loginPhone',
+      name: 'loginPhonePage',
+      getComponent(location, cb) {
+        import('containers/LoginPhonePage')
+          .then(loadModule(cb))
+          .catch(errorLoading);
+      },
+    }, {
+      path: 'register',
+      name: 'registerPage',
+      getComponent(location, cb) {
+        import('containers/RegisterPage')
+          .then(loadModule(cb))
+          .catch(errorLoading);
+      },
+    }, {
       path: '*',
       name: 'notfound',
       getComponent(nextState, cb) {

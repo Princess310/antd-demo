@@ -8,8 +8,9 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { browserHistory } from 'react-router';
+import pallete from 'styles/colors';
 import AppContent from 'components/AppContent';
-import { NavBar, RefreshControl, ListView, List, WhiteSpace, Button } from 'antd-mobile';
+import { NavBar, RefreshControl, ListView, List, WhiteSpace, Button, Icon } from 'antd-mobile';
 
 import Avatar from 'components/Avatar';
 import FlexRowCenter from 'components/FlexRowCenter';
@@ -101,8 +102,9 @@ export class UserBlackList extends React.PureComponent { // eslint-disable-line 
     return (
       <div>
         <NavBar
-          leftContent="back"
           mode="light"
+          iconName={false}
+          leftContent={<Icon type={require('icons/ali/返回.svg')} size="sm" color={pallete.theme} />}
           onLeftClick={() => browserHistory.goBack()}
         >
           黑名单

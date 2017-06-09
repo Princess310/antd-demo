@@ -16,7 +16,6 @@ import swiperLeft from 'assets/images/swiper-left.png';
 import swiperRight from 'assets/images/swiper-right.png';
 
 const swiperStyle={
-  height: '100%',
   top: 0,
   width: '0.88rem',
   height: '100%',

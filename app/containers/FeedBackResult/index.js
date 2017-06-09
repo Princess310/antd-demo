@@ -6,7 +6,7 @@
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-
+import pallete from 'styles/colors';
 import { browserHistory } from 'react-router';
 import { NavBar, Result, Icon, WhiteSpace } from 'antd-mobile';
 
@@ -15,9 +15,10 @@ export class FeedBackResult extends React.PureComponent { // eslint-disable-line
     return (
       <div>
         <NavBar
-          leftContent="back"
           mode="light"
-          onLeftClick={() => browserHistory.go(-2)}
+          iconName={false}
+          leftContent={<Icon type={require('icons/ali/返回.svg')} size="sm" color={pallete.theme} />}
+          onLeftClick={() => browserHistory.goBack()}
         >
           意见反馈
         </NavBar>

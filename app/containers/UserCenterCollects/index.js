@@ -131,8 +131,9 @@ export class UserCenterCollects extends React.PureComponent { // eslint-disable-
     return (
       <div>
         <NavBar
-          leftContent="back"
           mode="light"
+          iconName={false}
+          leftContent={<Icon type={require('icons/ali/返回.svg')} size="sm" color={pallete.theme} />}
           onLeftClick={() => browserHistory.goBack()}
         >
           我的收藏

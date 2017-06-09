@@ -7,26 +7,28 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import styled from 'styled-components';
+import request from 'utils/request';
+import pallete from 'styles/colors';
+import { browserHistory } from 'react-router';
 
-import { List, InputItem, Button } from 'antd-mobile';
+import FlexSB from 'components/FlexSB';
+import CallPhone from 'components/CallPhone';
+import { NavBar, List, InputItem, Icon, WhiteSpace, WingBlank, Button, Toast } from 'antd-mobile';
 
+import { makeSelectInitialState } from 'containers/App/selectors';
 import makeSelectLoginPage from './selectors';
 import { doLogin } from './actions';
 
-const BtnWrapper = styled.div`
-  margin: 0.64rem 0.16rem 0;
-`;
-
 export class LoginPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   state = {
-    username: '',
+    pwdInputType: 'password',
+    phone: '',
     password: '',
   }
 
-  handleUsername = (value) => {
+  handlePhone = (value) => {
     this.setState({
-      username: value,
+      phone: value,
     });
   }
 
@@ -36,42 +38,87 @@ export class LoginPage extends React.PureComponent { // eslint-disable-line reac
     });
   }
 
-  handleLogin = () => {
-    const { username, password } = this.state;
+  changeInputType = () => {
+    this.setState({
+      pwdInputType: this.state.pwdInputType === 'text' ? 'password' : 'text',
+    });
+  }
 
-    return this.props.doLogin(username, password);
+  handleLogin = () => {
+    const { phone, password } = this.state;
+
+    return this.props.doLogin(phone.replace(/\s/g, ''), password);
   }
 
   render() {
-    const { username, password } = this.state;
-    const disableBtn = (username === '' || password === '');
+    const { phone, password, pwdInputType } = this.state;
+    const { initialInfo } = this.props;
+    const disableBtn = (phone === '' || password === '');
 
     return (
       <div>
-        <List renderHeader={() => '登录'}>
+        <NavBar
+          mode="light"
+          iconName={false}
+          leftContent={<Icon type={require('icons/ali/返回.svg')} size="sm" color={pallete.theme} />}
+          onLeftClick={() => browserHistory.goBack()}
+        >
+          登录
+        </NavBar>
+        <WhiteSpace size="md" />
+        <List>
           <InputItem
-            clear
+            type="phone"
             placeholder="手机号/健康商信号"
-            value={username}
-            onChange={this.handleUsername}
-            autoFocus
-          >用户名</InputItem>
+            value={phone}
+            onChange={this.handlePhone}
+            labelNumber={2}
+          >
+            <Icon
+              type={require('icons/ali/手机.svg')}
+              color={phone === '' ? pallete.button.grey.background : pallete.theme}
+              size="md"
+            />
+          </InputItem>
           <InputItem
-            type="password"
-            placeholder="密码"
+            type={pwdInputType}
+            placeholder="重置密码"
             value={password}
             onChange={this.handlePassword}
-          >密码</InputItem>
+            labelNumber={2}
+            extra={
+              <Icon
+                type={require('icons/ali/查看.svg')}
+                color={pwdInputType === 'password' ? pallete.button.grey.background : pallete.theme}
+                size="md"
+              />
+            }
+            onExtraClick={this.changeInputType}
+          >
+            <Icon
+              type={require('icons/ali/输入密码.svg')}
+              color={password === '' ? pallete.button.grey.background : pallete.theme}
+              size="md"
+            />
+          </InputItem>
         </List>
+        <WhiteSpace size="lg" />
+        <WingBlank>
+          <Button className="btn" type="primary" disabled={disableBtn} onClick={this.handleLogin}>完成</Button>
+        </WingBlank>
+        <WhiteSpace size="lg" />
+        <WingBlank>
+          <FlexSB>
+            <span style={{ color: pallete.theme, fontSize: '0.28rem' }} onClick={() => {
+              browserHistory.push('/resetPassword');
+            }}>忘记密码？</span>
 
-        <BtnWrapper>
-          <Button
-            className="btn"
-            type="primary"
-            disabled={disableBtn}
-            onClick={this.handleLogin}
-          >登录</Button>
-        </BtnWrapper>
+            <span style={{ color: pallete.theme, fontSize: '0.28rem' }} onClick={() => {
+              browserHistory.push('/register');
+            }}>免费注册</span>
+        </FlexSB>
+        </WingBlank>
+        {initialInfo && <CallPhone phone={initialInfo.phone.data} />}
       </div>
     );
   }
@@ -79,10 +126,11 @@ export class LoginPage extends React.PureComponent { // eslint-disable-line reac
 
 LoginPage.propTypes = {
   doLogin: PropTypes.func,
+  initialInfo: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
-  LoginPage: makeSelectLoginPage(),
+  initialInfo: makeSelectInitialState(),
 });
 
 function mapDispatchToProps(dispatch) {

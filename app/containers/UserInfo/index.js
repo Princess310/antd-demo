@@ -60,8 +60,9 @@ export class UserInfo extends React.PureComponent { // eslint-disable-line react
     return (
       <div>
         <NavBar
-          leftContent="back"
           mode="light"
+          iconName={false}
+          leftContent={<Icon type={require('icons/ali/返回.svg')} size="sm" color={pallete.theme} />}
           onLeftClick={() => browserHistory.goBack()}
           rightContent={
             <Popover mask

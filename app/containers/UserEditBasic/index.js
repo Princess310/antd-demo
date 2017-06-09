@@ -7,11 +7,13 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
+import pallete from 'styles/colors';
+
 import { createStructuredSelector } from 'reselect';
 import { makeSelectCurrentUser } from 'containers/HomePage/selectors';
 import { browserHistory } from 'react-router';
 
-import { NavBar, List, WhiteSpace, InputItem } from 'antd-mobile';
+import { NavBar, List, WhiteSpace, InputItem, Icon } from 'antd-mobile';
 import Avatar from 'components/Avatar';
 import MenuBtn from 'components/MenuBtn';
 
@@ -119,8 +121,9 @@ export class UserEditBasic extends React.PureComponent { // eslint-disable-line 
     return (
       <div className="user-edit-basic">
         <NavBar
-          leftContent="back"
           mode="light"
+          iconName={false}
+          leftContent={<Icon type={require('icons/ali/返回.svg')} size="sm" color={pallete.theme} />}
           onLeftClick={() => browserHistory.goBack()}
           rightContent={[
             <MenuBtn key="0" onClick={this.handleSave}>保存</MenuBtn>,

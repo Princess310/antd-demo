@@ -8,8 +8,9 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { browserHistory } from 'react-router';
+import pallete from 'styles/colors';
 
-import { NavBar, List, WhiteSpace, Modal } from 'antd-mobile';
+import { NavBar, List, WhiteSpace, Modal, Icon } from 'antd-mobile';
 
 import { loadUser } from 'containers/App/actions';
 import makeSelectUserSettingPage from './selectors';
@@ -21,8 +22,9 @@ export class UserSettingPage extends React.PureComponent { // eslint-disable-lin
     return (
       <div>
         <NavBar
-          leftContent="back"
           mode="light"
+          iconName={false}
+          leftContent={<Icon type={require('icons/ali/返回.svg')} size="sm" color={pallete.theme} />}
           onLeftClick={() => browserHistory.goBack()}
         >
           设置
@@ -66,7 +68,7 @@ export class UserSettingPage extends React.PureComponent { // eslint-disable-lin
                     // clear user info
                     localStorage.setItem('access_token', '');
                     this.props.setUser({});
-                    browserHistory.push('/login');
+                    browserHistory.push('/preview');
                   },
                   style: { fontWeight: 'bold' },
                 },

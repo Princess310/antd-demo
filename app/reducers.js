@@ -9,7 +9,6 @@ import { LOCATION_CHANGE } from 'react-router-redux';
 
 import globalReducer from 'containers/App/reducer';
 import languageProviderReducer from 'containers/LanguageProvider/reducer';
-
 /*
  * routeReducer
  *
@@ -38,6 +37,28 @@ function routeReducer(state = routeInitialState, action) {
   }
 }
 
+/*
+ * initial
+ *
+ * The reducer merges inital info for app into our immutable state.
+ *
+ */
+
+const initialInitialState = fromJS({
+  info: null,
+});
+
+function initialReducer(state = initialInitialState, action) {
+  switch (action.type) {
+    case 'LOAD_APP_INITIAL': {
+      const { data } = action.payload;
+      return state.set('info', data);
+    }
+    default:
+      return state;
+  }
+}
+
 /**
  * Creates the main reducer with the asynchronously loaded ones
  */
@@ -46,6 +67,7 @@ export default function createReducer(asyncReducers) {
     route: routeReducer,
     global: globalReducer,
     language: languageProviderReducer,
+    initial: initialReducer,
     ...asyncReducers,
   });
 }

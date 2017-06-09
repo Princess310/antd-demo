@@ -7,8 +7,8 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
-
-import { NavBar, List, WhiteSpace } from 'antd-mobile';
+import pallete from 'styles/colors';
+import { NavBar, List, WhiteSpace, Icon } from 'antd-mobile';
 import Avatar from 'components/Avatar';
 import FlexCenter from 'components/FlexCenter';
 
@@ -20,8 +20,9 @@ export class AboutPage extends React.PureComponent { // eslint-disable-line reac
     return (
       <div>
         <NavBar
-          leftContent="back"
           mode="light"
+          iconName={false}
+          leftContent={<Icon type={require('icons/ali/返回.svg')} size="sm" color={pallete.theme} />}
           onLeftClick={() => browserHistory.goBack()}
         >
           关于健康商信

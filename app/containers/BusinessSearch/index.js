@@ -59,17 +59,65 @@ const buttonStyle = {
 
 const Item = List.Item;
 export class BusinessSearch extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
-  state = {
-    step: 1, // 1 -> search, 2 -> search panel view, 3 -> search all view
-    panel: '7', // default panel is 7
-    keyword: '',
-    reward_as: 0,
-    page: 1,
-    seeMore: false,
+  constructor(props) {
+    super(props);
+    const historyList = localStorage.getItem('search_business');
+
+    this.state = {
+      step: 1, // 1 -> search, 2 -> search panel view, 3 -> search all view
+      panel: '7', // default panel is 7
+      keyword: '',
+      reward_as: 0,
+      page: 1,
+      seeMore: false,
+      historyList: historyList ? JSON.parse(historyList) : [],
+    }
   }
 
   onChange = (keyword) => {
     this.setState({ keyword });
+  }
+
+  storeHistore = (keyword) => {
+    let { historyList } = this.state;
+    let id = 0;
+
+    if (historyList && historyList.length > 0) {
+      id = historyList[historyList.length - 1].id + 1;
+    } else {
+      historyList = [];
+    }
+
+    // 如果已经存在关键字，删除久的
+    for(let i = 0; i < historyList.length; i += 1){
+      let item = historyList[i];
+
+      if(item.name == keyword){
+        historyList.splice(i, 1);
+      }
+    }
+
+    // 如果超过6个历史记录，覆盖第一个
+    if(historyList.length >= 6){
+      historyList.splice(5, 1);
+    }
+
+    if (keyword.trim() !== '') {
+      const obj = { id: id, name: keyword };
+      historyList = [obj, ...historyList];
+
+      localStorage.setItem('search_business', JSON.stringify(historyList));
+      this.setState({
+        historyList,
+      });
+    }
+  }
+
+  handleClearHistory = () => {
+    this.setState({
+      historyList: [],
+    });
+    localStorage.setItem('search_business', JSON.stringify([]));
   }
 
   handleSearch = () => {
@@ -86,6 +134,7 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
     }
 
     this.props.doSearch(panel, keyword, reward_as, page);
+    this.storeHistore(keyword);
   }
 
   handleSeeMore = (reward_as) => {
@@ -136,12 +185,23 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
     });
   }
 
+  handleHistorySearch = (keyword) => {
+    const { panel, reward_as, page } = this.state;
+    
+    this.setState({
+      keyword,
+      step: 2,
+    });
+    this.props.doSearch(panel, keyword, reward_as, page);
+    this.storeHistore(keyword);
+  }
+
   onEndReached = () => {
     // TODO: pagination for search
   }
 
   render() {
-    const { keyword, step, panel, reward_as } = this.state;
+    const { keyword, step, panel, reward_as, historyList } = this.state;
     const { searchPanel, searchAll, currentUser } = this.props;
     let placeholder = '搜索动态';
     if (panel !== '7') {
@@ -157,7 +217,7 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
     return (
       <div>
         <FlexSB style={{ backgroundColor: pallete.white }}>
-          {step !== 1 && <div onClick={this.handleBack} style={{ marginLeft: '0.24rem' }}><Icon type={require('icons/ali/向左.svg')} color={pallete.text.help} /></div>}
+          {step !== 1 && <div onClick={this.handleBack} style={{ marginLeft: '0.24rem' }}><Icon type={require('icons/ali/返回.svg')} color={pallete.theme} /></div>}
           <SearchWithCancelBar
             placeholder={placeholder}
             value={keyword}
@@ -185,22 +245,19 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
                 <SelectCircle onClick={() => this.handleReward(0)}>人脉</SelectCircle>
               </FlexSB>
               <WhiteSpace size="md" />
-              <div style={{ backgroundColor: pallete.white, height: '4.8rem' }}>
+              {(historyList && historyList.length > 0) && <div style={{ backgroundColor: pallete.white, height: '4.8rem' }}>
                 <section style={{ padding: '0.24rem', color: pallete.text.help, fontSize: '0.26rem' }}>
                   历史搜索
                 </section>
                 <div>
-                  <Button style={buttonStyle} inline>礼品商</Button>
-                  <Button style={buttonStyle} inline>礼品商</Button>
-                  <Button style={buttonStyle} inline>礼品商</Button>
-                  <Button style={buttonStyle} inline>礼品商</Button>
-                  <Button style={buttonStyle} inline>礼品商</Button>
-                  <Button style={buttonStyle} inline>礼品商</Button>
+                  {historyList.map((item, i) => (
+                     <Button key={i} style={buttonStyle} inline onClick={() => this.handleHistorySearch(item.name)}>{item.name}</Button>
+                  ))}
                 </div>
                 <FlexCenter style={{ height: '1.2rem' }}>
-                  <Button type="ghost" style={{...buttonStyle, color: pallete.theme}} inline>清空搜索历史</Button>
+                  <Button type="ghost" style={{...buttonStyle, color: pallete.theme}} inline onClick={this.handleClearHistory}>清空搜索历史</Button>
                 </FlexCenter>
-              </div>
+              </div>}
             </div>
           )
         }

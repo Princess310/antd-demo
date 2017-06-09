@@ -8,8 +8,8 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { browserHistory } from 'react-router';
-
-import { NavBar, List, TextareaItem, WhiteSpace, ImagePicker, Toast } from 'antd-mobile';
+import pallete from 'styles/colors';
+import { NavBar, List, TextareaItem, WhiteSpace, ImagePicker, Toast, Icon } from 'antd-mobile';
 import MenuBtn from 'components/MenuBtn';
 
 import { saveInfo } from './actions';
@@ -52,8 +52,9 @@ export class FeedBackPage extends React.PureComponent { // eslint-disable-line r
     return (
       <div>
         <NavBar
-          leftContent="back"
           mode="light"
+          iconName={false}
+          leftContent={<Icon type={require('icons/ali/返回.svg')} size="sm" color={pallete.theme} />}
           onLeftClick={() => browserHistory.goBack()}
           rightContent={[
             <MenuBtn key="0" onClick={this.handleSave}>发送</MenuBtn>,

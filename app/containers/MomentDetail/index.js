@@ -79,8 +79,9 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
     return (
       <div>
         <NavBar
-          leftContent="back"
           mode="light"
+          iconName={false}
+          leftContent={<Icon type={require('icons/ali/返回.svg')} size="sm" color={pallete.theme} />}
           onLeftClick={() => browserHistory.goBack()}
         >
           动态详情
