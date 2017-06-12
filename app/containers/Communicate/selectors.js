@@ -27,6 +27,19 @@ const makeSelectCommunicate = () => createSelector(
   }
 );
 
+const makeSelectCommunicateSearch = () => createSelector(
+  selectCommunicate,
+  (substate) => {
+    const info = substate.get('search');
+    return {
+      loading: info.get('loading'),
+      list: info.get('list'),
+      hasNext: info.get('hasNext'),
+    };
+  }
+);
+
 export {
   makeSelectCommunicate,
+  makeSelectCommunicateSearch,
 };

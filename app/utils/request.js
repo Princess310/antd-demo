@@ -1,5 +1,6 @@
 import 'whatwg-fetch';
 import { Toast } from 'antd-mobile';
+import { browserHistory } from 'react-router';
 
 export const API_ROOT = 'http://jkhz-api.test.alijian.net/index.php?r=';
 export const WEB_ROOT = 'http://jkhz-web.test.alijian.net/';
@@ -90,7 +91,7 @@ const fetchDao = {
 
         if (data && data.code !== 200) {
           if (data.code === 603) {
-            // TODO: do relogin rediction
+            browserHistory.push('/preview');
           } else {
             Toast.info(data.message, 2);
           }

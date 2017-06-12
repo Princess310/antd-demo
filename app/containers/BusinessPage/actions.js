@@ -28,6 +28,7 @@ import {
   FETCH_BUSINESS_SEARCH,
   LOAD_BUSINESS_SEARCH_PANEL,
   LOAD_BUSINESS_SEARCH_ALL,
+  LOAD_BUSINESS_SEARCH_ALL_LOADING,
 } from './constants';
 
 export function fetchMomentDetail(id) {
@@ -178,5 +179,14 @@ export function loadSearchAll(list, page) {
       list,
       page,
     }
+  };
+}
+
+export function loadSearchAllLoading(loading) {
+  return {
+    type: LOAD_BUSINESS_SEARCH_ALL_LOADING,
+    payload: {
+      loading,
+    },
   };
 }

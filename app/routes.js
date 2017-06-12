@@ -364,6 +364,30 @@ export default function createRoutes(store) {
               .then(loadModule(cb))
               .catch(errorLoading);
           },
+        }, {
+          path: 'guide',
+          name: 'guidePage',
+          getComponent(location, cb) {
+            import('containers/GuidePage')
+              .then(loadModule(cb))
+              .catch(errorLoading);
+          },
+        }, {
+          path: 'recentDemand',
+          name: 'recentDemandPage',
+          getComponent(location, cb) {
+            import('containers/RecentDemandPage')
+              .then(loadModule(cb))
+              .catch(errorLoading);
+          },
+        }, {
+          path: 'communicateSearch',
+          name: 'communicateSearch',
+          getComponent(location, cb) {
+            import('containers/CommunicateSearch')
+              .then(loadModule(cb))
+              .catch(errorLoading);
+          },
         },
       ],
     }, {

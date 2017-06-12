@@ -22,11 +22,15 @@ export class UserEditService extends React.PureComponent { // eslint-disable-lin
   constructor(props) {
     super(props);
 
-    const { currentUser, getService } = props;
+    const { currentUser } = props;
     this.state = {
       tag_identity_id: currentUser.tag_identity_id,
       main_service_id: currentUser.main_service_id,
     };
+  }
+
+  componentDidMount() {
+    const { currentUser, getService } = this.props;
 
     // fetch service list here
     if (currentUser && currentUser.tag_identity_id) {

@@ -22,7 +22,7 @@ export class UserEditIdentity extends React.PureComponent { // eslint-disable-li
   constructor(props) {
     super(props);
 
-    const { currentUser, getIndustry, industryList, serviceList } = props;
+    const { currentUser, industryList, serviceList } = props;
     let serviceId = '';
     if (serviceList && serviceList.length > 0) {
       serviceId = serviceList[0].id;
@@ -34,6 +34,10 @@ export class UserEditIdentity extends React.PureComponent { // eslint-disable-li
       tag_identity_id: currentUser.tag_identity_id,
       main_service_id: serviceId,
     };
+  }
+
+  componentDidMount() {
+    const { getIndustry, industryList } = this.props;
 
     // fetch industry list here
     if (!industryList) {

@@ -7,6 +7,7 @@
 import { fromJS } from 'immutable';
 import {
   LOAD_INDUSTRY,
+  LOAD_INDUSTRY_SON,
   LOAD_SERVICE,
   LOAD_BUSINESS_INFO,
   LAOD_CITY_INFO,
@@ -35,6 +36,7 @@ import {
 
 const initialState = fromJS({
   industry: false,
+  industrySon: '',
   service: false,
   business: false,
   city: false,
@@ -85,6 +87,11 @@ function userCenterReducer(state = initialState, action) {
       const { list } = action.payload;
 
       return state.set('industry', list);
+    }
+    case LOAD_INDUSTRY_SON: {
+      const { id } = action.payload;
+
+      return state.set('industrySon', id);
     }
     case LOAD_SERVICE: {
       const { list } = action.payload;

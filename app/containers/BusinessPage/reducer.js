@@ -21,6 +21,7 @@ import {
 
   LOAD_BUSINESS_SEARCH_PANEL,
   LOAD_BUSINESS_SEARCH_ALL,
+  LOAD_BUSINESS_SEARCH_ALL_LOADING,
 } from './constants';
 
 const initialState = fromJS({
@@ -158,6 +159,14 @@ function businessPageReducer(state = initialState, action) {
         .set('hasNext', hasNext)
         .set('loading', false);
 
+      return state.set('searchAll', result);
+    }
+    case LOAD_BUSINESS_SEARCH_ALL_LOADING: {
+      const { loading } = action.payload;
+
+      const info = state.get('searchAll');
+
+      const result = info.set('loading', loading);
       return state.set('searchAll', result);
     }
     default:

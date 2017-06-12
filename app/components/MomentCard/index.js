@@ -55,7 +55,7 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
     super(props);
     const { moment: { content }, from } = this.props;
 
-    const moreContent = (from !== 'detail' && content.length > 60);
+    const moreContent = (from !== 'detail' && content.length > 100);
     this.state = {
       moreContent,
       expanded: false,
@@ -165,7 +165,7 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
         }}
       >
         <div style={{ padding: '0.15rem', borderBottom: `0.01rem ${pallete.border.deep} solid` }}>
-          {(Number(source_type) !== 1 || from === 'list') &&
+          {(Number(source_type) !== 1 || from !== 'detail') &&
           <MomentHeader
             user={{
               id: uid,

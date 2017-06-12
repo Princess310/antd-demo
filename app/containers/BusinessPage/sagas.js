@@ -30,6 +30,7 @@ import {
 
   loadSearchPanel,
   loadSearchAll,
+  loadSearchAllLoading,
 } from './actions';
 
 export function* fetchMomentDetail(action) {
@@ -126,6 +127,9 @@ export function* fetchBusinessSearch(action) {
         yield put(loadSearchAll(list, resPage));
       }
     } else {
+      if (page !== 1) {
+        yield put(loadSearchAllLoading(true));
+      }
       const res = yield request.doGet('follow/search-friend', {
         type: 0,
         search: keyword,

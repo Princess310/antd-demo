@@ -121,7 +121,7 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
   }
 
   handleSearch = () => {
-    const { panel, keyword, reward_as, page } = this.state;
+    const { panel, keyword, reward_as } = this.state;
 
     if (panel === '7') {
       this.setState({
@@ -133,7 +133,7 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
       });
     }
 
-    this.props.doSearch(panel, keyword, reward_as, page);
+    this.props.doSearch(panel, keyword, reward_as, 1);
     this.storeHistore(keyword);
   }
 
@@ -186,18 +186,31 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
   }
 
   handleHistorySearch = (keyword) => {
-    const { panel, reward_as, page } = this.state;
+    const { panel, reward_as } = this.state;
     
     this.setState({
       keyword,
       step: 2,
     });
-    this.props.doSearch(panel, keyword, reward_as, page);
+    this.props.doSearch(panel, keyword, reward_as, 1);
     this.storeHistore(keyword);
   }
 
   onEndReached = () => {
-    // TODO: pagination for search
+    const { panel, keyword, reward_as, page } = this.state;
+    
+    if (panel === '7') {
+      this.setState({
+        step: 2,
+        page: page + 1,
+      });
+    } else {
+      this.setState({
+        step: 3,
+        page: page + 1,
+      });
+    }
+    this.props.doSearch(panel, keyword, reward_as, page + 1);
   }
 
   render() {
@@ -347,7 +360,7 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
         }
 
         {(step === 3 && searchAll) && (
-          <ScrollContainer scrollKey="communicate">
+          <ScrollContainer scrollKey="business_search">
             <TouchLoader
               initializing={0}
               hasMore={searchAll.hasNext}

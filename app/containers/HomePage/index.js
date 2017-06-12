@@ -35,18 +35,16 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
   }
 
   componentWillMount() {
-    const { currentUser, getUser } = this.props;
+    const { getUser } = this.props;
 
-    if (!currentUser.id) {
-      getUser();
-    }
+    getUser();
   }
 
   componentWillReceiveProps(nextProps) {
     const { currentUser } = nextProps;
 
     if (!currentUser.id) {
-      browserHistory.replace('/login');
+      browserHistory.replace('/preview');
     }
   }
 

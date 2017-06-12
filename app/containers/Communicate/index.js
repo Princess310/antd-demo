@@ -88,7 +88,9 @@ export class Communicate extends React.PureComponent { // eslint-disable-line re
         >
           交流
         </NavBar>
-        <div onClick={() => console.log('in')}>
+        <div onClick={() => {
+          browserHistory.push('/communicateSearch');
+        }}>
           <SearchBar title="搜索动态" />
         </div>
         <ScrollContainer scrollKey="communicate">

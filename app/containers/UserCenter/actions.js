@@ -9,6 +9,7 @@ import {
 
   FETCH_INDUSTRY,
   LOAD_INDUSTRY,
+  LOAD_INDUSTRY_SON,
 
   FETCH_SERVICE,
   LOAD_SERVICE,
@@ -71,6 +72,15 @@ export function loadIndustry(list) {
     type: LOAD_INDUSTRY,
     payload: {
       list,
+    },
+  };
+}
+
+export function loadIndustrySon(id) {
+  return {
+    type: LOAD_INDUSTRY_SON,
+    payload: {
+      id,
     },
   };
 }
