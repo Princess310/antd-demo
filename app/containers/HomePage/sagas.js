@@ -18,8 +18,9 @@ export function* fetchUser() {
     yield put(loadUser(res.data));
 
     // do change loaction if user info not complete
-    const { tag_identity_id, main_service_id } = res.data;
-    if (industry_son_id === '0' || main_service_id === '0') {
+    const { industry_son_id, main_service_id, company, position } = res.data;
+
+    if (industry_son_id === '0' || main_service_id === '0' || company === '' || position === '') {
       browserHistory.push('/guide');
     }
     // yield im.login(res.data.chat.userid, res.data.chat.password);

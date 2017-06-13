@@ -7,6 +7,8 @@
 import { fromJS } from 'immutable';
 import {
   LOAD_MOMENT_DETAIL,
+  REFRESH_LIST_NEW_MOMENT,
+  REMOVE_LIST_MOMENT,
 
   LOAD_BUSINESS,
   LOAD_BUSINESS_REFRESH,
@@ -56,6 +58,72 @@ function businessPageReducer(state = initialState, action) {
       const { data } = action.payload;
 
       return state.set('detail', data);
+    }
+    case REFRESH_LIST_NEW_MOMENT: {
+      const { data } = action.payload;
+      let supplier = state.get('businessSupplier');
+      const supplierList = supplier.get('list');
+      let demand = state.get('businessDemand');
+      const demandList = demand.get('list');
+      const newSupplierList = [];
+      const newDemandList = [];
+
+      // try to refresh moment for list
+      if (supplierList) {
+        supplierList.forEach((m, i) => {
+          if (m.id === data.id) {
+            newSupplierList[i] = data;
+          } else {
+            newSupplierList[i] = m;
+          }
+        });
+
+        supplier = supplier.set('list', newSupplierList);
+      }
+
+      if (demandList) {
+        demandList.forEach((m, i) => {
+          if (m.id === data.id) {
+            newDemandList[i] = data;
+          } else {
+            newDemandList[i] = m;
+          }
+        });
+
+        demand = demand.set('list', newDemandList);
+      }
+
+      return state.set('businessSupplier', supplier).set('businessDemand', demand);
+    }
+    case REMOVE_LIST_MOMENT: {
+      const { id } = action.payload;
+
+      const { data } = action.payload;
+      let supplier = state.get('businessSupplier');
+      let supplierList = supplier.get('list');
+      let demand = state.get('businessDemand');
+      let demandList = demand.get('list');
+      let newSupplierList = [];
+      let newDemandList = [];
+
+      // try to refresh moment for list
+      if (supplierList) {
+        supplierList = supplierList.filter((m) => (
+          m.id !== id
+        ));
+
+        supplier = supplier.set('list', supplierList);
+      }
+
+      if (demandList) {
+        demandList = demandList.filter((m) => (
+          m.id !== id
+        ));
+
+        demand = demand.set('list', demandList);
+      }
+
+      return state.set('businessSupplier', supplier).set('businessDemand', demand);
     }
     case LOAD_BUSINESS: {
       const { type, list, page } = action.payload;

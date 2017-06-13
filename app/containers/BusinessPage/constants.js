@@ -6,6 +6,7 @@
 
 export const FETCH_MOMENT_DETAIL = 'app/BusinessPage/FETCH_MOMENT_DETAIL';
 export const LOAD_MOMENT_DETAIL = 'app/BusinessPage/LOAD_MOMENT_DETAIL';
+export const REFRESH_LIST_NEW_MOMENT = 'app/BusinessPage/REFRESH_LIST_NEW_MOMENT';
 
 export const FETCH_BUSINESS = 'app/BusinessPage/FETCH_BUSINESS';
 export const LOAD_BUSINESS = 'app/BusinessPage/LOAD_BUSINESS';
@@ -28,3 +29,10 @@ export const FETCH_BUSINESS_SEARCH = 'app/BusinessPage/FETCH_BUSINESS_SEARCH';
 export const LOAD_BUSINESS_SEARCH_PANEL = 'app/BusinessPage/LOAD_BUSINESS_SEARCH_PANEL';
 export const LOAD_BUSINESS_SEARCH_ALL = 'app/BusinessPage/LOAD_BUSINESS_SEARCH_ALL';
 export const LOAD_BUSINESS_SEARCH_ALL_LOADING = 'app/BusinessPage/LOAD_BUSINESS_SEARCH_ALL_LOADING';
+
+export const DO_LIKE_MOMENT = 'app/BusinessPage/DO_LIKE_MOMENT';
+export const DO_LIKE_COMMENT = 'app/BusinessPage/DO_LIKE_COMMENT';
+export const DO_DELETE_MOMENT = 'app/BusinessPage/DO_DELETE_MOMENT';
+export const REMOVE_LIST_MOMENT = 'app/BusinessPage/REMOVE_LIST_MOMENT';
+export const DO_SEND_COMMENT = 'app/BusinessPage/DO_SEND_COMMENT';
+export const DO_DELETE_COMMENT = 'app/BusinessPage/DO_DELETE_COMMENT';

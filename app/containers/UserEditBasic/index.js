@@ -158,7 +158,7 @@ export class UserEditBasic extends React.PureComponent { // eslint-disable-line 
           >真实姓名</Item>
           <Item
             extra={<InputItem
-              maxLength={6}
+              maxLength={30}
               style={inputStyle}
               name="company"
               value={company}
@@ -168,7 +168,7 @@ export class UserEditBasic extends React.PureComponent { // eslint-disable-line 
           >公司/个体</Item>
           <Item
             extra={<InputItem
-              maxLength={20}
+              maxLength={15}
               style={inputStyle}
               name="position"
               value={position}

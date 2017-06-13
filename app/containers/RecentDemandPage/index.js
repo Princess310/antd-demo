@@ -11,7 +11,7 @@ import pallete from 'styles/colors';
 import request from 'utils/request';
 import { browserHistory } from 'react-router';
 
-import { NavBar, Icon, Button, TextareaItem, WhiteSpace, WingBlank } from 'antd-mobile';
+import { NavBar, Icon, Button, TextareaItem, WhiteSpace, WingBlank, Toast, Modal } from 'antd-mobile';
 
 import { fetchReward } from 'containers/BusinessPage/actions';
 import { makeSelectBusinessRewards } from 'containers/BusinessPage/selectors';
@@ -27,6 +27,7 @@ const buttonStyle = {
   fontSize: '0.3rem',
 }
 
+const alert = Modal.alert;
 export class RecentDemandPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   state = {
     selected: '',
@@ -54,6 +55,20 @@ export class RecentDemandPage extends React.PureComponent { // eslint-disable-li
   saveInfo = () => {
     const { selected, content } = this.state;
 
+    if (selected === '') {
+      Toast.info('请选择产品需求标签', 2);
+      return;
+    }
+
+    if (content.trim() === '') {
+      const alertInstance = alert('对不起，您还未填写您的采购需求', '', [
+        { text: '跳过', onPress: () => browserHistory.push('/'), style: 'default' },
+        { text: '立即填写', onPress: () => alertInstance.close(), style: { fontWeight: 'bold' } },
+      ]);
+
+      return;
+    }
+
     request.doPost('moments/release', {
       content,
       reward_item: selected,
@@ -67,7 +82,6 @@ export class RecentDemandPage extends React.PureComponent { // eslint-disable-li
   render() {
     const { selected, content } = this.state;
     const { reward } = this.props;
-    const disableBtn = (selected === '' || content === '');
 
     return (
       <div>
@@ -104,7 +118,7 @@ export class RecentDemandPage extends React.PureComponent { // eslint-disable-li
         <WhiteSpace size="lg" />
           <WhiteSpace size="lg" />
           <WingBlank>
-            <Button className="btn" type="primary" disabled={disableBtn} onClick={this.saveInfo}>立即体验</Button>
+            <Button className="btn" type="primary" onClick={this.saveInfo}>立即体验</Button>
           </WingBlank>
       </div>
     );

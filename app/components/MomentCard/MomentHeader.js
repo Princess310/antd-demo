@@ -76,7 +76,7 @@ class MomentHeader extends React.PureComponent { // eslint-disable-line react/pr
                 <FlexSB>
                   <FlexRow>
                     <section style={{ fontSize: '0.28rem' }}>{user.nickname}</section>
-                    <LevelTag style={tagStyle}>{user.tag_identity_name}</LevelTag>
+                    {user.tag_identity_name !== '' && <LevelTag style={tagStyle}>{user.tag_identity_name}</LevelTag>}
                   </FlexRow>
                   {rightContent}
                 </FlexSB>
@@ -97,8 +97,8 @@ class MomentHeader extends React.PureComponent { // eslint-disable-line react/pr
                 <FlexSB>
                   <FlexRow>
                     <section style={{ fontSize: '0.28rem' }}>{user.nickname}</section>
-                    <LineTag style={tagStyle}>{user.tag_identity_name}</LineTag>
-                    {user.main_service_name && <LineTag style={tagStyle}>{user.main_service_name}</LineTag>}
+                    {user.tag_identity_name !== '' && <LineTag style={tagStyle}>{user.tag_identity_name}</LineTag>}
+                    {(user.main_service_name && user.main_service_name !== '') && <LineTag style={tagStyle}>{user.main_service_name}</LineTag>}
                   </FlexRow>
                   {rightContent}
                 </FlexSB>
@@ -118,7 +118,7 @@ class MomentHeader extends React.PureComponent { // eslint-disable-line react/pr
           }
           {(source_type_name && type === 'communication') && <LineTag style={{
             position: 'absolute',
-            top: '0.76rem',
+            top: '0.96rem',
             right:'0.15rem',
           }}>{source_type_name}</LineTag>}
         </FlexSB>

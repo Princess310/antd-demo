@@ -5,6 +5,7 @@
 */
 
 import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 import pallete from 'styles/colors';
 import oss from 'utils/oss';
@@ -12,11 +13,14 @@ import { browserHistory } from 'react-router';
 
 import { Icon, Modal } from 'antd-mobile';
 import FlexSB from 'components/FlexSB';
+import LineTag from 'components/LineTag';
+import chatTool from 'components/ChatTool';
+import { likeMoment, sendComment, delMoment } from 'containers/BusinessPage/actions';
 import MomentHeader from './MomentHeader';
 import MomentComment from './MomentComment';
 
 const ContentWrapper= styled.div`
-  padding: 0.12rem 0 0.12rem 1.08rem;
+  padding: 0 0 0.12rem 1.08rem;
   fontSize: 0.26rem;
   color: ${pallete.text.content};
 `;
@@ -65,12 +69,12 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
   showActionSheet = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    const { moment, currentUser } = this.props;
+    const { moment, from, currentUser, doDelMoment } = this.props;
 
     if (String(currentUser.id) === String(moment.uid)) {
       operation([
         { text: '删除', onPress: () => {
-          // TODO: add action
+          doDelMoment(moment.id, from);
         }, style: {...actionSheetStyle, color: pallete.text.red} },
         { text: '取消', onPress: () => {
           // TODO: add action
@@ -100,9 +104,27 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
     });
   }
 
+  handleLike = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const { moment, doLikeMoment } = this.props;
+
+    doLikeMoment(moment.id, moment.uid, 'list');
+  }
+
+  handleShowChatTool = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const { moment, doSendComment } = this.props;
+
+    chatTool((message) => {
+      doSendComment(moment.id, moment.uid, message, 'list');
+    });
+  }
+
   render() {
     const { moreContent, expanded } = this.state;
-    const { moment, style, from, type } = this.props;
+    const { moment, style, from, type, currentUser } = this.props;
     const {
       id,
       uid,
@@ -122,6 +144,9 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
       share_count,
       is_like,
       comments,
+      item_name,
+      section,
+      units,
       ...other,
     } = moment;
 
@@ -191,6 +216,12 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
             )}
           />}
           <ContentWrapper style={contentStyle}>
+            {type === 'business' && (
+              <div style={{ marginBottom: '0.08rem' }}>
+                {item_name !== '' && <LineTag>{item_name}</LineTag>}
+                {section !== '' && <LineTag style={{ marginLeft: '0.08rem' }}>{section}</LineTag>}
+              </div>
+            )}
             {moreContent ?
               (
                 <div>
@@ -227,17 +258,17 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
           </ContentWrapper>
           {from === 'list' && 
             <FlexSB style={{ paddingLeft: (type === 'business' ? '2.6rem' : '3.6rem'), paddingRight: '0.12rem', fontSize: '0.28rem', color: pallete.text.help }}>
-              {type === 'business' &&
+              {(type === 'business' && String(uid) === String(currentUser.id)) &&
                 <FlexSB>
                   <Icon type={require('icons/ali/置顶.svg')} size="sm" color={pallete.text.help} />
                   <span style={{ marginLeft: '0.04rem' }}>置顶</span>
                 </FlexSB>
               }
-              <FlexSB>
+              <FlexSB onClick={this.handleShowChatTool}>
                 <Icon type={require('icons/ali/评论.svg')} size="sm" color={pallete.text.help} />
                 <span style={{ marginLeft: '0.04rem' }}>{comment_count > 0 ? comment_count : '评论'}</span>
               </FlexSB>
-              <FlexSB>
+              <FlexSB onClick={this.handleLike}>
                 <Icon type={require('icons/ali/点赞.svg')} size="sm" color={is_like > 0 ? pallete.theme : pallete.text.help} />
                 <span style={{ marginLeft: '0.04rem' }}>{like_count > 0 ? like_count : '点赞'}</span>
               </FlexSB>
@@ -270,6 +301,17 @@ MomentCard.propTypes = {
   // communication or business
   type: PropTypes.string,
   style: PropTypes.object,
+  doLikeMoment: PropTypes.func,
+  doSendComment: PropTypes.func,
+  doDelMoment: PropTypes.func,
 };
 
-export default MomentCard;
+function mapDispatchToProps(dispatch) {
+  return {
+    doLikeMoment: (id, uid, from) => dispatch(likeMoment(id, uid, from)),
+    doSendComment: (id, uid, content, from) => dispatch(sendComment(id, uid, content, from)),
+    doDelMoment: (id, from) => dispatch(delMoment(id, from)),
+  };
+}
+
+export default connect(null, mapDispatchToProps)(MomentCard);

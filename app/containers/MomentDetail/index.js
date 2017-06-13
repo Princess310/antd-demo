@@ -16,11 +16,12 @@ import MomentCard from 'components/MomentCard';
 import UserHeaderBar from 'components/UserHeaderBar';
 import FlexSB from 'components/FlexSB';
 import FlexCenter from 'components/FlexCenter';
-import { NavBar, Tabs, WhiteSpace, Icon } from 'antd-mobile';
+import chatTool from 'components/ChatTool';
+import { NavBar, Tabs, WhiteSpace, Icon, ActionSheet } from 'antd-mobile';
 
 import { makeSelectBusinessDetail } from 'containers/BusinessPage/selectors';
 import { makeSelectCurrentUser } from 'containers/HomePage/selectors';
-import { fetchMomentDetail, loadMomentDetail } from 'containers/BusinessPage/actions';
+import { fetchMomentDetail, loadMomentDetail, likeMoment, sendComment, delComment, likeComment } from 'containers/BusinessPage/actions';
 
 const CommentWrapper= styled.div`
   fontSize: 0.26rem;
@@ -61,6 +62,59 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
 
   handleTabClick = () => {
 
+  }
+
+  handleLike = () => {
+    const { momentDetail, doLikeMoment } = this.props;
+    
+    doLikeMoment(momentDetail.id, momentDetail.uid, 'detail');
+  }
+  
+  handleLikeComment = (cid, uid) => {
+    const { momentDetail, doLikeComment } = this.props;
+    
+    doLikeComment(momentDetail.id, cid, uid);
+  }
+
+  handleShowChatTool = (e) => {
+    const { momentDetail, doSendComment } = this.props;
+
+    chatTool((message) => {
+      doSendComment(momentDetail.id, momentDetail.uid, message, 'detail');
+    });
+  }
+
+  handleDoublueSendComment = (id, uid) => {
+    const { currentUser, momentDetail, doSendComment, doDelComment } = this.props;
+
+    if (String(currentUser.id) === String(uid)) {
+      const BUTTONS = ['删除', '取消'];
+      ActionSheet.showActionSheetWithOptions({
+        options: BUTTONS,
+        cancelButtonIndex: BUTTONS.length - 1,
+        destructiveButtonIndex: BUTTONS.length - 2,
+        maskClosable: true,
+      },
+      (buttonIndex) => {
+        if (buttonIndex === 0) {
+          doDelComment(momentDetail.id, id);
+        }
+      });
+    } else {
+      const BUTTONS = ['回复', '取消'];
+      ActionSheet.showActionSheetWithOptions({
+        options: BUTTONS,
+        cancelButtonIndex: BUTTONS.length - 1,
+        maskClosable: true,
+      },
+      (buttonIndex) => {
+        if (buttonIndex === 0) {
+          chatTool((message) => {
+            doSendComment(momentDetail.id, momentDetail.uid, message, 'detail', id);
+          });
+        }
+      });
+    }
   }
 
   render() {
@@ -107,7 +161,9 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
                 <TabPane tab={`评论 ${comment_count}`} key="1">
                   <div>
                     {comments.map((u)  => (
-                      <div key={u.id} style={{ borderBottom: `0.01rem ${pallete.border.deep} solid` }}>
+                      <div key={u.id} style={{ borderBottom: `0.01rem ${pallete.border.deep} solid` }} onClick={() => {
+                        this.handleDoublueSendComment(u.id, u.created_by);
+                      }}>
                         <UserHeaderBar
                           user={{...u, id: u.created_by}}
                         />
@@ -116,7 +172,11 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
                             {u.to_name !== '' && <span>回复<span style={{ color: pallete.theme }}>{u.to_name}</span>：</span>}
                             {u.content}
                           </div>
-                          <div style={{ textAlign: 'right' }}>
+                          <div style={{ textAlign: 'right' }} onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            this.handleLikeComment(u.id, u.created_by);
+                          }}>
                             <Icon type={require('icons/ali/点赞.svg')} size="sm" color={u.is_like > 0 ? pallete.theme : pallete.text.help} />
                           </div>
                         </CommentWrapper>
@@ -155,11 +215,11 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
                   <span style={{ marginLeft: '0.04rem', color: pallete.text.help }}>置顶</span>
                 </FlexCenter>
               }
-              <FlexCenter>
+              <FlexCenter onClick={this.handleShowChatTool}>
                 <Icon type={require('icons/ali/评论.svg')} size="sm" color={pallete.text.help} />
                 <span style={{ marginLeft: '0.04rem', color: pallete.text.help }}>{comment_count > 0 ? comment_count : '评论'}</span>
               </FlexCenter>
-              <FlexCenter>
+              <FlexCenter onClick={this.handleLike}>
                 <Icon type={require('icons/ali/点赞.svg')} size="sm" color={is_like > 0 ? pallete.theme : pallete.text.help} />
                 <span style={{ marginLeft: '0.04rem', color: pallete.text.help }}>{like_count > 0 ? like_count : '点赞'}</span>
               </FlexCenter>
@@ -182,6 +242,10 @@ MomentDetail.propTypes = {
   ]),
   getMoment: PropTypes.func,
   currentUser: PropTypes.object,
+  doLikeMoment: PropTypes.func,
+  doLikeComment: PropTypes.func,
+  doSendComment: PropTypes.func,
+  doDelComment: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -193,6 +257,10 @@ function mapDispatchToProps(dispatch) {
   return {
     getMoment: (id) => dispatch(fetchMomentDetail(id)),
     saveMoment: (data) => dispatch(loadMomentDetail(data)),
+    doLikeMoment: (id, uid, from) => dispatch(likeMoment(id, uid, from)),
+    doLikeComment: (id, cid, uid) =>  dispatch(likeComment(id, cid, uid)),
+    doSendComment: (id, uid, content, from, pid) => dispatch(sendComment(id, uid, content, from, pid)),
+    doDelComment: (id, cid) => dispatch(delComment(id, cid)),
   };
 }
 

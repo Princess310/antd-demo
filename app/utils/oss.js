@@ -72,7 +72,7 @@ const oss = {
     const checkPicSize = 150 * 1024;
     let resizePercent = 100;
 
-    if (path.indexOf("__") >= 0) {
+    if (path.indexOf("__") >= 0 && path[path.length - 1] !== 'p') {
       if (Number(size) > checkPicSize) {
         resizePercent = Math.round(checkPicSize / (size * 100));
 

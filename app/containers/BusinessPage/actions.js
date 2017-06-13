@@ -7,6 +7,7 @@
 import {
   FETCH_MOMENT_DETAIL,
   LOAD_MOMENT_DETAIL,
+  REFRESH_LIST_NEW_MOMENT,
 
   FETCH_BUSINESS,
   LOAD_BUSINESS,
@@ -29,6 +30,13 @@ import {
   LOAD_BUSINESS_SEARCH_PANEL,
   LOAD_BUSINESS_SEARCH_ALL,
   LOAD_BUSINESS_SEARCH_ALL_LOADING,
+
+  DO_LIKE_MOMENT,
+  DO_LIKE_COMMENT,
+  DO_DELETE_MOMENT,
+  REMOVE_LIST_MOMENT,
+  DO_SEND_COMMENT,
+  DO_DELETE_COMMENT,
 } from './constants';
 
 export function fetchMomentDetail(id) {
@@ -43,6 +51,15 @@ export function fetchMomentDetail(id) {
 export function loadMomentDetail(data) {
   return {
     type: LOAD_MOMENT_DETAIL,
+    payload: {
+      data,
+    },
+  };
+}
+
+export function refreshListNewMoment(data) {
+  return {
+    type: REFRESH_LIST_NEW_MOMENT,
     payload: {
       data,
     },
@@ -187,6 +204,70 @@ export function loadSearchAllLoading(loading) {
     type: LOAD_BUSINESS_SEARCH_ALL_LOADING,
     payload: {
       loading,
+    },
+  };
+}
+
+export function likeMoment(id, uid, from) {
+  return {
+    type: DO_LIKE_MOMENT,
+    payload: {
+      id,
+      uid,
+      from,
+    },
+  };
+}
+
+export function delMoment(id, from) {
+  return {
+    type: DO_DELETE_MOMENT,
+    payload: {
+      id,
+      from,
+    },
+  };
+}
+
+export function removeMoment(id) {
+  return {
+    type: REMOVE_LIST_MOMENT,
+    payload: {
+      id,
+    },
+  };
+}
+
+export function likeComment(id, cid, uid) {
+  return {
+    type: DO_LIKE_COMMENT,
+    payload: {
+      id,
+      cid,
+      uid,
+    },
+  };
+}
+
+export function sendComment(id, uid, content, from, pid) {
+  return {
+    type: DO_SEND_COMMENT,
+    payload: {
+      id,
+      uid,
+      content,
+      from,
+      pid,
+    },
+  };
+}
+
+export function delComment(id, cid) {
+  return {
+    type: DO_DELETE_COMMENT,
+    payload: {
+      id,
+      cid,
     },
   };
 }

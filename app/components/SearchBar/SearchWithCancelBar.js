@@ -8,10 +8,9 @@ import React, { PropTypes } from 'react';
 import pallete from 'styles/colors';
 
 import FlexRowCenter from 'components/FlexRowCenter';
-import { Icon, InputItem } from 'antd-mobile';
+import { Icon } from 'antd-mobile';
 
 const inputStyle = {
-  fontSize: '0.34rem',
   WebkitAppearance: 'none',
   MozAppearance: 'none',
   appearance: 'none',

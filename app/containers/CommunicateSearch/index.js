@@ -184,7 +184,7 @@ export class CommunicateSearch extends React.PureComponent { // eslint-disable-l
                   moment={d}
                   currentUser={currentUser}
                   from="search"
-                  type="communicate"
+                  type="communication"
                 />
               ))}
             </TouchLoader>

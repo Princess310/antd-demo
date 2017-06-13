@@ -12,6 +12,9 @@ import {
 
   LOAD_COMMUNICATE_SEARCH,
   LOAD_COMMUNICATE_SEARCH_LOADING,
+
+  REFRESH_LIST_NEW_MOMENT,
+  REMOVE_LIST_MOMENT,
 } from './constants';
 
 const initialState = fromJS({
@@ -109,6 +112,41 @@ function communicateReducer(state = initialState, action) {
 
       const result = info.set('loading', loading);
       return state.set('search', result);
+    }
+    case REFRESH_LIST_NEW_MOMENT: {
+      const { data } = action.payload;
+      let info = state.get('communication');
+      const list = info.get('list');
+      const newList = [];
+
+      if (list) {
+        list.forEach((m, i) => {
+          if (m.id === data.id) {
+            newList[i] = data;
+          } else {
+            newList[i] = m;
+          }
+        });
+
+        info = info.set('list', newList);
+      }
+
+      return state.set('communication', info);
+    }
+    case REMOVE_LIST_MOMENT: {
+      const { id } = action.payload;
+      let info = state.get('communication');
+      let list = info.get('list');
+
+      if (list) {
+        list = list.filter((m) => (
+          m.id !== id
+        ));
+
+        info = info.set('list', list);
+      }
+
+      return state.set('communication', info);
     }
     default:
       return state;

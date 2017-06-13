@@ -13,6 +13,9 @@ import {
   FETCH_COMMUNICATE_SEARCH,
   LOAD_COMMUNICATE_SEARCH,
   LOAD_COMMUNICATE_SEARCH_LOADING,
+
+  REFRESH_LIST_NEW_MOMENT,
+  REMOVE_LIST_MOMENT,
 } from './constants';
 
 export function fetchCommunicate(page) {
@@ -77,6 +80,24 @@ export function loadCommunicateSearchLoading(loading) {
     type: LOAD_COMMUNICATE_SEARCH_LOADING,
     payload: {
       loading,
+    },
+  };
+}
+
+export function refreshListNewCommunicate(data) {
+  return {
+    type: REFRESH_LIST_NEW_MOMENT,
+    payload: {
+      data,
+    },
+  };
+}
+
+export function removeListCommunicate(id) {
+  return {
+    type: REMOVE_LIST_MOMENT,
+    payload: {
+      id,
     },
   };
 }

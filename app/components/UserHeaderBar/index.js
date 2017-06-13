@@ -34,10 +34,10 @@ class UserHeaderBar extends React.PureComponent { // eslint-disable-line react/p
   }
 
   render() {
-    const { user, avatarSize, style, rightContent } = this.props;
+    const { user, avatarSize, style, rightContent, ...other } = this.props;
 
     return (
-      <Wrapper style={style}>
+      <Wrapper style={style} {...other}>
         <Avatar
           size={avatarSize ? avatarSize : '0.72rem'}
           id={user.id}
