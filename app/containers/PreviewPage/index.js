@@ -5,6 +5,7 @@
  */
 
 import React, { PropTypes } from 'react';
+import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import pallete from 'styles/colors';
@@ -44,6 +45,13 @@ export class PreviewPage extends React.PureComponent { // eslint-disable-line re
     };
     return (
       <div>
+        <Helmet
+          title="引导页"
+          meta={[
+            { name: 'description', content: '健康商信引导页' },
+            { name: 'keywords', content: '健康,商业，健康商信，引导页' },
+          ]}
+        />
         <div className="company-pictures" style={rootStyle}>
           <div className="swiper-wrapper">
             {pictures.map((p, i) => (

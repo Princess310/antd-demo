@@ -112,7 +112,7 @@ export class RecentDemandPage extends React.PureComponent { // eslint-disable-li
           autoHeight
           value={content}
           onChange={this.handleChange}
-          placeholder="请用一句话补充描述您的采购需求"
+          placeholder="请用一句话补充描述您的需求"
           labelNumber={1}
         />
         <WhiteSpace size="lg" />

@@ -118,7 +118,7 @@ class MomentHeader extends React.PureComponent { // eslint-disable-line react/pr
           }
           {(source_type_name && type === 'communication') && <LineTag style={{
             position: 'absolute',
-            top: '0.96rem',
+            top: '0.72rem',
             right:'0.15rem',
           }}>{source_type_name}</LineTag>}
         </FlexSB>
