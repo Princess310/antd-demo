@@ -48,3 +48,7 @@ export const LOAD_USER_COMMUNICATION_LOADING = 'app/UserCenter/LOAD_USER_COMMUNI
 
 export const FETCH_USER_INFO = 'app/UserCenter/FETCH_USER_INFO';
 export const LOAD_USER_INFO = 'app/UserCenter/LOAD_USER_INFO';
+
+export const FETCH_COMPLAINT_TYPES = 'app/UserCenter/FETCH_COMPLAINT_TYPES';
+export const LOAD_COMPLAINT_TYPES = 'app/UserCenter/LOAD_COMPLAINT_TYPES';
+export const SAVE_USER_COMPLAINT = 'app/UserCenter/SAVE_USER_COMPLAINT';

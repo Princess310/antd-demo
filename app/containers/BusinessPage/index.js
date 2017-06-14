@@ -9,31 +9,26 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import pallete from 'styles/colors';
 import { browserHistory } from 'react-router';
+import request from 'utils/request';
 
 import { ScrollContainer } from 'react-router-scroll';
 import TouchLoader from 'components/TouchLoader';
 import MomentCard from 'components/MomentCard';
 import FlexColumnCenter from 'components/FlexColumnCenter';
 import FlexRow from 'components/FlexRow';
-import { NavBar, SegmentedControl, Icon, ListView, RefreshControl } from 'antd-mobile';
+import { NavBar, SegmentedControl, Icon, ActionSheet, Modal } from 'antd-mobile';
 
 import { makeSelectUserBusinessDemand, makeSelectUserBusinessSupplier, makeSelectBusinessFilter } from './selectors';
 import { makeSelectCurrentUser } from 'containers/HomePage/selectors';
 
 import FilterPanel from './FilterPanel';
-import PublishMenu from './PublishMenu';
 import { fetchBusiness, fetchBusinessPrice, fetchBusinessNumber, fetchReward } from './actions';
+import './styles.scss';
 
+const alert = Modal.alert;
 export class BusinessPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
     super(props);
-    const dataSourceSupplier = new ListView.DataSource({
-      rowHasChanged: (row1, row2) => row1 !== row2,
-    });
-
-    const dataSourceDemand = new ListView.DataSource({
-      rowHasChanged: (row1, row2) => row1 !== row2,
-    });
 
     this.initData = [];
     this.state = {
@@ -58,7 +53,6 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
         id: 0,
         value: '',
       },
-      showPublishMenu: false,
     };
   }
 
@@ -189,10 +183,40 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
     // do the filter for business
     getBusiness(type, startPage, searchParams);
   }
-  
+
+  handlePublish = () => {
+    const { type } = this.state;
+    const listClass = type === 2 ? 'business-publish-demand-menu' : 'business-publish-supplier-menu';
+    const BUTTONS = ['发布采购需求', '发布供应信息', '取消'];
+    ActionSheet.showActionSheetWithOptions({
+      options: BUTTONS,
+      cancelButtonIndex: BUTTONS.length - 1,
+      maskClosable: true,
+      className: listClass,
+    },
+    (buttonIndex) => {
+      if (buttonIndex < 2) {
+        request.doGet('moments/check-release', {
+          reward_as: type
+        }).then((res) => {
+          if (res.natural_day_counts > 0) {
+            alert(res.message, '', [
+              { text: '我知道了' },
+            ])
+          } else {
+            if (buttonIndex === 0) {
+              browserHistory.push('businessPublish');
+            } else if (buttonIndex === 1) {
+              browserHistory.push('/businessPublishSupplier');
+            }
+          }
+        });
+      }
+    });
+  }
 
   render() {
-    const { type, priceFilter, numberFilter, rewardDemandFilter, rewardSupplierFilter, showPublishMenu } = this.state;
+    const { type, priceFilter, numberFilter, rewardDemandFilter, rewardSupplierFilter } = this.state;
     const { businessDemand, businessSupplier, currentUser, filters } = this.props;
     const { price, number, reward } = filters;
 
@@ -210,11 +234,7 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
             </FlexColumnCenter>
           )}
           rightContent={[
-            <div key={1} onClick={() => {
-              this.setState({
-                showPublishMenu: true,
-              });
-            }}>
+            <div key={1} onClick={this.handlePublish}>
               <Icon type={require('icons/ali/编辑.svg')} color={pallete.theme} />
             </div>,
           ]}
@@ -332,9 +352,6 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
             </TouchLoader>
           </ScrollContainer>
         }
-        {showPublishMenu && <PublishMenu onClose={() => {this.setState({
-          showPublishMenu: false,
-        })}} />}
       </div>
     );
   }

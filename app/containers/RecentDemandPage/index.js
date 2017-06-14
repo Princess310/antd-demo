@@ -61,7 +61,7 @@ export class RecentDemandPage extends React.PureComponent { // eslint-disable-li
     }
 
     if (content.trim() === '') {
-      const alertInstance = alert('对不起，您还未填写您的采购需求', '', [
+      const alertInstance = alert('对不起，您还未描述您的需求', '', [
         { text: '跳过', onPress: () => browserHistory.push('/'), style: 'default' },
         { text: '立即填写', onPress: () => alertInstance.close(), style: { fontWeight: 'bold' } },
       ]);

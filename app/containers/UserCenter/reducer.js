@@ -32,6 +32,8 @@ import {
   LOAD_USER_COMMUNICATION_LOADING,
 
   LOAD_USER_INFO,
+
+  LOAD_COMPLAINT_TYPES,
 } from './constants';
 
 const initialState = fromJS({
@@ -43,6 +45,7 @@ const initialState = fromJS({
   authInfo: false,
   authFiles: false,
   userInfo: false,
+  complaintList: false,
   visitorUsers: {
     refresh: false,
     loading: false,
@@ -306,6 +309,11 @@ function userCenterReducer(state = initialState, action) {
       const { data } = action.payload;
 
       return state.set('userInfo', data);
+    }
+    case LOAD_COMPLAINT_TYPES: {
+      const { list } = action.payload;
+
+      return state.set('complaintList', list);
     }
     default:
       return state;

@@ -11,11 +11,11 @@ import pallete from 'styles/colors';
 import oss from 'utils/oss';
 import { browserHistory } from 'react-router';
 
-import { Icon, Modal } from 'antd-mobile';
+import { Icon, Modal, ActionSheet } from 'antd-mobile';
 import FlexSB from 'components/FlexSB';
 import LineTag from 'components/LineTag';
 import chatTool from 'components/ChatTool';
-import { likeMoment, sendComment, delMoment } from 'containers/BusinessPage/actions';
+import { likeMoment, sendComment, delMoment, collectMoment, setTopMoment, changeMomentTrade } from 'containers/BusinessPage/actions';
 import MomentHeader from './MomentHeader';
 import MomentComment from './MomentComment';
 
@@ -53,6 +53,12 @@ const actionSheetStyle = {
   color: pallete.theme,
 };
 
+const shareIconList = [
+  { icon: <Icon type={require('icons/share/微博icon.svg')} color={pallete.theme} />, title: '新浪微博' },
+  { icon: <Icon type={require('icons/share/微信icon.svg')} color={pallete.theme} />, title: '微信好友' },
+  { icon: <Icon type={require('icons/share/QQicon.svg')} color={pallete.theme} />, title: 'QQ' },
+];
+
 const operation = Modal.operation;
 class MomentCard extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
@@ -69,10 +75,23 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
   showActionSheet = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    const { moment, from, currentUser, doDelMoment } = this.props;
+    const { moment, from, currentUser, doDelMoment, doCollectMoment, doChangeMomentTrade, type } = this.props;
+    let moreAction = [];
+
+    if (type === 'business') {
+      moreAction = [
+        { text: '更改交易状态', onPress: () => {
+          doChangeMomentTrade(moment.id, from);
+        }, style: actionSheetStyle },
+      ];
+    }
 
     if (String(currentUser.id) === String(moment.uid)) {
       operation([
+        ...moreAction,
+        { text: '收藏', onPress: () => {
+          doCollectMoment(moment.id);
+        }, style: actionSheetStyle },
         { text: '删除', onPress: () => {
           doDelMoment(moment.id, from);
         }, style: {...actionSheetStyle, color: pallete.text.red} },
@@ -83,10 +102,16 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
     } else {
       operation([
         { text: '收藏', onPress: () => {
-          // TODO: add action
+          doCollectMoment(moment.id);
         }, style: actionSheetStyle },
         { text: '举报', onPress: () => {
-          // TODO: add action
+          browserHistory.push({
+            pathname: '/complaintUser',
+            state: {
+              id: moment.id,
+              module: 1,
+            },
+          });
         }, style: actionSheetStyle },
         { text: '取消', onPress: () => {
           // TODO: add action
@@ -122,6 +147,24 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
     });
   }
 
+  handleSetTop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const { moment, doSetTopMoment } = this.props;
+
+    doSetTopMoment(moment.id, moment.reward_as);
+  }
+
+  handleShare = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    ActionSheet.showShareActionSheetWithOptions({
+      options: shareIconList,
+      message: '分享动态',
+    });
+  }
+
   render() {
     const { moreContent, expanded } = this.state;
     const { moment, style, from, type, currentUser } = this.props;
@@ -147,6 +190,7 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
       item_name,
       section,
       units,
+      trade_status,
       ...other,
     } = moment;
 
@@ -204,9 +248,10 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
             }}
             type={type}
             source_type={source_type}
+            trade_status={trade_status}
             {...other}
             rightContent={(
-              from !== 'search' && <div style={{ width: '0.48rem', height: '0.48rem', textAlign: 'right' }} onClick={this.showActionSheet}>
+              from !== 'search' && <div style={{ width: '0.48rem', height: '0.48rem', textAlign: 'right', zIndex: 20 }} onClick={this.showActionSheet}>
                 <Icon
                   type={require('icons/ali/下拉.svg')}
                   size="xs"
@@ -259,7 +304,7 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
           {from === 'list' && 
             <FlexSB style={{ paddingLeft: (type === 'business' ? '2.6rem' : '3.6rem'), paddingRight: '0.12rem', fontSize: '0.28rem', color: pallete.text.help }}>
               {(type === 'business' && String(uid) === String(currentUser.id)) &&
-                <FlexSB>
+                <FlexSB onClick={this.handleSetTop}>
                   <Icon type={require('icons/ali/置顶.svg')} size="sm" color={pallete.text.help} />
                   <span style={{ marginLeft: '0.04rem' }}>置顶</span>
                 </FlexSB>
@@ -272,7 +317,7 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
                 <Icon type={require('icons/ali/点赞.svg')} size="sm" color={is_like > 0 ? pallete.theme : pallete.text.help} />
                 <span style={{ marginLeft: '0.04rem' }}>{like_count > 0 ? like_count : '点赞'}</span>
               </FlexSB>
-              <FlexSB>
+              <FlexSB onClick={this.handleShare}>
                 <Icon type={require('icons/ali/分享.svg')} size="xxs" color={pallete.text.help} />
                 <span style={{ marginLeft: '0.04rem' }}>{share_count > 0 ? share_count : '分享'}</span>
               </FlexSB>
@@ -304,6 +349,8 @@ MomentCard.propTypes = {
   doLikeMoment: PropTypes.func,
   doSendComment: PropTypes.func,
   doDelMoment: PropTypes.func,
+  doCollectMoment: PropTypes.func,
+  doSetTopMoment: PropTypes.func,
 };
 
 function mapDispatchToProps(dispatch) {
@@ -311,6 +358,9 @@ function mapDispatchToProps(dispatch) {
     doLikeMoment: (id, uid, from) => dispatch(likeMoment(id, uid, from)),
     doSendComment: (id, uid, content, from) => dispatch(sendComment(id, uid, content, from)),
     doDelMoment: (id, from) => dispatch(delMoment(id, from)),
+    doCollectMoment: (id) => dispatch(collectMoment(id)),
+    doSetTopMoment: (id, reward_as) => dispatch(setTopMoment(id, reward_as)),
+    doChangeMomentTrade: (id, from) => dispatch(changeMomentTrade(id, from)),
   };
 }
 

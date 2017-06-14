@@ -2,6 +2,7 @@ import { take, cancel, put, takeLatest } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { browserHistory } from 'react-router';
 import request from 'utils/request';
+import { Toast } from 'antd-mobile';
 
 import {
   refreshListNewCommunicate,
@@ -25,6 +26,9 @@ import {
   DO_LIKE_COMMENT,
   DO_SEND_COMMENT,
   DO_DELETE_COMMENT,
+  DO_COLLECT_MOMENT,
+  SET_TOP_MOMENT,
+  CHANGE_MOMENT_TRADE,
 } from './constants';
 
 import {
@@ -280,6 +284,63 @@ export function* delComment(action) {
   }
 }
 
+export function* collectMoment(action) {
+  try {
+    const { id } = action.payload;
+
+    const res = yield request.doPost('user/favorite', {
+      moments_id: id,
+    });
+
+    Toast.success('收藏成功!', 1);
+  } catch (err) {
+    // console.log(err);
+  }
+}
+
+export function* setTopMoment(action) {
+  try {
+    const { id, reward_as } = action.payload;
+
+    const res = yield request.doPost('moments/supply-and-demnd-top', {
+      moments_id: id,
+    });
+
+    yield fetchBusiness({
+      payload: {
+        type: reward_as,
+        page: 1,
+      },
+    });
+
+    Toast.success('置顶成功!', 1);
+  } catch (err) {
+    // console.log(err);
+  }
+}
+
+export function* changeMomentTrade(action) {
+  try {
+    const { id, from } = action.payload;
+
+    const res = yield request.doPost('moments/trade', {
+      moments_id: id,
+    });
+
+    if (from === 'detail') {
+      yield fetchMomentDetail({
+        payload: {
+          id,
+        }
+      });
+    }
+
+    yield doRefreshMoment(id);
+  } catch (err) {
+    // console.log(err);
+  }
+}
+
 export function* defaultSaga() {
   const watcher = yield takeLatest(FETCH_MOMENT_DETAIL, fetchMomentDetail);
   const watcherBusiness = yield takeLatest(FETCH_BUSINESS, fetchBusiness);
@@ -293,6 +354,9 @@ export function* defaultSaga() {
   const watcherLileComment = yield takeLatest(DO_LIKE_COMMENT, likeComment);
   const watcherSendComment = yield takeLatest(DO_SEND_COMMENT, sendComment);
   const watcherDelComment = yield takeLatest(DO_DELETE_COMMENT, delComment);
+  const watcherCollectMoment = yield takeLatest(DO_COLLECT_MOMENT, collectMoment);
+  const watcherSetTop = yield takeLatest(SET_TOP_MOMENT, setTopMoment);
+  const watcherChangeMomentTrade = yield takeLatest(CHANGE_MOMENT_TRADE, changeMomentTrade);
 
   // Suspend execution until location changes
   yield take(LOCATION_CHANGE);
@@ -308,6 +372,9 @@ export function* defaultSaga() {
   yield cancel(watcherLileComment);
   yield cancel(watcherSendComment);
   yield cancel(watcherDelComment);
+  yield cancel(watcherCollectMoment);
+  yield cancel(watcherSetTop);
+  yield cancel(watcherChangeMomentTrade);
 }
 
 // All sagas to be loaded

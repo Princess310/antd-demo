@@ -37,6 +37,9 @@ import {
   REMOVE_LIST_MOMENT,
   DO_SEND_COMMENT,
   DO_DELETE_COMMENT,
+  DO_COLLECT_MOMENT,
+  SET_TOP_MOMENT,
+  CHANGE_MOMENT_TRADE,
 } from './constants';
 
 export function fetchMomentDetail(id) {
@@ -268,6 +271,35 @@ export function delComment(id, cid) {
     payload: {
       id,
       cid,
+    },
+  };
+}
+
+export function collectMoment(id) {
+  return {
+    type: DO_COLLECT_MOMENT,
+    payload: {
+      id,
+    },
+  };
+}
+
+export function setTopMoment(id, reward_as) {
+  return {
+    type: SET_TOP_MOMENT,
+    payload: {
+      id,
+      reward_as,
+    },
+  };
+}
+
+export function changeMomentTrade(id, from) {
+  return {
+    type: CHANGE_MOMENT_TRADE,
+    payload: {
+      id,
+      from,
     },
   };
 }

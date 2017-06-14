@@ -28,6 +28,9 @@ import {
   FETCH_USER_COMMUNICATION,
 
   FETCH_USER_INFO,
+
+  FETCH_COMPLAINT_TYPES,
+  SAVE_USER_COMPLAINT,
 } from './constants';
 
 import {
@@ -57,6 +60,7 @@ import {
   loadCommunicationLoading,
 
   loadUserInfo,
+  loadComplaintTypes,
 } from './actions';
 
 export function* saveUser(action) {
@@ -258,6 +262,33 @@ export function* fetchUserInfo(action) {
   }
 }
 
+export function* fetchComplaint() {
+  try {
+    const res = yield request.doGet('complaints/complanints-type');
+    const { list } = res;
+
+    yield put(loadComplaintTypes(list));
+  } catch (err) {
+    // console.log(err);
+  }
+}
+
+export function* saveComplaint(action) {
+  try {
+    const { id, type, module } = action.payload;
+    const res = yield request.doPost('complaints/user-complain', {
+      type,
+      module_id: id,
+      module,
+    });
+
+    browserHistory.goBack();
+    Toast.success(res.message, 2);
+  } catch (err) {
+    // console.log(err);
+  }
+}
+
 export function* defaultSaga() {
   const watcher = yield takeLatest(SAVE_USER, saveUser);
   const watcherIndustry = yield takeLatest(FETCH_INDUSTRY, fetchIndustry);
@@ -273,6 +304,8 @@ export function* defaultSaga() {
   const watcherSaveAuth = yield takeLatest(SAVE_USER_AUTH_INFO, saveUserAuth);
   const watcherCommunication = yield takeLatest(FETCH_USER_COMMUNICATION, fetchCommunication);
   const watcherUserInfo = yield takeLatest(FETCH_USER_INFO, fetchUserInfo);
+  const watcherComplaintTypes = yield takeLatest(FETCH_COMPLAINT_TYPES, fetchComplaint);
+  const watcherSaveComplaint = yield takeLatest(SAVE_USER_COMPLAINT, saveComplaint);
 
   // Suspend execution until location changes
   yield take(LOCATION_CHANGE);
@@ -290,6 +323,8 @@ export function* defaultSaga() {
   yield cancel(watcherSaveAuth);
   yield cancel(watcherCommunication);
   yield cancel(watcherUserInfo);
+  yield cancel(watcherComplaintTypes);
+  yield cancel(watcherSaveComplaint);
 }
 
 // All sagas to be loaded

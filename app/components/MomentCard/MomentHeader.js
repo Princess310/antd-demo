@@ -17,6 +17,8 @@ import LevelTag from 'components/LevelTag';
 import LineTag from 'components/LineTag';
 import DateInfo from 'components/DateInfo';
 
+import momentSuccess from 'assets/images/moment-success.png';
+
 const Wrapper = styled(FlexRow)`
   position: relative;
   display: flex;
@@ -54,6 +56,7 @@ class MomentHeader extends React.PureComponent { // eslint-disable-line react/pr
       type,
       style,
       rightContent,
+      trade_status,
     } = this.props;
 
     return (
@@ -122,6 +125,13 @@ class MomentHeader extends React.PureComponent { // eslint-disable-line react/pr
             right:'0.15rem',
           }}>{source_type_name}</LineTag>}
         </FlexSB>
+        {trade_status > 0 && <img role="presentation" src={momentSuccess} style={{
+          position: 'absolute',
+          top: '0.24rem',
+          right: '0.24rem',
+          width: 'auto',
+          height: '1rem',
+        }} />}
       </Wrapper>
     );
   }

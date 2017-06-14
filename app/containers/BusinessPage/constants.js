@@ -36,3 +36,6 @@ export const DO_DELETE_MOMENT = 'app/BusinessPage/DO_DELETE_MOMENT';
 export const REMOVE_LIST_MOMENT = 'app/BusinessPage/REMOVE_LIST_MOMENT';
 export const DO_SEND_COMMENT = 'app/BusinessPage/DO_SEND_COMMENT';
 export const DO_DELETE_COMMENT = 'app/BusinessPage/DO_DELETE_COMMENT';
+export const DO_COLLECT_MOMENT = 'app/BusinessPage/DO_COLLECT_MOMENT';
+export const SET_TOP_MOMENT = 'app/BusinessPage/SET_TOP_MOMENT';
+export const CHANGE_MOMENT_TRADE = 'app/BusinessPage/CHANGE_MOMENT_TRADE';

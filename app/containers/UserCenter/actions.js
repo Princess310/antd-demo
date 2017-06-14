@@ -50,6 +50,10 @@ import {
 
   FETCH_USER_INFO,
   LOAD_USER_INFO,
+
+  FETCH_COMPLAINT_TYPES,
+  LOAD_COMPLAINT_TYPES,
+  SAVE_USER_COMPLAINT,
 } from './constants';
 
 export function saveUser(params) {
@@ -363,6 +367,32 @@ export function loadUserInfo(data) {
     type: LOAD_USER_INFO,
     payload: {
       data,
+    },
+  };
+}
+
+export function fetchComplaintTypes() {
+  return {
+    type: FETCH_COMPLAINT_TYPES,
+  };
+}
+
+export function loadComplaintTypes(list) {
+  return {
+    type: LOAD_COMPLAINT_TYPES,
+    payload: {
+      list,
+    },
+  };
+}
+
+export function saveUserComplaint(id, type, module) {
+  return {
+    type: SAVE_USER_COMPLAINT,
+    payload: {
+      id,
+      type,
+      module,
     },
   };
 }

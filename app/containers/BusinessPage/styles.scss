@@ -1,0 +1,15 @@
+.business-publish-demand-menu {
+  .am-action-sheet-button-list-item {
+    &:nth-of-type(2) {
+      color: #ccc;
+    }
+  }
+}
+
+.business-publish-supplier-menu {
+  .am-action-sheet-button-list-item {
+    &:first-child {
+      color: #ccc;
+    }
+  }
+}

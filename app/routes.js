@@ -388,6 +388,14 @@ export default function createRoutes(store) {
               .then(loadModule(cb))
               .catch(errorLoading);
           },
+        }, {
+          path: 'complaintUser',
+          name: 'complaintUser',
+          getComponent(location, cb) {
+            import('containers/ComplaintUser')
+              .then(loadModule(cb))
+              .catch(errorLoading);
+          },
         },
       ],
     }, {
