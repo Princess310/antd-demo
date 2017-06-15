@@ -40,6 +40,10 @@ import {
   DO_COLLECT_MOMENT,
   SET_TOP_MOMENT,
   CHANGE_MOMENT_TRADE,
+
+  PUBLISH_MOMENT,
+
+  LOAD_PUBLISH_PARAMS,
 } from './constants';
 
 export function fetchMomentDetail(id) {
@@ -300,6 +304,27 @@ export function changeMomentTrade(id, from) {
     payload: {
       id,
       from,
+    },
+  };
+}
+
+export function publishMoment(content, files, params, step) {
+  return {
+    type: PUBLISH_MOMENT,
+    payload: {
+      content,
+      files,
+      params,
+      step,
+    },
+  };
+}
+
+export function loadPublishParams(params) {
+  return {
+    type: LOAD_PUBLISH_PARAMS,
+    payload: {
+      params,
     },
   };
 }

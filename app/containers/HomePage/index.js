@@ -88,7 +88,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
           >
             {!hideTabs && <BusinessPage />}
           </TabItem>
-          <TabItem
+          {/*<TabItem
             icon={<Icon type={require('icons/ali/消息.svg')} />}
             selectedIcon={<Icon type={require('icons/ali/消息.svg')} />}
             title="消息"
@@ -102,7 +102,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
             }}
           >
             {!hideTabs && <div>消息</div>}
-          </TabItem>
+          </TabItem>*/}
           <TabItem
             icon={<Icon type={require('icons/ali/我的.svg')} />}
             selectedIcon={<Icon type={require('icons/ali/我的.svg')} />}

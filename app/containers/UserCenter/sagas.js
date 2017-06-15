@@ -31,6 +31,8 @@ import {
 
   FETCH_COMPLAINT_TYPES,
   SAVE_USER_COMPLAINT,
+
+  FETCH_USER_FRIEND,
 } from './constants';
 
 import {
@@ -61,6 +63,8 @@ import {
 
   loadUserInfo,
   loadComplaintTypes,
+
+  loadUserFirend,
 } from './actions';
 
 export function* saveUser(action) {
@@ -289,6 +293,17 @@ export function* saveComplaint(action) {
   }
 }
 
+export function* fetchUserFriend() {
+  try {
+    const res = yield request.doGet('follow/friend-lists');
+
+    const { list } = res;
+    yield put(loadUserFirend(list));
+  } catch (err) {
+    // console.log(err);
+  }
+}
+
 export function* defaultSaga() {
   const watcher = yield takeLatest(SAVE_USER, saveUser);
   const watcherIndustry = yield takeLatest(FETCH_INDUSTRY, fetchIndustry);
@@ -306,6 +321,7 @@ export function* defaultSaga() {
   const watcherUserInfo = yield takeLatest(FETCH_USER_INFO, fetchUserInfo);
   const watcherComplaintTypes = yield takeLatest(FETCH_COMPLAINT_TYPES, fetchComplaint);
   const watcherSaveComplaint = yield takeLatest(SAVE_USER_COMPLAINT, saveComplaint);
+  const watcherUserFriend = yield takeLatest(FETCH_USER_FRIEND, fetchUserFriend);
 
   // Suspend execution until location changes
   yield take(LOCATION_CHANGE);
@@ -325,6 +341,7 @@ export function* defaultSaga() {
   yield cancel(watcherUserInfo);
   yield cancel(watcherComplaintTypes);
   yield cancel(watcherSaveComplaint);
+  yield cancel(watcherUserFriend);
 }
 
 // All sagas to be loaded

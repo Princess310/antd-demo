@@ -13,12 +13,42 @@ import { browserHistory } from 'react-router';
 import { NavBar, List, TextareaItem, WhiteSpace, ImagePicker, Toast, Icon } from 'antd-mobile';
 import MenuBtn from 'components/MenuBtn';
 
+import { publishMoment, loadPublishParams } from 'containers/BusinessPage/actions';
+import { makeSelectPublishParams } from 'containers/BusinessPage/selectors';
+
 const Item = List.Item;
 export class CommunicatePublish extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
-  state = {
-    content: '',
-    files: [],
-    filesMax: 9,
+  constructor(props) {
+    super(props);
+    const { publishParams }  = this.props;
+
+    this.state = {
+      content: publishParams.content ? publishParams.content : '',
+      files: publishParams.files ? publishParams.files : [],
+      filesMax: 9,
+    }
+  }
+
+  componentWillMount() {
+    const { location: { action } } = this.props;
+
+    if (action === 'PUSH') {
+      this.props.setPublishParams(false);
+      this.setState({
+        content: '',
+        files: [],
+      });
+    }
+  }
+
+  componentWillUnmount() {
+    const { location: { action } } = this.props;
+    const { content, files } = this.state;
+
+    this.props.setPublishParams({
+      content,
+      files,
+    });
   }
 
   onChange = (files) => {
@@ -33,8 +63,19 @@ export class CommunicatePublish extends React.PureComponent { // eslint-disable-
     });
   }
 
+  handleSave = () => {
+    const { content, files } = this.state;
+    const { publishParams, saveMoment } = this.props;
+
+    saveMoment(content, files, {
+      category: 4,
+      reminds: publishParams.selectFriend ? publishParams.selectFriend.join(',') : '',
+    });
+  }
+
   render() {
     const { content, files, filesMax } = this.state;
+    const { publishParams } = this.props;
 
     return (
       <div>
@@ -67,8 +108,9 @@ export class CommunicatePublish extends React.PureComponent { // eslint-disable-
           <Item
             thumb={<Icon type={require('icons/ali/@.svg')} color={pallete.text.help} />}
             arrow="horizontal"
+            extra={`${publishParams.selectFriend ? publishParams.selectFriend.length : 0}人`}
             onClick={() => {
-              browserHistory.push('/userCenterCollects');
+              browserHistory.push('/selectFriend');
             }}
           >提醒谁看</Item>
         </List>
@@ -78,14 +120,19 @@ export class CommunicatePublish extends React.PureComponent { // eslint-disable-
 }
 
 CommunicatePublish.propTypes = {
-  dispatch: PropTypes.func.isRequired,
+  setPublishParams: PropTypes.func,
+  publishParams: PropTypes.object,
 };
 
+const mapStateToProps = createStructuredSelector({
+  publishParams: makeSelectPublishParams(),
+});
 
 function mapDispatchToProps(dispatch) {
   return {
-    dispatch,
+    setPublishParams: (params) => dispatch(loadPublishParams(params)),
+    saveMoment: (content, files, params) => dispatch(publishMoment(content, files, params)),
   };
 }
 
-export default connect(null, mapDispatchToProps)(CommunicatePublish);
+export default connect(mapStateToProps, mapDispatchToProps)(CommunicatePublish);

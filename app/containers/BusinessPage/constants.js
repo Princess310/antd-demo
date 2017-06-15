@@ -39,3 +39,6 @@ export const DO_DELETE_COMMENT = 'app/BusinessPage/DO_DELETE_COMMENT';
 export const DO_COLLECT_MOMENT = 'app/BusinessPage/DO_COLLECT_MOMENT';
 export const SET_TOP_MOMENT = 'app/BusinessPage/SET_TOP_MOMENT';
 export const CHANGE_MOMENT_TRADE = 'app/BusinessPage/CHANGE_MOMENT_TRADE';
+
+export const PUBLISH_MOMENT = 'app/BusinessPage/PUBLISH_MOMENT';
+export const LOAD_PUBLISH_PARAMS = 'app/BusinessPage/LOAD_PUBLISH_PARAMS';

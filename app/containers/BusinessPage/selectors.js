@@ -62,6 +62,21 @@ const makeSelectBusinessRewards = () => createSelector(
   (substate) => substate.get('reward')
 );
 
+const makeSelectBusinessPrice = () => createSelector(
+  selectBusiness,
+  (substate) => substate.get('price')
+);
+
+const makeSelectBusinessNumber = () => createSelector(
+  selectBusiness,
+  (substate) => substate.get('number')
+);
+
+const makeSelectBusinessUnits = () => createSelector(
+  selectBusiness,
+  (substate) => substate.get('units')
+);
+
 const makeSelectBusinessSearchPanel = () => createSelector(
   selectBusiness,
   (substate) => substate.get('searchPanel')
@@ -79,12 +94,21 @@ const makeSelectBusinessSearchAll = () => createSelector(
   }
 );
 
+const makeSelectPublishParams = () => createSelector(
+  selectBusiness,
+  (substate) => substate.get('publishParams')
+);
+
 export {
   makeSelectBusinessDetail,
   makeSelectUserBusinessDemand,
   makeSelectUserBusinessSupplier,
   makeSelectBusinessFilter,
   makeSelectBusinessRewards,
+  makeSelectBusinessPrice,
+  makeSelectBusinessNumber,
+  makeSelectBusinessUnits,
   makeSelectBusinessSearchPanel,
   makeSelectBusinessSearchAll,
+  makeSelectPublishParams,
 };

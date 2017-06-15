@@ -2,12 +2,18 @@ import { take, cancel, put, takeLatest } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { browserHistory } from 'react-router';
 import request from 'utils/request';
+import { uploadFile } from 'utils/utils';
+import oss from 'utils/oss';
 import { Toast } from 'antd-mobile';
 
 import {
   refreshListNewCommunicate,
   removeListCommunicate,
 } from 'containers/Communicate/actions';
+
+import {
+  fetchCommunicate
+} from 'containers/Communicate/sagas';
 
 import {
   FETCH_MOMENT_DETAIL,
@@ -29,6 +35,8 @@ import {
   DO_COLLECT_MOMENT,
   SET_TOP_MOMENT,
   CHANGE_MOMENT_TRADE,
+
+  PUBLISH_MOMENT,
 } from './constants';
 
 import {
@@ -49,6 +57,8 @@ import {
   loadSearchAllLoading,
 
   removeMoment,
+
+  loadPublishParams,
 } from './actions';
 
 
@@ -107,7 +117,7 @@ export function* fetchBusinessNumber() {
 
 export function* fetchBusinessUnits() {
   try {
-    const res = yield request.doGet('moments/moments/units');
+    const res = yield request.doGet('moments/units');
 
     // load all filter things
     yield put(loadBusinessUnits(res.list));
@@ -341,6 +351,41 @@ export function* changeMomentTrade(action) {
   }
 }
 
+export function* publishMoment(action) {
+  try {
+    const { content, files, params, step } = action.payload;
+    const pics = [];
+
+    // compress images and upload to oss
+    for (let i = 0; i < files.length; i += 1) {
+      const url = yield uploadFile(files[i].file, oss.getFolderPath('moments', '1'));
+      pics.push(url);
+    }
+
+    const res = yield request.doPost('moments/release', {
+      content,
+      pictures: pics.join(','),
+      ...params,
+    });
+
+    yield fetchCommunicate({
+      payload: {
+        page: 1,
+      },
+    });
+    // reset publish params
+    yield put(loadPublishParams(false));
+
+    if (step) {
+      browserHistory.go(-step);
+    } else {
+      browserHistory.goBack();
+    }
+  } catch (err) {
+    // console.log(err);
+  }
+}
+
 export function* defaultSaga() {
   const watcher = yield takeLatest(FETCH_MOMENT_DETAIL, fetchMomentDetail);
   const watcherBusiness = yield takeLatest(FETCH_BUSINESS, fetchBusiness);
@@ -357,6 +402,7 @@ export function* defaultSaga() {
   const watcherCollectMoment = yield takeLatest(DO_COLLECT_MOMENT, collectMoment);
   const watcherSetTop = yield takeLatest(SET_TOP_MOMENT, setTopMoment);
   const watcherChangeMomentTrade = yield takeLatest(CHANGE_MOMENT_TRADE, changeMomentTrade);
+  const watcherPublishMoment = yield takeLatest(PUBLISH_MOMENT, publishMoment);
 
   // Suspend execution until location changes
   yield take(LOCATION_CHANGE);
@@ -375,6 +421,7 @@ export function* defaultSaga() {
   yield cancel(watcherCollectMoment);
   yield cancel(watcherSetTop);
   yield cancel(watcherChangeMomentTrade);
+  yield cancel(watcherPublishMoment);
 }
 
 // All sagas to be loaded

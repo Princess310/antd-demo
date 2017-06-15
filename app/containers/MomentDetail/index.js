@@ -128,6 +128,8 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
       like_count,
       shares,
       share_count,
+      reward_as,
+      category,
     } = momentDetail;
 
     return (
@@ -138,7 +140,7 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
           leftContent={<Icon type={require('icons/ali/返回.svg')} size="sm" color={pallete.theme} />}
           onLeftClick={() => browserHistory.goBack()}
         >
-          动态详情
+          {(category === '3' || reward_as === '2') ? '需求详情' : ((category === '0' || reward_as === '1') ? '供应详情' : '动态详情')}
         </NavBar>
         {momentDetail && (
           <div>

@@ -52,3 +52,7 @@ export const LOAD_USER_INFO = 'app/UserCenter/LOAD_USER_INFO';
 export const FETCH_COMPLAINT_TYPES = 'app/UserCenter/FETCH_COMPLAINT_TYPES';
 export const LOAD_COMPLAINT_TYPES = 'app/UserCenter/LOAD_COMPLAINT_TYPES';
 export const SAVE_USER_COMPLAINT = 'app/UserCenter/SAVE_USER_COMPLAINT';
+
+export const FETCH_USER_FRIEND = 'app/UserCenter/FETCH_USER_FRIEND';
+export const LOAD_USER_FRIEND = 'app/UserCenter/LOAD_USER_FRIEND';
+export const LOAD_SELECTED_USER_FRIEND = 'app/UserCenter/LOAD_SELECTED_USER_FRIEND';

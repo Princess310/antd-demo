@@ -78,9 +78,9 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
     const { moment, from, currentUser, doDelMoment, doCollectMoment, doChangeMomentTrade, type } = this.props;
     let moreAction = [];
 
-    if (type === 'business') {
+    if (type === 'business' && moment.reward_as === '2') {
       moreAction = [
-        { text: '更改交易状态', onPress: () => {
+        { text: '关闭或打开需求', onPress: () => {
           doChangeMomentTrade(moment.id, from);
         }, style: actionSheetStyle },
       ];

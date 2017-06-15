@@ -25,7 +25,7 @@ const Wrapper = styled(FlexRow)`
   background-color: ${pallete.white};
 `;
 const ItemWrapper = styled.div`
-  margin-right: 0.12rem;
+  margin-right: 0.24rem;
   font-size: 0.26rem;
   color: ${pallete.text.help};
 `;
@@ -37,7 +37,7 @@ const SubInfoWrapper = styled.div`
 `;
 
 const tagStyle = {
-  marginLeft: '0.04rem',
+  marginLeft: '0.12rem',
 };
 
 class MomentHeader extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function

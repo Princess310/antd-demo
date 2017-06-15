@@ -138,6 +138,11 @@ const makeSelectUserComplaint = () => createSelector(
   (substate) => substate.get('complaintList')
 );
 
+const makeSelectUserFriend = () => createSelector(
+  selectUserCenter,
+  (substate) => substate.get('friendList')
+);
+
 export {
   makeSelectUserCenterIndustry,
   makeSelectUserCenterIndustrySon,
@@ -154,4 +159,5 @@ export {
   makeSelectUserCommunication,
   makeSelectUserInfo,
   makeSelectUserComplaint,
+  makeSelectUserFriend,
 };

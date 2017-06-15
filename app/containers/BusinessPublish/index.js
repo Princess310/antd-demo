@@ -14,12 +14,42 @@ import { NavBar, List, TextareaItem, WhiteSpace, WingBlank, ImagePicker, Toast, 
 import MenuBtn from 'components/MenuBtn';
 import FlexCenter from 'components/FlexCenter';
 
+import { publishMoment, loadPublishParams } from 'containers/BusinessPage/actions';
+import { makeSelectPublishParams } from 'containers/BusinessPage/selectors';
+
 const Item = List.Item;
 export class BusinessPublish extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
-  state = {
-    content: '',
-    files: [],
-    filesMax: 9,
+  constructor(props) {
+    super(props);
+    const { publishParams }  = this.props;
+
+    this.state = {
+      content: publishParams.content ? publishParams.content : '',
+      files: publishParams.files ? publishParams.files : [],
+      filesMax: 9,
+    }
+  }
+
+  componentWillMount() {
+    const { location: { action } } = this.props;
+
+    if (action === 'PUSH') {
+      this.props.setPublishParams(false);
+      this.setState({
+        content: '',
+        files: [],
+      });
+    }
+  }
+
+  componentWillUnmount() {
+    const { location: { action } } = this.props;
+    const { content, files } = this.state;
+
+    this.props.setPublishParams({
+      content,
+      files,
+    });
   }
 
   onChange = (files) => {
@@ -34,8 +64,28 @@ export class BusinessPublish extends React.PureComponent { // eslint-disable-lin
     });
   }
 
+  handleSave = () => {
+    const { content, files } = this.state;
+    const { publishParams, saveMoment } = this.props;
+
+    if (!publishParams.reward_item) {
+      Toast.info('请选择产品类别', 2);
+      return;
+    }
+
+    saveMoment(content, files, {
+      category: 6,
+      reward_as: 2,
+      reward_item: publishParams.reward_item ? publishParams.reward_item.id : 0,
+      section: publishParams.number ? publishParams.number.value : '',
+      units: publishParams.units ? publishParams.units.name : '',
+    });
+  }
+
   render() {
     const { content, files, filesMax } = this.state;
+    const { publishParams } = this.props;
+
     return (
       <div>
         <NavBar
@@ -55,7 +105,12 @@ export class BusinessPublish extends React.PureComponent { // eslint-disable-lin
             <FlexCenter style={{ fontSize: '0.3rem'}}>
               <span>如需要发布供应信息，</span>
               <span style={{ color: pallete.theme }} onClick={() => {
-                browserHistory.push('/businessPublishSupplier');
+                browserHistory.push({
+                  pathname: '/businessPublishSupplier',
+                  state: {
+                    from: 'demand',
+                  },
+                });
               }}>点此切换</span>
             </FlexCenter>
           </Item>
@@ -64,23 +119,30 @@ export class BusinessPublish extends React.PureComponent { // eslint-disable-lin
         <List>
           <Item
             arrow="horizontal"
-            extra="未选择"
+            extra={publishParams.reward_item ? publishParams.reward_item.name : '未选择'}
             onClick={() => {
-              
+              browserHistory.push('/selectReward');
             }}
           >产品类别（必选）</Item>
           <Item
             arrow="horizontal"
-            extra="不限"
+            extra={!publishParams.number || publishParams.number.value === '' ? "不限" : publishParams.number.value }
             onClick={() => {
-              
+              browserHistory.push('/selectNumber');
             }}
           >需求数量</Item>
           <Item
             arrow="horizontal"
-            extra="不限"
+            extra={!publishParams.units ? "不限" : publishParams.units.name}
             onClick={() => {
-              
+              if (publishParams.number && publishParams.number.value !== '') {
+                browserHistory.push({
+                  pathname: '/selectUnits',
+                  state: {
+                    type: 'demand',
+                  },
+                });
+              }
             }}
           >需求数量单位</Item>
         </List>
@@ -107,14 +169,20 @@ export class BusinessPublish extends React.PureComponent { // eslint-disable-lin
 }
 
 BusinessPublish.propTypes = {
-  dispatch: PropTypes.func.isRequired,
+  setPublishParams: PropTypes.func,
+  saveMoment: PropTypes.func,
+  publishParams: PropTypes.object,
 };
 
+const mapStateToProps = createStructuredSelector({
+  publishParams: makeSelectPublishParams(),
+});
 
 function mapDispatchToProps(dispatch) {
   return {
-    dispatch,
+    setPublishParams: (params) => dispatch(loadPublishParams(params)),
+    saveMoment: (content, files, params) => dispatch(publishMoment(content, files, params)),
   };
 }
 
-export default connect(null, mapDispatchToProps)(BusinessPublish);
+export default connect(mapStateToProps, mapDispatchToProps)(BusinessPublish);

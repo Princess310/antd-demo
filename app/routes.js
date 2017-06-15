@@ -396,6 +396,46 @@ export default function createRoutes(store) {
               .then(loadModule(cb))
               .catch(errorLoading);
           },
+        }, {
+          path: 'selectFriend',
+          name: 'selectFriend',
+          getComponent(location, cb) {
+            import('containers/SelectFriend')
+              .then(loadModule(cb))
+              .catch(errorLoading);
+          },
+        }, {
+          path: 'selectReward',
+          name: 'selectReward',
+          getComponent(location, cb) {
+            import('containers/SelectReward')
+              .then(loadModule(cb))
+              .catch(errorLoading);
+          },
+        }, {
+          path: 'selectNumber',
+          name: 'selectNumber',
+          getComponent(location, cb) {
+            import('containers/SelectNumber')
+              .then(loadModule(cb))
+              .catch(errorLoading);
+          },
+        }, {
+          path: 'selectUnits',
+          name: 'selectUnits',
+          getComponent(location, cb) {
+            import('containers/SelectUnits')
+              .then(loadModule(cb))
+              .catch(errorLoading);
+          },
+        }, {
+          path: 'selectPrice',
+          name: 'selectPrice',
+          getComponent(location, cb) {
+            import('containers/SelectPrice')
+              .then(loadModule(cb))
+              .catch(errorLoading);
+          },
         },
       ],
     }, {

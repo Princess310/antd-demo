@@ -24,6 +24,8 @@ import {
   LOAD_BUSINESS_SEARCH_PANEL,
   LOAD_BUSINESS_SEARCH_ALL,
   LOAD_BUSINESS_SEARCH_ALL_LOADING,
+
+  LOAD_PUBLISH_PARAMS,
 } from './constants';
 
 const initialState = fromJS({
@@ -33,6 +35,8 @@ const initialState = fromJS({
   units: false,
   reward: false,
   searchPanel: false,
+  // record params when publish moment
+  publishParams: {},
   searchAll: {
     loading: false,
     list: false,
@@ -236,6 +240,20 @@ function businessPageReducer(state = initialState, action) {
 
       const result = info.set('loading', loading);
       return state.set('searchAll', result);
+    }
+    case LOAD_PUBLISH_PARAMS: {
+      const { params } = action.payload;
+      let newParams = state.get('publishParams');
+
+      if (!params) {
+        newParams = {};
+      } else {
+        for (let key in params) {
+          newParams[key] = params[key];
+        }
+      }
+
+      return state.set('publishParams', newParams);
     }
     default:
       return state;

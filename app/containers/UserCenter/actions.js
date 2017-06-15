@@ -54,6 +54,9 @@ import {
   FETCH_COMPLAINT_TYPES,
   LOAD_COMPLAINT_TYPES,
   SAVE_USER_COMPLAINT,
+
+  FETCH_USER_FRIEND,
+  LOAD_USER_FRIEND,
 } from './constants';
 
 export function saveUser(params) {
@@ -393,6 +396,21 @@ export function saveUserComplaint(id, type, module) {
       id,
       type,
       module,
+    },
+  };
+}
+
+export function fetchUserFriend() {
+  return {
+    type: FETCH_USER_FRIEND,
+  };
+}
+
+export function loadUserFirend(list) {
+  return {
+    type: LOAD_USER_FRIEND,
+    payload: {
+      list,
     },
   };
 }

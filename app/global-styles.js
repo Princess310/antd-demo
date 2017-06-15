@@ -74,6 +74,24 @@ injectGlobal`
     }
   }
 
+  .am-accordion {
+    &.select-friend-accordion {
+      .am-accordion-item .am-accordion-header {
+        padding-left: 0.84rem;
+        .arrow {
+          left: 0.3rem;
+          right: initial;
+          transform: rotate(0);
+        }
+        &[aria-expanded~="true"] {
+          .arrow {
+            transform: rotate(90deg);
+          }
+        }
+      }
+    }
+  }
+
   .t-l {
     text-align: left;
   }
