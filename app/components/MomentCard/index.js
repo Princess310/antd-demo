@@ -11,6 +11,9 @@ import pallete from 'styles/colors';
 import oss from 'utils/oss';
 import { browserHistory } from 'react-router';
 
+import PhotoSwipe from 'photoswipe';
+import PhotoSwipeUIdefault from 'photoswipe/dist/photoswipe-ui-default';
+
 import { Icon, Modal, ActionSheet } from 'antd-mobile';
 import FlexSB from 'components/FlexSB';
 import LineTag from 'components/LineTag';
@@ -70,6 +73,41 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
       moreContent,
       expanded: false,
     };
+  }
+
+  handleView = (e, i) => {
+    e.preventDefault();
+    e.stopPropagation()
+    const { moment } = this.props;
+    const eTarget = e.target || e.srcElement;
+    const pswpElement = document.querySelectorAll('.pswp')[0];
+    const length = document.body.clientWidth;
+
+    const items = moment.pictures.map((p) => ({
+      src: p,
+      w: length,
+      h: length,
+    }));
+
+    const options = {
+      index: i,
+      shareEl: false,
+      bgOpacity: 0.5,
+      // getThumbBoundsFn: () => {
+      //   const thumbnail = eTarget;
+      //   const pageYScroll = window.pageYOffset || document.documentElement.scrollTop;
+      //   const rect = thumbnail.getBoundingClientRect();
+
+      //   return {
+      //     x: rect.left,
+      //     y: rect.top + pageYScroll,
+      //     w: rect.width,
+      //   };
+      // },
+    };
+
+    const gallery = new PhotoSwipe(pswpElement, PhotoSwipeUIdefault, items, options);
+    gallery.init();
   }
 
   showActionSheet = (e) => {
@@ -208,6 +246,7 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
         key={i}
         role="presentation"
         src={oss.getImgSuitablePath(pic)}
+        onClick={(e) => this.handleView(e, i)}
         style={{
           width: (Number(source_type) === 1 ? '100%' : picLength),
           height: picLength,
