@@ -51,12 +51,19 @@ import {
   FETCH_USER_INFO,
   LOAD_USER_INFO,
 
+  DO_FOLLOW_USER,
+
   FETCH_COMPLAINT_TYPES,
   LOAD_COMPLAINT_TYPES,
   SAVE_USER_COMPLAINT,
 
   FETCH_USER_FRIEND,
   LOAD_USER_FRIEND,
+
+  FETCH_FOLLOW_USER_INFO,
+  LOAD_FOLLOW_USER_INFO,
+
+  DO_CHANGE_FOLLOW_BLACK,
 } from './constants';
 
 export function saveUser(params) {
@@ -374,6 +381,16 @@ export function loadUserInfo(data) {
   };
 }
 
+export function doFollow(id, type) {
+  return {
+    type: DO_FOLLOW_USER,
+    payload: {
+      id,
+      type,
+    },
+  };
+}
+
 export function fetchComplaintTypes() {
   return {
     type: FETCH_COMPLAINT_TYPES,
@@ -411,6 +428,34 @@ export function loadUserFirend(list) {
     type: LOAD_USER_FRIEND,
     payload: {
       list,
+    },
+  };
+}
+
+export function fetchFollowUserInfo(id) {
+  return {
+    type: FETCH_FOLLOW_USER_INFO,
+    payload: {
+      id,
+    },
+  };
+}
+
+export function loadFollowUserInfo(data) {
+  return {
+    type: LOAD_FOLLOW_USER_INFO,
+    payload: {
+      data,
+    },
+  };
+}
+
+export function changeFollowBlack(id, isBlack) {
+  return {
+    type: DO_CHANGE_FOLLOW_BLACK,
+    payload: {
+      id,
+      isBlack,
     },
   };
 }

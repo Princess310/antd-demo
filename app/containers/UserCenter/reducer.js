@@ -36,6 +36,8 @@ import {
   LOAD_COMPLAINT_TYPES,
 
   LOAD_USER_FRIEND,
+
+  LOAD_FOLLOW_USER_INFO,
 } from './constants';
 
 const initialState = fromJS({
@@ -49,6 +51,7 @@ const initialState = fromJS({
   userInfo: false,
   complaintList: false,
   friendList: false,
+  followUser: false,
   visitorUsers: {
     refresh: false,
     loading: false,
@@ -322,6 +325,11 @@ function userCenterReducer(state = initialState, action) {
       const { list } = action.payload;
 
       return state.set('friendList', list);
+    }
+    case LOAD_FOLLOW_USER_INFO: {
+      const { data } = action.payload;
+
+      return state.set('followUser', data);
     }
     default:
       return state;

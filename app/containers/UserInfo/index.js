@@ -18,7 +18,7 @@ import { NavBar, Popover, Tabs, WhiteSpace, Icon } from 'antd-mobile';
 
 import { makeSelectUserInfo } from 'containers/UserCenter/selectors';
 import { makeSelectCurrentUser } from 'containers/HomePage/selectors';
-import { fetchUserInfo, loadUserInfo } from 'containers/UserCenter/actions';
+import { fetchUserInfo, loadUserInfo, doFollow } from 'containers/UserCenter/actions';
 
 const Item = Popover.Item;
 export class UserInfo extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
@@ -42,9 +42,23 @@ export class UserInfo extends React.PureComponent { // eslint-disable-line react
   }
 
   onSelect = (opt) => {
-    // console.log(opt.props.value);
+    const value = opt.props.value;
+    const { userInfo, followUser } = this.props;
+
+    if (value === 'follow') {
+      const type = userInfo.is_my_friend === 0 ? 'add' : 'cancel';
+      followUser(userInfo.id, type);
+    } else if (value === 'setting') {
+      browserHistory.push({
+        pathname: '/editUser',
+        query: {
+          id: userInfo.id,
+        },
+      });
+    }
+
     this.setState({
-      visible: false,
+      visiblePopover: false,
       selected: opt.props.value,
     });
   };
@@ -55,7 +69,8 @@ export class UserInfo extends React.PureComponent { // eslint-disable-line react
   };
 
   render() {
-    const { userInfo } = this.props;
+    const { userInfo, currentUser } = this.props;
+    const isSelf = String(currentUser.id) === String(userInfo.id);
 
     return (
       <div>
@@ -70,8 +85,10 @@ export class UserInfo extends React.PureComponent { // eslint-disable-line react
               overlayStyle={{ color: 'currentColor' }}
               visible={this.state.visiblePopover}
               overlay={[
-                (<Item key="1" value="focus" data-seed="logId">关注</Item>),
-                (<Item key="2" value="setting">资料设置</Item>),
+                (!isSelf && <Item key="1" value="follow" data-seed="logId">
+                  {(userInfo && userInfo.is_my_friend > 0 ? '取消关注' : '关注')}
+                </Item>),
+                (!isSelf && <Item key="2" value="setting">资料设置</Item>),
                 (<Item key="3" value="share">
                   分享健康商信名片
                 </Item>),
@@ -138,6 +155,7 @@ UserInfo.propTypes = {
   ]),
   currentUser: PropTypes.object,
   getUserInfo: PropTypes.func,
+  followUser: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -149,6 +167,7 @@ function mapDispatchToProps(dispatch) {
   return {
     getUserInfo: (id) => dispatch(fetchUserInfo(id)),
     saveUserInfo: (data) => dispatch(loadUserInfo(data)),
+    followUser: (id, type) => dispatch(doFollow(id, type)),
   };
 }
 

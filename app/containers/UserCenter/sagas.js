@@ -29,10 +29,16 @@ import {
 
   FETCH_USER_INFO,
 
+  DO_FOLLOW_USER,
+
   FETCH_COMPLAINT_TYPES,
   SAVE_USER_COMPLAINT,
 
   FETCH_USER_FRIEND,
+
+  FETCH_FOLLOW_USER_INFO,
+
+  DO_CHANGE_FOLLOW_BLACK,
 } from './constants';
 
 import {
@@ -65,6 +71,8 @@ import {
   loadComplaintTypes,
 
   loadUserFirend,
+
+  loadFollowUserInfo,
 } from './actions';
 
 export function* saveUser(action) {
@@ -304,6 +312,65 @@ export function* fetchUserFriend() {
   }
 }
 
+export function* doFollow(action) {
+  try {
+    const { id, type } = action.payload;
+
+    if (type === 'add') {
+      yield request.doPost('follow/add-follow', { fid: id });
+    } else {
+      yield request.doPut('follow/cancel-follow', { fid: id });
+    }
+
+    yield fetchUserInfo({
+      payload: {
+        id,
+      },
+    });
+  } catch (err) {
+    // console.log(err);
+  }
+}
+
+export function* fetchFollowUserInfo(action) {
+  try {
+    const { id } = action.payload;
+
+    const res = yield request.doGet('follow/user-group-info', {
+      fid: id,
+    });
+
+    const { data } = res;
+    yield put(loadFollowUserInfo(data));
+  } catch (err) {
+    // console.log(err);
+  }
+}
+
+export function* changeFolloBlack(action) {
+  try {
+    const { id, isBlack } = action.payload;
+
+    if (isBlack) {
+      yield request.doPost('user/add-black-list', {
+        fid: id,
+      });
+    } else {
+      yield request.doDelete('user/delete-black-list', {
+        fid: id,
+      });
+    }
+
+    yield fetchFollowUserInfo({
+      payload: {
+        id,
+      },
+    });
+  } catch (err) {
+    // console.log(err);
+  }
+}
+
 export function* defaultSaga() {
   const watcher = yield takeLatest(SAVE_USER, saveUser);
   const watcherIndustry = yield takeLatest(FETCH_INDUSTRY, fetchIndustry);
@@ -322,6 +389,9 @@ export function* defaultSaga() {
   const watcherComplaintTypes = yield takeLatest(FETCH_COMPLAINT_TYPES, fetchComplaint);
   const watcherSaveComplaint = yield takeLatest(SAVE_USER_COMPLAINT, saveComplaint);
   const watcherUserFriend = yield takeLatest(FETCH_USER_FRIEND, fetchUserFriend);
+  const watcherFollow = yield takeLatest(DO_FOLLOW_USER, doFollow);
+  const watcherFollowUserInfo = yield takeLatest(FETCH_FOLLOW_USER_INFO, fetchFollowUserInfo);
+  const watcherChangeFollowBlck = yield takeLatest(DO_CHANGE_FOLLOW_BLACK, changeFolloBlack);
 
   // Suspend execution until location changes
   yield take(LOCATION_CHANGE);
@@ -342,6 +412,9 @@ export function* defaultSaga() {
   yield cancel(watcherComplaintTypes);
   yield cancel(watcherSaveComplaint);
   yield cancel(watcherUserFriend);
+  yield cancel(watcherFollow);
+  yield cancel(watcherFollowUserInfo);
+  yield cancel(watcherChangeFollowBlck);
 }
 
 // All sagas to be loaded

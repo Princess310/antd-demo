@@ -73,7 +73,7 @@ export class BusinessPublishSupplier extends React.PureComponent { // eslint-dis
       return;
     }
 
-    if (state.from && state.from === 'demand') {
+    if (state && state.from && state.from === 'demand') {
       step = 2;
     }
 

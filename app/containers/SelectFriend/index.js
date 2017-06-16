@@ -20,6 +20,7 @@ import { makeSelectUserFriend } from 'containers/UserCenter/selectors';
 import { makeSelectPublishParams } from 'containers/BusinessPage/selectors';
 
 const RadioItem = Radio.RadioItem;
+const AccordionPanel = Accordion.Panel;
 export class SelectFriend extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
     super(props);
@@ -80,7 +81,7 @@ export class SelectFriend extends React.PureComponent { // eslint-disable-line r
         </NavBar>
         <Accordion defaultActiveKey="0" className="select-friend-accordion">
           {friendList && friendList.map((i) => (
-            <Accordion.Panel key={i.id} header={
+            <AccordionPanel key={i.id} header={
               <FlexSB>
                 <div>{i.name}</div>
                 <div>{i.list.length}</div>
@@ -92,7 +93,7 @@ export class SelectFriend extends React.PureComponent { // eslint-disable-line r
                   </RadioItem>
                 ))}
               </List>
-            </Accordion.Panel>
+            </AccordionPanel>
           ))}
         </Accordion>
       </div>

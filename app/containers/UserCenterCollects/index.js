@@ -97,7 +97,20 @@ export class UserCenterCollects extends React.PureComponent { // eslint-disable-
     const { collectInfo } = this.props;
 
     const row = (moment) => (
-      <div style={{ borderBottom: `0.01rem ${pallete.border.normal} solid` }}>
+      <div
+        style={{ borderBottom: `0.01rem ${pallete.border.normal} solid` }}
+        onClick={() => {
+          browserHistory.push({
+            pathname: 'momentDetail',
+            query: {
+              id: moment.moments_id,
+            },
+            state: {
+              type: moment.type,
+            },
+          });
+        }}
+      >
         <UserMomentHeader
           key={moment.id}
           user={moment.user}

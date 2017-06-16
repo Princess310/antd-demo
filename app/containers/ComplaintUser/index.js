@@ -39,7 +39,6 @@ export class ComplaintUser extends React.PureComponent { // eslint-disable-line 
   }
 
   handleSave = () => {
-    console.log(this.props);
     const { selected } = this.state;
     const { location: { state }, saveInfo } = this.props;
 

@@ -436,6 +436,22 @@ export default function createRoutes(store) {
               .then(loadModule(cb))
               .catch(errorLoading);
           },
+        }, {
+          path: 'editUser',
+          name: 'editUserPage',
+          getComponent(location, cb) {
+            import('containers/EditUserPage')
+              .then(loadModule(cb))
+              .catch(errorLoading);
+          },
+        }, {
+          path: 'editUserRemark',
+          name: 'editUserRemark',
+          getComponent(location, cb) {
+            import('containers/EditUserRemark')
+              .then(loadModule(cb))
+              .catch(errorLoading);
+          },
         },
       ],
     }, {

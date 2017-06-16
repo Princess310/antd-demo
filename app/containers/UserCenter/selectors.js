@@ -143,6 +143,11 @@ const makeSelectUserFriend = () => createSelector(
   (substate) => substate.get('friendList')
 );
 
+const makeSelectFollowUserInfo = () => createSelector(
+  selectUserCenter,
+  (substate) => substate.get('followUser')
+);
+
 export {
   makeSelectUserCenterIndustry,
   makeSelectUserCenterIndustrySon,
@@ -160,4 +165,5 @@ export {
   makeSelectUserInfo,
   makeSelectUserComplaint,
   makeSelectUserFriend,
+  makeSelectFollowUserInfo,
 };

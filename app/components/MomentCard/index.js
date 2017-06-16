@@ -126,10 +126,10 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
 
     if (String(currentUser.id) === String(moment.uid)) {
       operation([
-        ...moreAction,
         { text: '收藏', onPress: () => {
           doCollectMoment(moment.id);
         }, style: actionSheetStyle },
+        ...moreAction,
         { text: '删除', onPress: () => {
           doDelMoment(moment.id, from);
         }, style: {...actionSheetStyle, color: pallete.text.red} },

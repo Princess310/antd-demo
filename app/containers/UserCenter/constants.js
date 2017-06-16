@@ -49,6 +49,8 @@ export const LOAD_USER_COMMUNICATION_LOADING = 'app/UserCenter/LOAD_USER_COMMUNI
 export const FETCH_USER_INFO = 'app/UserCenter/FETCH_USER_INFO';
 export const LOAD_USER_INFO = 'app/UserCenter/LOAD_USER_INFO';
 
+export const DO_FOLLOW_USER = 'app/UserCenter/DO_FOLLOW_USER';
+
 export const FETCH_COMPLAINT_TYPES = 'app/UserCenter/FETCH_COMPLAINT_TYPES';
 export const LOAD_COMPLAINT_TYPES = 'app/UserCenter/LOAD_COMPLAINT_TYPES';
 export const SAVE_USER_COMPLAINT = 'app/UserCenter/SAVE_USER_COMPLAINT';
@@ -56,3 +58,8 @@ export const SAVE_USER_COMPLAINT = 'app/UserCenter/SAVE_USER_COMPLAINT';
 export const FETCH_USER_FRIEND = 'app/UserCenter/FETCH_USER_FRIEND';
 export const LOAD_USER_FRIEND = 'app/UserCenter/LOAD_USER_FRIEND';
 export const LOAD_SELECTED_USER_FRIEND = 'app/UserCenter/LOAD_SELECTED_USER_FRIEND';
+
+export const FETCH_FOLLOW_USER_INFO = 'app/UserCenter/FETCH_FOLLOW_USER_INFO';
+export const LOAD_FOLLOW_USER_INFO = 'app/UserCenter/LOAD_FOLLOW_USER_INFO';
+
+export const DO_CHANGE_FOLLOW_BLACK = 'app/UserCenter/DO_CHANGE_FOLLOW_BLACK';
