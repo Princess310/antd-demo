@@ -39,3 +39,10 @@ export function parseDistance(distance, city) {
   }
   return result;
 }
+
+export function getQueryString(name) {
+  const reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+  const r = window.location.search.substr(1).match(reg);
+
+  return r == null ? (arguments[1] === undefined ? null : arguments[1]) : decodeURIComponent(r[2]);
+}

@@ -5,6 +5,7 @@ import pallete from 'styles/colors';
 injectGlobal`
   html,
   body {
+    margin: 0;
     height: 100%;
     width: 100%;
   }
@@ -48,6 +49,13 @@ injectGlobal`
     -webkit-overflow-scrolling: touch;
     & .am-list-body {
       background-color: ${pallete.background.antd};
+    }
+  }
+
+  .app-cms-content {
+    img {
+      width: 100% !important;
+      height: auto;
     }
   }
 

@@ -6,9 +6,10 @@ const OfflinePlugin = require('offline-plugin');
 
 module.exports = require('./webpack.base.babel')({
   // In production, we skip all hot-reloading stuff
-  entry: [
-    path.join(process.cwd(), 'app/app.js'),
-  ],
+  entry: {
+    index: path.join(process.cwd(), 'app/app.js'),
+    share: path.join(process.cwd(), 'app/share/app.js'),
+  },
 
   // Utilize long-term caching by adding content hashes (not compilation hashes) to compiled assets
   output: {
@@ -40,6 +41,28 @@ module.exports = require('./webpack.base.babel')({
         minifyURLs: true,
       },
       inject: true,
+      filename: 'index.html',
+      chunks: ['index'],
+    }),
+
+    // public_share.html
+    new HtmlWebpackPlugin({
+      template: 'app/share/public_share.html',
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeRedundantAttributes: true,
+        useShortDoctype: true,
+        removeEmptyAttributes: true,
+        removeStyleLinkTypeAttributes: true,
+        keepClosingSlash: true,
+        minifyJS: true,
+        minifyCSS: true,
+        minifyURLs: true,
+      },
+      inject: true,
+      filename: 'public_share.html',
+      chunks: ['share'],
     }),
 
     // Put it in the end to capture all the HtmlWebpackPlugin's
