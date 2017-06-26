@@ -87,10 +87,17 @@ class FilterPanel extends React.PureComponent { // eslint-disable-line react/pre
 
     const itemsView = items ? items.map((item, i) => {
       if (item.id === value) {
-        currentItemTitle = item[field];
+        currentItemTitle = item[field] + (item.unit ? item.unit : '');
       }
       return (
-        item[field] !== '' && <Button key={i} className="btn" inline style={item.id === value ? {...buttonStyle, ...buttonActiveStyle} : buttonStyle} activeStyle={buttonActiveStyle} onClick={() => onSelect(item)}>
+        item[field] !== '' &&
+        <Button
+          key={i}
+          className="btn"
+          inline
+          style={item.id === value ? {...buttonStyle, ...buttonActiveStyle} : buttonStyle}
+          activeStyle={buttonActiveStyle}
+          onClick={() => onSelect(item)}>
           {item[field]}{item.unit ? item.unit : ''}
         </Button>
       )
@@ -120,7 +127,12 @@ class FilterPanel extends React.PureComponent { // eslint-disable-line react/pre
           {expanded &&
             <MaskWrapper onClick={this.handleExpand}>
               <ContentWrapper>
-                <Button key={0} className="btn" inline style={value === 0 ? {...buttonStyle, ...buttonActiveStyle} : buttonStyle} activeStyle={buttonActiveStyle} onClick={() => onSelect({ id: 0, [field]: '' })}>
+                <Button
+                  key={0}
+                  className="btn"
+                  inline
+                  style={value === 0 ? {...buttonStyle, ...buttonActiveStyle} : buttonStyle} activeStyle={buttonActiveStyle}
+                  onClick={() => onSelect({ id: 0, [field]: '' })}>
                   {selectTotalName}
                 </Button>
                 {itemsView}

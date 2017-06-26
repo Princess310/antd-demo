@@ -14,15 +14,17 @@ import { browserHistory } from 'react-router';
 import PhotoSwipe from 'photoswipe';
 import PhotoSwipeUIdefault from 'photoswipe/dist/photoswipe-ui-default';
 
-import { Icon, Modal, ActionSheet } from 'antd-mobile';
+import { Icon, Modal, ActionSheet, Button } from 'antd-mobile';
 import FlexSB from 'components/FlexSB';
 import LineTag from 'components/LineTag';
 import chatTool from 'components/ChatTool';
 import { likeMoment, sendComment, delMoment, collectMoment, setTopMoment, changeMomentTrade } from 'containers/BusinessPage/actions';
 import MomentHeader from './MomentHeader';
+import CmsMomentHeader from 'components/MomentCard/CmsMomentHeader';
 import MomentComment from './MomentComment';
 
 const ContentWrapper= styled.div`
+  position: relative;
   padding: 0 0 0.12rem 1.08rem;
   fontSize: 0.26rem;
   color: ${pallete.text.content};
@@ -44,6 +46,10 @@ const PicWrapper = styled.div`
   flex-wrap: wrap;
 `;
 
+const Remark = styled.span`
+  color: ${pallete.theme};
+`;
+
 const contentActionStyle = {
   margin: '0.12rem 0',
   fontSize: '0.28rem',
@@ -55,6 +61,17 @@ const actionSheetStyle = {
   textAlign: 'center',
   color: pallete.theme,
 };
+
+const buttonStyle = {
+  position: 'absolute',
+  top: '0.2rem',
+  left: 0,
+  height: '0.4rem',
+  width: '1rem',
+  lineHeight: '0.4rem',
+  fontSize: '0.24rem',
+  color: pallete.white,
+}
 
 const shareIconList = [
   { icon: <Icon type={require('icons/share/微博icon.svg')} color={pallete.theme} />, title: '新浪微博' },
@@ -77,7 +94,7 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
 
   handleView = (e, i) => {
     e.preventDefault();
-    e.stopPropagation()
+    e.stopPropagation();
     const { moment } = this.props;
     const eTarget = e.target || e.srcElement;
     const pswpElement = document.querySelectorAll('.pswp')[0];
@@ -229,17 +246,25 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
       section,
       units,
       trade_status,
+      created_at,
+      category,
+      reward_as,
+      demand_counts,
       ...other,
     } = moment;
 
+    // dom root style
     const rootStyle = {
       backgroundColor: pallete.white,
     };
+
+    // moment content wrapper style
     const contentStyle = Number(source_type) === 1 ? {
       paddingLeft: 0,
       paddingRight: 0,
     } : {};
 
+    // check pic length to show
     const picLength = pictures.length === 1 ? '3.5rem' : ((pictures.length === 4 || pictures.length === 2) ? '2.2rem' : '1.45rem')
     const picturesView = pictures.map((pic, i) => (
       <img
@@ -254,6 +279,43 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
           marginRight: '0.06rem'
         }} />
     ));
+
+    // check type of moment
+    const businessType = (category === '3' || reward_as === '2') ? 'demand' : ((category === '0' || reward_as === '1') ? 'supplier' : 'status');
+    // defined the theme color for moment to show: special for business demand && supplier
+    let themeColor = pallete.text.help;
+
+    if (businessType) {
+      themeColor = businessType === 'demand' ? pallete.theme : pallete.yellow;
+    }
+
+    // content to show
+    const contentResult = businessType === 'demand' ? `需求描述：${content}` : content;
+    const contentView = businessType === 'demand' ? (
+      <div>
+        <div>{nickname}在发布他的第<Remark>{demand_counts}</Remark>次需求</div>
+        <div>需求类别：<Remark>{item_name}</Remark></div>
+        <div>需求数量：{section === '' ? '不限' : section}</div>
+        <div>{contentResult}</div>
+      </div>
+    ) : (
+      businessType === 'demand' ? (
+        <div style={{ marginBottom: '0.08rem' }}>
+          {item_name !== '' && <LineTag>{item_name}</LineTag>}
+          {section !== '' && <LineTag style={{ marginLeft: '0.08rem' }}>{section}</LineTag>}
+        </div>
+      ) : contentResult
+    );
+
+    const tagStyle = (businessType && businessType === 'demand') ? {
+      borderColor: pallete.theme,
+      backgroundColor: pallete.theme,
+      color: pallete.white,
+    } : {
+      borderColor: pallete.yellow,
+      backgroundColor: pallete.yellow,
+      color: pallete.white,
+    };
 
     return (
       <div
@@ -288,6 +350,7 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
             type={type}
             source_type={source_type}
             trade_status={trade_status}
+            businessType={businessType}
             {...other}
             rightContent={(
               from !== 'search' && <div style={{ width: '0.48rem', height: '0.48rem', textAlign: 'right', zIndex: 20 }} onClick={this.showActionSheet}>
@@ -300,10 +363,10 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
             )}
           />}
           <ContentWrapper style={contentStyle}>
-            {type === 'business' && (
+            {(type === 'business' && businessType === 'supplier') && (
               <div style={{ marginBottom: '0.08rem' }}>
-                {item_name !== '' && <LineTag>{item_name}</LineTag>}
-                {section !== '' && <LineTag style={{ marginLeft: '0.08rem' }}>{section}</LineTag>}
+                {item_name !== '' && <LineTag style={tagStyle}>{item_name}</LineTag>}
+                {section !== '' && <LineTag style={{ marginLeft: '0.08rem', ...tagStyle }}>{section}</LineTag>}
               </div>
             )}
             {moreContent ?
@@ -312,13 +375,13 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
                   {expanded ?
                     (
                       <div>
-                        <div>{content}</div>
+                        <div>{contentView}</div>
                         <div style={contentActionStyle} onClick={this.handleExpand}>收起</div>
                       </div>
                     ) : (
                       <div>
                         <WordsWrapper>
-                          {content}
+                          {contentView}
                         </WordsWrapper>
                         <div style={contentActionStyle} onClick={this.handleExpand}>全文</div>
                       </div>
@@ -327,37 +390,57 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
                 </div>
               ) : (
                 Number(source_type) === 1 ? (
-                  <div dangerouslySetInnerHTML={{__html: content}} />
+                  <div>
+                    <CmsMomentHeader
+                      user={{
+                        id: uid,
+                        avatar,
+                        verify_status,
+                        nickname,
+                        tag_identity_name,
+                        main_service_name,
+                        company,
+                        position,
+                      }}
+                      created_at={created_at}
+                      hits={hits}
+                      style={{
+                        paddingBottom: '0.12rem',
+                        borderBottom: `0.01rem ${pallete.border.normal} solid`,
+                      }}
+                    />                    
+                    <div dangerouslySetInnerHTML={{__html: contentView}} />
+                  </div>                  
                 ) : (
-                  <div style={{ marginBottom: '0.12rem' }}>{content}</div>
+                  <div style={{ marginBottom: '0.12rem' }}>{contentView}</div>
                 )
               )
             }
             {(Number(source_type) !== 1 || from === 'list') && <PicWrapper style={contentStyle}>{picturesView}</PicWrapper>}
-            {(Number(source_type) === 1 && from === 'detail') ? (
-              Number(hits) > 0 && <div style={{ paddingTop: '0.24rem', fontSize: '0.26rem', color: pallete.text.words, borderTop: `0.01rem ${pallete.border.normal} solid` }}>阅读{hits}</div>
-            ) : (
+            {businessType === 'demand' && <div><Remark>※符合要求的请及时联系我※</Remark></div>}
+            {Number(source_type) !== 1 && (
               (Number(hits) > 0 && from !== 'search') && <div style={{ fontSize: '0.26rem', color: pallete.text.help }}>{hits}人看过</div>
             )}
+            {type === 'business' && <Button style={{backgroundColor: themeColor, ...buttonStyle}}>加好友</Button>}
           </ContentWrapper>
           {from === 'list' && 
-            <FlexSB style={{ paddingLeft: (type === 'business' ? '2.6rem' : '3.6rem'), paddingRight: '0.12rem', fontSize: '0.28rem', color: pallete.text.help }}>
+            <FlexSB style={{ paddingLeft: (type === 'business' ? '2.6rem' : '3.6rem'), paddingRight: '0.12rem', fontSize: '0.28rem', color: themeColor }}>
               {(type === 'business' && String(uid) === String(currentUser.id)) &&
                 <FlexSB onClick={this.handleSetTop}>
-                  <Icon type={require('icons/ali/置顶.svg')} size="sm" color={pallete.text.help} />
+                  <Icon type={require('icons/ali/置顶.svg')} size="sm" />
                   <span style={{ marginLeft: '0.04rem' }}>置顶</span>
                 </FlexSB>
               }
               <FlexSB onClick={this.handleShowChatTool}>
-                <Icon type={require('icons/ali/评论.svg')} size="sm" color={pallete.text.help} />
+                <Icon type={require('icons/ali/消息.svg')} size="sm" />
                 <span style={{ marginLeft: '0.04rem' }}>{comment_count > 0 ? comment_count : '评论'}</span>
               </FlexSB>
               <FlexSB onClick={this.handleLike}>
-                <Icon type={require('icons/ali/点赞.svg')} size="sm" color={is_like > 0 ? pallete.theme : pallete.text.help} />
+                <Icon type={require('icons/ali/点赞.svg')} size="sm" />
                 <span style={{ marginLeft: '0.04rem' }}>{like_count > 0 ? like_count : '点赞'}</span>
               </FlexSB>
               <FlexSB onClick={this.handleShare}>
-                <Icon type={require('icons/ali/分享.svg')} size="xxs" color={pallete.text.help} />
+                <Icon type={require('icons/ali/分享.svg')} size="xxs" />
                 <span style={{ marginLeft: '0.04rem' }}>{share_count > 0 ? share_count : '分享'}</span>
               </FlexSB>
             </FlexSB>
@@ -370,6 +453,7 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
             comment_count={comment_count}
             type={type}
             style={{ padding: '0.15rem' }}
+            businessType={businessType}
           />
         }
       </div>

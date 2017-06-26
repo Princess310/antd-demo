@@ -20,9 +20,11 @@ import { NavBar, SegmentedControl, Icon, ActionSheet, Modal } from 'antd-mobile'
 
 import { makeSelectUserBusinessDemand, makeSelectUserBusinessSupplier, makeSelectBusinessFilter } from './selectors';
 import { makeSelectCurrentUser } from 'containers/HomePage/selectors';
+import { makeSelectUserCenterIndustry } from 'containers/UserCenter/selectors';
 
 import FilterPanel from './FilterPanel';
 import { fetchBusiness, fetchBusinessPrice, fetchBusinessNumber, fetchReward } from './actions';
+import { fetchIndustry } from 'containers/UserCenter/actions';
 import './styles.scss';
 
 const alert = Modal.alert;
@@ -50,6 +52,10 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
         value: '',
       },
       rewardSupplierFilter: {
+        id: 0,
+        value: '',
+      },
+      industryFilter: {
         id: 0,
         value: '',
       },
@@ -176,6 +182,8 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
 
     if (filter === 'priceFilter' || filter === 'numberFilter') {
       searchParams.section = item.value;
+    } else if (filter === 'industryFilter') {
+      searchParams.role = item.id;
     } else {
       searchParams.reward_item = item.id;
     }
@@ -216,9 +224,11 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
   }
 
   render() {
-    const { type, priceFilter, numberFilter, rewardDemandFilter, rewardSupplierFilter } = this.state;
-    const { businessDemand, businessSupplier, currentUser, filters } = this.props;
+    const { type, priceFilter, numberFilter, rewardDemandFilter, rewardSupplierFilter, industryFilter } = this.state;
+    const { businessDemand, businessSupplier, currentUser, filters, industryList } = this.props;
     const { price, number, reward } = filters;
+
+    const themeColor = type === 2 ? pallete.theme : pallete.yellow;
 
     return (
       <div>
@@ -234,8 +244,8 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
             </FlexColumnCenter>
           )}
           rightContent={[
-            <div key={1} onClick={this.handlePublish}>
-              <Icon type={require('icons/ali/编辑.svg')} color={pallete.theme} />
+            <div key={1} onClick={this.handlePublish} style={{ color: themeColor }}>
+              发布
             </div>,
           ]}
         >
@@ -244,6 +254,7 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
             values={['需求', '供应']}
             style={{ height: '0.3rem', width: '3rem' }}
             onChange={this.onChangeTitle}
+            tintColor={themeColor}
           />
         </NavBar>
         {type === 2 ?
@@ -275,6 +286,17 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
             ) : (
               <FlexRow>
                 <FilterPanel
+                  defaultTitle="行业角色"
+                  selectTotalName="全部"
+                  items={industryList}
+                  value={industryFilter.id}
+                  field="name"
+                  onSelect={(item) => this.handleFilter('industryFilter', item)}
+                  onExpand={() => {
+                    !industryList && this.props.getIndustry();
+                  }}
+                />
+                <FilterPanel
                   defaultTitle="产品类别"
                   selectTotalName="全部类别"
                   items={reward}
@@ -284,6 +306,7 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
                   onExpand={() => {
                     !reward && this.props.getReward();
                   }}
+                  contentStyle={{ borderLeft: `0.01rem ${pallete.border.normal} solid` }}
                 />
                 <FilterPanel
                   defaultTitle="价格区间"
@@ -366,6 +389,11 @@ BusinessPage.propTypes = {
   businessSupplier: PropTypes.object,
   currentUser: PropTypes.object,
   filters: PropTypes.object,
+  getIndustry: PropTypes.func,
+  industryList: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.bool,
+  ]),
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -373,6 +401,7 @@ const mapStateToProps = createStructuredSelector({
   businessSupplier: makeSelectUserBusinessSupplier(),
   currentUser: makeSelectCurrentUser(),
   filters: makeSelectBusinessFilter(),
+  industryList: makeSelectUserCenterIndustry(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -381,6 +410,7 @@ function mapDispatchToProps(dispatch) {
     getPrice: () => dispatch(fetchBusinessPrice()),
     getNumber: () => dispatch(fetchBusinessNumber()),
     getReward: () => dispatch(fetchReward()),
+    getIndustry: () => dispatch(fetchIndustry()),
   };
 }
 

@@ -57,7 +57,10 @@ class MomentHeader extends React.PureComponent { // eslint-disable-line react/pr
       style,
       rightContent,
       trade_status,
+      businessType,
     } = this.props;
+
+    const themeColor = businessType === 'demand' ? pallete.theme : pallete.yellow;
 
     return (
       <Wrapper style={style}>
@@ -100,8 +103,8 @@ class MomentHeader extends React.PureComponent { // eslint-disable-line react/pr
                 <FlexSB>
                   <FlexRow>
                     <section style={{ fontSize: '0.28rem' }}>{user.nickname}</section>
-                    {user.tag_identity_name !== '' && <LineTag style={tagStyle}>{user.tag_identity_name}</LineTag>}
-                    {(user.main_service_name && user.main_service_name !== '') && <LineTag style={tagStyle}>{user.main_service_name}</LineTag>}
+                    {user.tag_identity_name !== '' && <LineTag style={{ borderColor: themeColor, ...tagStyle }}>{user.tag_identity_name}</LineTag>}
+                    {(user.main_service_name && user.main_service_name !== '') && <LineTag style={{ borderColor: themeColor, ...tagStyle }}>{user.main_service_name}</LineTag>}
                   </FlexRow>
                   {rightContent}
                 </FlexSB>
@@ -143,6 +146,7 @@ MomentHeader.propTypes = {
   avatarSize: PropTypes.string,
   from: PropTypes.string,
   type: PropTypes.string,
+  businessType: PropTypes.string,
   rightContent: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.node,

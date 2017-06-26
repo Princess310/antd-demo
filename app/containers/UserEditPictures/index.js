@@ -10,7 +10,7 @@ import { createStructuredSelector } from 'reselect';
 
 import { makeSelectCurrentUser } from 'containers/HomePage/selectors';
 import { makeSelectUserCenterBusiness } from 'containers/UserCenter/selectors';
-import { fetchBusiness, saveBusiness } from 'containers/UserCenter/actions';
+import { saveUser } from 'containers/UserCenter/actions';
 import oss from 'utils/oss';
 
 import { browserHistory } from 'react-router';
@@ -22,22 +22,20 @@ export class UserEditPictures extends React.PureComponent { // eslint-disable-li
   constructor(props) {
     super(props);
 
-    const { businessInfo, getBusiness } = props;
+    const { currentUser } = props;
     this.state = {
-      files: businessInfo ? businessInfo.pictures.map((file) => ({
+      files: currentUser.pictures ? currentUser.pictures.map((file) => ({
         url: file,
       })) : [],
       filesMax: 9,
     };
-
-    getBusiness();
   }
 
   componentWillReceiveProps(nextProps) {
-    const { businessInfo } = nextProps;
+    const { currentUser } = nextProps;
 
     this.setState({
-      files: businessInfo ? businessInfo.pictures.map((file) => ({
+      files: currentUser.pictures ? currentUser.pictures.map((file) => ({
         url: file,
       })) : [],
     });
@@ -77,10 +75,10 @@ export class UserEditPictures extends React.PureComponent { // eslint-disable-li
 
   handleSave = () => {
     const { files } = this.state;
-    const { saveBusinessInfo } = this.props;
+    const { saveUserInfo } = this.props;
     const filesResult = files.map((file) => oss.getImgSourcePath(file.url));
 
-    saveBusinessInfo({
+    saveUserInfo({
       pictures: JSON.stringify(filesResult),
     });
   }
@@ -120,24 +118,17 @@ export class UserEditPictures extends React.PureComponent { // eslint-disable-li
 }
 
 UserEditPictures.propTypes = {
-  businessInfo: PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.bool,
-  ]),
-  getBusiness: PropTypes.func,
-  saveBusinessInfo: PropTypes.func,
   currentUser: PropTypes.object,
+  saveUserInfo: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
-  businessInfo: makeSelectUserCenterBusiness(),
   currentUser: makeSelectCurrentUser(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
-    getBusiness: () => dispatch(fetchBusiness()),
-    saveBusinessInfo: (params) => dispatch(saveBusiness(params)),
+    saveUserInfo: (params) => dispatch(saveUser(params)),
   };
 }
 

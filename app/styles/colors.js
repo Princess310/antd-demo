@@ -3,6 +3,7 @@ const pallete = {
   white: '#ffffff',
   black: '#000000',
   red: '#ED2302',
+  yellow: '#F39C12',
   disable: '#dadee0',
   tabBackground: '#f8f8f8',
   themeBackground: '#f1f6f9',

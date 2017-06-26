@@ -80,6 +80,15 @@ injectGlobal`
         border-bottom: none;
       }
     }
+
+    &.moment-detail-tabs-supplier {
+      .am-tabs-tab-active {
+        color: #F39C12;
+      }
+      .am-tabs-ink-bar {
+        background-color: #F39C12;
+      }
+    }
   }
 
   .am-accordion {

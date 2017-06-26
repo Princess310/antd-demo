@@ -46,6 +46,13 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
     if (!currentUser.id) {
       browserHistory.replace('/preview');
     }
+
+    // do change loaction if user info not complete
+    const { industry_son_id, main_service_id, company, position } = currentUser;
+
+    if (industry_son_id === '0' || main_service_id === '0' || company === '' || position === '') {
+      browserHistory.push('/guide');
+    }
   }
 
   render() {
@@ -61,10 +68,10 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
           hidden={hideTabs}
         >
           <TabItem
-            title="交流"
-            key="交流"
-            icon={<Icon type={require('icons/ali/交流.svg')} />}
-            selectedIcon={<Icon type={require('icons/ali/交流.svg')} />}
+            title="动态"
+            key="动态"
+            icon={<Icon type={require('icons/ali/动态.svg')} />}
+            selectedIcon={<Icon type={require('icons/ali/动态.svg')} />}
             selected={this.state.selectedTab === 'communicate'}
             onPress={() => {
               this.setState({

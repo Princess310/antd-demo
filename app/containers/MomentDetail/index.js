@@ -21,9 +21,9 @@ import { NavBar, Tabs, WhiteSpace, Icon, ActionSheet } from 'antd-mobile';
 
 import { makeSelectBusinessDetail } from 'containers/BusinessPage/selectors';
 import { makeSelectCurrentUser } from 'containers/HomePage/selectors';
-import { fetchMomentDetail, loadMomentDetail, likeMoment, sendComment, delComment, likeComment } from 'containers/BusinessPage/actions';
+import { fetchMomentDetail, loadMomentDetail, likeMoment, sendComment, delComment, likeComment, collectMoment } from 'containers/BusinessPage/actions';
 
-const CommentWrapper= styled.div`
+const CommentWrapper = styled.div`
   fontSize: 0.26rem;
   padding: 0 0.12rem 0.12rem 1.2rem;
   background-color: ${pallete.white};
@@ -51,7 +51,7 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
 
     getMoment(id);
   }
-  
+
   componentWillUnmount() {
     this.props.saveMoment(false);
   }
@@ -66,13 +66,13 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
 
   handleLike = () => {
     const { momentDetail, doLikeMoment } = this.props;
-    
+
     doLikeMoment(momentDetail.id, momentDetail.uid, 'detail');
   }
-  
+
   handleLikeComment = (cid, uid) => {
     const { momentDetail, doLikeComment } = this.props;
-    
+
     doLikeComment(momentDetail.id, cid, uid);
   }
 
@@ -117,6 +117,22 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
     }
   }
 
+  handleMore = () => {
+    const { momentDetail, doCollectMoment } = this.props;
+
+    const BUTTONS = ['收藏', '取消'];
+      ActionSheet.showActionSheetWithOptions({
+        options: BUTTONS,
+        cancelButtonIndex: BUTTONS.length - 1,
+        maskClosable: true,
+      },
+      (buttonIndex) => {
+        if (buttonIndex === 0) {
+          doCollectMoment(momentDetail.id);
+        }
+      });
+  }
+
   render() {
     const { momentDetail, currentUser, location: { state: { type } } } = this.props;
     const {
@@ -130,7 +146,15 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
       share_count,
       reward_as,
       category,
+      title,
     } = momentDetail;
+
+    const cmsTitle = title ? (title.length > 18 ? `${title.substring(0, 15)}...` : title) : '动态详情';
+
+    // check type of moment
+    const businessType = (category === '3' || reward_as === '2') ? 'demand' : ((category === '0' || reward_as === '1') ? 'supplier' : 'status');
+    // defined the theme color for moment to show: special for business demand && supplier
+    const themeColor = businessType === 'demand' ? pallete.theme : (businessType === 'supplier' ? pallete.yellow : pallete.text.help);
 
     return (
       <div>
@@ -140,7 +164,7 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
           leftContent={<Icon type={require('icons/ali/返回.svg')} size="sm" color={pallete.theme} />}
           onLeftClick={() => browserHistory.goBack()}
         >
-          {(category === '3' || reward_as === '2') ? '需求详情' : ((category === '0' || reward_as === '1') ? '供应详情' : '动态详情')}
+          {(category === '3' || reward_as === '2') ? '需求详情' : ((category === '0' || reward_as === '1') ? '供应详情' : cmsTitle)}
         </NavBar>
         {momentDetail && (
           <div>
@@ -158,7 +182,7 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
                 animated={false}
                 onChange={this.callback}
                 onTabClick={this.handleTabClick}
-                className="moment-detail-tabs"
+                className={`moment-detail-tabs moment-detail-tabs-${businessType}`}
               >
                 <TabPane tab={`评论 ${comment_count}`} key="1">
                   <div>
@@ -210,25 +234,31 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
                 </TabPane>
               </Tabs>
             </AppContent>
-            <ActionWrapper>
+            <ActionWrapper style={{ color: themeColor }}>
               {(type === 'business' && String(currentUser.id) === uid) &&
                 <FlexCenter>
-                  <Icon type={require('icons/ali/置顶.svg')} size="sm" color={pallete.text.help} />
-                  <span style={{ marginLeft: '0.04rem', color: pallete.text.help }}>置顶</span>
+                  <Icon type={require('icons/ali/置顶.svg')} size="sm" />
+                  <span style={{ marginLeft: '0.04rem' }}>置顶</span>
                 </FlexCenter>
               }
               <FlexCenter onClick={this.handleShowChatTool}>
-                <Icon type={require('icons/ali/评论.svg')} size="sm" color={pallete.text.help} />
-                <span style={{ marginLeft: '0.04rem', color: pallete.text.help }}>{comment_count > 0 ? comment_count : '评论'}</span>
+                <Icon type={require('icons/ali/消息.svg')} size="sm" />
+                <span style={{ marginLeft: '0.04rem' }}>{comment_count > 0 ? comment_count : '评论'}</span>
               </FlexCenter>
               <FlexCenter onClick={this.handleLike}>
-                <Icon type={require('icons/ali/点赞.svg')} size="sm" color={is_like > 0 ? pallete.theme : pallete.text.help} />
-                <span style={{ marginLeft: '0.04rem', color: pallete.text.help }}>{like_count > 0 ? like_count : '点赞'}</span>
+                <Icon type={require('icons/ali/点赞.svg')} size="sm" color={(is_like > 0 && businessType === 'status') ? pallete.theme : themeColor} />
+                <span style={{ marginLeft: '0.04rem' }}>{like_count > 0 ? like_count : '点赞'}</span>
               </FlexCenter>
               <FlexCenter>
-                <Icon type={require('icons/ali/分享.svg')} size="xxs" color={pallete.text.help} />
-                <span style={{ marginLeft: '0.04rem', color: pallete.text.help }}>{share_count > 0 ? share_count : '分享'}</span>
+                <Icon type={require('icons/ali/分享.svg')} size="xxs" />
+                <span style={{ marginLeft: '0.04rem' }}>{share_count > 0 ? share_count : '分享'}</span>
               </FlexCenter>
+               {type === 'communication' &&
+                <FlexCenter  onClick={this.handleMore}>
+                  <Icon type={require('icons/ali/更多.svg')} size="sm" />
+                  <span style={{ marginLeft: '0.04rem' }}>更多</span>
+                </FlexCenter>
+              }
             </ActionWrapper>
           </div>
         )}
@@ -248,6 +278,7 @@ MomentDetail.propTypes = {
   doLikeComment: PropTypes.func,
   doSendComment: PropTypes.func,
   doDelComment: PropTypes.func,
+  doCollectMoment: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -263,6 +294,7 @@ function mapDispatchToProps(dispatch) {
     doLikeComment: (id, cid, uid) =>  dispatch(likeComment(id, cid, uid)),
     doSendComment: (id, uid, content, from, pid) => dispatch(sendComment(id, uid, content, from, pid)),
     doDelComment: (id, cid) => dispatch(delComment(id, cid)),
+    doCollectMoment: (id) => dispatch(collectMoment(id)),
   };
 }
 

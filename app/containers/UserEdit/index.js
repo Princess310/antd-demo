@@ -21,6 +21,13 @@ const briefStyle = {
   whiteSpace: 'inherit',
 };
 
+const imgStyle = {
+  marginTop: '0.08rem',
+  marginRight: '0.08rem',
+  width: '2.34rem',
+  height: '2.34rem',
+}
+
 const Item = List.Item;
 const Brief = Item.Brief;
 export class UserEdit extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
@@ -130,7 +137,7 @@ export class UserEdit extends React.PureComponent { // eslint-disable-line react
             >
               业务介绍
               <Brief style={briefStyle}>
-                {currentUser.intro === '' ? '完善您的业务介绍，让大家更容易了解您~' : currentUser.intro}
+                {currentUser.business_intro === '' ? '完善您的业务介绍，让大家更容易了解您~' : currentUser.business_intro}
               </Brief>
             </Item>
           </List>
@@ -143,6 +150,11 @@ export class UserEdit extends React.PureComponent { // eslint-disable-line react
               }}
             >展示图片</Item>
           </List>
+          <div style={{ paddingLeft: '0.08rem' }}>
+            {currentUser.pictures && currentUser.pictures.map((p, i) => (
+              <img key={i} role="presentation" src={p} style={imgStyle} />
+            ))}
+          </div>
           <WhiteSpace size="md" />
         </AppContent>
       </div>

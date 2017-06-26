@@ -150,19 +150,6 @@ class ShareMomentCard extends React.PureComponent { // eslint-disable-line react
     return (
       <div
         style={Object.assign(rootStyle, style)}
-        onClick={() => {
-          if (from !== 'detail') {
-            browserHistory.push({
-              pathname: 'momentDetail',
-              query: {
-                id,
-              },
-              state: {
-                type,
-              },
-            });
-          }
-        }}
       >
         <div style={{ padding: '0.15rem', borderBottom: `0.01rem ${pallete.border.deep} solid` }}>
           {(Number(source_type) !== 1 || from !== 'detail') &&

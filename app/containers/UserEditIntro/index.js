@@ -22,7 +22,7 @@ export class UserEditIntro extends React.PureComponent { // eslint-disable-line 
 
     const { currentUser } = props;
     this.state = {
-      intro: currentUser.intro,
+      business_intro: currentUser.business_intro,
     };
   }
 
@@ -30,27 +30,27 @@ export class UserEditIntro extends React.PureComponent { // eslint-disable-line 
     const { currentUser } = nextProps;
 
     this.setState({
-      intro: currentUser.intro,
+      business_intro: currentUser.business_intro,
     });
   }
 
   handleChange = (value) => {
     this.setState({
-      intro: value,
+      business_intro: value,
     });
   }
 
   handleSave = () => {
     const { saveUserInfo } = this.props;
-    const { intro } = this.state;
+    const { business_intro } = this.state;
 
     saveUserInfo({
-      intro,
+      business_intro,
     });
   }
 
   render() {
-    const { intro } = this.state;
+    const { business_intro } = this.state;
 
     return (
       <div>
@@ -69,10 +69,9 @@ export class UserEditIntro extends React.PureComponent { // eslint-disable-line 
         <List>
           <TextareaItem
             placeholder="完善您的业务介绍，让大家更容易了解您~"
-            value={intro}
+            value={business_intro}
             onChange={this.handleChange}
             rows={4}
-            count={1000}
           />
         </List>
       </div>

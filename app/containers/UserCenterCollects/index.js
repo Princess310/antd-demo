@@ -74,7 +74,9 @@ export class UserCenterCollects extends React.PureComponent { // eslint-disable-
     });
   }
 
-  showActionSheet = (id) => {
+  showActionSheet = (e, id) => {
+    e.preventDefault();
+    e.stopPropagation();
     const { deleteCollect } = this.props;
     const BUTTONS = ['删除', '取消'];
 
@@ -106,7 +108,7 @@ export class UserCenterCollects extends React.PureComponent { // eslint-disable-
               id: moment.moments_id,
             },
             state: {
-              type: moment.type,
+              type: (moment.category === '3' || moment.reward_as === '2') || (moment.category === '0' || moment.reward_as === '1') ? 'business' : 'communication',
             },
           });
         }}
@@ -115,7 +117,7 @@ export class UserCenterCollects extends React.PureComponent { // eslint-disable-
           key={moment.id}
           user={moment.user}
           rightContent={
-            <div style={{ width: '0.48rem', height: '0.48rem', textAlign: 'right' }} onClick={() => this.showActionSheet(moment.id)}>
+            <div style={{ width: '0.48rem', height: '0.48rem', textAlign: 'right' }} onClick={(e) => this.showActionSheet(e, moment.id)}>
               <Icon
                 type={require('icons/ali/下拉.svg')}
                 size="xs"

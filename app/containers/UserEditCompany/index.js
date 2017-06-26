@@ -11,7 +11,7 @@ import { makeSelectCurrentUser } from 'containers/HomePage/selectors';
 
 import pallete from 'styles/colors';
 import { browserHistory } from 'react-router';
-import { NavBar, List, TextareaItem, WhiteSpace, Icon } from 'antd-mobile';
+import { NavBar, List, TextareaItem, WhiteSpace, Icon, Toast } from 'antd-mobile';
 import MenuBtn from 'components/MenuBtn';
 
 import { saveUser } from 'containers/UserCenter/actions';
@@ -44,6 +44,11 @@ export class UserEditCompany extends React.PureComponent { // eslint-disable-lin
     const { saveUserInfo } = this.props;
     const { address } = this.state;
 
+    if (address.trim().length > 30 || address.trim().length < 6) {
+      Toast.info('公司地址6~30个字符', 1.5);
+      return;
+    }
+
     saveUserInfo({
       address,
     });
@@ -71,8 +76,7 @@ export class UserEditCompany extends React.PureComponent { // eslint-disable-lin
             placeholder="请填写公司地址"
             value={address}
             onChange={this.handleChange}
-            rows={4}
-            count={30}
+            rows={3}
           />
         </List>
       </div>

@@ -51,8 +51,8 @@ class UserHeaderBar extends React.PureComponent { // eslint-disable-line react/p
               <section style={{ fontSize: '0.28rem' }}>{user.nickname}</section>
               {user.company && <ItemWrapper>{user.company}</ItemWrapper>}
               {user.position && <ItemWrapper>{user.position}</ItemWrapper>}
-              {user.integrity_level && <LevelTag>LV{user.integrity_level}</LevelTag>}
-              {user.influence && <ExpTag>{user.influence}</ExpTag>}
+              {/*{user.integrity_level && <LevelTag>LV{user.integrity_level}</LevelTag>}
+              {user.influence && <ExpTag>{user.influence}</ExpTag>}*/}
             </FlexRow>
             <section
               style={{

@@ -36,12 +36,15 @@ class MomentComment extends React.PureComponent { // eslint-disable-line react/p
       type,
       comments,
       comment_count,
+      businessType,
     } = this.props;
+
+    const themeColor = businessType === 'demand' ? pallete.theme : pallete.yellow;
 
     const commentsView = comments.length > 0 ? comments.map((c) => {
       return (
         <CommentWrapper key={c.id}>
-          <span style={{ color: pallete.theme, marginRight: '0.08rem' }}>{c.nickname}:</span>
+          <span style={{ color: themeColor, marginRight: '0.08rem' }}>{c.nickname}:</span>
           <span>{c.content}</span>
         </CommentWrapper>
       );
@@ -78,6 +81,7 @@ MomentComment.propTypes = {
   style: PropTypes.object,
   comments: PropTypes.array,
   type: PropTypes.string,
+  businessType: PropTypes.string,
   comment_count: PropTypes.oneOfType([
     PropTypes.number,
     PropTypes.string,
