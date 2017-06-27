@@ -1,5 +1,8 @@
 .business-publish-demand-menu {
   .am-action-sheet-button-list-item {
+    &:first-child {
+      color: #50abf1;
+    }
     &:nth-of-type(2) {
       color: #ccc;
     }
@@ -10,6 +13,9 @@
   .am-action-sheet-button-list-item {
     &:first-child {
       color: #ccc;
+    }
+    &:nth-of-type(2) {
+      color: #F39C12;
     }
   }
 }

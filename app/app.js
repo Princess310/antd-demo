@@ -117,6 +117,11 @@ export function initAppInfo() {
   });
 }
 
+// export the global store to solve dispath things
+export function getStore() {
+  return store;
+}
+
 // Chunked polyfill for browsers without Intl support
 if (!window.Intl) {
   (new Promise((resolve) => {

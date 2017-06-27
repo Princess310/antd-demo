@@ -12,3 +12,5 @@
 export const CHANGE_USERNAME = 'boilerplate/Home/CHANGE_USERNAME';
 
 export const FETCH_USER = 'app/HomePage/FETCH_USER';
+
+export const LOAD_SELECT_TAB = 'app/HomePage/LOAD_SELECT_TAB';

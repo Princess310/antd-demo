@@ -63,3 +63,6 @@ export const FETCH_FOLLOW_USER_INFO = 'app/UserCenter/FETCH_FOLLOW_USER_INFO';
 export const LOAD_FOLLOW_USER_INFO = 'app/UserCenter/LOAD_FOLLOW_USER_INFO';
 
 export const DO_CHANGE_FOLLOW_BLACK = 'app/UserCenter/DO_CHANGE_FOLLOW_BLACK';
+
+export const FETCH_POINTS_RULES = 'app/UserCenter/FETCH_POINTS_RULES';
+export const LOAD_POINTS_RULES = 'app/UserCenter/LOAD_POINTS_RULES';

@@ -13,11 +13,13 @@ import { fromJS } from 'immutable';
 
 import {
   CHANGE_USERNAME,
+  LOAD_SELECT_TAB,
 } from './constants';
 
 // The initial state of the App
 const initialState = fromJS({
   username: '',
+  selectTab: 'communicate',
 });
 
 function homeReducer(state = initialState, action) {
@@ -27,6 +29,11 @@ function homeReducer(state = initialState, action) {
       // Delete prefixed '@' from the github username
       return state
         .set('username', action.name.replace(/@/gi, ''));
+    case LOAD_SELECT_TAB: {
+      const { selectTab } = action.payload;
+
+      return state.set('selectTab', selectTab);
+    }
     default:
       return state;
   }

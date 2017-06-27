@@ -148,6 +148,11 @@ const makeSelectFollowUserInfo = () => createSelector(
   (substate) => substate.get('followUser')
 );
 
+const makeSelectPointsRules = () => createSelector(
+  selectUserCenter,
+  (substate) => substate.get('pointsRules')
+);
+
 export {
   makeSelectUserCenterIndustry,
   makeSelectUserCenterIndustrySon,
@@ -166,4 +171,5 @@ export {
   makeSelectUserComplaint,
   makeSelectUserFriend,
   makeSelectFollowUserInfo,
+  makeSelectPointsRules,
 };

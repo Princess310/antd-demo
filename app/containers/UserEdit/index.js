@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { browserHistory } from 'react-router';
 import pallete from 'styles/colors';
-import { NavBar, List, WhiteSpace, Icon } from 'antd-mobile';
+import { NavBar, List, WhiteSpace, Icon, Modal } from 'antd-mobile';
 import Avatar from 'components/Avatar';
 import AppContent from 'components/AppContent';
 
@@ -30,6 +30,7 @@ const imgStyle = {
 
 const Item = List.Item;
 const Brief = Item.Brief;
+const alert = Modal.alert;
 export class UserEdit extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   render() {
     const { currentUser } = this.props;
@@ -92,7 +93,20 @@ export class UserEdit extends React.PureComponent { // eslint-disable-line react
               extra={currentUser.tag_identity_name}
               arrow="horizontal"
               onClick={() => {
-                browserHistory.push('/userEditIdentity');
+                const editNumber = currentUser.role_edit_number;
+
+                if (editNumber && editNumber >= 2) {
+                  alert('您已经修改过行业角色信息，不能再次修改', '', [
+                    { text: '我知道了', onPress: () => console.log('confirm') },
+                  ])
+                } else {
+                  alert('行业角色信息只能修改一次，并且会清空您之前的所有信息，请谨慎修改', '', [
+                    { text: '我知道了', onPress: () => console.log('cancel') },
+                    { text: '确定修改', onPress: () => {
+                      browserHistory.push('/userEditIdentity');
+                    }, style: { fontWeight: 'bold' } },
+                  ]);
+                };
               }}
             >行业角色</Item>
             <Item

@@ -3,7 +3,10 @@ import { LOCATION_CHANGE } from 'react-router-redux';
 import { browserHistory } from 'react-router';
 import request from 'utils/request';
 import { loadUser } from 'containers/App/actions';
-import { Toast } from 'antd-mobile';
+import { Toast, Modal } from 'antd-mobile';
+import { getStore } from 'app';
+
+const alert = Modal.alert;
 
 import {
   SAVE_USER,
@@ -39,6 +42,8 @@ import {
   FETCH_FOLLOW_USER_INFO,
 
   DO_CHANGE_FOLLOW_BLACK,
+
+  FETCH_POINTS_RULES,
 } from './constants';
 
 import {
@@ -73,7 +78,11 @@ import {
   loadUserFirend,
 
   loadFollowUserInfo,
+
+  loadPointsRules,
 } from './actions';
+
+import { loadSelectTab } from 'containers/HomePage/actions';
 
 export function* saveUser(action) {
   try {
@@ -81,9 +90,22 @@ export function* saveUser(action) {
 
     const res = yield request.doPut('user/edit', params);
 
-    yield put(loadUser(res.data));
+    const { data, list: { status } } = res;
+
+    yield put(loadUser(data));
     // go back to user info page
     browserHistory.goBack();
+
+    if (status === 1) {
+      alert('恭喜您成功完善资料，获得50次好友申请次数的奖励，去生意版块逛逛吧~', '', [
+        { text: '我知道了', onPress: () => console.log('cancel') },
+        { text: '立即前去', onPress: () => {
+          const store = getStore();
+          store.dispatch(loadSelectTab('business'));
+          browserHistory.push('/')
+        }, style: { fontWeight: 'bold' } },
+      ]);
+    }
   } catch (err) {
     // console.log(err);
   }
@@ -371,6 +393,17 @@ export function* changeFolloBlack(action) {
   }
 }
 
+export function* fetchPointsRules() {
+  try {
+    const res = yield request.doGet('user/point-system');
+
+    const { list } = res;
+    yield put(loadPointsRules(list));
+  } catch (err) {
+    // console.log(err);
+  }
+}
+
 export function* defaultSaga() {
   const watcher = yield takeLatest(SAVE_USER, saveUser);
   const watcherIndustry = yield takeLatest(FETCH_INDUSTRY, fetchIndustry);
@@ -392,6 +425,7 @@ export function* defaultSaga() {
   const watcherFollow = yield takeLatest(DO_FOLLOW_USER, doFollow);
   const watcherFollowUserInfo = yield takeLatest(FETCH_FOLLOW_USER_INFO, fetchFollowUserInfo);
   const watcherChangeFollowBlck = yield takeLatest(DO_CHANGE_FOLLOW_BLACK, changeFolloBlack);
+  const watcherPointsRules = yield takeLatest(FETCH_POINTS_RULES, fetchPointsRules);
 
   // Suspend execution until location changes
   yield take(LOCATION_CHANGE);
@@ -415,6 +449,7 @@ export function* defaultSaga() {
   yield cancel(watcherFollow);
   yield cancel(watcherFollowUserInfo);
   yield cancel(watcherChangeFollowBlck);
+  yield cancel(watcherPointsRules);
 }
 
 // All sagas to be loaded

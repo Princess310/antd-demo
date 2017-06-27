@@ -452,6 +452,14 @@ export default function createRoutes(store) {
               .then(loadModule(cb))
               .catch(errorLoading);
           },
+        }, {
+          path: 'userPointsRule',
+          name: 'userPointsRule',
+          getComponent(location, cb) {
+            import('containers/UserPointsRule')
+              .then(loadModule(cb))
+              .catch(errorLoading);
+          },
         },
       ],
     }, {

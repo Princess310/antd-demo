@@ -16,8 +16,8 @@ import FlexCenter from 'components/FlexCenter';
 import AuthCard from 'components/AuthCard';
 import AppContent from 'components/AppContent';
 import { NavBar, Button, Icon } from 'antd-mobile';
-import { makeSelectUserAuthInfo } from 'containers/UserCenter/selectors';
-import { fetchAuthInfo, loadAuthFiles } from 'containers/UserCenter/actions';
+import { makeSelectUserAuthInfo, makeSelectPointsRules } from 'containers/UserCenter/selectors';
+import { fetchAuthInfo, loadAuthFiles, fetchPointsRules } from 'containers/UserCenter/actions';
 
 import card from 'assets/images/user-auth-card.png';
 import email from 'assets/images/user-auth-email.png';
@@ -63,6 +63,7 @@ const Wrapper = styled.div`
 
 const cards = [
   {
+    feild: 'verify_by_business_card',
     flag: 2,
     url: '',
     backUrl: card,
@@ -70,6 +71,7 @@ const cards = [
     exp: 20,
     editable: true,
   }, {
+    feild: 'verify_by_work_card',
     flag: 1,
     url: '',
     backUrl: work,
@@ -77,6 +79,7 @@ const cards = [
     exp: 10,
     editable: true,
   }, {
+    field: 'verify_by_occupational_certificate',
     flag: 5,
     url: '',
     backUrl: position,
@@ -84,6 +87,7 @@ const cards = [
     exp: 40,
     editable: true,
   }, {
+    field: 'verify_by_business_license',
     flag: 4,
     url: '',
     backUrl: license,
@@ -91,6 +95,7 @@ const cards = [
     exp: 60,
     editable: true,
   }, {
+    field: 'verify_by_email',
     flag: 3,
     url: '',
     backUrl: email,
@@ -98,6 +103,7 @@ const cards = [
     exp: 10,
     editable: true,
   }, {
+    field: 'verify_by_other',
     flag: 6,
     url: '',
     backUrl: other,
@@ -109,7 +115,15 @@ const cards = [
 export class UserAuthorizeFiles extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
     super(props);
-    const { authInfo, getAuthInfo } = props;
+
+    this.state = {
+      cards: cards,
+      uploaded: false,
+    };
+  }
+
+  componentWillMount() {
+    const { pointsRules, getPointsRules, authInfo, getAuthInfo } = this.props;
 
     if (authInfo) {
       const { auth: { material } } = authInfo;
@@ -126,31 +140,41 @@ export class UserAuthorizeFiles extends React.PureComponent { // eslint-disable-
       getAuthInfo();
     }
 
-    this.state = {
-      cards: cards,
-      uploaded: false,
-    };
+    if (!pointsRules) {
+      getPointsRules();
+    }
   }
 
   componentWillReceiveProps(nextProps) {
-    const { authInfo } = nextProps;
+    const { authInfo, pointsRules } = nextProps;
 
     if (authInfo) {
       const { auth: { material } } = authInfo;
       material.forEach((m) => {
         cards.forEach((c) => {
-        if (Number(m.flag) === c.flag) {
-          c.url = m.url;
-          c.editable = false;
-          c.status = m.status;
-        }
+          if (Number(m.flag) === c.flag) {
+            c.url = m.url;
+            c.editable = false;
+            c.status = m.status;
+          }
         });
       });
-
-      this.state = {
-        cards: cards,
-      };
     }
+
+    if (pointsRules) {
+      for (const k of Object.keys(pointsRules)) {
+        cards.forEach((c) => {
+          if (c.field === k) {
+            c.influence = pointsRules[k].influence;
+            c.exp = pointsRules[k].integrity;
+          }
+        });
+      }
+    }
+
+    this.setState(
+      cards,
+    );
   }
 
   handFile = (e, index) => {
@@ -268,16 +292,23 @@ UserAuthorizeFiles.propTypes = {
   ]),
   getAuthInfo: PropTypes.func,
   saveAuthFiles: PropTypes.func,
+  pointsRules: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.bool,
+  ]),
+  getPointsRules: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
   authInfo: makeSelectUserAuthInfo(),
+  pointsRules: makeSelectPointsRules(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     getAuthInfo: () => dispatch(fetchAuthInfo()),
     saveAuthFiles: (files) => dispatch(loadAuthFiles(files)),
+    getPointsRules: () => dispatch(fetchPointsRules()),
   };
 }
 

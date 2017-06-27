@@ -18,6 +18,7 @@
 import {
   CHANGE_USERNAME,
   FETCH_USER,
+  LOAD_SELECT_TAB,
 } from './constants';
 
 /**
@@ -37,5 +38,15 @@ export function changeUsername(name) {
 export function fetchUser() {
   return {
     type: FETCH_USER,
+  };
+}
+
+export function loadSelectTab(selectTab) {
+  console.log('selectTab', selectTab);
+  return {
+    type: LOAD_SELECT_TAB,
+    payload: {
+      selectTab,
+    },
   };
 }

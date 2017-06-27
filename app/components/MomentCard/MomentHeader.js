@@ -130,7 +130,7 @@ class MomentHeader extends React.PureComponent { // eslint-disable-line react/pr
         </FlexSB>
         {trade_status > 0 && <img role="presentation" src={momentSuccess} style={{
           position: 'absolute',
-          top: '0.24rem',
+          top: '0.84rem',
           right: '0.24rem',
           width: 'auto',
           height: '1rem',

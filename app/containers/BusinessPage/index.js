@@ -25,6 +25,7 @@ import { makeSelectUserCenterIndustry } from 'containers/UserCenter/selectors';
 import FilterPanel from './FilterPanel';
 import { fetchBusiness, fetchBusinessPrice, fetchBusinessNumber, fetchReward } from './actions';
 import { fetchIndustry } from 'containers/UserCenter/actions';
+import { loadSelectTab } from 'containers/HomePage/actions';
 import './styles.scss';
 
 const alert = Modal.alert;
@@ -193,7 +194,9 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
   }
 
   handlePublish = () => {
+    const { setSelectTab } = this.props;
     const { type } = this.state;
+
     const listClass = type === 2 ? 'business-publish-demand-menu' : 'business-publish-supplier-menu';
     const BUTTONS = ['发布采购需求', '发布供应信息', '取消'];
     ActionSheet.showActionSheetWithOptions({
@@ -207,15 +210,28 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
         request.doGet('moments/check-release', {
           reward_as: type
         }).then((res) => {
-          if (res.natural_day_counts > 0) {
+          const { natural_day_counts, my_point, release_point } = res;
+          if (natural_day_counts > 0) {
             alert(res.message, '', [
               { text: '我知道了' },
             ])
           } else {
-            if (buttonIndex === 0) {
-              browserHistory.push('businessPublish');
-            } else if (buttonIndex === 1) {
-              browserHistory.push('/businessPublishSupplier');
+            if (my_point < release_point) {
+              alert('发布失败', <div>
+                  <div style={{ color: pallete.theme }}>{`剩余${my_point}积分`}</div>
+                  <div>{`您的账户已不足${release_point}分，无法继续发布采购需求信息，可到“动态”栏目评论、点赞、分享挣取积分。`}</div>
+                </div>, [
+                { text: '我知道了', onPress: () => console.log('cancel') },
+                { text: '立即前去', onPress: () => {
+                  setSelectTab('communicate');
+                }, style: { fontWeight: 'bold' } },
+              ]);
+            } else {
+              if (buttonIndex === 0) {
+                browserHistory.push('businessPublish');
+              } else if (buttonIndex === 1) {
+                browserHistory.push('/businessPublishSupplier');
+              }
             }
           }
         });
@@ -394,6 +410,7 @@ BusinessPage.propTypes = {
     PropTypes.array,
     PropTypes.bool,
   ]),
+  setSelectTab: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -411,6 +428,7 @@ function mapDispatchToProps(dispatch) {
     getNumber: () => dispatch(fetchBusinessNumber()),
     getReward: () => dispatch(fetchReward()),
     getIndustry: () => dispatch(fetchIndustry()),
+    setSelectTab: (selectTab) => dispatch(loadSelectTab(selectTab)),
   };
 }
 

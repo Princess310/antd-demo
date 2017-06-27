@@ -15,9 +15,10 @@ import { createStructuredSelector } from 'reselect';
 import { browserHistory } from 'react-router';
 import { TabBar, Icon } from 'antd-mobile';
 
-import { makeSelectCurrentUser } from './selectors';
+import { makeSelectCurrentUser, makeSelectTab } from './selectors';
 import {
   fetchUser,
+  loadSelectTab,
 } from './actions';
 
 import Communicate from '../Communicate';
@@ -29,7 +30,6 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
   constructor(props) {
     super(props);
     this.state = {
-      selectedTab: 'communicate',
       hidden: false,
     };
   }
@@ -56,7 +56,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
   }
 
   render() {
-    const { location, children } = this.props;
+    const { location, children, selectTab, setSelectTab } = this.props;
     const hideTabs = location.pathname !== '/';
     return (
       <div>
@@ -72,11 +72,9 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
             key="动态"
             icon={<Icon type={require('icons/ali/动态.svg')} />}
             selectedIcon={<Icon type={require('icons/ali/动态.svg')} />}
-            selected={this.state.selectedTab === 'communicate'}
+            selected={selectTab === 'communicate'}
             onPress={() => {
-              this.setState({
-                selectedTab: 'communicate',
-              });
+              setSelectTab('communicate');
             }}
           >
             {!hideTabs && <Communicate />}
@@ -86,11 +84,9 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
             selectedIcon={<Icon type={require('icons/ali/生意.svg')} />}
             title="生意"
             key="生意"
-            selected={this.state.selectedTab === 'business'}
+            selected={selectTab === 'business'}
             onPress={() => {
-              this.setState({
-                selectedTab: 'business',
-              });
+              setSelectTab('business');
             }}
           >
             {!hideTabs && <BusinessPage />}
@@ -101,7 +97,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
             title="消息"
             key="消息"
             dot
-            selected={this.state.selectedTab === 'message'}
+            selected={selectTab === 'message'}
             onPress={() => {
               this.setState({
                 selectedTab: 'message',
@@ -115,11 +111,9 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
             selectedIcon={<Icon type={require('icons/ali/我的.svg')} />}
             title="我的"
             key="我的"
-            selected={this.state.selectedTab === 'mine'}
+            selected={selectTab === 'mine'}
             onPress={() => {
-              this.setState({
-                selectedTab: 'mine',
-              });
+              setSelectTab('mine');
             }}
           >
             <div className="home-container">
@@ -134,19 +128,23 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
 
 HomePage.propTypes = {
   getUser: PropTypes.func,
+  setSelectTab: PropTypes.func,
   currentUser: PropTypes.object,
   location: PropTypes.object,
   children: PropTypes.node,
+  selectTab: PropTypes.string,
 };
 
 export function mapDispatchToProps(dispatch) {
   return {
     getUser: () => dispatch(fetchUser()),
+    setSelectTab: (selectTab) => dispatch(loadSelectTab(selectTab)),
   };
 }
 
 const mapStateToProps = createStructuredSelector({
   currentUser: makeSelectCurrentUser(),
+  selectTab: makeSelectTab(),
 });
 
 // Wrap the component to inject dispatch and state into it

@@ -198,12 +198,13 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
                             {u.to_name !== '' && <span>回复<span style={{ color: pallete.theme }}>{u.to_name}</span>：</span>}
                             {u.content}
                           </div>
-                          <div style={{ textAlign: 'right' }} onClick={(e) => {
+                          <div style={{ textAlign: 'right', color: businessType === 'status' ? (u.is_like > 0 ? pallete.theme : pallete.text.help) : themeColor }} onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
                             this.handleLikeComment(u.id, u.created_by);
                           }}>
-                            <Icon type={require('icons/ali/点赞.svg')} size="sm" color={u.is_like > 0 ? pallete.theme : pallete.text.help} />
+                            <Icon type={require('icons/ali/点赞.svg')} size="sm" />
+                            {u.like_count}
                           </div>
                         </CommentWrapper>
                       </div>

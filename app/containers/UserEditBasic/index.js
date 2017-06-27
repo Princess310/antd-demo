@@ -13,7 +13,7 @@ import { createStructuredSelector } from 'reselect';
 import { makeSelectCurrentUser } from 'containers/HomePage/selectors';
 import { browserHistory } from 'react-router';
 
-import { NavBar, List, WhiteSpace, InputItem, Icon } from 'antd-mobile';
+import { NavBar, List, WhiteSpace, InputItem, Icon, ActionSheet } from 'antd-mobile';
 import Avatar from 'components/Avatar';
 import MenuBtn from 'components/MenuBtn';
 
@@ -49,6 +49,8 @@ export class UserEditBasic extends React.PureComponent { // eslint-disable-line 
       nickname: currentUser.nickname,
       company: currentUser.company,
       position: currentUser.position,
+      nature: currentUser.nature,
+
     };
   }
 
@@ -62,6 +64,7 @@ export class UserEditBasic extends React.PureComponent { // eslint-disable-line 
       nickname: currentUser.nickname,
       company: currentUser.company,
       position: currentUser.position,
+      nature: currentUser.nature,
     });
   }
 
@@ -80,6 +83,29 @@ export class UserEditBasic extends React.PureComponent { // eslint-disable-line 
   handlePosition= (value) => {
     this.setState({
       position: value,
+    });
+  }
+
+  handleNature = () => {
+    const self = this;
+    const BUTTONS = ['公司', '个体', '取消'];
+
+    ActionSheet.showActionSheetWithOptions({
+      options: BUTTONS,
+      cancelButtonIndex: BUTTONS.length - 1,
+      maskClosable: true,
+    },
+    (buttonIndex) => {
+      console.log('buttonIndex', buttonIndex);
+      if (buttonIndex === 0) {
+        self.setState({
+          nature: '公司',
+        });
+      } else if (buttonIndex === 1) {
+        self.setState({
+          nature: '个体',
+        });
+      }
     });
   }
 
@@ -105,18 +131,19 @@ export class UserEditBasic extends React.PureComponent { // eslint-disable-line 
 
   handleSave = () => {
     const { saveUserInfo } = this.props;
-    const { avatar, nickname, company, position } = this.state;
+    const { avatar, nickname, company, position, nature } = this.state;
 
     saveUserInfo({
       avatar,
       nickname,
       company,
       position,
+      nature,
     });
   }
 
   render() {
-    const { id, verify_status, avatar, nickname, company, position } = this.state;
+    const { id, verify_status, avatar, nickname, company, position, nature } = this.state;
 
     return (
       <div className="user-edit-basic">
@@ -156,6 +183,7 @@ export class UserEditBasic extends React.PureComponent { // eslint-disable-line 
               placeholder="输入姓名"
             ></InputItem>}
           >真实姓名</Item>
+          <Item extra={<div style={{ color: '#000' }}>{nature}</div>} onClick={this.handleNature}>公司性质</Item>
           <Item
             extra={<InputItem
               maxLength={15}

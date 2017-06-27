@@ -38,6 +38,8 @@ import {
   LOAD_USER_FRIEND,
 
   LOAD_FOLLOW_USER_INFO,
+
+  LOAD_POINTS_RULES,
 } from './constants';
 
 const initialState = fromJS({
@@ -52,6 +54,7 @@ const initialState = fromJS({
   complaintList: false,
   friendList: false,
   followUser: false,
+  pointsRules: false,
   visitorUsers: {
     refresh: false,
     loading: false,
@@ -330,6 +333,11 @@ function userCenterReducer(state = initialState, action) {
       const { data } = action.payload;
 
       return state.set('followUser', data);
+    }
+    case LOAD_POINTS_RULES: {
+      const { list } = action.payload;
+
+      return state.set('pointsRules', list);
     }
     default:
       return state;

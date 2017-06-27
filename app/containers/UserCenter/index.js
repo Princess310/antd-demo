@@ -11,15 +11,17 @@ import { browserHistory } from 'react-router';
 
 import styled from 'styled-components';
 import pallete from 'styles/colors';
+import request from 'utils/request';
 
 import ExpProgress from 'components/ExpProgress';
 import LevelProgress from 'components/LevelProgress';
 import Avatar from 'components/Avatar';
 import FlexSB from 'components/FlexSB';
 import FlexRow from 'components/FlexRow';
-import { List, Icon, WhiteSpace, Button, ActionSheet } from 'antd-mobile';
+import { List, Icon, WhiteSpace, Button, ActionSheet, Modal } from 'antd-mobile';
 import userBg from 'assets/images/person-bg.png';
 import { makeSelectCurrentUser } from 'containers/HomePage/selectors';
+import { loadSelectTab } from 'containers/HomePage/actions';
 
 import './styles.scss';
 
@@ -41,7 +43,10 @@ const InfoWrapper = styled.div`
 
 const SubInfoWrapper = styled.div`
   display: flex;
+  align-items: center;
+  justify-content: center;
   background-color: ${pallete.white};
+  font-size: 0.26rem;
   height: 0.72rem;
   color: ${pallete.text.subHelp};
 `;
@@ -71,7 +76,25 @@ const verifyStyle = {
   color: pallete.text.yellow,
 };
 const Item = List.Item;
+const alert = Modal.alert;
 export class UserCenter extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+  componentDidMount() {
+    const { setSelectTab } = this.props;
+    
+    request.doGet('user/user-new-status').then((res) => {
+      const { data: { status} } = res;
+
+      if (status === 1) {
+         alert('恭喜您成功完成了一次用户认证，获得100次好友申请次数的奖励，去生意频道逛逛吧~', '', [
+          { text: '我知道了', onPress: () => console.log('cancel') },
+          { text: '立即前去', onPress: () => {
+            setSelectTab('business');
+          }, style: { fontWeight: 'bold' } },
+        ]);
+      }
+    });
+  }
+
   showShareActionSheet = () => {
     ActionSheet.showShareActionSheetWithOptions({
       options: shareIconList,
@@ -156,14 +179,11 @@ export class UserCenter extends React.PureComponent { // eslint-disable-line rea
           </FlexSB>
         </UserWrapper>
         <List>
-          <SubInfoWrapper>
-            <SubInfo className="user-sub-info-item">
-              活跃度：<span style={{ color: pallete.theme }}>{currentUser.influence}</span>
-            </SubInfo>
-            <SubInfo className="user-sub-info-item">
-              影响力：<ExpProgress progress={currentUser.integrity_progress} />
-              <span style={{ marginLeft: '0.08rem', color: pallete.text.yellow }}>V{currentUser.integrity_level}</span>
-            </SubInfo>
+          <SubInfoWrapper onClick={() => {
+            browserHistory.push('/userPointsRule');
+          }}>
+            我的积分:<span style={{ color: pallete.theme }}>{currentUser.point}</span>分
+            <Icon type={require('icons/ali/个人中心-积分帮助.svg')} size="xs" color="#AAAAAA" style={{ marginLeft: '0.08rem' }} />
           </SubInfoWrapper>
         </List>
         <WhiteSpace size="md" />
@@ -234,14 +254,16 @@ export class UserCenter extends React.PureComponent { // eslint-disable-line rea
 
 UserCenter.propTypes = {
   currentUser: PropTypes.object,
+  setSelectTab: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
   currentUser: makeSelectCurrentUser(),
 });
 
-function mapDispatchToProps() {
+function mapDispatchToProps(dispatch) {
   return {
+    setSelectTab: (selectTab) => dispatch(loadSelectTab(selectTab)),
   };
 }
 

@@ -4,7 +4,10 @@ import { browserHistory } from 'react-router';
 import request from 'utils/request';
 import { uploadFile } from 'utils/utils';
 import oss from 'utils/oss';
-import { Toast } from 'antd-mobile';
+import { Toast, Modal } from 'antd-mobile';
+import { getStore } from 'app';
+
+const alert = Modal.alert;
 
 import {
   refreshListNewCommunicate,
@@ -271,6 +274,22 @@ export function* sendComment(action) {
     }
 
     yield doRefreshMoment(id);
+
+    const { data: { is_popup, messagePopup }, message } = res;
+    if (is_popup === 1) {
+      alert('发布成功', <div>
+          <div style={{ color: '#50ABF1' }}>{messagePopup[0]}</div>
+          <div>{messagePopup[1]}</div>
+        </div>, [
+        { text: '我知道了', onPress: () => console.log('cancel') },
+        { text: '立即前去', onPress: () => {
+          const store = getStore();
+          store.dispatch(loadSelectTab('business'));
+        }, style: { fontWeight: 'bold' } },
+      ]);
+    } else {
+      Toast.info(message, 1.2);
+    }
   } catch (err) {
     // console.log(err);
   }
@@ -323,7 +342,10 @@ export function* setTopMoment(action) {
       },
     });
 
-    Toast.success('置顶成功!', 1);
+    const { data: { is_popup }, message } = res;
+    if (is_popup === 0) {
+      Toast.info(message, 1.2);
+    }
   } catch (err) {
     // console.log(err);
   }
@@ -380,6 +402,22 @@ export function* publishMoment(action) {
       browserHistory.go(-step);
     } else {
       browserHistory.goBack();
+    }
+
+    const { data: { is_popup, messagePopup }, message } = res;
+    if (is_popup === 1) {
+      alert('发布成功', <div>
+          <div style={{ color: '#50ABF1' }}>{messagePopup[0]}</div>
+          <div>{messagePopup[1]}</div>
+        </div>, [
+        { text: '我知道了', onPress: () => console.log('cancel') },
+        { text: '立即前去', onPress: () => {
+          const store = getStore();
+          store.dispatch(loadSelectTab('communicate'));
+        }, style: { fontWeight: 'bold' } },
+      ]);
+    } else {
+      Toast.info(message, 1.2);
     }
   } catch (err) {
     // console.log(err);

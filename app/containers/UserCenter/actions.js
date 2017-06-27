@@ -64,6 +64,9 @@ import {
   LOAD_FOLLOW_USER_INFO,
 
   DO_CHANGE_FOLLOW_BLACK,
+
+  FETCH_POINTS_RULES,
+  LOAD_POINTS_RULES,
 } from './constants';
 
 export function saveUser(params) {
@@ -456,6 +459,21 @@ export function changeFollowBlack(id, isBlack) {
     payload: {
       id,
       isBlack,
+    },
+  };
+}
+
+export function fetchPointsRules() {
+  return {
+    type: FETCH_POINTS_RULES,
+  };
+}
+
+export function loadPointsRules(list) {
+  return {
+    type: LOAD_POINTS_RULES,
+    payload: {
+      list,
     },
   };
 }
