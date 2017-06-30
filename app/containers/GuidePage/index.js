@@ -14,9 +14,10 @@ import request from 'utils/request';
 
 import { browserHistory } from 'react-router';
 import { makeSelectCurrentUser } from 'containers/HomePage/selectors';
-import { makeSelectUserCenterIndustrySon } from 'containers/UserCenter/selectors';
+import { makeSelectUserCenterIndustrySon, makeSelectUserCenterIndustry, makeSelectUserCenterService } from 'containers/UserCenter/selectors';
+import { fetchIndustry, fetchService } from 'containers/UserCenter/actions';
 
-import { NavBar, List, WhiteSpace, WingBlank, Button, InputItem } from 'antd-mobile';
+import { NavBar, List, WhiteSpace, WingBlank, Button, InputItem, ActionSheet, Popup, Modal, Radio, Icon, Toast } from 'antd-mobile';
 import Avatar from 'components/Avatar';
 import AppContent from 'components/AppContent';
 
@@ -40,6 +41,8 @@ const FileItem = styled.input`
 `;
 
 const Item = List.Item;
+const alert = Modal.alert;
+const RadioItem = Radio.RadioItem;
 const inputStyle = {
   height: '0.48rem',
   minHeight: '0.48rem',
@@ -57,12 +60,20 @@ export class GuidePage extends React.PureComponent { // eslint-disable-line reac
       nickname: currentUser.nickname,
       company: currentUser.company,
       position: currentUser.position,
-      tag_identity_id: currentUser.tag_identity_id,
-      tag_identity_name: currentUser.tag_identity_name,
-      main_service_id: currentUser.main_service_id,
-      main_service_name: currentUser.main_service_name,
-      industry_son_id: industrySon,
+      nature: currentUser.nature,
+      // view to show
+      showIndustry: false,
+      showService: false,
     };
+  }
+
+  componentDidMount() {
+    const { getIndustry, industryList } = this.props;
+
+    // fetch industry list here
+    if (!industryList) {
+      getIndustry();
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -75,10 +86,7 @@ export class GuidePage extends React.PureComponent { // eslint-disable-line reac
       nickname: currentUser.nickname,
       company: currentUser.company,
       position: currentUser.position,
-      tag_identity_id: currentUser.tag_identity_id,
-      tag_identity_name: currentUser.tag_identity_name,
-      main_service_id: currentUser.main_service_id,
-      main_service_name: currentUser.main_service_name,
+      nature: currentUser.nature,
       industry_son_id: industrySon,
     });
   }
@@ -121,8 +129,90 @@ export class GuidePage extends React.PureComponent { // eslint-disable-line reac
     }
   }
 
+  handleNature = () => {
+    const self = this;
+    const BUTTONS = ['公司', '个体', '取消'];
+
+    ActionSheet.showActionSheetWithOptions({
+      options: BUTTONS,
+      cancelButtonIndex: BUTTONS.length - 1,
+      maskClosable: true,
+    },
+    (buttonIndex) => {
+      if (buttonIndex === 0) {
+        self.setState({
+          nature: '公司',
+        });
+      } else if (buttonIndex === 1) {
+        self.setState({
+          nature: '个体',
+        });
+      }
+    });
+  }
+
+  handleChangeIndustry = (id, name) => {
+    const { getService } = this.props;
+
+    // refresh service list
+    getService(id);
+
+    this.setState({
+      tag_identity_id: id,
+      tag_identity_name: name,
+      main_service_id: '',
+      main_service_name: '',
+      showIndustry: false,
+    });
+  }
+
+  handleChangeService = (id, name) => {
+    this.setState({
+      main_service_id: id,
+      main_service_name: name,
+      showService: false,
+    });
+  }
+
+  handleSelectIndustry = () => {
+    const self = this;
+    const { currentUser } = this.props;
+    const editNumber = currentUser.role_edit_number;
+
+    if (editNumber && editNumber >= 2) {
+      alert('您已经修改过行业角色信息，不能再次修改', '', [
+        { text: '我知道了', onPress: () => console.log('confirm') },
+      ])
+    } else {
+      if (currentUser.tag_identity_id !== '') {
+        alert('行业角色信息只能修改一次，并且会清空您之前的所有信息，请谨慎修改', '', [
+          { text: '我知道了', onPress: () => console.log('cancel') },
+          { text: '确定修改', onPress: () => {
+             self.setState({
+              showIndustry: true,
+            });
+          }, style: { fontWeight: 'bold' } },
+        ]);
+      } else {
+        this.setState({
+          showIndustry: true,
+        });
+      }
+    };
+  }
+
   saveInfo = () => {
-    const { id, verify_status, avatar, nickname, company, position, tag_identity_id, main_service_id, industry_son_id } = this.state;
+    const { id, verify_status, avatar, nickname, company, position, tag_identity_id, main_service_id, industry_son_id, nature } = this.state;
+
+    if (!tag_identity_id || tag_identity_id === '') {
+      Toast.info('未选择行业角色', 1.2);
+      return;
+    }
+
+    if (!main_service_id || main_service_id === '') {
+      Toast.info('未选择主营类别', 1.2);
+      return;
+    }
 
     request.doPut('user/complete-info', {
       avatar,
@@ -132,13 +222,55 @@ export class GuidePage extends React.PureComponent { // eslint-disable-line reac
       main_service_id,
       company,
       position,
-    }).then(() => {
+      nature,
+    }).then((res) => {
+      const { data: { is_popup }, message } = res;
+      if (is_popup === 0) {
+        Toast.info(message, 1.2);
+      }
       browserHistory.push('/recentDemand');
     });
   }
 
   render() {
-    const { id, verify_status, avatar, nickname, company, position, tag_identity_name, main_service_name } = this.state;
+    const {
+      id,
+      verify_status,
+      avatar,
+      nickname,
+      company,
+      position,
+      tag_identity_name,
+      main_service_name,
+      nature,
+      showIndustry,
+      showService,
+      tag_identity_id,
+      main_service_id,
+    } = this.state;
+
+    const { industryList, serviceList } = this.props;
+
+    const listView = industryList ? industryList.map((industry) => (
+      <RadioItem
+        key={industry.id}
+        checked={Number(tag_identity_id) === Number(industry.id)}
+        onChange={() => this.handleChangeIndustry(industry.id, industry.name)}
+      >
+        {industry.name}
+      </RadioItem>
+    )) : null;
+
+    const serviceListView = serviceList ? serviceList.map((service) => (
+      <RadioItem
+        key={service.id}
+        checked={Number(main_service_id) === Number(service.id)}
+        onChange={() => this.handleChangeService(service.id, service.name)}
+      >
+        {service.name}
+      </RadioItem>
+    )) : null;
+    
     return (
       <div className="user-edit-basic">
         <NavBar
@@ -170,6 +302,7 @@ export class GuidePage extends React.PureComponent { // eslint-disable-line reac
                 placeholder="输入姓名"
               ></InputItem>}
             >真实姓名</Item>
+            <Item extra={<div style={{ color: '#000' }}>{nature}</div>} onClick={this.handleNature}>公司性质</Item>
             <Item
               extra={<InputItem
                 maxLength={6}
@@ -193,15 +326,15 @@ export class GuidePage extends React.PureComponent { // eslint-disable-line reac
             <Item
               extra={tag_identity_name}
               arrow="horizontal"
-              onClick={() => {
-                browserHistory.push('/userEditIdentity');
-              }}
+              onClick={this.handleSelectIndustry}
             >选择行业角色</Item>
             <Item
               extra={main_service_name}
               arrow="horizontal"
               onClick={() => {
-                browserHistory.push('/userEditService');
+                serviceList && this.setState({
+                  showService: true,
+                });
               }}
             >选择主营类别</Item>
           </List>
@@ -211,28 +344,77 @@ export class GuidePage extends React.PureComponent { // eslint-disable-line reac
             <Button className="btn" type="primary" onClick={this.saveInfo}>下一步</Button>
           </WingBlank>
         </AppContent>
+        {showIndustry && <AppContent style={{ top: 0, zIndex: 100, background: pallete.white }}>
+          <NavBar
+            mode="light"
+            iconName={false}
+            leftContent={<Icon type={require('icons/ali/返回.svg')} size="sm" color={pallete.theme} />}
+            onLeftClick={() => {
+              this.setState({
+                showIndustry: false,
+              });
+            }}
+          >
+            行业角色
+          </NavBar>
+          <WhiteSpace size="md" />
+          <List>
+            {listView}
+          </List>
+        </AppContent>}
+
+        {showService && <AppContent style={{ top: 0, zIndex: 100, background: pallete.white }}>
+          <NavBar
+            mode="light"
+            iconName={false}
+            leftContent={<Icon type={require('icons/ali/返回.svg')} size="sm" color={pallete.theme} />}
+            onLeftClick={() => {
+              this.setState({
+                showService: false,
+              });
+            }}
+          >
+            主营类别
+          </NavBar>
+          <WhiteSpace size="md" />
+          <List>
+            {serviceListView}
+          </List>
+        </AppContent>}
       </div>
     );
   }
 }
 
 GuidePage.propTypes = {
-  dispatch: PropTypes.func.isRequired,
   currentUser: PropTypes.oneOfType([
     PropTypes.bool,
     PropTypes.object,
   ]),
   industrySon: PropTypes.string,
+  industryList: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.bool,
+  ]),
+  serviceList: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.bool,
+  ]),
+  getIndustry: PropTypes.func,
+  getService: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
   currentUser: makeSelectCurrentUser(),
   industrySon: makeSelectUserCenterIndustrySon(),
+  industryList: makeSelectUserCenterIndustry(),
+  serviceList: makeSelectUserCenterService(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
-    dispatch,
+    getIndustry: () => dispatch(fetchIndustry()),
+    getService: (id) => dispatch(fetchService(id)),
   };
 }
 

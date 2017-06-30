@@ -40,6 +40,8 @@ import {
   CHANGE_MOMENT_TRADE,
 
   PUBLISH_MOMENT,
+
+  FETCH_MY_MOMENTS,
 } from './constants';
 
 import {
@@ -62,6 +64,9 @@ import {
   removeMoment,
 
   loadPublishParams,
+
+  loadMyMoments,
+  loadMyMomentsLoading,
 } from './actions';
 
 
@@ -209,6 +214,11 @@ export function* likeMoment(action) {
     }
 
     yield doRefreshMoment(id);
+
+    const { data: { is_popup }, message } = res;
+    if (is_popup === 0) {
+      Toast.info(message, 1.2);
+    }
   } catch (err) {
     // console.log(err);
   }
@@ -245,6 +255,11 @@ export function* likeComment(action) {
         id,
       }
     });
+
+    const { data: { is_popup }, message } = res;
+    if (is_popup === 0) {
+      Toast.info(message, 1.2);
+    }
   } catch (err) {
     // console.log(err);
   }
@@ -424,6 +439,23 @@ export function* publishMoment(action) {
   }
 }
 
+export function* fetchMyMoments(action) {
+  try {
+    const { type, page } = action.payload;
+    // add refresh status
+    if (page !== 1) {
+      yield put(loadMyMomentsLoading(type, true));
+    }
+
+    const res = yield request.doGet('moments/my-supplier-demand', { reward_as: type, page });
+
+    const { list, page: resPage } = res;
+    yield put(loadMyMoments(type, list, resPage));
+  } catch (err) {
+    // console.log(err);
+  }
+}
+
 export function* defaultSaga() {
   const watcher = yield takeLatest(FETCH_MOMENT_DETAIL, fetchMomentDetail);
   const watcherBusiness = yield takeLatest(FETCH_BUSINESS, fetchBusiness);
@@ -441,6 +473,7 @@ export function* defaultSaga() {
   const watcherSetTop = yield takeLatest(SET_TOP_MOMENT, setTopMoment);
   const watcherChangeMomentTrade = yield takeLatest(CHANGE_MOMENT_TRADE, changeMomentTrade);
   const watcherPublishMoment = yield takeLatest(PUBLISH_MOMENT, publishMoment);
+  const watcherMyMoments = yield takeLatest(FETCH_MY_MOMENTS, fetchMyMoments);
 
   // Suspend execution until location changes
   yield take(LOCATION_CHANGE);
@@ -460,6 +493,7 @@ export function* defaultSaga() {
   yield cancel(watcherSetTop);
   yield cancel(watcherChangeMomentTrade);
   yield cancel(watcherPublishMoment);
+  yield cancel(watcherMyMoments);
 }
 
 // All sagas to be loaded

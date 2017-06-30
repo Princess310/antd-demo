@@ -37,8 +37,6 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
     this.state = {
       type: 2, // type-> 1: 我的供应, 2:我的需求
       startPage: 1,
-      supplierPage: 1,
-      demandPage: 1,
       supplierLoaded: false,
       priceFilter: {
         id: 0,
@@ -118,21 +116,13 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
         return;
       }
 
-      this.setState({
-        supplierPage: supplierPage + 1,
-      });
-
-      getBusiness(type, supplierPage + 1, searchParams);
+      getBusiness(type, businessSupplier.page + 1, searchParams);
     } else {
       if (businessDemand.loading || !businessDemand.hasNext) {
         return;
       }
 
-      this.setState({
-        demandPage: demandPage + 1,
-      });
-
-      getBusiness(type, demandPage + 1, searchParams);
+      getBusiness(type, businessDemand.page + 1, searchParams);
     }
   }
 

@@ -44,6 +44,10 @@ import {
   PUBLISH_MOMENT,
 
   LOAD_PUBLISH_PARAMS,
+
+  FETCH_MY_MOMENTS,
+  LOAD_MY_MOMENTS,
+  LOAD_MY_MOMENTS_LOADING,
 } from './constants';
 
 export function fetchMomentDetail(id) {
@@ -325,6 +329,37 @@ export function loadPublishParams(params) {
     type: LOAD_PUBLISH_PARAMS,
     payload: {
       params,
+    },
+  };
+}
+
+export function fetchMyMoments(type, uid) {
+  return {
+    type: FETCH_MY_MOMENTS,
+    payload: {
+      type,
+      uid,
+    },
+  };
+}
+
+export function loadMyMoments(type, list, page) {
+  return {
+    type: LOAD_MY_MOMENTS,
+    payload: {
+      type,
+      list,
+      page,
+    },
+  };
+}
+
+export function loadMyMomentsLoading(type, loading) {
+  return {
+    type: LOAD_MY_MOMENTS_LOADING,
+    payload: {
+      type,
+      loading,
     },
   };
 }

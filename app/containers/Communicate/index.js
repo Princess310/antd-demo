@@ -26,7 +26,6 @@ export class Communicate extends React.PureComponent { // eslint-disable-line re
 
     this.state = {
       startPage: 1,
-      page: 1,
     };
   }
 
@@ -46,17 +45,13 @@ export class Communicate extends React.PureComponent { // eslint-disable-line re
   }
 
   onEndReached = () => {
-    const { page } = this.state;
     const { communicationList, getList } = this.props;
 
     if (communicationList.loading || !communicationList.hasNext) {
       return;
     }
 
-    getList(page + 1);
-    this.setState({
-      page: page + 1,
-    });
+    getList(communicationList.page + 1);
   }
 
   render() {
@@ -76,7 +71,7 @@ export class Communicate extends React.PureComponent { // eslint-disable-line re
           iconName={false}
           mode="light"
         >
-          交流
+          动态
         </NavBar>
         <div onClick={() => {
           browserHistory.push('/communicateSearch');

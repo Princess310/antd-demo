@@ -8,7 +8,9 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { browserHistory } from 'react-router';
-import { NavBar, ListView, RefreshControl, Icon, ActionSheet, Result, WhiteSpace } from 'antd-mobile';
+import { ScrollContainer } from 'react-router-scroll';
+import TouchLoader from 'components/TouchLoader';
+import { NavBar, Icon, ActionSheet, Result, WhiteSpace } from 'antd-mobile';
 import AppContent from 'components/AppContent';
 import UserMomentHeader from 'components/UserMomentHeader';
 import DateInfo from 'components/DateInfo';
@@ -36,15 +38,8 @@ export class UserCenterCollects extends React.PureComponent { // eslint-disable-
   constructor(props) {
     super(props);
 
-    const dataSource = new ListView.DataSource({
-      rowHasChanged: (row1, row2) => row1 !== row2,
-    });
-
-    this.initData = [];
     this.state = {
       startPage: 1,
-      page: 1,
-      dataSource: dataSource.cloneWithRows(this.initData),
     };
   }
 
@@ -68,10 +63,7 @@ export class UserCenterCollects extends React.PureComponent { // eslint-disable-
       return;
     }
 
-    getCollects(page + 1);
-    this.setState({
-      page: page + 1,
-    });
+    getCollects(collectInfo.page + 1);
   }
 
   showActionSheet = (e, id) => {
@@ -98,51 +90,6 @@ export class UserCenterCollects extends React.PureComponent { // eslint-disable-
   render() {
     const { collectInfo } = this.props;
 
-    const row = (moment) => (
-      <div
-        style={{ borderBottom: `0.01rem ${pallete.border.normal} solid` }}
-        onClick={() => {
-          browserHistory.push({
-            pathname: 'momentDetail',
-            query: {
-              id: moment.moments_id,
-            },
-            state: {
-              type: (moment.category === '3' || moment.reward_as === '2') || (moment.category === '0' || moment.reward_as === '1') ? 'business' : 'communication',
-            },
-          });
-        }}
-      >
-        <UserMomentHeader
-          key={moment.id}
-          user={moment.user}
-          rightContent={
-            <div style={{ width: '0.48rem', height: '0.48rem', textAlign: 'right' }} onClick={(e) => this.showActionSheet(e, moment.id)}>
-              <Icon
-                type={require('icons/ali/下拉.svg')}
-                size="xs"
-                color={pallete.text.words}
-              />
-            </div>
-          }
-        />
-        <div style={WrapperStyle}>
-          <FlexRow style={CollectContentStyle}>
-            {moment.url !== '' && <img role="presentation" style={{ maxWidth: '1.8rem', maxHeight: '1.8rem', marginRight: '0.12rem' }} src={moment.url} />}
-            <div>{moment.content}</div>
-          </FlexRow>
-        </div>
-        <DateInfo
-          time={moment.created_at}
-          style={{
-            textAlign: 'right',
-            backgroundColor: pallete.white,
-            padding: '0.24rem',
-          }}
-        />
-      </div>
-    );
-
     return (
       <div>
         <NavBar
@@ -157,28 +104,64 @@ export class UserCenterCollects extends React.PureComponent { // eslint-disable-
           {
             (collectInfo.list && collectInfo.list.length > 0) ?
             (
-              <ListView
-                dataSource={this.state.dataSource.cloneWithRows(collectInfo.list)}
-                renderRow={row}
-                renderFooter={() => (<div style={{ padding: '0.3rem', textAlign: 'center' }}>
-                  {collectInfo.loading ? 'Loading...' : 'Loaded'}
-                </div>)}
-                initialListSize={10}
-                pageSize={10}
-                scrollRenderAheadDistance={200}
-                scrollEventThrottle={20}
-                onScroll={this.onScroll}
-                style={{
-                  height: document.documentElement.clientHeight,
-                }}
-                scrollerOptions={{ scrollbars: true }}
-                refreshControl={<RefreshControl
+              <ScrollContainer scrollKey="user_center_collects">
+                <TouchLoader
+                  initializing={0}
                   refreshing={collectInfo.refresh}
-                  onRefresh={this.onRefresh}
-                />}
-                onEndReached={this.onEndReached}
-                onEndReachedThreshold={10}
-              />
+                  onRefresh={() => this.onRefresh(0)}
+                  hasMore={collectInfo.hasNext}
+                  loading={collectInfo.loading}
+                  onLoadMore={this.onEndReached}
+                  autoLoadMore={true}
+                  className="tloader app-content"
+                  style={{ top: '0' }}
+                >
+                  {collectInfo.list.map((moment) => (
+                    <div
+                      style={{ borderBottom: `0.01rem ${pallete.border.normal} solid` }}
+                      onClick={() => {
+                        browserHistory.push({
+                          pathname: 'momentDetail',
+                          query: {
+                            id: moment.moments_id,
+                          },
+                          state: {
+                            type: (moment.category === '3' || moment.reward_as === '2') || (moment.category === '0' || moment.reward_as === '1') ? 'business' : 'communication',
+                          },
+                        });
+                      }}
+                      key={moment.id}
+                    >
+                      <UserMomentHeader
+                        user={moment.user}
+                        rightContent={
+                          <div style={{ width: '0.48rem', height: '0.48rem', textAlign: 'right' }} onClick={(e) => this.showActionSheet(e, moment.id)}>
+                            <Icon
+                              type={require('icons/ali/下拉.svg')}
+                              size="xs"
+                              color={pallete.text.words}
+                            />
+                          </div>
+                        }
+                      />
+                      <div style={WrapperStyle}>
+                        <FlexRow style={CollectContentStyle}>
+                          {moment.url !== '' && <img role="presentation" style={{ maxWidth: '1.8rem', maxHeight: '1.8rem', marginRight: '0.12rem' }} src={moment.url} />}
+                          <div>{moment.content}</div>
+                        </FlexRow>
+                      </div>
+                      <DateInfo
+                        time={moment.created_at}
+                        style={{
+                          textAlign: 'right',
+                          backgroundColor: pallete.white,
+                          padding: '0.24rem',
+                        }}
+                      />
+                    </div>
+                  ))}
+                </TouchLoader>
+              </ScrollContainer>
             ) : (
               <div>
                 <WhiteSpace size="xs" />

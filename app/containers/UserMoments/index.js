@@ -10,9 +10,11 @@ import { createStructuredSelector } from 'reselect';
 import { browserHistory } from 'react-router';
 import pallete from 'styles/colors';
 
+import { ScrollContainer } from 'react-router-scroll';
+import TouchLoader from 'components/TouchLoader';
 import AppContent from 'components/AppContent';
 import MomentCard from 'components/MomentCard';
-import { NavBar, SegmentedControl, Tabs, ListView, RefreshControl, Icon } from 'antd-mobile';
+import { NavBar, SegmentedControl, Tabs, Icon } from 'antd-mobile';
 import { makeSelectUserMomentDemand, makeSelectUserMomentSupplier } from 'containers/UserCenter/selectors';
 import { makeSelectCurrentUser } from 'containers/HomePage/selectors';
 import { fetchUserMoments } from 'containers/UserCenter/actions';
@@ -20,25 +22,15 @@ import { fetchUserMoments } from 'containers/UserCenter/actions';
 export class UserMoments extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
     super(props);
-    const dataSourceSupplier = new ListView.DataSource({
-      rowHasChanged: (row1, row2) => row1 !== row2,
-    });
 
-    const dataSourceDemand = new ListView.DataSource({
-      rowHasChanged: (row1, row2) => row1 !== row2,
-    });
-
-    this.initData = [];
     this.state = {
       type: 2, // type-> 1: 我的供应, 2:我的需求
       startPage: 1,
       supplier: {
         page: 1,
-        dataSourceSupplier: dataSourceSupplier.cloneWithRows(this.initData),
       },
       demand: {
         page: 1,
-        dataSourceDemand: dataSourceDemand.cloneWithRows(this.initData),
       },
       supplierLoaded: false,
     };
@@ -66,25 +58,13 @@ export class UserMoments extends React.PureComponent { // eslint-disable-line re
         return;
       }
 
-      getMoments(type, supplier.page + 1);
-      this.setState({
-        supplier: {
-          ...supplier,
-          page: supplier.page + 1,
-        },
-      });
+      getMoments(type, momentSupplier.page + 1);
     } else {
       if (momentDemand.loading || !momentDemand.hasNext) {
         return;
       }
 
-      getMoments(type, demand.page + 1);
-      this.setState({
-        demand: {
-          ...mindemande,
-          page: demand.page + 1,
-        },
-      });
+      getMoments(type, momentDemand.page + 1);
     }
   }
 
@@ -114,16 +94,6 @@ export class UserMoments extends React.PureComponent { // eslint-disable-line re
     const { type } = this.state;
     const { momentDemand, momentSupplier, currentUser } = this.props;
 
-    const row = (moment) => (
-      <MomentCard
-        moment={moment}
-        currentUser={currentUser}
-        from="list"
-        type="business"
-        style={{ marginTop: '0.12rem' }}
-      />
-    );
-
     return (
       <div>
         <NavBar
@@ -141,53 +111,59 @@ export class UserMoments extends React.PureComponent { // eslint-disable-line re
         </NavBar>
         <AppContent>
           {(type === 2 && momentDemand.list && momentDemand.list.length > 0) &&
-            <ListView
-              dataSource={this.state.demand.dataSourceDemand.cloneWithRows(momentDemand.list)}
-              renderRow={row}
-              renderFooter={() => (<div style={{ padding: '0.3rem', textAlign: 'center' }}>
-                {momentDemand.loading ? 'Loading...' : 'Loaded'}
-              </div>)}
-              initialListSize={10}
-              pageSize={10}
-              scrollRenderAheadDistance={200}
-              scrollEventThrottle={20}
-              onScroll={this.onScroll}
-              style={{
-                height: document.documentElement.clientHeight,
-              }}
-              scrollerOptions={{ scrollbars: true }}
-              refreshControl={<RefreshControl
+            <ScrollContainer scrollKey="user_moment_demand">
+              <TouchLoader
+                initializing={0}
                 refreshing={momentDemand.refresh}
                 onRefresh={() => this.onRefresh(2)}
-              />}
-              onEndReached={this.onEndReached}
-              onEndReachedThreshold={10}
-            />
+                hasMore={momentDemand.hasNext}
+                loading={momentDemand.loading}
+                onLoadMore={this.onEndReached}
+                autoLoadMore={true}
+                className="tloader app-content"
+                style={{ top: '0' }}
+              >
+                {momentDemand.list.map((moment) => (
+                  <div key={moment.id}>
+                    <MomentCard
+                      moment={moment}
+                      currentUser={currentUser}
+                      from="list"
+                      type="business"
+                      style={{ marginTop: '0.12rem' }}
+                    />
+                  </div>
+                ))}
+              </TouchLoader>
+            </ScrollContainer>
           }
 
           {(type === 1 && momentSupplier.list && momentSupplier.list.length > 0) &&
-            <ListView
-              dataSource={this.state.demand.dataSourceSupplier.cloneWithRows(momentSupplier.list)}
-              renderRow={row}
-              renderFooter={() => (<div style={{ padding: '0.3rem', textAlign: 'center' }}>
-                {momentSupplier.loading ? 'Loading...' : 'Loaded'}
-              </div>)}
-              initialListSize={10}
-              pageSize={10}
-              scrollRenderAheadDistance={200}
-              scrollEventThrottle={20}
-              onScroll={this.onScroll}
-              style={{
-                height: document.documentElement.clientHeight,
-              }}
-              scrollerOptions={{ scrollbars: true }}
-              refreshControl={<RefreshControl
+            <ScrollContainer scrollKey="user_moment_supplier">
+              <TouchLoader
+                initializing={0}
                 refreshing={momentSupplier.refresh}
-                onRefresh={() => this.onRefresh(2)}
-              />}
-              onEndReached={this.onEndReached}
-              onEndReachedThreshold={10}
-            />
+                onRefresh={() => this.onRefresh(1)}
+                hasMore={momentSupplier.hasNext}
+                loading={momentSupplier.loading}
+                onLoadMore={this.onEndReached}
+                autoLoadMore={true}
+                className="tloader app-content"
+                style={{ top: '0' }}
+              >
+                {momentSupplier.list.map((moment) => (
+                  <div key={moment.id}>
+                    <MomentCard
+                      moment={moment}
+                      currentUser={currentUser}
+                      from="list"
+                      type="business"
+                      style={{ marginTop: '0.12rem' }}
+                    />
+                  </div>
+                ))}
+              </TouchLoader>
+            </ScrollContainer>
           }
         </AppContent>
       </div>

@@ -44,6 +44,7 @@ const makeSelectUserVisitorUsers = () => createSelector(
   (substate) => {
     const info = substate.get('visitorUsers');
     return {
+      page: info.get('page'),
       refresh: info.get('refresh'),
       loading: info.get('loading'),
       list: info.get('list'),
@@ -57,6 +58,7 @@ const makeSelectUserVisitorMine = () => createSelector(
   (substate) => {
     const info = substate.get('visitorMine');
     return {
+      page: info.get('page'),
       refresh: info.get('refresh'),
       loading: info.get('loading'),
       list: info.get('list'),
@@ -70,6 +72,7 @@ const makeSelectUserCollects = () => createSelector(
   (substate) => {
     const info = substate.get('collects');
     return {
+      page: info.get('page'),
       refresh: info.get('refresh'),
       loading: info.get('loading'),
       list: info.get('list'),
@@ -84,6 +87,7 @@ const makeSelectUserMomentDemand = () => createSelector(
   (substate) => {
     const info = substate.get('momentsDemand');
     return {
+      page: info.get('page'),
       refresh: info.get('refresh'),
       loading: info.get('loading'),
       list: info.get('list'),
@@ -97,6 +101,7 @@ const makeSelectUserMomentSupplier = () => createSelector(
   (substate) => {
     const info = substate.get('momentsSupplier');
     return {
+      page: info.get('page'),
       refresh: info.get('refresh'),
       loading: info.get('loading'),
       list: info.get('list'),
@@ -110,6 +115,7 @@ const makeSelectUserCommunication = () => createSelector(
   (substate) => {
     const info = substate.get('communication');
     return {
+      page: info.get('page'),
       refresh: info.get('refresh'),
       loading: info.get('loading'),
       list: info.get('list'),

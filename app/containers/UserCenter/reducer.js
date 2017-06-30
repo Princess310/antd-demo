@@ -56,36 +56,42 @@ const initialState = fromJS({
   followUser: false,
   pointsRules: false,
   visitorUsers: {
+    page: 1,
     refresh: false,
     loading: false,
     list: false,
     hasNext: false,
   },
   visitorMine: {
+    page: 1,
     refresh: false,
     loading: false,
     list: false,
     hasNext: false,
   },
   collects: {
+    page: 1,
     refresh: false,
     loading: false,
     list: false,
     hasNext: false,
   },
   momentsSupplier: {
+    page: 1,
     refresh: false,
     loading: false,
     list: false,
     hasNext: false,
   },
   momentsDemand: {
+    page: 1,
     refresh: false,
     loading: false,
     list: false,
     hasNext: false,
   },
   communication: {
+    page: 1,
     refresh: false,
     loading: false,
     list: false,
@@ -127,6 +133,7 @@ function userCenterReducer(state = initialState, action) {
       const oldList = info.get('list') ? info.get('list') : [];
       let newList = [];
       let hasNext = true;
+      let newPage = info.get('page');
 
       if (page) {
         if (page.current_page === 1) {
@@ -138,11 +145,14 @@ function userCenterReducer(state = initialState, action) {
         if (page.current_page >= page.page_count) {
           hasNext = false;
         }
+
+        newPage = page.current_page;
       } else {
         hasNext = false;
       }
 
       const result = info.set('list', newList)
+        .set('page', newPage)
         .set('hasNext', hasNext)
         .set('refresh', false)
         .set('loading', false);
@@ -170,6 +180,7 @@ function userCenterReducer(state = initialState, action) {
       const oldList = info.get('list') ? info.get('list') : [];
       let newList = [];
       let hasNext = true;
+      let newPage = info.get('page');
 
       if (page) {
         if (page.current_page === 1) {
@@ -181,11 +192,14 @@ function userCenterReducer(state = initialState, action) {
         if (page.current_page >= page.page_count) {
           hasNext = false;
         }
+
+        newPage = page.current_page;
       } else {
         hasNext = false;
       }
 
       const result = info.set('list', newList)
+        .set('page', newPage)
         .set('hasNext', hasNext)
         .set('refresh', false)
         .set('loading', false);
@@ -224,6 +238,7 @@ function userCenterReducer(state = initialState, action) {
       const oldList = info.get('list') ? info.get('list') : [];
       let newList = [];
       let hasNext = true;
+      let newPage = info.get('page')
 
       if (page) {
         if (page.current_page === 1) {
@@ -235,11 +250,14 @@ function userCenterReducer(state = initialState, action) {
         if (page.current_page >= page.page_count) {
           hasNext = false;
         }
+
+        newPage = page.current_page;
       } else {
         hasNext = false;
       }
 
       const result = info.set('list', newList)
+        .set('page', newPage)
         .set('hasNext', hasNext)
         .set('refresh', false)
         .set('loading', false);
@@ -277,6 +295,7 @@ function userCenterReducer(state = initialState, action) {
       const oldList = info.get('list') ? info.get('list') : [];
       let newList = [];
       let hasNext = true;
+      let newPage = info.get('page')
 
       if (page) {
         if (page.current_page === 1) {
@@ -288,11 +307,14 @@ function userCenterReducer(state = initialState, action) {
         if (page.current_page >= page.page_count) {
           hasNext = false;
         }
+
+        newPage = page.current_page;
       } else {
         hasNext = false;
       }
 
       const result = info.set('list', newList)
+        .set('page', newPage)
         .set('hasNext', hasNext)
         .set('refresh', false)
         .set('loading', false);

@@ -26,6 +26,9 @@ import {
   LOAD_BUSINESS_SEARCH_ALL_LOADING,
 
   LOAD_PUBLISH_PARAMS,
+
+  LOAD_MY_MOMENTS,
+  LOAD_MY_MOMENTS_LOADING,
 } from './constants';
 
 const initialState = fromJS({
@@ -38,18 +41,33 @@ const initialState = fromJS({
   // record params when publish moment
   publishParams: {},
   searchAll: {
+    page: 1,
     loading: false,
     list: false,
     hasNext: false,
   },
   businessSupplier: {
+    page: 1,
     refresh: false,
     loading: false,
     list: false,
     hasNext: false,
   },
   businessDemand: {
+    page: 1,
     refresh: false,
+    loading: false,
+    list: false,
+    hasNext: false,
+  },
+  myMomentsDemand: {
+    page: 1,
+    loading: false,
+    list: false,
+    hasNext: false,
+  },
+  myMomentsSupplier: {
+    page: 1,
     loading: false,
     list: false,
     hasNext: false,
@@ -136,6 +154,7 @@ function businessPageReducer(state = initialState, action) {
       const oldList = info.get('list') ? info.get('list') : [];
       let newList = [];
       let hasNext = true;
+      let newPage = info.get('page');
 
       if (page) {
         if (page.current_page === 1) {
@@ -147,11 +166,14 @@ function businessPageReducer(state = initialState, action) {
         if (page.current_page >= page.page_count) {
           hasNext = false;
         }
+
+        newPage = page.current_page;
       } else {
         hasNext = false;
       }
 
       const result = info.set('list', newList)
+        .set('page', newPage)
         .set('hasNext', hasNext)
         .set('refresh', false)
         .set('loading', false);
@@ -212,6 +234,7 @@ function businessPageReducer(state = initialState, action) {
       const oldList = info.get('list') ? info.get('list') : [];
       let newList = [];
       let hasNext = true;
+      let newPage = info.get('page');
 
       if (page) {
         if (page.current_page === 1) {
@@ -223,11 +246,14 @@ function businessPageReducer(state = initialState, action) {
         if (page.current_page >= page.page_count) {
           hasNext = false;
         }
+
+        newPage = page.current_page;
       } else {
         hasNext = false;
       }
 
       const result = info.set('list', newList)
+        .set('page', newPage)
         .set('hasNext', hasNext)
         .set('loading', false);
 
@@ -254,6 +280,45 @@ function businessPageReducer(state = initialState, action) {
       }
 
       return state.set('publishParams', newParams);
+    }
+    case LOAD_MY_MOMENTS: {
+      const { type, list, page } = action.payload;
+      const info = type === 1 ? state.get('myMomentsSupplier') : state.get('myMomentsDemand');
+
+      const oldList = info.get('list') ? info.get('list') : [];
+      let newList = [];
+      let hasNext = true;
+      let newPage = info.get('page');
+
+      if (page) {
+        if (page.current_page === 1) {
+          newList = list;
+        } else if (page.current_page <= page.page_count) {
+          newList = [...oldList, ...list];
+        }
+
+        if (page.current_page >= page.page_count) {
+          hasNext = false;
+        }
+
+        newPage = page.current_page;
+      } else {
+        hasNext = false;
+      }
+
+      const result = info.set('list', newList)
+        .set('page', newPage)
+        .set('hasNext', hasNext)
+        .set('loading', false);
+
+      return type === 1 ? state.set('myMomentsSupplier', result) : state.set('myMomentsDemand', result);
+    }
+    case LOAD_BUSINESS_LOADING: {
+      const { type, loading } = action.payload;
+      const info = type === 1 ? state.get('myMomentsSupplier') : state.get('myMomentsDemand');
+
+      const result = info.set('loading', loading);
+      return type === 1 ? state.set('myMomentsSupplier', result) : state.set('myMomentsDemand', result);
     }
     default:
       return state;

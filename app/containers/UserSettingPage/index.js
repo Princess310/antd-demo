@@ -31,12 +31,12 @@ export class UserSettingPage extends React.PureComponent { // eslint-disable-lin
         </NavBar>
         <WhiteSpace size="md" />
         <List>
-          <Item
+          {/*<Item
             arrow="horizontal"
             onClick={() => {
               browserHistory.push('/userPrivacy');
             }}
-          >隐私设定</Item>
+          >隐私设定</Item>*/}
           <Item
             arrow="horizontal"
             onClick={() => {

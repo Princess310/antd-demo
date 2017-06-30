@@ -45,7 +45,6 @@ export class CommunicateSearch extends React.PureComponent { // eslint-disable-l
     this.state = {
       step: 1, // 1 -> search, 2 -> search result
       keyword: '',
-      page: 1,
       historyList: historyList ? JSON.parse(historyList) : [],
     }
   }
@@ -119,12 +118,14 @@ export class CommunicateSearch extends React.PureComponent { // eslint-disable-l
   }
 
   onEndReached = () => {
-    const { keyword, page } = this.state;
+    const { keyword } = this.state;
+    const { searchPanel } = this.props;
 
-    this.setState({
-      page: page + 1,
-    });
-    this.props.doSearch(keyword, page + 1);
+    if (searchPanel.loading || !searchPanel.hasNext) {
+      return;
+    }
+
+    this.props.doSearch(keyword, searchPanel.page + 1);
   }
 
   render() {

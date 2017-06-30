@@ -24,6 +24,7 @@ const makeSelectUserBusinessDemand = () => createSelector(
   (substate) => {
     const info = substate.get('businessDemand');
     return {
+      page: info.get('page'),
       refresh: info.get('refresh'),
       loading: info.get('loading'),
       list: info.get('list'),
@@ -37,6 +38,7 @@ const makeSelectUserBusinessSupplier = () => createSelector(
   (substate) => {
     const info = substate.get('businessSupplier');
     return {
+      page: info.get('page'),
       refresh: info.get('refresh'),
       loading: info.get('loading'),
       list: info.get('list'),
@@ -87,6 +89,7 @@ const makeSelectBusinessSearchAll = () => createSelector(
   (substate) => {
     const info = substate.get('searchAll');
     return {
+      page: info.get('page'),
       loading: info.get('loading'),
       list: info.get('list'),
       hasNext: info.get('hasNext'),
@@ -97,6 +100,32 @@ const makeSelectBusinessSearchAll = () => createSelector(
 const makeSelectPublishParams = () => createSelector(
   selectBusiness,
   (substate) => substate.get('publishParams')
+);
+
+const makeSelectMyMomentsDemand = () => createSelector(
+  selectBusiness,
+  (substate) => {
+    const info = substate.get('myMomentsDemand');
+    return {
+      page: info.get('page'),
+      loading: info.get('loading'),
+      list: info.get('list'),
+      hasNext: info.get('hasNext'),
+    };
+  }
+);
+
+const makeSelectMyMomentsSupplier = () => createSelector(
+  selectBusiness,
+  (substate) => {
+    const info = substate.get('myMomentsSupplier');
+    return {
+      page: info.get('page'),
+      loading: info.get('loading'),
+      list: info.get('list'),
+      hasNext: info.get('hasNext'),
+    };
+  }
 );
 
 export {
@@ -111,4 +140,6 @@ export {
   makeSelectBusinessSearchPanel,
   makeSelectBusinessSearchAll,
   makeSelectPublishParams,
+  makeSelectMyMomentsDemand,
+  makeSelectMyMomentsSupplier,
 };

@@ -42,3 +42,7 @@ export const CHANGE_MOMENT_TRADE = 'app/BusinessPage/CHANGE_MOMENT_TRADE';
 
 export const PUBLISH_MOMENT = 'app/BusinessPage/PUBLISH_MOMENT';
 export const LOAD_PUBLISH_PARAMS = 'app/BusinessPage/LOAD_PUBLISH_PARAMS';
+
+export const FETCH_MY_MOMENTS = 'app/UserCenter/FETCH_MY_MOMENTS';
+export const LOAD_MY_MOMENTS = 'app/UserCenter/LOAD_MY_MOMENTS';
+export const LOAD_MY_MOMENTS_LOADING = 'app/UserCenter/LOAD_MY_MOMENTS_LOADING';

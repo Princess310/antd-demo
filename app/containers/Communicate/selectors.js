@@ -19,6 +19,7 @@ const makeSelectCommunicate = () => createSelector(
   (substate) => {
     const info = substate.get('communication');
     return {
+      page: info.get('page'),
       refresh: info.get('refresh'),
       loading: info.get('loading'),
       list: info.get('list'),
@@ -32,6 +33,7 @@ const makeSelectCommunicateSearch = () => createSelector(
   (substate) => {
     const info = substate.get('search');
     return {
+      page: info.get('page'),
       loading: info.get('loading'),
       list: info.get('list'),
       hasNext: info.get('hasNext'),

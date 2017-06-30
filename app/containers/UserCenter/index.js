@@ -78,11 +78,15 @@ const verifyStyle = {
 const Item = List.Item;
 const alert = Modal.alert;
 export class UserCenter extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+  state = {
+    point: 0,
+  };
+
   componentDidMount() {
     const { setSelectTab } = this.props;
     
     request.doGet('user/user-new-status').then((res) => {
-      const { data: { status} } = res;
+      const { data: { status } } = res;
 
       if (status === 1) {
          alert('恭喜您成功完成了一次用户认证，获得100次好友申请次数的奖励，去生意频道逛逛吧~', '', [
@@ -208,7 +212,7 @@ export class UserCenter extends React.PureComponent { // eslint-disable-line rea
             onClick={() => {
               browserHistory.push('/userCommunicate');
             }}
-          >我的交流</Item>
+          >我的动态</Item>
           <Item
             thumb={<Icon type={require('icons/ali/收藏.svg')} color={pallete.theme} />}
             arrow="horizontal"

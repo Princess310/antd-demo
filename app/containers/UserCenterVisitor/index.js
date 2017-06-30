@@ -10,11 +10,13 @@ import { createStructuredSelector } from 'reselect';
 import { browserHistory } from 'react-router';
 import pallete from 'styles/colors';
 
+import { ScrollContainer } from 'react-router-scroll';
+import TouchLoader from 'components/TouchLoader';
 import UserHeaderBar from 'components/UserHeaderBar';
 import DateInfo from 'components/DateInfo';
 import UserSubInfoBar from 'components/UserSubInfoBar';
 import AppContent from 'components/AppContent';
-import { NavBar, Tabs, ListView, RefreshControl, Icon } from 'antd-mobile';
+import { NavBar, Tabs, Icon } from 'antd-mobile';
 
 import { fetchVistor } from 'containers/UserCenter/actions';
 import { makeSelectUserVisitorUsers, makeSelectUserVisitorMine } from 'containers/UserCenter/selectors';
@@ -23,25 +25,15 @@ const TabPane = Tabs.TabPane;
 export class UserCenterVisitor extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
     super(props);
-    const dataSourceUsers = new ListView.DataSource({
-      rowHasChanged: (row1, row2) => row1 !== row2,
-    });
 
-    const dataSourceMine = new ListView.DataSource({
-      rowHasChanged: (row1, row2) => row1 !== row2,
-    });
-
-    this.initData = [];
     this.state = {
       type: 0, // type-> 0: 我的访客, 1:访问我的
       startPage: 1,
       users: {
         page: 1,
-        dataSourceUsers: dataSourceUsers.cloneWithRows(this.initData),
       },
       mine: {
         page: 1,
-        dataSourceMine: dataSourceMine.cloneWithRows(this.initData),
       },
       usersLoaded: false,
     };
@@ -128,25 +120,6 @@ export class UserCenterVisitor extends React.PureComponent { // eslint-disable-l
   render() {
     const { visitorUsers, visitorMine } = this.props;
 
-    const row = (user) => (
-      <div>
-        <UserHeaderBar
-          user={user}
-          rightContent={
-            <DateInfo time={user.created_at} style={{ alignSelf: 'flex-end' }} />
-          }
-        />
-        <UserSubInfoBar
-          influence={user.influence}
-          progress={user.integrity_progress}
-          level={user.integrity_level}
-          distance={user.distance}
-          city={user.city_name}
-          style={{ marginBottom: '0.16rem' }}
-        />
-      </div>
-    );
-
     return (
       <div>
         <NavBar
@@ -162,56 +135,76 @@ export class UserCenterVisitor extends React.PureComponent { // eslint-disable-l
             <TabPane tab="谁看过我" key="1">
               {
                 (visitorMine.list && visitorMine.list.length > 0) &&
-                <ListView
-                  dataSource={this.state.mine.dataSourceMine.cloneWithRows(visitorMine.list)}
-                  renderRow={row}
-                  renderFooter={() => (<div style={{ padding: '0.3rem', textAlign: 'center' }}>
-                    {visitorMine.loading ? 'Loading...' : 'Loaded'}
-                  </div>)}
-                  initialListSize={10}
-                  pageSize={10}
-                  scrollRenderAheadDistance={200}
-                  scrollEventThrottle={20}
-                  onScroll={this.onScroll}
-                  style={{
-                    height: document.documentElement.clientHeight,
-                  }}
-                  scrollerOptions={{ scrollbars: true }}
-                  refreshControl={<RefreshControl
+                <ScrollContainer scrollKey="user_visitor_mine">
+                  <TouchLoader
+                    initializing={0}
                     refreshing={visitorMine.refresh}
-                    onRefresh={() => this.onRefresh(1)}
-                  />}
-                  onEndReached={this.onEndReached}
-                  onEndReachedThreshold={10}
-                />
+                    onRefresh={() => this.onRefresh(0)}
+                    hasMore={visitorMine.hasNext}
+                    loading={visitorMine.loading}
+                    onLoadMore={this.onEndReached}
+                    autoLoadMore={true}
+                    className="tloader app-content"
+                    style={{ top: '0', position: 'relative' }}
+                  >
+                    {visitorMine.list.map((user, i) => (
+                      <div key={i}>
+                        <UserHeaderBar
+                          user={user}
+                          rightContent={
+                            <DateInfo time={user.created_at} style={{ alignSelf: 'flex-end' }} />
+                          }
+                        />
+                        <UserSubInfoBar
+                          influence={user.influence}
+                          progress={user.integrity_progress}
+                          level={user.integrity_level}
+                          distance={user.distance}
+                          city={user.city_name}
+                          style={{ marginBottom: '0.16rem' }}
+                        />
+                      </div>
+                    ))}
+                  </TouchLoader>
+                </ScrollContainer>
               }
             </TabPane>
             <TabPane tab="我看过谁" key="0">
               <div>
                 {
                   (visitorUsers.list && visitorUsers.list.length > 0) &&
-                  <ListView
-                    dataSource={this.state.users.dataSourceUsers.cloneWithRows(visitorUsers.list)}
-                    renderRow={row}
-                    renderFooter={() => (<div style={{ padding: '0.3rem', textAlign: 'center' }}>
-                      {visitorUsers.loading ? 'Loading...' : 'Loaded'}
-                    </div>)}
-                    initialListSize={10}
-                    pageSize={10}
-                    scrollRenderAheadDistance={200}
-                    scrollEventThrottle={20}
-                    onScroll={this.onScroll}
-                    style={{
-                      height: document.documentElement.clientHeight,
-                    }}
-                    scrollerOptions={{ scrollbars: true }}
-                    refreshControl={<RefreshControl
+                  <ScrollContainer scrollKey="user_visitor_users">
+                    <TouchLoader
+                      initializing={0}
                       refreshing={visitorUsers.refresh}
-                      onRefresh={() => this.onRefresh(0)}
-                    />}
-                    onEndReached={this.onEndReached}
-                    onEndReachedThreshold={10}
-                  />
+                      onRefresh={() => this.onRefresh(1)}
+                      hasMore={visitorUsers.hasNext}
+                      loading={visitorUsers.loading}
+                      onLoadMore={this.onEndReached}
+                      autoLoadMore={true}
+                      className="tloader app-content"
+                      style={{ top: '0', position: 'relative' }}
+                    >
+                      {visitorUsers.list.map((user, i) => (
+                        <div key={i}>
+                          <UserHeaderBar
+                            user={user}
+                            rightContent={
+                              <DateInfo time={user.created_at} style={{ alignSelf: 'flex-end' }} />
+                            }
+                          />
+                          <UserSubInfoBar
+                            influence={user.influence}
+                            progress={user.integrity_progress}
+                            level={user.integrity_level}
+                            distance={user.distance}
+                            city={user.city_name}
+                            style={{ marginBottom: '0.16rem' }}
+                          />
+                        </div>
+                      ))}
+                    </TouchLoader>
+                  </ScrollContainer>
                 }
               </div>
             </TabPane>

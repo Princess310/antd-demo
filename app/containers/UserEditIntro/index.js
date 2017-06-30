@@ -11,7 +11,7 @@ import { makeSelectCurrentUser } from 'containers/HomePage/selectors';
 
 import { browserHistory } from 'react-router';
 import pallete from 'styles/colors';
-import { NavBar, List, TextareaItem, WhiteSpace, Icon } from 'antd-mobile';
+import { NavBar, List, TextareaItem, WhiteSpace, Icon, Toast } from 'antd-mobile';
 import MenuBtn from 'components/MenuBtn';
 
 import { saveUser } from 'containers/UserCenter/actions';
@@ -43,6 +43,11 @@ export class UserEditIntro extends React.PureComponent { // eslint-disable-line 
   handleSave = () => {
     const { saveUserInfo } = this.props;
     const { business_intro } = this.state;
+
+    if (business_intro.trim().length > 1000 || business_intro.trim().length < 6) {
+      Toast.info('业务介绍6～1000个字符', 1.5);
+      return;
+    }
 
     saveUserInfo({
       business_intro,

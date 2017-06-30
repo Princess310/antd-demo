@@ -11,16 +11,28 @@ import { browserHistory } from 'react-router';
 import styled from 'styled-components';
 import pallete from 'styles/colors';
 
+import { ScrollContainer } from 'react-router-scroll';
+import TouchLoader from 'components/TouchLoader';
+import CompHeader from 'components/CompHeader';
 import ExpandContent from 'components/UserInfoCard/ExpandContent';
 import Gallery from 'components/UserInfoCard/Gallery';
 import UserInfoCard from 'components/UserInfoCard';
+import MomentInfoCard from 'components/MomentCard/MomentInfoCard';
+import AppContent from 'components/AppContent';
 import { NavBar, Popover, Tabs, WhiteSpace, Icon } from 'antd-mobile';
 
 import { makeSelectUserInfo } from 'containers/UserCenter/selectors';
 import { makeSelectCurrentUser } from 'containers/HomePage/selectors';
+import { makeSelectMyMomentsDemand, makeSelectMyMomentsSupplier } from 'containers/BusinessPage/selectors';
 import { fetchUserInfo, loadUserInfo, doFollow } from 'containers/UserCenter/actions';
+import { fetchMyMoments } from 'containers/BusinessPage/actions';
+
+const ImteWrapper = styled.div`
+  display: flex;
+`;
 
 const Item = Popover.Item;
+const TabPane = Tabs.TabPane;
 export class UserInfo extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
     super(props);
@@ -28,13 +40,17 @@ export class UserInfo extends React.PureComponent { // eslint-disable-line react
     this.state = {
       visiblePopover: false,
       selected: '',
+      startPage: 1,
+      type: 2,
     };
   }
 
   componentWillMount() {
-    const { location: { query: { id } }, getUserInfo } = this.props;
+    const { location: { query: { id } }, getUserInfo, getMyMoments } = this.props;
+    const { type, startPage } = this.state;
 
     getUserInfo(id);
+    getMyMoments(type, startPage);
   }
   
   componentWillUnmount() {
@@ -44,34 +60,94 @@ export class UserInfo extends React.PureComponent { // eslint-disable-line react
   onSelect = (opt) => {
     const value = opt.props.value;
     const { userInfo, followUser } = this.props;
-
-    if (value === 'follow') {
-      const type = userInfo.is_my_friend === 0 ? 'add' : 'cancel';
-      followUser(userInfo.id, type);
-    } else if (value === 'setting') {
+    
+    if (value === 'complaint') {
       browserHistory.push({
-        pathname: '/editUser',
-        query: {
+        pathname: '/complaintUser',
+        state: {
           id: userInfo.id,
+          module: 0,
         },
       });
     }
+
+    // if (value === 'follow') {
+    //   const type = userInfo.is_my_friend === 0 ? 'add' : 'cancel';
+    //   followUser(userInfo.id, type);
+    // } else if (value === 'setting') {
+    //   browserHistory.push({
+    //     pathname: '/editUser',
+    //     query: {
+    //       id: userInfo.id,
+    //     },
+    //   });
+    // }
 
     this.setState({
       visiblePopover: false,
       selected: opt.props.value,
     });
   };
+
   handleVisibleChange = (visiblePopover) => {
     this.setState({
       visiblePopover,
     });
   };
 
-  render() {
-    const { userInfo, currentUser } = this.props;
-    const isSelf = String(currentUser.id) === String(userInfo.id);
+  callback = () => {
+    
+  }
 
+  handleTabClick = () => {
+
+  }
+
+  handleSortList = (list) => {
+    const dateList = [];
+    const sortedList = [];
+
+    list && list.forEach((moment) => {
+      const date = new Date(moment.created_at * 1000);
+      const d = date.getDate();
+      const m = date.getMonth() + 1;
+      const dm = `${d}-${m}`;
+
+      if (dateList.findIndex((i) => i === dm) === -1) {
+        dateList.push(dm);
+        sortedList.push({
+          dm,
+          date: {
+            d,
+            m,
+          },
+          list: [],
+        });
+      }
+
+      sortedList.forEach((sortedObj) => {
+        if (sortedObj.dm === dm) {
+          sortedObj.list.push(moment);
+        }
+      });
+    });
+
+    return sortedList;
+  }
+
+  render() {
+    const { type } = this.state;
+    const { userInfo, currentUser, myDemand, mySupplier } = this.props;
+    const isSelf = String(currentUser.id) === String(userInfo.id);
+    const yearDemandList = [];
+    const yearSupplierList = [];
+
+    const loading = (type === 2 && myDemand.loading) || (type === 1 && mySupplier.loading);
+    const hasNext = (type === 2 && myDemand.hasNext) || (type === 1 && mySupplier.hasNext);
+    
+    const sortedDemand = this.handleSortList(myDemand.list);
+    const sortedSupplier = this.handleSortList(mySupplier.list);
+console.log('sortedDemand', sortedDemand);
     return (
       <div>
         <NavBar
@@ -85,12 +161,8 @@ export class UserInfo extends React.PureComponent { // eslint-disable-line react
               overlayStyle={{ color: 'currentColor' }}
               visible={this.state.visiblePopover}
               overlay={[
-                (!isSelf && <Item key="1" value="follow" data-seed="logId">
-                  {(userInfo && userInfo.is_my_friend > 0 ? '取消关注' : '关注')}
-                </Item>),
-                (!isSelf && <Item key="2" value="setting">资料设置</Item>),
-                (<Item key="3" value="share">
-                  分享健康商信名片
+                (<Item key="1" value="complaint">
+                  投诉
                 </Item>),
               ]}
               align={{
@@ -115,34 +187,81 @@ export class UserInfo extends React.PureComponent { // eslint-disable-line react
         >
           {userInfo ? userInfo.nickname : '用户详情'}
         </NavBar>
-        {userInfo && (
-          <div>
-            <UserInfoCard user={userInfo} />
-            {userInfo.intro !== '' && (
+        <ScrollContainer scrollKey="user_info">
+          <TouchLoader
+            initializing={0}
+            hasMore={hasNext}
+            loading={loading}
+            onLoadMore={this.onEndReached}
+            autoLoadMore={true}
+            className="tloader app-content"
+          >
+            {userInfo && (
               <div>
-                <WhiteSpace size="md" />
-                <ExpandContent title="个人简介" content={userInfo.intro} />
+                <UserInfoCard user={userInfo} />
+                {userInfo.intro !== '' && (
+                  <div>
+                    <WhiteSpace size="md" />
+                    <ExpandContent title="个人简介" content={userInfo.intro} />
+                  </div>
+                )}
+                {userInfo.business_intro !== '' && (
+                  <div>
+                    <WhiteSpace size="md" />
+                    <ExpandContent title="业务介绍" content={userInfo.business_intro} />
+                  </div>
+                )}
+                {
+                  userInfo.pictures.length > 0 && (
+                    <div>
+                      <WhiteSpace size="md" />
+                      <Gallery
+                        title="展示图片"
+                        pictures={userInfo.pictures}
+                      />
+                    </div>
+                  )
+                }
               </div>
             )}
-            {userInfo.business_intro !== '' && (
-              <div>
-                <WhiteSpace size="md" />
-                <ExpandContent title="业务介绍" content={userInfo.business_intro} />
-              </div>
-            )}
-            {
-              userInfo.pictures.length > 0 && (
-                <div>
-                  <WhiteSpace size="md" />
-                  <Gallery
-                    title="展示图片"
-                    pictures={userInfo.pictures}
-                  />
+            <WhiteSpace size="md" />
+            <Tabs defaultActiveKey="1" swipeable={false} onChange={this.callback} onTabClick={this.handleTabClick}>
+              <TabPane tab="Ta的需求" key="1">
+                {sortedDemand.map((sortedObj) => (
+                  <ImteWrapper>
+                    <div><span>{sortedObj.date.d}</span><span>{sortedObj.date.m}</span></div>
+                  </ImteWrapper>
+                ))}
+                {(myDemand.list && myDemand.list.length > 0) && myDemand.list.map((moment) => {
+                  const date = new Date(moment.created_at * 1000);
+                  const year = date.getFullYear();
+
+                  if (yearDemandList.findIndex((y) => y === year) === -1) {
+                    yearDemandList.push(year);
+                    return (
+                      <div key={moment.id}>
+                        <CompHeader>{year}年</CompHeader>
+                        <MomentInfoCard
+                          moment={moment}
+                        />
+                      </div>
+                    );
+                  }
+
+                  return <MomentInfoCard
+                    key={moment.id}
+                    moment={moment}
+                  />;
+                })}
+              </TabPane>
+              <TabPane tab="Ta的供应" key="2">
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '5rem', backgroundColor: '#fff' }}>
+                  选项卡二内容
                 </div>
-              )
-            }
-          </div>
-        )}
+              </TabPane>
+          </Tabs>
+          </TouchLoader>
+        </ScrollContainer>
       </div>
     );
   }
@@ -156,11 +275,16 @@ UserInfo.propTypes = {
   currentUser: PropTypes.object,
   getUserInfo: PropTypes.func,
   followUser: PropTypes.func,
+  myDemand: PropTypes.object,
+  mySupplier: PropTypes.object,
+  getMyMoments: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
   userInfo: makeSelectUserInfo(),
   currentUser: makeSelectCurrentUser(),
+  myDemand: makeSelectMyMomentsDemand(),
+  mySupplier: makeSelectMyMomentsSupplier(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -168,6 +292,7 @@ function mapDispatchToProps(dispatch) {
     getUserInfo: (id) => dispatch(fetchUserInfo(id)),
     saveUserInfo: (data) => dispatch(loadUserInfo(data)),
     followUser: (id, type) => dispatch(doFollow(id, type)),
+    getMyMoments: (type, page) => dispatch(fetchMyMoments(type, page)),
   };
 }
 

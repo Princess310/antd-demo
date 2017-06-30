@@ -13,7 +13,7 @@ import { createStructuredSelector } from 'reselect';
 import { makeSelectCurrentUser } from 'containers/HomePage/selectors';
 import { browserHistory } from 'react-router';
 
-import { NavBar, List, WhiteSpace, InputItem, Icon, ActionSheet } from 'antd-mobile';
+import { NavBar, List, WhiteSpace, InputItem, Icon, ActionSheet, Toast } from 'antd-mobile';
 import Avatar from 'components/Avatar';
 import MenuBtn from 'components/MenuBtn';
 
@@ -96,7 +96,6 @@ export class UserEditBasic extends React.PureComponent { // eslint-disable-line 
       maskClosable: true,
     },
     (buttonIndex) => {
-      console.log('buttonIndex', buttonIndex);
       if (buttonIndex === 0) {
         self.setState({
           nature: '公司',
@@ -132,6 +131,21 @@ export class UserEditBasic extends React.PureComponent { // eslint-disable-line 
   handleSave = () => {
     const { saveUserInfo } = this.props;
     const { avatar, nickname, company, position, nature } = this.state;
+
+    if (nickname.trim().length > 6 || nickname.trim().length < 2) {
+      Toast.info('真实姓名：2-6个字', 1.5);
+      return;
+    }
+
+    if (company.trim().length > 15 || company.trim().length < 2) {
+      Toast.info('公司：2-15个字', 1.5);
+      return;
+    }
+
+    if (position.trim().length > 8 || position.trim().length < 2) {
+      Toast.info('职位：2-8个字', 1.5);
+      return;
+    }
 
     saveUserInfo({
       avatar,

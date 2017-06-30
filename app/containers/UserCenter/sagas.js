@@ -118,7 +118,7 @@ export function* fetchIndustry() {
     const { list } = res;
     // industry list set in first child for back data
     const { children, id } = list[0];
-    yield put(loadIndustry(children));
+    yield put(loadIndustry(children));console.log('id', id);
     yield put(loadIndustrySon(id));
   } catch (err) {
     // console.log(err);

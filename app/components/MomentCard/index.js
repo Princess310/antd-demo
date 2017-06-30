@@ -104,6 +104,7 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
       src: p,
       w: length,
       h: length,
+      doGetSlideDimensions: true,
     }));
 
     const options = {
@@ -124,6 +125,47 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
     };
 
     const gallery = new PhotoSwipe(pswpElement, PhotoSwipeUIdefault, items, options);
+
+    function getSlideDimensions(slide) {
+
+      if (!slide.doGetSlideDimensions)
+          return;    // make sure we don't keep requesting the image if it doesn't exist etc.
+
+      let img = new Image();
+
+      img.onerror = () => {
+        slide.doGetSlideDimensions = false;
+      };
+
+      img.onload = () => {
+        slide.doGetSlideDimensions = false;
+
+        slide.w = img.naturalWidth;
+        slide.h = img.naturalHeight;
+
+        gallery.invalidateCurrItems();
+        gallery.updateSize(true);
+      }
+
+      img.src = slide.src;
+    }
+
+    gallery.listen("gettingData", function(index, slide){
+      if (slide.doGetSlideDimensions) {
+        setTimeout(
+          // use setTimeout so that it runs in the event loop
+          function(){ getSlideDimensions(slide); }
+          ,300
+        );
+      }
+    });
+
+    gallery.listen("imageLoadComplete", function(index, slide){
+      if (slide.doGetSlideDimensions) {
+        getSlideDimensions(slide);
+      }
+    });
+
     gallery.init();
   }
 
@@ -267,17 +309,19 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
     // check pic length to show
     const picLength = pictures.length === 1 ? '3.5rem' : ((pictures.length === 4 || pictures.length === 2) ? '2.2rem' : '1.45rem')
     const picturesView = pictures.map((pic, i) => (
-      <img
+      <div
         key={i}
-        role="presentation"
-        src={oss.getImgSuitablePath(pic)}
         onClick={(e) => this.handleView(e, i)}
         style={{
+          backgroundImage: `url(${oss.getImgSuitablePath(pic)})`,
+          backgroundPosition: 'center center',
+          backgroundSize: 'cover',
           width: (Number(source_type) === 1 ? '100%' : picLength),
           height: picLength,
           marginTop: '0.06rem',
           marginRight: '0.06rem'
-        }} />
+        }}
+      />
     ));
 
     // check type of moment
@@ -293,7 +337,7 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
     const contentResult = businessType === 'demand' ? `需求描述：${content}` : content;
     const contentView = businessType === 'demand' ? (
       <div>
-        <div>{nickname}在发布他的第<Remark>{demand_counts}</Remark>次需求</div>
+        <div>{nickname}已经发布了<Remark>{demand_counts}</Remark>条需求</div>
         <div>需求类别：<Remark>{item_name}</Remark></div>
         <div>需求数量：{section === '' ? '不限' : section}</div>
         <div>{contentResult}</div>
@@ -351,6 +395,7 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
             source_type={source_type}
             trade_status={trade_status}
             businessType={businessType}
+            created_at={created_at}
             {...other}
             rightContent={(
               from !== 'search' && <div style={{ width: '0.48rem', height: '0.48rem', textAlign: 'right', zIndex: 20 }} onClick={this.showActionSheet}>
