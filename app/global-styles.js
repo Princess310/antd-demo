@@ -109,6 +109,41 @@ injectGlobal`
     }
   }
 
+  .am-segment {
+    &.demand-dot {
+      .am-segment-item {
+        &:first-child {
+          &:after {
+            position: absolute;
+            top: 0.16rem;
+            right: 0.2rem;
+            width: 0.16rem;
+            height: 0.16rem;
+            content: '';
+            background-color: #ff5b05;
+            border-radius: 50%;
+          }
+        }
+      }
+    }
+    &.supplier-dot {
+      .am-segment-item {
+        &:last-child {
+          &:after {
+            position: absolute;
+            top: 0.16rem;
+            right: 0.2rem;
+            width: 0.16rem;
+            height: 0.16rem;
+            content: '';
+            background-color: #ff5b05;
+            border-radius: 50%;
+          }
+        }
+      }
+    }
+  }
+
   .t-l {
     text-align: left;
   }

@@ -9,7 +9,12 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import pallete from 'styles/colors';
 import oss from 'utils/oss';
+import request from 'utils/request';
+import shareUtil from 'utils/shareUtil';
+
 import { browserHistory } from 'react-router';
+
+import logo from 'assets/images/logo-icon.png';
 
 import PhotoSwipe from 'photoswipe';
 import PhotoSwipeUIdefault from 'photoswipe/dist/photoswipe-ui-default';
@@ -74,9 +79,8 @@ const buttonStyle = {
 }
 
 const shareIconList = [
-  { icon: <Icon type={require('icons/share/微博icon.svg')} color={pallete.theme} />, title: '新浪微博' },
-  { icon: <Icon type={require('icons/share/微信icon.svg')} color={pallete.theme} />, title: '微信好友' },
-  { icon: <Icon type={require('icons/share/QQicon.svg')} color={pallete.theme} />, title: 'QQ' },
+  { icon: <Icon type={require('icons/share/微博icon.svg')} color={pallete.theme} />, title: '新浪微博', type: 'sina' },
+  { icon: <Icon type={require('icons/share/QQicon.svg')} color={pallete.theme} />, title: 'QQ', type: 'qq' },
 ];
 
 const operation = Modal.operation;
@@ -255,10 +259,27 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
   handleShare = (e) => {
     e.preventDefault();
     e.stopPropagation();
+    const { currentUser, moment } = this.props;
+    const { id, content, pictures } = moment;
 
     ActionSheet.showShareActionSheetWithOptions({
       options: shareIconList,
       message: '分享动态',
+    },
+    (index) => {
+      if (index > -1) {
+        const type = shareIconList[index].type;
+        shareUtil.config(type, {
+          url: `${request.getWebRoot()}public_share.html?type=momment&id=${id}`,
+          title: content !== '' ? content : `分享${currentUser.nickname}的健康商信动态`,
+          pic: pictures.length > 0 ? pictures[0] : `${request.getWebRoot()}${logo}`,
+          content: `健康产业APP：` +
+                    `${currentUser.company !== '' ? currentUser.company + '.' : ''}` +
+                    `${currentUser.position !== '' ? currentUser.position + '.' : ''}` +
+                    `${currentUser.nickname}` +
+                    `在分享动态，邀请您也来分享！`,
+        });
+      }
     });
   }
 
@@ -292,6 +313,7 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
       category,
       reward_as,
       demand_counts,
+      is_my_friend,
       ...other,
     } = moment;
 
@@ -360,6 +382,9 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
       backgroundColor: pallete.yellow,
       color: pallete.white,
     };
+
+    // check is self
+    const isSelf = String(currentUser.id) === String(uid);
 
     return (
       <div
@@ -466,11 +491,23 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
             {Number(source_type) !== 1 && (
               (Number(hits) > 0 && from !== 'search') && <div style={{ fontSize: '0.26rem', color: pallete.text.help }}>{hits}人看过</div>
             )}
-            {type === 'business' && <Button style={{backgroundColor: themeColor, ...buttonStyle}}>加好友</Button>}
+            {(type === 'business' && Number(is_my_friend) === 0 && !isSelf) && <Button style={{backgroundColor: themeColor, ...buttonStyle}} onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              browserHistory.push({
+                pathname: '/addFriend',
+                state: {
+                  id: uid,
+                  name: nickname,
+                  flag: (businessType === 'demand' ? 1 : 2),
+                  moments_id: id,
+                },
+              });
+            }}>加好友</Button>}
           </ContentWrapper>
           {from === 'list' && 
             <FlexSB style={{ paddingLeft: (type === 'business' ? '2.6rem' : '3.6rem'), paddingRight: '0.12rem', fontSize: '0.28rem', color: themeColor }}>
-              {(type === 'business' && String(uid) === String(currentUser.id)) &&
+              {(type === 'business' && isSelf) &&
                 <FlexSB onClick={this.handleSetTop}>
                   <Icon type={require('icons/ali/置顶.svg')} size="sm" />
                   <span style={{ marginLeft: '0.04rem' }}>置顶</span>

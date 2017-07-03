@@ -17,6 +17,10 @@ import {
   loadCommunicateSearchLoading,
 } from './actions';
 
+import {
+  fetchUnreadDot,
+} from 'containers/HomePage/sagas';
+
 export function* fetchCommunicate(action) {
   try {
     const { page } = action.payload;
@@ -31,6 +35,7 @@ export function* fetchCommunicate(action) {
 
     const { list, page: resPage } = res;
     yield put(loadCommunicate(list, resPage));
+    yield fetchUnreadDot();
   } catch (err) {
     // console.log(err);
   }

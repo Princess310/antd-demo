@@ -11,6 +11,10 @@ import { browserHistory } from 'react-router';
 import styled from 'styled-components';
 import pallete from 'styles/colors';
 
+import request from 'utils/request';
+import shareUtil from 'utils/shareUtil';
+import logo from 'assets/images/logo-icon.png';
+
 import AppContent from 'components/AppContent';
 import MomentCard from 'components/MomentCard';
 import UserHeaderBar from 'components/UserHeaderBar';
@@ -39,6 +43,10 @@ const ActionWrapper = styled(FlexSB)`
   background-color: ${pallete.white};
   z-index: 20;
 `
+const shareIconList = [
+  { icon: <Icon type={require('icons/share/微博icon.svg')} color={pallete.theme} />, title: '新浪微博', type: 'sina' },
+  { icon: <Icon type={require('icons/share/QQicon.svg')} color={pallete.theme} />, title: 'QQ', type: 'qq' },
+];
 
 const TabPane = Tabs.TabPane;
 export class MomentDetail extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
@@ -131,6 +139,33 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
           doCollectMoment(momentDetail.id);
         }
       });
+  }
+
+  handleShare = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const { currentUser, momentDetail } = this.props;
+    const { id, content, pictures } = momentDetail;
+
+    ActionSheet.showShareActionSheetWithOptions({
+      options: shareIconList,
+      message: '分享动态',
+    },
+    (index) => {
+      if (index > -1) {
+        const type = shareIconList[index].type;
+        shareUtil.config(type, {
+          url: `${request.getWebRoot()}public_share.html?type=momment&id=${id}`,
+          title: content !== '' ? content : `分享${currentUser.nickname}的健康商信动态`,
+          pic: pictures.length > 0 ? pictures[0] : `${request.getWebRoot()}${logo}`,
+          content: `健康产业APP：` +
+                    `${currentUser.company !== '' ? currentUser.company + '.' : ''}` +
+                    `${currentUser.position !== '' ? currentUser.position + '.' : ''}` +
+                    `${currentUser.nickname}` +
+                    `在分享动态，邀请您也来分享！`,
+        });
+      }
+    });
   }
 
   render() {
@@ -250,7 +285,7 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
                 <Icon type={require('icons/ali/点赞.svg')} size="sm" color={(is_like > 0 && businessType === 'status') ? pallete.theme : themeColor} />
                 <span style={{ marginLeft: '0.04rem' }}>{like_count > 0 ? like_count : '点赞'}</span>
               </FlexCenter>
-              <FlexCenter>
+              <FlexCenter onClick={this.handleShare}>
                 <Icon type={require('icons/ali/分享.svg')} size="xxs" />
                 <span style={{ marginLeft: '0.04rem' }}>{share_count > 0 ? share_count : '分享'}</span>
               </FlexCenter>

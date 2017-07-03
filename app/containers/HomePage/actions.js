@@ -19,6 +19,9 @@ import {
   CHANGE_USERNAME,
   FETCH_USER,
   LOAD_SELECT_TAB,
+
+  FETCH_UNREAD_DOT,
+  LOAD_UNREAD_DOT,
 } from './constants';
 
 /**
@@ -42,11 +45,25 @@ export function fetchUser() {
 }
 
 export function loadSelectTab(selectTab) {
-  console.log('selectTab', selectTab);
   return {
     type: LOAD_SELECT_TAB,
     payload: {
       selectTab,
+    },
+  };
+}
+
+export function fetchUnreadDot() {
+  return {
+    type: FETCH_UNREAD_DOT,
+  };
+}
+
+export function loadUnreadDot(data) {
+  return {
+    type: LOAD_UNREAD_DOT,
+    payload: {
+      data,
     },
   };
 }

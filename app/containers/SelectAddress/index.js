@@ -114,7 +114,6 @@ export class SelectAddress extends React.PureComponent { // eslint-disable-line 
           }}
           quickSearchBarStyle={{
             position: 'absolute',
-            top: '1rem',
           }}
           delayTime={10}
           delayActivityIndicator={<div style={{ padding: 25, textAlign: 'center' }}>rendering...</div>}

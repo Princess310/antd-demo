@@ -12,6 +12,7 @@ import { browserHistory } from 'react-router';
 import styled from 'styled-components';
 import pallete from 'styles/colors';
 import request from 'utils/request';
+import shareUtil from 'utils/shareUtil';
 
 import ExpProgress from 'components/ExpProgress';
 import LevelProgress from 'components/LevelProgress';
@@ -20,6 +21,7 @@ import FlexSB from 'components/FlexSB';
 import FlexRow from 'components/FlexRow';
 import { List, Icon, WhiteSpace, Button, ActionSheet, Modal } from 'antd-mobile';
 import userBg from 'assets/images/person-bg.png';
+import logo from 'assets/images/logo-icon.png';
 import { makeSelectCurrentUser } from 'containers/HomePage/selectors';
 import { loadSelectTab } from 'containers/HomePage/actions';
 
@@ -66,9 +68,8 @@ const ItemWrapper = styled.div`
 `;
 
 const shareIconList = [
-  { icon: <Icon type={require('icons/share/微博icon.svg')} color={pallete.theme} />, title: '新浪微博' },
-  { icon: <Icon type={require('icons/share/微信icon.svg')} color={pallete.theme} />, title: '微信好友' },
-  { icon: <Icon type={require('icons/share/QQicon.svg')} color={pallete.theme} />, title: 'QQ' },
+  { icon: <Icon type={require('icons/share/微博icon.svg')} color={pallete.theme} />, title: '新浪微博', type: 'sina' },
+  { icon: <Icon type={require('icons/share/QQicon.svg')} color={pallete.theme} />, title: 'QQ', type: 'qq' },
 ];
 
 const verifyStyle = {
@@ -100,9 +101,22 @@ export class UserCenter extends React.PureComponent { // eslint-disable-line rea
   }
 
   showShareActionSheet = () => {
+    const { currentUser } = this.props;
+
     ActionSheet.showShareActionSheetWithOptions({
       options: shareIconList,
       message: '邀请好友帮你增加影响力',
+    },
+    (index) => {
+      if (index > -1) {
+        const type = shareIconList[index].type;
+        shareUtil.config(type, {
+          title: `${currentUser.nickname}邀请您加入健康商信APP`,
+          pic: `${request.getWebRoot()}${logo}`,
+          content: '80万行业资源平台，找讲师、找厂家、找经销商就上健康商信！',
+          url: request.getWebRoot(),
+        });
+      }
     });
   }
 

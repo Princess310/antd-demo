@@ -46,3 +46,12 @@ export function getQueryString(name) {
 
   return r == null ? (arguments[1] === undefined ? null : arguments[1]) : decodeURIComponent(r[2]);
 }
+
+export function zeroFull(str) {
+  return str >= 10 ? str : `0${str}`;
+}
+
+//去掉所有的html标记
+export function emptyHtml(str) {
+  return str.replace(/<[^>]+>/g,"");
+}

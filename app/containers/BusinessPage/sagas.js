@@ -69,6 +69,9 @@ import {
   loadMyMomentsLoading,
 } from './actions';
 
+import {
+  fetchUnreadDot,
+} from 'containers/HomePage/sagas';
 
 export function* fetchMomentDetail(action) {
   try {
@@ -88,6 +91,7 @@ export function* fetchBusiness(action) {
     // add refresh status
     if (page === 1) {
       yield put(loadBusinessRefresh(type, true));
+      yield fetchUnreadDot();
     } else {
       yield put(loadBusienssLoading(type, true));
     }

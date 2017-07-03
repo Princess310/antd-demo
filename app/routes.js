@@ -460,6 +460,14 @@ export default function createRoutes(store) {
               .then(loadModule(cb))
               .catch(errorLoading);
           },
+        }, {
+          path: 'addFriend',
+          name: 'addFriendPage',
+          getComponent(location, cb) {
+            import('containers/AddFriendPage')
+              .then(loadModule(cb))
+              .catch(errorLoading);
+          },
         },
       ],
     }, {

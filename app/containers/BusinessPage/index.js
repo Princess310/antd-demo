@@ -19,7 +19,7 @@ import FlexRow from 'components/FlexRow';
 import { NavBar, SegmentedControl, Icon, ActionSheet, Modal } from 'antd-mobile';
 
 import { makeSelectUserBusinessDemand, makeSelectUserBusinessSupplier, makeSelectBusinessFilter } from './selectors';
-import { makeSelectCurrentUser } from 'containers/HomePage/selectors';
+import { makeSelectCurrentUser, makeSelectUnreadDot } from 'containers/HomePage/selectors';
 import { makeSelectUserCenterIndustry } from 'containers/UserCenter/selectors';
 
 import FilterPanel from './FilterPanel';
@@ -231,10 +231,12 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
 
   render() {
     const { type, priceFilter, numberFilter, rewardDemandFilter, rewardSupplierFilter, industryFilter } = this.state;
-    const { businessDemand, businessSupplier, currentUser, filters, industryList } = this.props;
+    const { businessDemand, businessSupplier, currentUser, filters, industryList, unreadDot } = this.props;
     const { price, number, reward } = filters;
 
     const themeColor = type === 2 ? pallete.theme : pallete.yellow;
+    const demandMenuClass = unreadDot.demand_red_dot && Number(unreadDot.demand_red_dot) > 0 ? 'demand-dot' : '';
+    const supplierMenuClass = unreadDot.supplier_red_dot && Number(unreadDot.supplier_red_dot) > 0 ? 'supplier-dot' : '';
 
     return (
       <div>
@@ -261,6 +263,7 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
             style={{ height: '0.3rem', width: '3rem' }}
             onChange={this.onChangeTitle}
             tintColor={themeColor}
+            className={`${demandMenuClass} ${supplierMenuClass}`}
           />
         </NavBar>
         {type === 2 ?
@@ -401,6 +404,7 @@ BusinessPage.propTypes = {
     PropTypes.bool,
   ]),
   setSelectTab: PropTypes.func,
+  unreadDot: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -409,6 +413,7 @@ const mapStateToProps = createStructuredSelector({
   currentUser: makeSelectCurrentUser(),
   filters: makeSelectBusinessFilter(),
   industryList: makeSelectUserCenterIndustry(),
+  unreadDot: makeSelectUnreadDot(),
 });
 
 function mapDispatchToProps(dispatch) {

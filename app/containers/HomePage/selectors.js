@@ -17,7 +17,13 @@ const makeSelectTab = () => createSelector(
   (substate) => substate.get('selectTab')
 );
 
+const makeSelectUnreadDot = () => createSelector(
+  selectHome,
+  (substate) => substate.get('unreadDot')
+);
+
 export {
   makeSelectCurrentUser,
   makeSelectTab,
+  makeSelectUnreadDot,
 };

@@ -15,9 +15,10 @@ import { createStructuredSelector } from 'reselect';
 import { browserHistory } from 'react-router';
 import { TabBar, Icon } from 'antd-mobile';
 
-import { makeSelectCurrentUser, makeSelectTab } from './selectors';
+import { makeSelectCurrentUser, makeSelectTab, makeSelectUnreadDot } from './selectors';
 import {
   fetchUser,
+  fetchUnreadDot,
   loadSelectTab,
 } from './actions';
 
@@ -25,6 +26,7 @@ import Communicate from '../Communicate';
 import BusinessPage from '../BusinessPage';
 import UserCenter from '../UserCenter';
 
+let timer = null;
 const TabItem = TabBar.Item;
 export class HomePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
@@ -35,9 +37,22 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
   }
 
   componentWillMount() {
-    const { getUser } = this.props;
+    const { getUser, getUnreadDot } = this.props;
 
     getUser();
+
+    // get unread dot, for every 2 minutes
+    const mTime = 2 * 60 * 1000;
+    timer = setInterval(() => {
+      getUnreadDot();
+    }, mTime);
+  }
+
+  componentWillUnmount() {
+    // clear the timer when comp unmount
+    if (timer) {
+      clearInterval(timer);
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -48,15 +63,20 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
     }
 
     // do change loaction if user info not complete
-    const { industry_son_id, main_service_id, company, position } = currentUser;
+    const { industry_son_id, main_service_id, company, position, mobile } = currentUser;
 
     if (industry_son_id === '0' || main_service_id === '0' || company === '' || position === '') {
       browserHistory.push('/guide');
     }
+
+    // do register mobile
+    if (mobile === '') {
+      browserHistory.push('/resetMobile');
+    }
   }
 
   render() {
-    const { location, children, selectTab, setSelectTab } = this.props;
+    const { location, children, selectTab, setSelectTab, unreadDot } = this.props;
     const hideTabs = location.pathname !== '/';
     return (
       <div>
@@ -70,6 +90,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
           <TabItem
             title="动态"
             key="动态"
+            badge={unreadDot ? unreadDot.communication_red_dot : 0}
             icon={<Icon type={require('icons/ali/动态.svg')} />}
             selectedIcon={<Icon type={require('icons/ali/动态.svg')} />}
             selected={selectTab === 'communicate'}
@@ -133,11 +154,14 @@ HomePage.propTypes = {
   location: PropTypes.object,
   children: PropTypes.node,
   selectTab: PropTypes.string,
+  getUnreadDot: PropTypes.func,
+  unreadDot: PropTypes.object,
 };
 
 export function mapDispatchToProps(dispatch) {
   return {
     getUser: () => dispatch(fetchUser()),
+    getUnreadDot: () => dispatch(fetchUnreadDot()),
     setSelectTab: (selectTab) => dispatch(loadSelectTab(selectTab)),
   };
 }
@@ -145,6 +169,7 @@ export function mapDispatchToProps(dispatch) {
 const mapStateToProps = createStructuredSelector({
   currentUser: makeSelectCurrentUser(),
   selectTab: makeSelectTab(),
+  unreadDot: makeSelectUnreadDot(),
 });
 
 // Wrap the component to inject dispatch and state into it

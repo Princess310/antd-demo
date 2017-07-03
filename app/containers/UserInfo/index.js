@@ -10,6 +10,7 @@ import { createStructuredSelector } from 'reselect';
 import { browserHistory } from 'react-router';
 import styled from 'styled-components';
 import pallete from 'styles/colors';
+import { zeroFull } from 'utils/utils';
 
 import { ScrollContainer } from 'react-router-scroll';
 import TouchLoader from 'components/TouchLoader';
@@ -27,8 +28,9 @@ import { makeSelectMyMomentsDemand, makeSelectMyMomentsSupplier } from 'containe
 import { fetchUserInfo, loadUserInfo, doFollow } from 'containers/UserCenter/actions';
 import { fetchMyMoments } from 'containers/BusinessPage/actions';
 
-const ImteWrapper = styled.div`
+const ListWrapper = styled.div`
   display: flex;
+  backgroundColor: ${pallete.white};
 `;
 
 const Item = Popover.Item;
@@ -99,8 +101,44 @@ export class UserInfo extends React.PureComponent { // eslint-disable-line react
     
   }
 
-  handleTabClick = () => {
+  handleTabClick = (key) => {
+    const { startPage } = this.state;
+    const { mySupplier, getMyMoments } = this.props;
+    const type = Number(key);
 
+    if (type === 1 && !mySupplier.list) {
+      getMyMoments(type, startPage);
+
+      this.setState({
+        type,
+      });
+    }
+  }
+
+  handleSortYar = (list) => {
+    const yearList = [];
+    const sortedList = [];
+
+    list && list.forEach((moment) => {
+      const date = new Date(moment.created_at * 1000);
+      const year = date.getFullYear();
+
+      if (yearList.findIndex((y) => y === year) === -1) {
+        yearList.push(year);
+        sortedList.push({
+          year,
+          list: [],
+        });
+      }
+
+      sortedList.forEach((sortedObj) => {
+        if (sortedObj.year === year) {
+          sortedObj.list.push(moment);
+        }
+      });
+    });
+
+    return sortedList;
   }
 
   handleSortList = (list) => {
@@ -109,8 +147,8 @@ export class UserInfo extends React.PureComponent { // eslint-disable-line react
 
     list && list.forEach((moment) => {
       const date = new Date(moment.created_at * 1000);
-      const d = date.getDate();
-      const m = date.getMonth() + 1;
+      const d = zeroFull(date.getDate());
+      const m = zeroFull(date.getMonth() + 1);
       const dm = `${d}-${m}`;
 
       if (dateList.findIndex((i) => i === dm) === -1) {
@@ -135,19 +173,36 @@ export class UserInfo extends React.PureComponent { // eslint-disable-line react
     return sortedList;
   }
 
+  onEndReached = () => {
+    const { type } = this.state;
+    const { myDemand, mySupplier, getMyMoments } = this.props;
+
+    if (type === 1) {
+      if (mySupplier.loading || !mySupplier.hasNext) {
+        return;
+      }
+
+      getMyMoments(type, mySupplier.page + 1);
+    } else {
+      if (myDemand.loading || !myDemand.hasNext) {
+        return;
+      }
+
+      getMyMoments(type, myDemand.page + 1);
+    }
+  }
+
   render() {
     const { type } = this.state;
     const { userInfo, currentUser, myDemand, mySupplier } = this.props;
     const isSelf = String(currentUser.id) === String(userInfo.id);
-    const yearDemandList = [];
-    const yearSupplierList = [];
 
     const loading = (type === 2 && myDemand.loading) || (type === 1 && mySupplier.loading);
     const hasNext = (type === 2 && myDemand.hasNext) || (type === 1 && mySupplier.hasNext);
     
-    const sortedDemand = this.handleSortList(myDemand.list);
-    const sortedSupplier = this.handleSortList(mySupplier.list);
-console.log('sortedDemand', sortedDemand);
+    const sortedDemand = this.handleSortYar(myDemand.list);
+    const sortedSupplier = this.handleSortYar(mySupplier.list);
+
     return (
       <div>
         <NavBar
@@ -225,39 +280,68 @@ console.log('sortedDemand', sortedDemand);
               </div>
             )}
             <WhiteSpace size="md" />
-            <Tabs defaultActiveKey="1" swipeable={false} onChange={this.callback} onTabClick={this.handleTabClick}>
-              <TabPane tab="Ta的需求" key="1">
-                {sortedDemand.map((sortedObj) => (
-                  <ImteWrapper>
-                    <div><span>{sortedObj.date.d}</span><span>{sortedObj.date.m}</span></div>
-                  </ImteWrapper>
+            <Tabs defaultActiveKey="2" swipeable={false} onChange={this.callback} onTabClick={this.handleTabClick}>
+              <TabPane tab="Ta的需求" key="2">
+                {sortedDemand.map((sortedDemand, i) => (
+                  <div key={i}>
+                    <CompHeader>{sortedDemand.year}年</CompHeader>
+                    {this.handleSortList(sortedDemand.list).map((sortedObj, i) => {
+                      return (
+                        <ListWrapper key={i}>
+                          <div style={{
+                            paddingTop: '0.24rem',
+                            paddingLeft: '0.12rem',
+                            width: '1.2rem',
+                          }}>
+                            <span>{sortedObj.date.d}</span>
+                            <span style={{ marginLeft: '0.08rem', fontSize: '0.24rem' }}>{sortedObj.date.m}月</span>
+                          </div>
+                          <div style={{
+                            width: '100%',
+                          }}>
+                            {sortedObj.list.map((moment) => (
+                              <MomentInfoCard
+                                key={moment.id}
+                                moment={moment}
+                              />
+                            ))}
+                          </div>
+                        </ListWrapper>
+                      );
+                    })}
+                  </div>
                 ))}
-                {(myDemand.list && myDemand.list.length > 0) && myDemand.list.map((moment) => {
-                  const date = new Date(moment.created_at * 1000);
-                  const year = date.getFullYear();
-
-                  if (yearDemandList.findIndex((y) => y === year) === -1) {
-                    yearDemandList.push(year);
-                    return (
-                      <div key={moment.id}>
-                        <CompHeader>{year}年</CompHeader>
-                        <MomentInfoCard
-                          moment={moment}
-                        />
-                      </div>
-                    );
-                  }
-
-                  return <MomentInfoCard
-                    key={moment.id}
-                    moment={moment}
-                  />;
-                })}
               </TabPane>
-              <TabPane tab="Ta的供应" key="2">
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '5rem', backgroundColor: '#fff' }}>
-                  选项卡二内容
-                </div>
+              <TabPane tab="Ta的供应" key="1">
+                {sortedSupplier.map((sortedDemand, i) => (
+                  <div key={i}>
+                    <CompHeader>{sortedDemand.year}年</CompHeader>
+                    {this.handleSortList(sortedDemand.list).map((sortedObj, i) => {
+                      return (
+                        <ListWrapper key={i}>
+                          <div style={{
+                            paddingTop: '0.24rem',
+                            paddingLeft: '0.12rem',
+                            width: '1.2rem',
+                          }}>
+                            <span>{sortedObj.date.d}</span>
+                            <span style={{ marginLeft: '0.08rem', fontSize: '0.24rem' }}>{sortedObj.date.m}月</span>
+                          </div>
+                          <div style={{
+                            width: '100%',
+                          }}>
+                            {sortedObj.list.map((moment) => (
+                              <MomentInfoCard
+                                key={moment.id}
+                                moment={moment}
+                              />
+                            ))}
+                          </div>
+                        </ListWrapper>
+                      );
+                    })}
+                  </div>
+                ))}
               </TabPane>
           </Tabs>
           </TouchLoader>
