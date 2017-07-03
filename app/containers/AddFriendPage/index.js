@@ -29,11 +29,6 @@ export class AddFriendPage extends React.PureComponent { // eslint-disable-line 
     const { content } = this.state;
     const { location: { state } } = this.props;
 
-    if (content.trim() === '') {
-      Toast.info('内容不能为空！');
-      return;
-    }
-
     request.doPost('follow/add-friend', {
       fid: state.id,
       flag: state.flag,
