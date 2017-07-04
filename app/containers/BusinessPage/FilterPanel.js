@@ -43,11 +43,6 @@ const buttonStyle = {
   fontSize: '0.22rem',
 }
 
-const buttonActiveStyle = {
-  backgroundColor: pallete.background.lightBule,
-  color: pallete.theme,
-};
-
 const rootStyle = {
   height: '0.9rem',
   padding: '0.12rem 0',
@@ -85,10 +80,10 @@ class FilterPanel extends React.PureComponent { // eslint-disable-line react/pre
     const { defaultTitle, field, value, items, style, contentStyle, onSelect, selectTotalName, from } = this.props;
     let currentItemTitle = defaultTitle;
 
-    if (from && from === 'supplier') {
-      buttonActiveStyle.backgroundColor = '#ffedd0';
-      buttonActiveStyle.color = pallete.yellow;
-    }
+    const buttonActiveStyle = {
+      backgroundColor: from === 'supplier' ? '#ffedd0' : pallete.background.lightBule,
+      color: from === 'supplier' ? pallete.yellow : pallete.theme,
+    };
 
     const itemsView = items ? items.map((item, i) => {
       if (item.id === value) {
