@@ -87,10 +87,10 @@ export class UserCenter extends React.PureComponent { // eslint-disable-line rea
     const { setSelectTab } = this.props;
     
     request.doGet('user/user-new-status').then((res) => {
-      const { data: { status } } = res;
+      const { data: { status, message } } = res;
 
       if (status === 1) {
-         alert('恭喜您成功完成了一次用户认证，获得100次好友申请次数的奖励，去生意频道逛逛吧~', '', [
+         alert(message, '', [
           { text: '我知道了', onPress: () => console.log('cancel') },
           { text: '立即前去', onPress: () => {
             setSelectTab('business');

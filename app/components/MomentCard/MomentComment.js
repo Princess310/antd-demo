@@ -55,7 +55,7 @@ class MomentComment extends React.PureComponent { // eslint-disable-line react/p
         {commentsView}
         {Number(comment_count) > 3 &&
           <div
-            style={{ fontSize: '0.28rem', color: pallete.theme}}
+            style={{ fontSize: '0.28rem', color: themeColor}}
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();

@@ -99,10 +99,14 @@ export class UserEditBasic extends React.PureComponent { // eslint-disable-line 
       if (buttonIndex === 0) {
         self.setState({
           nature: '公司',
+          company: '',
+          position: '',
         });
       } else if (buttonIndex === 1) {
         self.setState({
           nature: '个体',
+          company: '',
+          position: '',
         });
       }
     });
@@ -194,7 +198,7 @@ export class UserEditBasic extends React.PureComponent { // eslint-disable-line 
               name="nickname"
               value={nickname}
               onChange={this.handleNickname}
-              placeholder="输入姓名"
+              placeholder="必填"
             ></InputItem>}
           >真实姓名</Item>
           <Item extra={<div style={{ color: '#000' }}>{nature}</div>} onClick={this.handleNature}>公司性质</Item>
@@ -205,9 +209,9 @@ export class UserEditBasic extends React.PureComponent { // eslint-disable-line 
               name="company"
               value={company}
               onChange={this.handleCompany}
-              placeholder="填写公司"
+              placeholder={`输入${nature}名称`}
             ></InputItem>}
-          >公司/个体</Item>
+          >{nature}</Item>
           <Item
             extra={<InputItem
               maxLength={8}
@@ -215,7 +219,7 @@ export class UserEditBasic extends React.PureComponent { // eslint-disable-line 
               name="position"
               value={position}
               onChange={this.handlePosition}
-              placeholder="填写职位"
+              placeholder="输入职位名称"
             ></InputItem>}
           >职位</Item>
         </List>

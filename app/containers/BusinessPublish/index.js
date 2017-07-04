@@ -10,7 +10,7 @@ import { createStructuredSelector } from 'reselect';
 import { browserHistory } from 'react-router';
 import pallete from 'styles/colors';
 
-import { NavBar, List, TextareaItem, WhiteSpace, WingBlank, ImagePicker, Toast, Icon } from 'antd-mobile';
+import { NavBar, List, TextareaItem, WhiteSpace, WingBlank, ImagePicker, Toast, Icon, SegmentedControl } from 'antd-mobile';
 import MenuBtn from 'components/MenuBtn';
 import FlexCenter from 'components/FlexCenter';
 
@@ -64,12 +64,25 @@ export class BusinessPublish extends React.PureComponent { // eslint-disable-lin
     });
   }
 
+  onChangeTitle = (e) => {
+    const index = e.nativeEvent.selectedSegmentIndex;
+
+    if (Number(index) === 1) {
+      browserHistory.replace('/businessPublishSupplier');
+    }
+  }
+
   handleSave = () => {
     const { content, files } = this.state;
     const { publishParams, saveMoment } = this.props;
 
     if (!publishParams.reward_item) {
       Toast.info('请选择产品类别', 2);
+      return;
+    }
+
+    if (content.trim().length > 0 && (content.trim().length > 30 || content.trim().length < 6)) {
+      Toast.info('补充信息 (6~30字)', 2);
       return;
     }
 
@@ -103,15 +116,13 @@ export class BusinessPublish extends React.PureComponent { // eslint-disable-lin
         <List>
           <Item>
             <FlexCenter style={{ fontSize: '0.3rem'}}>
-              <span>如需要发布供应信息，</span>
-              <span style={{ color: pallete.theme }} onClick={() => {
-                browserHistory.push({
-                  pathname: '/businessPublishSupplier',
-                  state: {
-                    from: 'demand',
-                  },
-                });
-              }}>点此切换</span>
+              <SegmentedControl
+                selectedIndex={0}
+                values={['需求', '供应']}
+                style={{ height: '0.3rem', width: '3rem' }}
+                onChange={this.onChangeTitle}
+                tintColor={pallete.theme}
+              />
             </FlexCenter>
           </Item>
         </List>

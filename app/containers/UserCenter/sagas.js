@@ -90,14 +90,14 @@ export function* saveUser(action) {
 
     const res = yield request.doPut('user/edit', params);
 
-    const { data, list: { status } } = res;
+    const { data, list: { status, message } } = res;
 
     yield put(loadUser(data));
     // go back to user info page
     browserHistory.goBack();
 
     if (status === 1) {
-      alert('恭喜您成功完善资料，获得50次好友申请次数的奖励，去生意版块逛逛吧~', '', [
+      alert(message, '', [
         { text: '我知道了', onPress: () => console.log('cancel') },
         { text: '立即前去', onPress: () => {
           const store = getStore();

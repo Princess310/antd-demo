@@ -10,8 +10,9 @@ import { createStructuredSelector } from 'reselect';
 import { browserHistory } from 'react-router';
 import pallete from 'styles/colors';
 
-import { NavBar, List, TextareaItem, WhiteSpace, ImagePicker, Toast, Icon } from 'antd-mobile';
+import { NavBar, List, TextareaItem, WhiteSpace, ImagePicker, Toast, Icon, SegmentedControl } from 'antd-mobile';
 import MenuBtn from 'components/MenuBtn';
+import FlexCenter from 'components/FlexCenter';
 
 import { publishMoment, loadPublishParams } from 'containers/BusinessPage/actions';
 import { makeSelectPublishParams } from 'containers/BusinessPage/selectors';
@@ -63,6 +64,14 @@ export class BusinessPublishSupplier extends React.PureComponent { // eslint-dis
     });
   }
 
+  onChangeTitle = (e) => {
+    const index = e.nativeEvent.selectedSegmentIndex;
+
+    if (Number(index) === 0) {
+      browserHistory.replace('/businessPublish');
+    }
+  }
+
   handleSave = () => {
     const { content, files } = this.state;
     const { publishParams, saveMoment, location: { state } } = this.props;
@@ -70,6 +79,11 @@ export class BusinessPublishSupplier extends React.PureComponent { // eslint-dis
 
     if (!publishParams.reward_item) {
       Toast.info('请选择产品类别', 2);
+      return;
+    }
+
+    if (content.trim().length > 0 && (content.trim().length > 1000 || content.trim().length < 6)) {
+      Toast.info('补充信息 (6~1000字)', 2);
       return;
     }
 
@@ -103,6 +117,20 @@ export class BusinessPublishSupplier extends React.PureComponent { // eslint-dis
         >
           发供应
         </NavBar>
+        <WhiteSpace size="md" />
+        <List>
+          <Item>
+            <FlexCenter style={{ fontSize: '0.3rem'}}>
+              <SegmentedControl
+                selectedIndex={1}
+                values={['需求', '供应']}
+                style={{ height: '0.3rem', width: '3rem' }}
+                onChange={this.onChangeTitle}
+                tintColor={pallete.yellow}
+              />
+            </FlexCenter>
+          </Item>
+        </List>
         <WhiteSpace size="md" />
         <List>
           <TextareaItem

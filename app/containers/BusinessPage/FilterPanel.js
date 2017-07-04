@@ -82,8 +82,13 @@ class FilterPanel extends React.PureComponent { // eslint-disable-line react/pre
 
   render() {
     const { expanded } = this.state;
-    const { defaultTitle, field, value, items, style, contentStyle, onSelect, selectTotalName } = this.props;
+    const { defaultTitle, field, value, items, style, contentStyle, onSelect, selectTotalName, from } = this.props;
     let currentItemTitle = defaultTitle;
+
+    if (from && from === 'supplier') {
+      buttonActiveStyle.backgroundColor = '#ffedd0';
+      buttonActiveStyle.color = pallete.yellow;
+    }
 
     const itemsView = items ? items.map((item, i) => {
       if (item.id === value) {
@@ -161,6 +166,7 @@ FilterPanel.propTypes = {
   contentStyle: PropTypes.object,
   onSelect: PropTypes.func,
   onExpand: PropTypes.func,
+  from: PropTypes.string,
 };
 
 export default FilterPanel;

@@ -187,44 +187,32 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
     const { setSelectTab } = this.props;
     const { type } = this.state;
 
-    const listClass = type === 2 ? 'business-publish-demand-menu' : 'business-publish-supplier-menu';
-    const BUTTONS = ['发布采购需求', '发布供应信息', '取消'];
-    ActionSheet.showActionSheetWithOptions({
-      options: BUTTONS,
-      cancelButtonIndex: BUTTONS.length - 1,
-      maskClosable: true,
-      className: listClass,
-    },
-    (buttonIndex) => {
-      if (buttonIndex < 2) {
-        request.doGet('moments/check-release', {
-          reward_as: type
-        }).then((res) => {
-          const { natural_day_counts, my_point, release_point } = res;
-          if (natural_day_counts > 0) {
-            alert(res.message, '', [
-              { text: '我知道了' },
-            ])
+    request.doGet('moments/check-release', {
+      reward_as: type
+    }).then((res) => {
+      const { natural_day_counts, my_point, release_point } = res;
+      if (natural_day_counts > 0) {
+        alert(res.message, '', [
+          { text: '我知道了' },
+        ])
+      } else {
+        if (my_point < release_point) {
+          alert('发布失败', <div>
+              <div style={{ color: pallete.theme }}>{`剩余${my_point}积分`}</div>
+              <div>{`您的账户已不足${release_point}分，无法继续发布采购需求信息，可到“动态”栏目评论、点赞、分享挣取积分。`}</div>
+            </div>, [
+            { text: '我知道了', onPress: () => console.log('cancel') },
+            { text: '立即前去', onPress: () => {
+              setSelectTab('communicate');
+            }, style: { fontWeight: 'bold' } },
+          ]);
+        } else {
+          if (type === 2) {
+            browserHistory.push('businessPublish');
           } else {
-            if (my_point < release_point) {
-              alert('发布失败', <div>
-                  <div style={{ color: pallete.theme }}>{`剩余${my_point}积分`}</div>
-                  <div>{`您的账户已不足${release_point}分，无法继续发布采购需求信息，可到“动态”栏目评论、点赞、分享挣取积分。`}</div>
-                </div>, [
-                { text: '我知道了', onPress: () => console.log('cancel') },
-                { text: '立即前去', onPress: () => {
-                  setSelectTab('communicate');
-                }, style: { fontWeight: 'bold' } },
-              ]);
-            } else {
-              if (buttonIndex === 0) {
-                browserHistory.push('businessPublish');
-              } else if (buttonIndex === 1) {
-                browserHistory.push('/businessPublishSupplier');
-              }
-            }
+            browserHistory.push('/businessPublishSupplier');
           }
-        });
+        }
       }
     });
   }
@@ -279,6 +267,7 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
                 onExpand={() => {
                   !reward && this.props.getReward();
                 }}
+                from="demand"
               />
               <FilterPanel
                 defaultTitle="需求数量"
@@ -290,6 +279,7 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
                   !number && this.props.getNumber();
                 }}
                 contentStyle={{ borderLeft: `0.01rem ${pallete.border.normal} solid` }}
+                from="demand"
               />
             </FlexRow>
             ) : (
@@ -304,6 +294,7 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
                   onExpand={() => {
                     !industryList && this.props.getIndustry();
                   }}
+                  from="supplier"
                 />
                 <FilterPanel
                   defaultTitle="产品类别"
@@ -316,6 +307,7 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
                     !reward && this.props.getReward();
                   }}
                   contentStyle={{ borderLeft: `0.01rem ${pallete.border.normal} solid` }}
+                  from="supplier"
                 />
                 <FilterPanel
                   defaultTitle="价格区间"
@@ -327,6 +319,7 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
                     !price && this.props.getPrice();
                   }}
                   contentStyle={{ borderLeft: `0.01rem ${pallete.border.normal} solid` }}
+                  from="supplier"
                 />
               </FlexRow>
           )

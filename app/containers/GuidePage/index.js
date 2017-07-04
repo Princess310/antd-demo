@@ -16,6 +16,7 @@ import { browserHistory } from 'react-router';
 import { makeSelectCurrentUser } from 'containers/HomePage/selectors';
 import { makeSelectUserCenterIndustrySon, makeSelectUserCenterIndustry, makeSelectUserCenterService } from 'containers/UserCenter/selectors';
 import { fetchIndustry, fetchService } from 'containers/UserCenter/actions';
+import { loadUser } from 'containers/App/actions';
 
 import { NavBar, List, WhiteSpace, WingBlank, Button, InputItem, ActionSheet, Popup, Modal, Radio, Icon, Toast } from 'antd-mobile';
 import Avatar from 'components/Avatar';
@@ -61,6 +62,10 @@ export class GuidePage extends React.PureComponent { // eslint-disable-line reac
       company: currentUser.company,
       position: currentUser.position,
       nature: currentUser.nature,
+      tag_identity_id: currentUser.tag_identity_id,
+      tag_identity_name: currentUser.tag_identity_name,
+      main_service_id: currentUser.main_service_id,
+      main_service_name: currentUser.main_service_name,
       // view to show
       showIndustry: false,
       showService: false,
@@ -88,6 +93,10 @@ export class GuidePage extends React.PureComponent { // eslint-disable-line reac
       position: currentUser.position,
       nature: currentUser.nature,
       industry_son_id: industrySon,
+      tag_identity_id: currentUser.tag_identity_id,
+      tag_identity_name: currentUser.tag_identity_name,
+      main_service_id: currentUser.main_service_id,
+      main_service_name: currentUser.main_service_name,
     });
   }
 
@@ -142,10 +151,14 @@ export class GuidePage extends React.PureComponent { // eslint-disable-line reac
       if (buttonIndex === 0) {
         self.setState({
           nature: '公司',
+          company: '',
+          position: '',
         });
       } else if (buttonIndex === 1) {
         self.setState({
           nature: '个体',
+          company: '',
+          position: '',
         });
       }
     });
@@ -203,6 +216,7 @@ export class GuidePage extends React.PureComponent { // eslint-disable-line reac
 
   saveInfo = () => {
     const { id, verify_status, avatar, nickname, company, position, tag_identity_id, main_service_id, industry_son_id, nature } = this.state;
+    const { setUser } = this.props;
 
     if (!tag_identity_id || tag_identity_id === '') {
       Toast.info('未选择行业角色', 1.2);
@@ -224,10 +238,13 @@ export class GuidePage extends React.PureComponent { // eslint-disable-line reac
       position,
       nature,
     }).then((res) => {
-      const { data: { is_popup }, message } = res;
+      const { data, list } = res;
+      const { point: { is_popup, message } } = list;
       if (is_popup === 0) {
         Toast.info(message, 1.2);
       }
+
+      setUser(data);
       browserHistory.push('/recentDemand');
     });
   }
@@ -310,9 +327,9 @@ export class GuidePage extends React.PureComponent { // eslint-disable-line reac
                 name="company"
                 value={company}
                 onChange={this.handleCompany}
-                placeholder="填写公司"
+                placeholder={`输入${nature}名称`}
               ></InputItem>}
-            >公司/个体</Item>
+            >{nature}</Item>
             <Item
               extra={<InputItem
                 maxLength={20}
@@ -320,7 +337,7 @@ export class GuidePage extends React.PureComponent { // eslint-disable-line reac
                 name="position"
                 value={position}
                 onChange={this.handlePosition}
-                placeholder="填写职位"
+                placeholder="填写职位名称"
               ></InputItem>}
             >职位</Item>
             <Item
@@ -402,6 +419,7 @@ GuidePage.propTypes = {
   ]),
   getIndustry: PropTypes.func,
   getService: PropTypes.func,
+  setUser: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -415,6 +433,7 @@ function mapDispatchToProps(dispatch) {
   return {
     getIndustry: () => dispatch(fetchIndustry()),
     getService: (id) => dispatch(fetchService(id)),
+    setUser: (data) => dispatch(loadUser(data)),
   };
 }
 

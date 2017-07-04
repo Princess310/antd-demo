@@ -45,7 +45,6 @@ const WordsWrapper = styled.div`
 `;
 
 const PicWrapper = styled.div`
-  padding-right: 1.24rem;
   margin-bottom: 0.12rem;
   display: flex;
   flex-wrap: wrap;
@@ -329,7 +328,7 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
     } : {};
 
     // check pic length to show
-    const picLength = pictures.length === 1 ? '3.5rem' : ((pictures.length === 4 || pictures.length === 2) ? '2.2rem' : '1.45rem')
+    const picLength = pictures.length === 1 ? '3.5rem' : ((pictures.length === 4 || pictures.length === 2) ? '2.2rem' : '1.88rem')
     const picturesView = pictures.map((pic, i) => (
       <div
         key={i}
