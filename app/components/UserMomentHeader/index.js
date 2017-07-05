@@ -37,10 +37,11 @@ class UserMomentHeader extends React.PureComponent { // eslint-disable-line reac
   static defaultProps = {
     style: {},
     type: 1,
+    linkUser: true,
   }
 
   render() {
-    const { user, avatarSize, style, rightContent } = this.props;
+    const { user, avatarSize, style, rightContent, linkUser } = this.props;
 
     return (
       <Wrapper style={style}>
@@ -49,7 +50,7 @@ class UserMomentHeader extends React.PureComponent { // eslint-disable-line reac
           id={user.id}
           avatar={user.avatar}
           isVip={Number(user.verify_status) === 2}
-          linkUser={true}
+          linkUser={linkUser}
         />
         <FlexSB style={{ width: '100%' }}>
           {
@@ -86,6 +87,7 @@ UserMomentHeader.propTypes = {
   style: PropTypes.object,
   user: PropTypes.object.isRequired,
   avatarSize: PropTypes.string,
+  linkUser: PropTypes.bool,
   rightContent: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.node,

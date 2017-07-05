@@ -134,6 +134,7 @@ export class UserCenterCollects extends React.PureComponent { // eslint-disable-
                     >
                       <UserMomentHeader
                         user={moment.user}
+                        linkUser={moment.user.source_type === 1 ? false : true}
                         rightContent={
                           <div style={{ width: '0.48rem', height: '0.48rem', textAlign: 'right' }} onClick={(e) => this.showActionSheet(e, moment.id)}>
                             <Icon
