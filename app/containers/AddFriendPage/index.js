@@ -57,7 +57,7 @@ export class AddFriendPage extends React.PureComponent { // eslint-disable-line 
         >
           {state.name}
         </NavBar>
-        <List renderHeader={() => '你需要发送验证申请，等对方验证'}>
+        <List renderHeader={() => '请在此输入您加好友验证信息'}>
           <TextareaItem
             autoHeight
             labelNumber={5}

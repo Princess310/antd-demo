@@ -91,7 +91,6 @@ export function* fetchBusiness(action) {
     // add refresh status
     if (page === 1) {
       yield put(loadBusinessRefresh(type, true));
-      yield fetchUnreadDot();
     } else {
       yield put(loadBusienssLoading(type, true));
     }
@@ -100,6 +99,10 @@ export function* fetchBusiness(action) {
 
     const { list, page: resPage } = res;
     yield put(loadBusiness(type, list, resPage));
+
+    if (page === 1) {
+      yield fetchUnreadDot();
+    }
   } catch (err) {
     // console.log(err);
   }

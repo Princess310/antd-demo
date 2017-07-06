@@ -69,6 +69,7 @@ export class GuidePage extends React.PureComponent { // eslint-disable-line reac
       // view to show
       showIndustry: false,
       showService: false,
+      skipPublish: false,
     };
   }
 
@@ -97,6 +98,7 @@ export class GuidePage extends React.PureComponent { // eslint-disable-line reac
       tag_identity_name: currentUser.tag_identity_name,
       main_service_id: currentUser.main_service_id,
       main_service_name: currentUser.main_service_name,
+      skipPublish: (currentUser.tag_identity_id && currentUser.tag_identity_id !== '0'),
     });
   }
 
@@ -215,8 +217,8 @@ export class GuidePage extends React.PureComponent { // eslint-disable-line reac
   }
 
   saveInfo = () => {
-    const { id, verify_status, avatar, nickname, company, position, tag_identity_id, main_service_id, industry_son_id, nature } = this.state;
-    const { setUser } = this.props;
+    const { id, verify_status, avatar, nickname, company, position, tag_identity_id, main_service_id, industry_son_id, nature, skipPublish } = this.state;
+    const { setUser, location: { state } } = this.props;
 
     if (!tag_identity_id || tag_identity_id === '') {
       Toast.info('未选择行业角色', 1.2);
@@ -245,7 +247,12 @@ export class GuidePage extends React.PureComponent { // eslint-disable-line reac
       }
 
       setUser(data);
-      browserHistory.push('/recentDemand');
+
+      if (skipPublish) {
+        browserHistory.push("/");
+      } else {
+        browserHistory.push('/recentDemand');
+      }
     });
   }
 
