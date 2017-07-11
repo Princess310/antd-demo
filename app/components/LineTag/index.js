@@ -4,7 +4,7 @@ import pallete from 'styles/colors';
 const LineTag = styled.div`
   display: inline-block;
   height: 0.3rem;
-  padding: 0 0.08rem;
+  padding: 0 0.16rem;
   fontSize: 0.20rem;
   line-height: 0.3rem;
   color: ${pallete.text.tag};

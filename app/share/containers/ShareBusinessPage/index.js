@@ -5,7 +5,7 @@
  */
 
 import React, { PropTypes } from 'react';
-import { NavBar, Tabs, WhiteSpace } from 'antd-mobile';
+import { NavBar, Tabs, WhiteSpace, Icon, Toast } from 'antd-mobile';
 import styled from 'styled-components';
 import pallete from 'styles/colors';
 
@@ -15,6 +15,10 @@ import UserHeaderBar from 'components/UserHeaderBar';
 import FlexSB from 'components/FlexSB';
 import FlexCenter from 'components/FlexCenter';
 import ShareMomentCard from 'components/MomentCard/ShareMomentCard';
+
+import DownloadBar from 'share/components/DownloadBar';
+import DownloadQrcode from 'share/components/DownloadQrcode';
+
 import request from 'utils/shareRequest';
 
 const CommentWrapper= styled.div`
@@ -41,6 +45,10 @@ export class ShareBusinessPage extends React.PureComponent { // eslint-disable-l
     title: '动态详情',
     type: 'business',
     moment: null,
+  }
+
+  handleDownloadInfo = () => {
+    Toast.info('请注册或登录', 2);
   }
 
   componentWillMount() {
@@ -81,15 +89,17 @@ export class ShareBusinessPage extends React.PureComponent { // eslint-disable-l
         >
           {title}
         </NavBar>
-        <AppContent>
+        <AppContent style={{ paddingBottom: '1.28rem' }}>
             {
               moment ? (
-                <div className={contentClassName}>
-                  <ShareMomentCard
-                    moment={moment}
-                    from="detail"
-                    type={type}
-                  />
+                <div>
+                  <div className={contentClassName}>
+                    <ShareMomentCard
+                      moment={moment}
+                      from="detail"
+                      type={type}
+                    />
+                  </div>
                   <WhiteSpace size="md" />
                   <Tabs
                     defaultActiveKey="1"
@@ -99,11 +109,10 @@ export class ShareBusinessPage extends React.PureComponent { // eslint-disable-l
                     <TabPane tab={`评论 ${moment.comment_count}`} key="1">
                       <div>
                         {moment.comments.map((u)  => (
-                          <div key={u.id} style={{ borderBottom: `0.01rem ${pallete.border.deep} solid` }} onClick={() => {
-                            this.handleDoublueSendComment(u.id, u.created_by);
-                          }}>
+                          <div key={u.id} style={{ borderBottom: `0.01rem ${pallete.border.deep} solid` }}>
                             <UserHeaderBar
                               user={{...u, id: u.created_by}}
+                              linkUser={false}
                             />
                             <CommentWrapper>
                               <div>
@@ -113,7 +122,7 @@ export class ShareBusinessPage extends React.PureComponent { // eslint-disable-l
                               <div style={{ textAlign: 'right' }} onClick={(e) => {
                                 e.preventDefault();
                                 e.stopPropagation();
-                                this.handleLikeComment(u.id, u.created_by);
+                                this.handleDownloadInfo();
                               }}>
                                 <Icon type={require('icons/ali/点赞.svg')} size="sm" color={u.is_like > 0 ? pallete.theme : pallete.text.help} />
                               </div>
@@ -128,6 +137,7 @@ export class ShareBusinessPage extends React.PureComponent { // eslint-disable-l
                           <div key={u.id} style={{ borderBottom: `0.01rem ${pallete.border.deep} solid` }}>
                             <UserHeaderBar
                               user={{...u, id: u.created_by}}
+                              linkUser={false}
                             />
                           </div>
                         ))}
@@ -139,6 +149,7 @@ export class ShareBusinessPage extends React.PureComponent { // eslint-disable-l
                           <div key={u.id} style={{ borderBottom: `0.01rem ${pallete.border.deep} solid` }}>
                             <UserHeaderBar
                               user={{...u, id: u.created_by}}
+                              linkUser={false}
                             />
                           </div>
                         ))}
@@ -148,7 +159,9 @@ export class ShareBusinessPage extends React.PureComponent { // eslint-disable-l
                 </div>
               ) : null
             }
+            <DownloadQrcode />
         </AppContent>
+        <DownloadBar />
       </div>
     );
   }

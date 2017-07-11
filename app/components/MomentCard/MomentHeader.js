@@ -42,6 +42,7 @@ const tagStyle = {
 
 class MomentHeader extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   static defaultProps = {
+    linkUser: true,
     style: {},
   }
 
@@ -58,6 +59,7 @@ class MomentHeader extends React.PureComponent { // eslint-disable-line react/pr
       rightContent,
       trade_status,
       businessType,
+      linkUser,
     } = this.props;
 
     const themeColor = businessType === 'demand' ? pallete.theme : pallete.yellow;
@@ -69,7 +71,7 @@ class MomentHeader extends React.PureComponent { // eslint-disable-line react/pr
           id={user.id}
           avatar={user.avatar}
           isVip={Number(user.verify_status) === 2}
-          linkUser={true}
+          linkUser={linkUser}
           linkUrl={ Number(source_type) === 1 ? {
             pathname: 'service'
           } : false }
@@ -147,6 +149,7 @@ MomentHeader.propTypes = {
   from: PropTypes.string,
   type: PropTypes.string,
   businessType: PropTypes.string,
+  linkUser: PropTypes.bool,
   rightContent: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.node,

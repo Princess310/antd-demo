@@ -10,10 +10,12 @@ import styled from 'styled-components';
 import pallete from 'styles/colors';
 import oss from 'utils/oss';
 
-import { Icon } from 'antd-mobile';
+import { Icon, Button, Toast } from 'antd-mobile';
 import FlexSB from 'components/FlexSB';
 import LineTag from 'components/LineTag';
 import chatTool from 'components/ChatTool';
+import CmsMomentHeader from 'components/MomentCard/CmsMomentHeader';
+
 import MomentHeader from './MomentHeader';
 import MomentComment from './MomentComment';
 
@@ -39,6 +41,10 @@ const PicWrapper = styled.div`
   flex-wrap: wrap;
 `;
 
+const Remark = styled.span`
+  color: ${pallete.theme};
+`;
+
 const contentActionStyle = {
   margin: '0.12rem 0',
   fontSize: '0.28rem',
@@ -51,16 +57,21 @@ const actionSheetStyle = {
   color: pallete.theme,
 };
 
+const buttonStyle = {
+  position: 'absolute',
+  top: '0.2rem',
+  right: '0.2rem',
+  height: '0.4rem',
+  width: '1rem',
+  lineHeight: '0.4rem',
+  fontSize: '0.24rem',
+  color: pallete.white,
+  backgroundColor: pallete.theme,
+}
+
 class ShareMomentCard extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
     super(props);
-    const { moment: { content }, from } = this.props;
-
-    const moreContent = (from !== 'detail' && content.length > 100);
-    this.state = {
-      moreContent,
-      expanded: false,
-    };
   }
 
   handleView = (e, i) => {
@@ -69,34 +80,13 @@ class ShareMomentCard extends React.PureComponent { // eslint-disable-line react
     console.log('handle view');
   }
 
-  handleExpand = (e) => {
+  handleDownloadInfo = (e) => {
     e.preventDefault();
     e.stopPropagation();
-
-    this.setState({
-      expanded: !this.state.expanded,
-    });
-  }
-
-  handleShowChatTool = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const { moment, doSendComment } = this.props;
-
-    chatTool((message) => {
-      this.props.doSendComment(moment.id, moment.uid, message);
-    });
-  }
-
-  handleShare = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    console.log('handle share');
+    Toast.info('请注册或登录', 2);
   }
 
   render() {
-    const { moreContent, expanded } = this.state;
     const { moment, style, from, type } = this.props;
     const {
       id,
@@ -121,6 +111,10 @@ class ShareMomentCard extends React.PureComponent { // eslint-disable-line react
       section,
       units,
       trade_status,
+      category,
+      reward_as,
+      created_at,
+      demand_counts,
       ...other,
     } = moment;
 
@@ -130,7 +124,9 @@ class ShareMomentCard extends React.PureComponent { // eslint-disable-line react
     const contentStyle = Number(source_type) === 1 ? {
       paddingLeft: 0,
       paddingRight: 0,
-    } : {};
+    } : {
+      marginTop: '0.2rem',
+    };
 
     const picLength = pictures.length === 1 ? '3.5rem' : ((pictures.length === 4 || pictures.length === 2) ? '2.2rem' : '1.45rem')
     const picturesView = pictures.map((pic, i) => (
@@ -146,6 +142,32 @@ class ShareMomentCard extends React.PureComponent { // eslint-disable-line react
           marginRight: '0.06rem'
         }} />
     ));
+
+    // check type of moment
+    const businessType = (category === '3' || reward_as === '2') ? 'demand' : ((category === '0' || reward_as === '1') ? 'supplier' : 'status');
+
+    // content to show
+    const contentResult = businessType === 'demand' ? `需求描述：${content}` : content;
+    const contentView = businessType === 'demand' ? (
+      <div>
+        <div>{nickname}已经发布了<Remark>{demand_counts}</Remark>条需求</div>
+        <div>需求类别：<Remark>{item_name}</Remark></div>
+        <div>需求数量：{section === '' ? '不限' : section}</div>
+        <div>{contentResult}</div>
+      </div>
+    ) : (
+      businessType === 'demand' ? (
+        <div style={{ marginBottom: '0.08rem' }}>
+          {item_name !== '' && <LineTag>{item_name}</LineTag>}
+          {section !== '' && <LineTag style={{ marginLeft: '0.08rem' }}>{section}</LineTag>}
+        </div>
+      ) : contentResult
+    );
+
+    const tagStyle = {
+      borderColor: pallete.theme,
+      color: pallete.text.help,
+    };
 
     return (
       <div
@@ -166,60 +188,62 @@ class ShareMomentCard extends React.PureComponent { // eslint-disable-line react
             }}
             type={type}
             source_type={source_type}
+            businessType='demand'
             trade_status={trade_status}
+            linkUser={false}
             {...other}
           />}
           <ContentWrapper style={contentStyle}>
-            {type === 'business' && (
+            {(type === 'business' && businessType === 'supplier') && (
               <div style={{ marginBottom: '0.08rem' }}>
-                {item_name !== '' && <LineTag>{item_name}</LineTag>}
-                {section !== '' && <LineTag style={{ marginLeft: '0.08rem' }}>{section}</LineTag>}
+                {item_name !== '' && <LineTag style={tagStyle}>{item_name}</LineTag>}
+                {section !== '' && <LineTag style={{ marginLeft: '0.08rem', ...tagStyle }}>{section}</LineTag>}
               </div>
             )}
-            {moreContent ?
-              (
+            {
+              Number(source_type) === 1 ? (
                 <div>
-                  {expanded ?
-                    (
-                      <div>
-                        <div>{content}</div>
-                        <div style={contentActionStyle} onClick={this.handleExpand}>收起</div>
-                      </div>
-                    ) : (
-                      <div>
-                        <WordsWrapper>
-                          {content}
-                        </WordsWrapper>
-                        <div style={contentActionStyle} onClick={this.handleExpand}>全文</div>
-                      </div>
-                    ) 
-                  }
-                </div>
+                  <CmsMomentHeader
+                    user={{
+                      id: uid,
+                      avatar,
+                      verify_status,
+                      nickname,
+                      tag_identity_name,
+                      main_service_name,
+                      company,
+                      position,
+                    }}
+                    created_at={created_at}
+                    hits={hits}
+                    style={{
+                      paddingBottom: '0.12rem',
+                      borderBottom: `0.01rem ${pallete.border.normal} solid`,
+                    }}
+                  />                    
+                  <div dangerouslySetInnerHTML={{__html: contentView}} />
+                </div>                  
               ) : (
-                Number(source_type) === 1 ? (
-                  <div dangerouslySetInnerHTML={{__html: content}} />
-                ) : (
-                  <div style={{ marginBottom: '0.12rem' }}>{content}</div>
-                )
+                <div style={{ marginBottom: '0.12rem' }}>{contentView}</div>
               )
             }
             {(Number(source_type) !== 1 || from === 'list') && <PicWrapper style={contentStyle}>{picturesView}</PicWrapper>}
-            {(Number(source_type) === 1 && from === 'detail') ? (
-              Number(hits) > 0 && <div style={{ paddingTop: '0.24rem', fontSize: '0.26rem', color: pallete.text.words, borderTop: `0.01rem ${pallete.border.normal} solid` }}>阅读{hits}</div>
-            ) : (
+            {businessType === 'demand' && <div><Remark>※符合要求的请及时联系我※</Remark></div>}
+            {Number(source_type) !== 1 && (
               (Number(hits) > 0 && from !== 'search') && <div style={{ fontSize: '0.26rem', color: pallete.text.help }}>{hits}人看过</div>
             )}
+            {type === 'business' && <Button style={buttonStyle} onClick={this.handleDownloadInfo}>加好友</Button>}
           </ContentWrapper>
           <FlexSB style={{ paddingLeft: (type === 'business' ? '2.6rem' : '3.6rem'), paddingRight: '0.12rem', fontSize: '0.28rem', color: pallete.text.help }}>
-            <FlexSB onClick={this.handleShowChatTool}>
+            <FlexSB onClick={this.handleDownloadInfo}>
               <Icon type={require('icons/ali/评论.svg')} size="sm" color={pallete.text.help} />
               <span style={{ marginLeft: '0.04rem' }}>{comment_count > 0 ? comment_count : '评论'}</span>
             </FlexSB>
-            <FlexSB onClick={this.handleLike}>
+            <FlexSB onClick={this.handleDownloadInfo}>
               <Icon type={require('icons/ali/点赞.svg')} size="sm" color={is_like > 0 ? pallete.theme : pallete.text.help} />
               <span style={{ marginLeft: '0.04rem' }}>{like_count > 0 ? like_count : '点赞'}</span>
             </FlexSB>
-            <FlexSB onClick={this.handleShare}>
+            <FlexSB onClick={this.handleDownloadInfo}>
               <Icon type={require('icons/ali/分享.svg')} size="xxs" color={pallete.text.help} />
               <span style={{ marginLeft: '0.04rem' }}>{share_count > 0 ? share_count : '分享'}</span>
             </FlexSB>

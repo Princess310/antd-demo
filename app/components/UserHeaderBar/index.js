@@ -30,11 +30,12 @@ const ItemWrapper = styled.div`
 
 class UserHeaderBar extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   static defaultProps = {
+    linkUser: true,
     style: {},
   }
 
   render() {
-    const { user, avatarSize, style, rightContent, ...other } = this.props;
+    const { user, avatarSize, style, rightContent, linkUser, ...other } = this.props;
 
     return (
       <Wrapper style={style} {...other}>
@@ -43,7 +44,7 @@ class UserHeaderBar extends React.PureComponent { // eslint-disable-line react/p
           id={user.id}
           avatar={user.avatar}
           isVip={Number(user.verify_status) === 2}
-          linkUser={true}
+          linkUser={linkUser}
         />
         <FlexSB style={{ width: '100%' }}>
           <FlexColumn style={{ padding: '0.04rem 0.24rem' }}>
@@ -73,6 +74,7 @@ UserHeaderBar.propTypes = {
   style: PropTypes.object,
   user: PropTypes.object.isRequired,
   avatarSize: PropTypes.string,
+  linkUser: PropTypes.bool,
   rightContent: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.node,
