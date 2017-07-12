@@ -40,7 +40,9 @@ const render = (messages) => {
 };
 
 // render
-request.doGet('user/js-api-config')
+request.doGet('user/js-api-config', {
+  url: location.href,
+})
   .then((res) => {
     let { list } = res;
     list.debug = false;
