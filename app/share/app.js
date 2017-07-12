@@ -41,7 +41,7 @@ const render = (messages) => {
 
 // render
 request.doGet('user/js-api-config', {
-  url: location.href,
+  url: encodeURIComponent(location.href),
 })
   .then((res) => {
     let { list } = res;
