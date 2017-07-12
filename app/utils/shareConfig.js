@@ -60,7 +60,8 @@ function onMenuShareOther(title, desc, link, imgUrl, success, cancel) {
 const domain = window.document.domain;
 const shareConfig = {
   config: (type, data) => {
-    let title = '';
+    let title = '80万行业资源平台，找讲师、找厂家、找经销商就上健康商信！';
+    let timeLineTitle = '';
     let desc = '';
     let link = `http://${domain}/public_share.html?type=${type}`;
     let imgUrl = '';
@@ -69,26 +70,27 @@ const shareConfig = {
 
     switch (type) {
       case 'card': {
-        const { id, avatar, nickname } = data;
+        const { id, avatar, nickname, company, position } = data;
         title = `${nickname}的健康商信名片`;
-        desc = `${nickname}邀请你加入健康商信80万行业精英群`;
+        timeLineTitle = `${nickname}的健康商信名片，点击查看详情；80万健康行业资源平台邀请您加入！`;
+        desc = `点击查看详情；${company}.${position}.${nickname}邀请你加入80万行业资源平台，找讲师、找厂家、找经销商就上健康商信！`;
         link = `${link}&id=${id}`;
         imgUrl = avatar;
         break;
       }
       case 'momment': {
-        const { id, nickname, content, pictures } = data;
-        title = `分享${nickname}的健康商信动态`;
-        desc = emptyHtml(content);
+        const { id, nickname, content, pictures, company, position } = data;
+        title = content.trim() !== '' ? emptyHtml(content) : `分享${nickname}的健康商信动态`;
+        timeLineTitle = `${nickname}邀请您加入健康商信APP，80万行业资源平台，找讲师、找厂家、找经销商就上健康商信！`;
+        desc = `健康商信APP：${company}.${position}.${nickname}在分享动态，邀请您也来分享`;
         link = `${link}&id=${id}`;
         imgUrl = pictures.length > 0 ? pictures[0] : `${domain}${logo}`;
       }
       default: {
-
       }
     }
 
-    onMenuShareTimeline(title, link, imgUrl, success, cancel);
+    onMenuShareTimeline(timeLineTitle, link, imgUrl, success, cancel);
     onMenuShareOther(title, desc, link, imgUrl, success, cancel);
   },
 

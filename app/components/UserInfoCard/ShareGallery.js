@@ -36,7 +36,12 @@ class Gallery extends React.PureComponent { // eslint-disable-line react/prefer-
   handleView = (e, i) => {
     e.preventDefault();
     e.stopPropagation();
-    
+    const { pictures } = this.props;
+  
+    wx.previewImage({
+      current: pictures[i],
+      urls: pictures,
+    });
   }
 
   render() {
