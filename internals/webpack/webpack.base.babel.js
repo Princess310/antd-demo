@@ -4,6 +4,7 @@
 
 const path = require('path');
 const webpack = require('webpack');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const svgDirs = [
   require.resolve('antd-mobile').replace(/warn\.js$/, ''),  // 1. 属于 antd-mobile 内置 svg 文件
@@ -91,6 +92,11 @@ module.exports = (options) => ({
     new webpack.NamedModulesPlugin(),
     new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /zh-cn/),
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+
+    // copy static things
+    new CopyWebpackPlugin([
+      { from: path.join(__dirname, '../../app/assets/static'), to: path.join(__dirname, '../../build') }
+    ]),
   ]),
   resolve: {
     modules: ['app', 'node_modules', path.join(__dirname, './node_modules')],
