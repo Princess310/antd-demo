@@ -56,14 +56,16 @@ class CmsMomentCard extends React.PureComponent { // eslint-disable-line react/p
     };
 
     const picturesView = pictures.map((pic, i) => (
-      <img
+      <div
         key={i}
-        role="presentation"
-        src={oss.getImgSuitablePath(pic)}
         style={{
+          backgroundImage: `url(${oss.getImgSuitablePath(pic)})`,
+          backgroundPosition: 'center center',
+          backgroundSize: 'cover',
           width: '100%',
           height: '3.5rem',
-        }} />
+        }}
+      />
     ));
 
     return (

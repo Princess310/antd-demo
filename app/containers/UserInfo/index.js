@@ -52,7 +52,7 @@ export class UserInfo extends React.PureComponent { // eslint-disable-line react
     const { type, startPage } = this.state;
 
     getUserInfo(id);
-    getMyMoments(type, startPage);
+    getMyMoments(type, id, startPage);
   }
   
   componentWillUnmount() {
@@ -103,11 +103,11 @@ export class UserInfo extends React.PureComponent { // eslint-disable-line react
 
   handleTabClick = (key) => {
     const { startPage } = this.state;
-    const { mySupplier, getMyMoments } = this.props;
+    const { location: { query: { id } }, mySupplier, getMyMoments } = this.props;
     const type = Number(key);
 
     if (type === 1 && !mySupplier.list) {
-      getMyMoments(type, startPage);
+      getMyMoments(type, id, startPage);
 
       this.setState({
         type,
@@ -175,20 +175,20 @@ export class UserInfo extends React.PureComponent { // eslint-disable-line react
 
   onEndReached = () => {
     const { type } = this.state;
-    const { myDemand, mySupplier, getMyMoments } = this.props;
+    const { location: { query: { id } }, myDemand, mySupplier, getMyMoments } = this.props;
 
     if (type === 1) {
       if (mySupplier.loading || !mySupplier.hasNext) {
         return;
       }
 
-      getMyMoments(type, mySupplier.page + 1);
+      getMyMoments(type, id, mySupplier.page + 1);
     } else {
       if (myDemand.loading || !myDemand.hasNext) {
         return;
       }
 
-      getMyMoments(type, myDemand.page + 1);
+      getMyMoments(type, id, myDemand.page + 1);
     }
   }
 
@@ -251,6 +251,7 @@ export class UserInfo extends React.PureComponent { // eslint-disable-line react
             autoLoadMore={true}
             className="tloader app-content"
           >
+            <WhiteSpace size="md" />
             {userInfo && (
               <div>
                 <UserInfoCard user={userInfo} />
@@ -376,7 +377,7 @@ function mapDispatchToProps(dispatch) {
     getUserInfo: (id) => dispatch(fetchUserInfo(id)),
     saveUserInfo: (data) => dispatch(loadUserInfo(data)),
     followUser: (id, type) => dispatch(doFollow(id, type)),
-    getMyMoments: (type, page) => dispatch(fetchMyMoments(type, page)),
+    getMyMoments: (type, uid, page) => dispatch(fetchMyMoments(type, uid, page)),
   };
 }
 

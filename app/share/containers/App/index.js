@@ -8,6 +8,7 @@
 import React from 'react';
 
 import ShareBusinessPage from 'share/containers/ShareBusinessPage';
+import ShareUserInfoPage from 'share/containers/ShareUserInfoPage';
 
 import { getQueryString } from 'utils/utils';
 
@@ -18,13 +19,18 @@ export default class App extends React.PureComponent { // eslint-disable-line re
   };
 
   render() {
-    const type = getQueryString('type', 'default');
+    let type = getQueryString('type', 'default');
     const id = getQueryString('id');
+
+    if (type.indexOf('share_') > -1) {
+      type = type.slice(6, type.length);
+    }
 
     return (
       <div>
         {React.Children.toArray(this.props.children)}
         {type === 'momment' && <ShareBusinessPage id={id} />}
+        {type === 'card' && <ShareUserInfoPage id={id} />}
       </div>
     );
   }

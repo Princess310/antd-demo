@@ -448,13 +448,13 @@ export function* publishMoment(action) {
 
 export function* fetchMyMoments(action) {
   try {
-    const { type, page } = action.payload;
+    const { type, page, uid } = action.payload;
     // add refresh status
     if (page !== 1) {
       yield put(loadMyMomentsLoading(type, true));
     }
 
-    const res = yield request.doGet('moments/my-supplier-demand', { reward_as: type, page });
+    const res = yield request.doGet('moments/my-supplier-demand', { reward_as: type, page, uid });
 
     const { list, page: resPage } = res;
     yield put(loadMyMoments(type, list, resPage));

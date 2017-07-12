@@ -27,6 +27,13 @@ const CommentWrapper= styled.div`
   background-color: ${pallete.white};
 `;
 
+const LikeWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  color: ${pallete.text.help};
+`;
+
 const ActionWrapper = styled(FlexSB)`
   position: fixed;
   left: 0;
@@ -119,13 +126,14 @@ export class ShareBusinessPage extends React.PureComponent { // eslint-disable-l
                                 {u.to_name !== '' && <span>回复<span style={{ color: pallete.theme }}>{u.to_name}</span>：</span>}
                                 {u.content}
                               </div>
-                              <div style={{ textAlign: 'right' }} onClick={(e) => {
+                              <LikeWrapper onClick={(e) => {
                                 e.preventDefault();
                                 e.stopPropagation();
                                 this.handleDownloadInfo();
                               }}>
-                                <Icon type={require('icons/ali/点赞.svg')} size="sm" color={u.is_like > 0 ? pallete.theme : pallete.text.help} />
-                              </div>
+                                <Icon type={require('icons/ali/点赞.svg')} size="sm" color={pallete.text.help} />
+                                {u.like_count}
+                              </LikeWrapper>
                             </CommentWrapper>
                           </div>
                         ))}
@@ -159,6 +167,7 @@ export class ShareBusinessPage extends React.PureComponent { // eslint-disable-l
                 </div>
               ) : null
             }
+            <WhiteSpace size="md" />
             <DownloadQrcode />
         </AppContent>
         <DownloadBar />

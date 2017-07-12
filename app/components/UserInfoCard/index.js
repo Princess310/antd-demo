@@ -11,8 +11,10 @@ import pallete from 'styles/colors';
 import Avatar from 'components/Avatar';
 import FlexColumn from 'components/FlexColumn';
 import FlexRow from 'components/FlexRow';
+import FlexSB from 'components/FlexSB';
 import FlexCenter from 'components/FlexCenter';
 import ExpProgress from 'components/ExpProgress';
+import LineTag from 'components/LineTag';
 import { Icon } from 'antd-mobile';
 import { parseDistance } from 'utils/utils';
 
@@ -29,6 +31,10 @@ const SubItem = styled.div`
   font-size: 0.24rem;
   color: ${pallete.text.help};
 `;
+
+const tagStyle = {
+  marginLeft: '0.12rem',
+};
 
 class UserInfoCard extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   static defaultProps = {
@@ -51,37 +57,24 @@ class UserInfoCard extends React.PureComponent { // eslint-disable-line react/pr
             avatar={user.avatar}
           />
           <div style={{ marginLeft: '0.24rem' }}>
-            <div>{user.nickname}</div>
+            <FlexSB>
+              <FlexRow>
+                <section style={{ fontSize: '0.28rem' }}>{user.nickname}</section>
+                {user.tag_identity_name !== '' && <LineTag style={tagStyle}>{user.tag_identity_name}</LineTag>}
+                {(user.main_service_name && user.main_service_name !== '') && <LineTag style={tagStyle}>{user.main_service_name}</LineTag>}
+              </FlexRow>
+            </FlexSB>
             <FlexRow>
               {user.company && <ItemWrapper>{user.company}</ItemWrapper>}
-              {user.position && <ItemWrapper style={{ borderLeft: `0.01rem ${pallete.border.normal} solid`, paddingLeft: '0.12rem' }}>{user.position}</ItemWrapper>}
+              {user.position && <ItemWrapper style={{ borderLeft: `0.01rem ${pallete.border.normal} solid`, paddingLeft: '0.12rem' }}>{user.tag_identity_name}</ItemWrapper>}
             </FlexRow>
             <FlexRow>
-                <SubItem>{user.tag_identity_name}</SubItem>
-                <SubItem>活跃度：<span style={{color: pallete.theme}}>{user.influence}</span></SubItem>
-                <FlexRow>
-                  <SubItem>诚信等级</SubItem>
-                  <ExpProgress progress={user.integrity_progress} />
-                  <SubItem style={{color: pallete.text.yellow, marginLeft: '0.04rem'}}>V{user.integrity_level}</SubItem>
-                </FlexRow>
+                <SubItem>手机号：</SubItem>
+                <SubItem style={{ marginLeft: '0.12rem' }}>
+                  {user.is_my_friend > 0 ? user.mobile : '手机互换可见'}
+                </SubItem>
             </FlexRow>
           </div>
-        </FlexRow>
-        <FlexRow style={{ marginTop: '0.12rem' }}>
-          <ItemWrapper>手机号：<span style={{ marginLeft: '0.12rem' }}>{user.mobile}</span></ItemWrapper>
-        </FlexRow>
-         <FlexRow>
-          <ItemWrapper>地区：<span style={{ marginLeft: '0.42rem' }}>{user.address}</span></ItemWrapper>
-          <ItemWrapper>
-            <FlexRow>
-              <Icon
-                type={require('icons/ali/定位.svg')}
-                size="xs"
-                color={pallete.text.words}
-              />
-              <span>{parseDistance(user.distance, user.city_name)}</span>
-            </FlexRow>
-          </ItemWrapper>
         </FlexRow>
       </div>
     );

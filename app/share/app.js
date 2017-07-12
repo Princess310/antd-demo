@@ -8,6 +8,10 @@ import ReactDOM from 'react-dom';
 import App from 'share/containers/App';
 
 import 'sanitize.css/sanitize.css';
+
+// Import Swiper css
+import 'styles/swiper.scss';
+
 // Import fast click
 import FastClick from 'assets/lib/fastclick';
 

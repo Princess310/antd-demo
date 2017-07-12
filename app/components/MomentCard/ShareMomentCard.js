@@ -35,7 +35,6 @@ const WordsWrapper = styled.div`
 `;
 
 const PicWrapper = styled.div`
-  padding-right: 1.24rem;
   margin-bottom: 0.12rem;
   display: flex;
   flex-wrap: wrap;
@@ -128,19 +127,21 @@ class ShareMomentCard extends React.PureComponent { // eslint-disable-line react
       marginTop: '0.2rem',
     };
 
-    const picLength = pictures.length === 1 ? '3.5rem' : ((pictures.length === 4 || pictures.length === 2) ? '2.2rem' : '1.45rem')
+    const picLength = pictures.length === 1 ? '7.2rem' : ((pictures.length === 4 || pictures.length === 2) ? '3.4rem' : '2.2rem')
     const picturesView = pictures.map((pic, i) => (
-      <img
+      <div
         key={i}
-        role="presentation"
-        src={oss.getImgSuitablePath(pic)}
         onClick={(e) => this.handleView(e, i)}
         style={{
+          backgroundImage: `url(${oss.getImgSuitablePath(pic)})`,
+          backgroundPosition: 'center center',
+          backgroundSize: 'cover',
           width: (Number(source_type) === 1 ? '100%' : picLength),
           height: picLength,
-          marginTop: '0.06rem',
-          marginRight: '0.06rem'
-        }} />
+          marginTop: '0.12rem',
+          marginRight: '0.12rem'
+        }}
+      />
     ));
 
     // check type of moment
@@ -190,6 +191,7 @@ class ShareMomentCard extends React.PureComponent { // eslint-disable-line react
             source_type={source_type}
             businessType='demand'
             trade_status={trade_status}
+            created_at={created_at}
             linkUser={false}
             {...other}
           />}

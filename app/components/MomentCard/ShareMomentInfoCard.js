@@ -18,7 +18,6 @@ const Wrapper = styled.div`
 
 const ContentWrapper= styled.div`
   display: -webkit-box;
-  width: 100%;
   overflow: hidden;
   text-overflow: -o-ellipsis-lastline;
   text-overflow: ellipsis;
@@ -28,7 +27,7 @@ const ContentWrapper= styled.div`
   color: ${pallete.text.content};
 `;
 
-class MomentInfoCard extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+class ShareMomentInfoCard extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   render() {
     const { moment, style } = this.props;
     const {
@@ -51,15 +50,7 @@ class MomentInfoCard extends React.PureComponent { // eslint-disable-line react/
       <div
         style={Object.assign(rootStyle, style)}
         onClick={() => {
-          browserHistory.push({
-            pathname: 'momentDetail',
-            query: {
-              id,
-            },
-            state: {
-              type: 'userinfo',
-            },
-          });
+          window.location.href = `public_share.html?type=momment&id=${id}`;
         }}
       >
         <Wrapper>
@@ -91,9 +82,9 @@ class MomentInfoCard extends React.PureComponent { // eslint-disable-line react/
   }
 }
 
-MomentInfoCard.propTypes = {
+ShareMomentInfoCard.propTypes = {
   moment: PropTypes.object,
   style: PropTypes.object,
 };
 
-export default MomentInfoCard;
+export default ShareMomentInfoCard;

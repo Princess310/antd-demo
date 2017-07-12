@@ -333,12 +333,13 @@ export function loadPublishParams(params) {
   };
 }
 
-export function fetchMyMoments(type, uid) {
+export function fetchMyMoments(type, uid, page) {
   return {
     type: FETCH_MY_MOMENTS,
     payload: {
       type,
       uid,
+      page,
     },
   };
 }
