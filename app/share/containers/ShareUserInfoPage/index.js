@@ -21,6 +21,8 @@ import { NavBar, Tabs, WhiteSpace, Icon } from 'antd-mobile';
 
 import request from 'utils/shareRequest';
 
+import shareConfig from 'utils/shareConfig';
+
 const ListWrapper = styled.div`
   display: flex;
   backgroundColor: ${pallete.white};
@@ -65,6 +67,8 @@ export class ShareUserInfoPage extends React.PureComponent { // eslint-disable-l
       this.setState({
         userInfo: data,
       });
+
+      shareConfig.share('card', data);
     });
 
     // fetch my moments

@@ -4,6 +4,9 @@ import 'babel-polyfill';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+
+import request from 'utils/shareRequest';
+
 // Import root app
 import App from 'share/containers/App';
 
@@ -14,6 +17,7 @@ import 'styles/swiper.scss';
 
 // Import fast click
 import FastClick from 'assets/lib/fastclick';
+
 
 // Load the favicon, the manifest.json file and the .htaccess file
 /* eslint-disable import/no-unresolved, import/extensions */
@@ -36,7 +40,17 @@ const render = (messages) => {
 };
 
 // render
-render();
+request.doGet('user/js-api-config')
+  .then((res) => {
+    let { list } = res;
+    list.debug = false;
+
+    wx.config(list);
+    render();
+  })
+  .catch(() => {
+    render();
+  });
 // Install ServiceWorker and AppCache in the end since
 // it's not most important operation and if main code fails,
 // we do not want it installed

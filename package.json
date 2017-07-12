@@ -87,7 +87,8 @@
       "WSDK": true,
       "twemoji": true,
       "WxLogin": true,
-      "OSS": true
+      "OSS": true,
+      "wx": true
     },
     "env": {
       "browser": true,

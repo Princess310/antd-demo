@@ -21,6 +21,8 @@ import DownloadQrcode from 'share/components/DownloadQrcode';
 
 import request from 'utils/shareRequest';
 
+import shareConfig from 'utils/shareConfig';
+
 const CommentWrapper= styled.div`
   fontSize: 0.26rem;
   padding: 0 0.12rem 0.12rem 1.2rem;
@@ -83,6 +85,8 @@ export class ShareBusinessPage extends React.PureComponent { // eslint-disable-l
         moment: data,
         contentClassName,
       });
+
+      shareConfig.share('momment', data);
     });
   }
   render() {
