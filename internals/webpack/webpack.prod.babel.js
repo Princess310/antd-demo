@@ -9,6 +9,7 @@ module.exports = require('./webpack.base.babel')({
   entry: {
     index: path.join(process.cwd(), 'app/app.js'),
     share: path.join(process.cwd(), 'app/share/app.js'),
+    shareApp: path.join(process.cwd(), 'app/share/share.js'),
   },
 
   // Utilize long-term caching by adding content hashes (not compilation hashes) to compiled assets
@@ -63,6 +64,26 @@ module.exports = require('./webpack.base.babel')({
       inject: true,
       filename: 'public_share.html',
       chunks: ['share'],
+    }),
+
+    // group_share.html
+    new HtmlWebpackPlugin({
+      template: 'app/share/group_share.html',
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeRedundantAttributes: true,
+        useShortDoctype: true,
+        removeEmptyAttributes: true,
+        removeStyleLinkTypeAttributes: true,
+        keepClosingSlash: true,
+        minifyJS: true,
+        minifyCSS: true,
+        minifyURLs: true,
+      },
+      inject: true,
+      filename: 'group_share.html',
+      chunks: ['shareApp'],
     }),
 
     // Put it in the end to capture all the HtmlWebpackPlugin's

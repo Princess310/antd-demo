@@ -61,13 +61,14 @@ export class ShareBusinessPage extends React.PureComponent { // eslint-disable-l
   }
 
   componentWillMount() {
-    const { id } = this.props;
+    const { id, uid } = this.props;
     request.doGet('moments/details', {
       moments_id: id,
+      uid,
       'from_share': 1
     }).then((res) => {
       const { data } = res;
-      const { category, reward_as, source_type } = data;
+      const { category, reward_as, source_type, share_user } = data;
 
       let contentClassName = '';
       let title = (category === '3' || reward_as === '2') ? '需求详情' : ((category === '0' || reward_as === '1') ? '供应详情' : '动态详情');
@@ -86,7 +87,7 @@ export class ShareBusinessPage extends React.PureComponent { // eslint-disable-l
         contentClassName,
       });
 
-      shareConfig.share('momment', data);
+      shareConfig.share('momment', data, share_user);
     });
   }
   render() {

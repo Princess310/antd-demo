@@ -8,7 +8,6 @@ import React, { PropTypes } from 'react';
 import pallete from 'styles/colors';
 import styled from 'styled-components';
 
-import FlexSB from 'components/FlexSB';
 import FlexCenter from 'components/FlexCenter';
 import ExpProgress from 'components/ExpProgress';
 import { Button } from 'antd-mobile';
@@ -16,39 +15,36 @@ import { Button } from 'antd-mobile';
 import { getDownloadUrl } from 'utils/utils';
 
 const Wrapper = styled.div`
-  position: fixed;
-  z-index: 99;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  height: 1.28rem;
-  background-color: ${pallete.white};
-  box-shadow: 0 0 10px rgba(51,51,112,.38);
+  margin: 0.72rem 0;
+  height: 1rem;
 `;
 
 const buttonStyle = {
-  width: '5.7rem',
+  width: '6.4rem',
+  height: '1rem',
+  lineHeight: '1rem',
   color: pallete.white,
   backgroundColor: pallete.theme,
-  borderRadius: 0,
 };
 
-class DownloadBar extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+class DownloadBtn extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   handleDownload = () => {
     window.location.href = getDownloadUrl();
   }
   render() {
+    const { label } = this.props;
     return (
       <Wrapper>
         <FlexCenter>
-          <Button style={buttonStyle} onClick={this.handleDownload}>免费下载，已有10000+人下载</Button>
+          <Button style={buttonStyle} onClick={this.handleDownload}>{label ? label : '点击下载'}</Button>
         </FlexCenter>
       </Wrapper>
     );
   }
 }
 
-DownloadBar.propTypes = {
+DownloadBtn.propTypes = {
+  label: PropTypes.string,
 };
 
-export default DownloadBar;
+export default DownloadBtn;

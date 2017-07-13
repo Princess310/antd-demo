@@ -55,20 +55,22 @@ export class ShareUserInfoPage extends React.PureComponent { // eslint-disable-l
 
   componentWillMount() {
     const self = this;
-    const { id } = this.props;
+    const { id, uid } = this.props;
     const { type, startPage } = this.state;
 
     request.doGet('match/view', {
       id,
+      uid,
       from_share: 1,
     }).then((res) => {
       const { data } = res;
+      const { share_user } = data;
 
       this.setState({
         userInfo: data,
       });
 
-      shareConfig.share('card', data);
+      shareConfig.share('card', data, share_user);
     });
 
     // fetch my moments

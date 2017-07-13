@@ -55,3 +55,8 @@ export function zeroFull(str) {
 export function emptyHtml(str) {
   return str.replace(/<[^>]+>/g,"");
 }
+
+export function getDownloadUrl() {
+  const DOWNLOAD_URL = 'http://a.app.qq.com/o/simple.jsp?pkgname=com.alijian.jkhz&winzoom=1';
+  return DOWNLOAD_URL;
+}
