@@ -129,10 +129,10 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
   onChangeTitle = (e) => {
     const index = e.nativeEvent.selectedSegmentIndex;
     const { getBusiness, unreadDot: { demand_red_dot, supplier_red_dot } } = this.props;
-    const { supplierLoaded } = this.state;
+    const { supplierLoaded, startPage } = this.state;
 
     if (Number(index) === 1 && !supplierLoaded) {
-      getBusiness(1);
+      getBusiness(1, startPage);
       this.setState({
         supplierLoaded: true,
         type: 1,
@@ -158,7 +158,7 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
           },
         });
 
-        getBusiness(1);
+        getBusiness(1, startPage);
       }
     } else {
       this.setState({
@@ -176,9 +176,9 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
             value: '',
           },
         });
-      }
 
-      getBusiness(2);
+        getBusiness(2, startPage);
+      }
     }
   }
 
