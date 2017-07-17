@@ -143,7 +143,9 @@ const shareConfig = {
 
   share: (type, data, user) => {
     // add weixin here to double check for weixin config
-    wx.ready(shareConfig.config(type, data, user));
+    wx.ready(() => {
+      shareConfig.config(type, data, user);
+    });
 
     return shareConfig.config(type, data, user);
   },
