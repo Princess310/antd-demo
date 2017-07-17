@@ -22,6 +22,7 @@ import UserHeaderBar from 'components/UserHeaderBar';
 import FlexSB from 'components/FlexSB';
 import FlexCenter from 'components/FlexCenter';
 import chatTool from 'components/ChatTool';
+import showWeixinGuide from 'components/WeixinGuide';
 import { NavBar, Tabs, WhiteSpace, Icon, ActionSheet } from 'antd-mobile';
 
 import { makeSelectBusinessDetail } from 'containers/BusinessPage/selectors';

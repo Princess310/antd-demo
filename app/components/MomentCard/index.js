@@ -25,6 +25,7 @@ import { Icon, Modal, ActionSheet, Button } from 'antd-mobile';
 import FlexSB from 'components/FlexSB';
 import LineTag from 'components/LineTag';
 import chatTool from 'components/ChatTool';
+import showWeixinGuide from 'components/WeixinGuide';
 import { likeMoment, sendComment, delMoment, collectMoment, setTopMoment, changeMomentTrade } from 'containers/BusinessPage/actions';
 import MomentHeader from './MomentHeader';
 import CmsMomentHeader from 'components/MomentCard/CmsMomentHeader';

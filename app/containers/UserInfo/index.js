@@ -23,6 +23,7 @@ import Gallery from 'components/UserInfoCard/Gallery';
 import UserInfoCard from 'components/UserInfoCard';
 import MomentInfoCard from 'components/MomentCard/MomentInfoCard';
 import AppContent from 'components/AppContent';
+import showWeixinGuide from 'components/WeixinGuide';
 import { NavBar, Popover, Tabs, WhiteSpace, Icon, ActionSheet } from 'antd-mobile';
 
 import { makeSelectUserInfo } from 'containers/UserCenter/selectors';
