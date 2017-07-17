@@ -16,6 +16,7 @@ import { applyRouterMiddleware, Router, browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 import { useScroll } from 'react-router-scroll';
 import request from 'utils/request';
+import brower from 'utils/brower';
 import 'sanitize.css/sanitize.css';
 // import photo swipe css
 import '!!style-loader!css-loader!photoswipe/dist/photoswipe.css';
@@ -115,6 +116,19 @@ export function initAppInfo() {
       },
     });
   });
+
+  // share api config
+  if (brower.checkIfWeixin()) {
+    request.doGet('user/js-api-config', {
+      url: encodeURIComponent(location.href.split('#')[0]),
+    })
+      .then((res) => {
+        let { list } = res;
+        list.debug = false;
+
+        wx.config(list);
+      })
+  }
 }
 
 // export the global store to solve dispath things

@@ -11,6 +11,9 @@ import { browserHistory } from 'react-router';
 import styled from 'styled-components';
 import pallete from 'styles/colors';
 import { zeroFull } from 'utils/utils';
+import shareUtil from 'utils/shareUtil';
+import shareConfig from 'utils/shareConfig';
+import brower from 'utils/brower';
 
 import { ScrollContainer } from 'react-router-scroll';
 import TouchLoader from 'components/TouchLoader';
@@ -20,7 +23,7 @@ import Gallery from 'components/UserInfoCard/Gallery';
 import UserInfoCard from 'components/UserInfoCard';
 import MomentInfoCard from 'components/MomentCard/MomentInfoCard';
 import AppContent from 'components/AppContent';
-import { NavBar, Popover, Tabs, WhiteSpace, Icon } from 'antd-mobile';
+import { NavBar, Popover, Tabs, WhiteSpace, Icon, ActionSheet } from 'antd-mobile';
 
 import { makeSelectUserInfo } from 'containers/UserCenter/selectors';
 import { makeSelectCurrentUser } from 'containers/HomePage/selectors';
@@ -32,6 +35,26 @@ const ListWrapper = styled.div`
   display: flex;
   backgroundColor: ${pallete.white};
 `;
+
+const shareIconList = [
+  { icon: <Icon type={require('icons/share/微博icon.svg')} color={pallete.theme} />, title: '新浪微博', type: 'sina' },
+  { icon: <Icon type={require('icons/share/QQicon.svg')} color={pallete.theme} />, title: 'QQ', type: 'qq' },
+];
+
+if (brower.checkIfWeixin()) {
+  shareIconList.push({
+    icon: <Icon type={require('icons/share/微信icon.svg')} color={pallete.theme} />,
+    title: '微信好友',
+    type: 'weixin',
+  });
+}
+if (brower.checkIfWeixin()) {
+  shareIconList.push({
+    icon: <Icon type={require('icons/share/微信icon.svg')} color={pallete.theme} />,
+    title: '微信好友',
+    type: 'weixin',
+  });
+}
 
 const Item = Popover.Item;
 const TabPane = Tabs.TabPane;
@@ -61,7 +84,7 @@ export class UserInfo extends React.PureComponent { // eslint-disable-line react
 
   onSelect = (opt) => {
     const value = opt.props.value;
-    const { userInfo, followUser } = this.props;
+    const { userInfo, followUser, currentUser } = this.props;
     
     if (value === 'complaint') {
       browserHistory.push({
@@ -70,6 +93,31 @@ export class UserInfo extends React.PureComponent { // eslint-disable-line react
           id: userInfo.id,
           module: 0,
         },
+      });
+    }
+
+    if (value === 'share') {
+      const shareInfo = shareConfig.share('card', userInfo, currentUser);
+
+      ActionSheet.showShareActionSheetWithOptions({
+        options: shareIconList,
+        message: '分享健康商信名片',
+      },
+      (index) => {
+        if (index > -1) {
+          const type = shareIconList[index].type;
+
+          if (type !== 'weixin') {
+            shareUtil.config(type, {
+              title: shareInfo.title,
+              pic: shareInfo.imgUrl,
+              content: shareInfo.desc,
+              url: shareInfo.link,
+            });
+          } else {
+            showWeixinGuide();
+          }
+        }
       });
     }
 
@@ -218,6 +266,9 @@ export class UserInfo extends React.PureComponent { // eslint-disable-line react
               overlay={[
                 (<Item key="1" value="complaint">
                   投诉
+                </Item>),
+                (<Item key="2" value="share">
+                  分享
                 </Item>),
               ]}
               align={{
