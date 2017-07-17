@@ -48,13 +48,6 @@ if (brower.checkIfWeixin()) {
     type: 'weixin',
   });
 }
-if (brower.checkIfWeixin()) {
-  shareIconList.push({
-    icon: <Icon type={require('icons/share/微信icon.svg')} color={pallete.theme} />,
-    title: '微信好友',
-    type: 'weixin',
-  });
-}
 
 const Item = Popover.Item;
 const TabPane = Tabs.TabPane;
