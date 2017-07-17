@@ -13,7 +13,8 @@ import pallete from 'styles/colors';
 
 import request from 'utils/request';
 import shareUtil from 'utils/shareUtil';
-import logo from 'assets/images/logo-icon.png';
+import shareConfig from 'utils/shareConfig';
+import brower from 'utils/brower';
 
 import AppContent from 'components/AppContent';
 import MomentCard from 'components/MomentCard';
@@ -54,6 +55,14 @@ const shareIconList = [
   { icon: <Icon type={require('icons/share/微博icon.svg')} color={pallete.theme} />, title: '新浪微博', type: 'sina' },
   { icon: <Icon type={require('icons/share/QQicon.svg')} color={pallete.theme} />, title: 'QQ', type: 'qq' },
 ];
+
+if (brower.checkIfWeixin()) {
+  shareIconList.push({
+    icon: <Icon type={require('icons/share/微信icon.svg')} color={pallete.theme} />,
+    title: '微信好友',
+    type: 'weixin',
+  });
+}
 
 const TabPane = Tabs.TabPane;
 export class MomentDetail extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
@@ -153,6 +162,7 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
     e.stopPropagation();
     const { currentUser, momentDetail } = this.props;
     const { id, content, pictures } = momentDetail;
+    const shareInfo = shareConfig.share('momment', momentDetail, currentUser);
 
     ActionSheet.showShareActionSheetWithOptions({
       options: shareIconList,
@@ -161,16 +171,17 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
     (index) => {
       if (index > -1) {
         const type = shareIconList[index].type;
-        shareUtil.config(type, {
-          url: `${request.getWebRoot()}public_share.html?type=momment&id=${id}`,
-          title: content !== '' ? content : `分享${currentUser.nickname}的健康商信动态`,
-          pic: pictures.length > 0 ? pictures[0] : `${request.getWebRoot()}${logo}`,
-          content: `健康产业APP：` +
-                    `${currentUser.company !== '' ? currentUser.company + '.' : ''}` +
-                    `${currentUser.position !== '' ? currentUser.position + '.' : ''}` +
-                    `${currentUser.nickname}` +
-                    `在分享动态，邀请您也来分享！`,
-        });
+
+        if (type !== 'weixin') {
+          shareUtil.config(type, {
+            title: shareInfo.title,
+            pic: shareInfo.imgUrl,
+            content: shareInfo.desc,
+            url: shareInfo.link,
+          });
+        } else {
+          showWeixinGuide();
+        }
       }
     });
   }

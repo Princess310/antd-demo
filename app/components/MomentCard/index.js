@@ -11,6 +11,8 @@ import pallete from 'styles/colors';
 import oss from 'utils/oss';
 import request from 'utils/request';
 import shareUtil from 'utils/shareUtil';
+import shareConfig from 'utils/shareConfig';
+import brower from 'utils/brower';
 
 import { browserHistory } from 'react-router';
 
@@ -81,6 +83,14 @@ const shareIconList = [
   { icon: <Icon type={require('icons/share/微博icon.svg')} color={pallete.theme} />, title: '新浪微博', type: 'sina' },
   { icon: <Icon type={require('icons/share/QQicon.svg')} color={pallete.theme} />, title: 'QQ', type: 'qq' },
 ];
+
+if (brower.checkIfWeixin()) {
+  shareIconList.push({
+    icon: <Icon type={require('icons/share/微信icon.svg')} color={pallete.theme} />,
+    title: '微信好友',
+    type: 'weixin',
+  });
+}
 
 const operation = Modal.operation;
 class MomentCard extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
@@ -260,24 +270,26 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
     e.stopPropagation();
     const { currentUser, moment } = this.props;
     const { id, content, pictures } = moment;
+    const shareInfo = shareConfig.share('momment', moment, currentUser);
 
     ActionSheet.showShareActionSheetWithOptions({
       options: shareIconList,
       message: '分享动态',
     },
     (index) => {
-      if (index > -1) {
+       if (index > -1) {
         const type = shareIconList[index].type;
-        shareUtil.config(type, {
-          url: `${request.getWebRoot()}public_share.html?type=momment&id=${id}`,
-          title: content !== '' ? content : `分享${currentUser.nickname}的健康商信动态`,
-          pic: pictures.length > 0 ? pictures[0] : `${request.getWebRoot()}${logo}`,
-          content: `健康产业APP：` +
-                    `${currentUser.company !== '' ? currentUser.company + '.' : ''}` +
-                    `${currentUser.position !== '' ? currentUser.position + '.' : ''}` +
-                    `${currentUser.nickname}` +
-                    `在分享动态，邀请您也来分享！`,
-        });
+
+        if (type !== 'weixin') {
+          shareUtil.config(type, {
+            title: shareInfo.title,
+            pic: shareInfo.imgUrl,
+            content: shareInfo.desc,
+            url: shareInfo.link,
+          });
+        } else {
+          showWeixinGuide();
+        }
       }
     });
   }

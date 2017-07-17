@@ -90,8 +90,8 @@ const shareConfig = {
         break;
       }
       case 'momment': {
-        const { id, nickname, content, pictures, company, position } = data;
-        title = content.trim() !== '' ? emptyHtml(content) : `分享${nickname}的健康商信动态`;
+        const { id, nickname, title:cmsTitle, content, pictures, company, position } = data;
+        title = cmsTitle ? cmsTitle : (content.trim() !== '' ? emptyHtml(content) : `分享${nickname}的健康商信动态`);
         timeLineTitle = `${emptyHtml(content)}分享${nickname}的健康商信动态.健康产业APP：${user ? `${user.company}.${user.position}.${user.nickname}` : `${company}.${position}.${nickname}`}在分享动态，邀请您也来分享`;
         desc = `健康商信APP：${user ? `${user.company}.${user.position}.${user.nickname}` : `${company}.${position}.${nickname}`}在分享动态，邀请您也来分享`;
         link = `${link}&id=${id}&uid=${uid}`;
@@ -135,13 +135,17 @@ const shareConfig = {
       pic: imgUrl,
       url: link,
     });
+
+    return {
+      title, desc, link, imgUrl
+    };
   },
 
   share: (type, data, user) => {
-    shareConfig.config(type, data, user);
-
     // add weixin here to double check for weixin config
     wx.ready(shareConfig.config(type, data, user));
+
+    return shareConfig.config(type, data, user);
   },
 };
 

@@ -13,15 +13,17 @@ import styled from 'styled-components';
 import pallete from 'styles/colors';
 import request from 'utils/request';
 import shareUtil from 'utils/shareUtil';
+import shareConfig from 'utils/shareConfig';
+import brower from 'utils/brower';
 
 import ExpProgress from 'components/ExpProgress';
 import LevelProgress from 'components/LevelProgress';
 import Avatar from 'components/Avatar';
 import FlexSB from 'components/FlexSB';
 import FlexRow from 'components/FlexRow';
+import showWeixinGuide from 'components/WeixinGuide';
 import { List, Icon, WhiteSpace, Button, ActionSheet, Modal } from 'antd-mobile';
 import userBg from 'assets/images/person-bg.png';
-import logo from 'assets/images/logo-icon.png';
 import { makeSelectCurrentUser } from 'containers/HomePage/selectors';
 import { loadSelectTab } from 'containers/HomePage/actions';
 
@@ -72,6 +74,14 @@ const shareIconList = [
   { icon: <Icon type={require('icons/share/QQicon.svg')} color={pallete.theme} />, title: 'QQ', type: 'qq' },
 ];
 
+if (brower.checkIfWeixin()) {
+  shareIconList.push({
+    icon: <Icon type={require('icons/share/微信icon.svg')} color={pallete.theme} />,
+    title: '微信好友',
+    type: 'weixin',
+  });
+}
+
 const verifyStyle = {
   marginLeft: '0.12rem',
   color: pallete.text.yellow,
@@ -102,6 +112,7 @@ export class UserCenter extends React.PureComponent { // eslint-disable-line rea
 
   showShareActionSheet = () => {
     const { currentUser } = this.props;
+    const shareInfo = shareConfig.share('app', { name: currentUser.nickname });
 
     ActionSheet.showShareActionSheetWithOptions({
       options: shareIconList,
@@ -110,12 +121,17 @@ export class UserCenter extends React.PureComponent { // eslint-disable-line rea
     (index) => {
       if (index > -1) {
         const type = shareIconList[index].type;
-        shareUtil.config(type, {
-          title: `${currentUser.nickname}邀请您加入健康商信APP`,
-          pic: `${request.getWebRoot()}${logo}`,
-          content: '80万行业资源平台，找讲师、找厂家、找经销商就上健康商信！',
-          url: request.getWebRoot(),
-        });
+
+        if (type !== 'weixin') {
+          shareUtil.config(type, {
+            title: shareInfo.title,
+            pic: shareInfo.imgUrl,
+            content: shareInfo.desc,
+            url: shareInfo.link,
+          });
+        } else {
+          showWeixinGuide();
+        }
       }
     });
   }
