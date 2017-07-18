@@ -24,6 +24,16 @@ const MaskWrapper = styled.div`
   background-color: rgba(0, 0, 0, 0.4);
 `;
 
+const MaskBg = styled.div`
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 100;
+  background-color: transparent;
+`;
+
 const ContentWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -125,19 +135,21 @@ class FilterPanel extends React.PureComponent { // eslint-disable-line react/pre
             </div>
           </FlexCenter>
           {expanded &&
-            <MaskWrapper onClick={this.handleExpand}>
-              <ContentWrapper>
-                <Button
-                  key={0}
-                  className="btn"
-                  inline
-                  style={value === 0 ? {...buttonStyle, ...buttonActiveStyle} : buttonStyle} activeStyle={buttonActiveStyle}
-                  onClick={() => onSelect({ id: 0, [field]: '' })}>
-                  {selectTotalName}
-                </Button>
-                {itemsView}
-              </ContentWrapper>
-            </MaskWrapper>
+            <MaskBg onClick={this.handleExpand}>
+              <MaskWrapper onClick={this.handleExpand}>
+                <ContentWrapper>
+                  <Button
+                    key={0}
+                    className="btn"
+                    inline
+                    style={value === 0 ? {...buttonStyle, ...buttonActiveStyle} : buttonStyle} activeStyle={buttonActiveStyle}
+                    onClick={() => onSelect({ id: 0, [field]: '' })}>
+                    {selectTotalName}
+                  </Button>
+                  {itemsView}
+                </ContentWrapper>
+              </MaskWrapper>
+            </MaskBg>
           }
         </div>
       </div>
