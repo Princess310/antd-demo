@@ -16,7 +16,6 @@ import { applyRouterMiddleware, Router, browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 import { useScroll } from 'react-router-scroll';
 import request from 'utils/request';
-import shareConfig from 'utils/shareConfig';
 import 'sanitize.css/sanitize.css';
 // import photo swipe css
 import '!!style-loader!css-loader!photoswipe/dist/photoswipe.css';
@@ -116,9 +115,6 @@ export function initAppInfo() {
       },
     });
   });
-
-  // weixin share config
-  shareConfig.wxConfig();
 }
 
 // export the global store to solve dispath things
