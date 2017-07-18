@@ -1,6 +1,8 @@
 // share config control
 import { emptyHtml } from 'utils/utils';
 import { getQueryString } from 'utils/utils';
+import request from 'utils/request';
+import brower from 'utils/brower';
 
 import logo from 'assets/images/logo-icon.png';
 
@@ -148,6 +150,22 @@ const shareConfig = {
     });
 
     return shareConfig.config(type, data, user);
+  },
+
+  wxConfig: () => {
+    // share api config
+    if (brower.checkIfWeixin()) {
+      request.doGet('user/js-api-config', {
+        url: encodeURIComponent(location.href.split('#')[0]),
+      })
+        .then((res) => {
+          let { list } = res;
+          list.debug = false;
+
+          wx.apiConfig = list;
+          wx.config(list);
+        })
+    }
   },
 };
 

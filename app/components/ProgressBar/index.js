@@ -1,4 +1,5 @@
 import React from 'react';
+import shareConfig from 'utils/shareConfig';
 import ProgressBar from './ProgressBar';
 
 function withProgressBar(WrappedComponent) {
@@ -13,15 +14,19 @@ function withProgressBar(WrappedComponent) {
     }
 
     componentWillMount() {
+      console.log('this.props.router', this.props.router);
       // Store a reference to the listener.
       /* istanbul ignore next */
       this.unsubscribeHistory = this.props.router && this.props.router.listenBefore((location) => {
-        // do wexin config when loaction change
-         wx.apiConfig && wx.config(wx.apiConfig);
         // Do not show progress bar for already loaded routes.
         if (this.state.loadedRoutes.indexOf(location.pathname) === -1) {
           this.updateProgress(0);
         }
+      });
+
+      this.props.router.listen(() => {
+        // do wexin config when loaction change
+        shareConfig.wxConfig();
       });
     }
 
