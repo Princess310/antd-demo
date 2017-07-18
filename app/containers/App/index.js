@@ -13,19 +13,19 @@
 
 import React from 'react';
 import Gallery from 'components/Gallery';
+import withProgressBar from 'components/ProgressBar';
 
-export default class App extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
-
-  static propTypes = {
-    children: React.PropTypes.node,
-  };
-
-  render() {
-    return (
-      <div>
-        {React.Children.toArray(this.props.children)}
+export function App(props) {
+  return (
+    <div>
+        {React.Children.toArray(props.children)}
         <Gallery />
       </div>
-    );
-  }
+  );
 }
+
+App.propTypes = {
+  children: React.PropTypes.node,
+};
+
+export default withProgressBar(App);

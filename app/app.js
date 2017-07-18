@@ -118,7 +118,7 @@ export function initAppInfo() {
   });
 
   // share api config
-  if (brower.checkIfWeixin()) {
+  //if (brower.checkIfWeixin()) {
     request.doGet('user/js-api-config', {
       url: encodeURIComponent(location.href.split('#')[0]),
     })
@@ -126,9 +126,10 @@ export function initAppInfo() {
         let { list } = res;
         list.debug = false;
 
+        wx.apiConfig = list;
         wx.config(list);
       })
-  }
+  //}
 }
 
 // export the global store to solve dispath things
