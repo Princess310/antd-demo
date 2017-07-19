@@ -228,7 +228,7 @@ class ShareMomentCard extends React.PureComponent { // eslint-disable-line react
                       borderBottom: `0.01rem ${pallete.border.normal} solid`,
                     }}
                   />                    
-                  <div dangerouslySetInnerHTML={{__html: contentView}} />
+                  <div className="app-cms-content" dangerouslySetInnerHTML={{__html: contentView}} />
                 </div>                  
               ) : (
                 <div style={{ marginBottom: '0.12rem' }}>{contentView}</div>

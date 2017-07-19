@@ -50,7 +50,6 @@ const ActionWrapper = styled(FlexSB)`
 const TabPane = Tabs.TabPane;
 export class ShareBusinessPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   state = {
-    contentClassName: '',
     title: '动态详情',
     type: 'business',
     moment: null,
@@ -69,29 +68,25 @@ export class ShareBusinessPage extends React.PureComponent { // eslint-disable-l
     }).then((res) => {
       const { data } = res;
       const { category, reward_as, source_type, share_user } = data;
-
-      let contentClassName = '';
       let title = (category === '3' || reward_as === '2') ? '需求详情' : ((category === '0' || reward_as === '1') ? '供应详情' : '动态详情');
       const type = (category === '3' || reward_as === '2' || category === '0' || reward_as === '1') ? 'business' : 'communication';
 
       // if it is CMS
       if (source_type === 1) {
         title = data.title;
-        contentClassName = 'app-cms-content';
       }
 
       this.setState({
         title,
         type,
         moment: data,
-        contentClassName,
       });
 
       shareConfig.share('momment', data, share_user);
     });
   }
   render() {
-    const { title, moment, type, contentClassName } = this.state;
+    const { title, moment, type } = this.state;
 
     return (
       <div>
@@ -99,13 +94,13 @@ export class ShareBusinessPage extends React.PureComponent { // eslint-disable-l
           mode="light"
           iconName={false}
         >
-          {title}
+          {title.length > 18 ? `${title.substring(0, 15)}...` : title}
         </NavBar>
         <AppContent style={{ paddingBottom: '1.28rem' }}>
             {
               moment ? (
                 <div>
-                  <div className={contentClassName}>
+                  <div>
                     <ShareMomentCard
                       moment={moment}
                       from="detail"
