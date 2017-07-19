@@ -93,7 +93,7 @@ export class ShareNotePage extends React.PureComponent { // eslint-disable-line 
             backgroundImage: `url(${oss.getImgSuitablePath(pic)})`,
             backgroundPosition: 'center center',
             backgroundSize: 'cover',
-            width: (Number(source_type) === 1 ? '100%' : picLength),
+            width: (pictures.length === 1 ? '100%' : picLength),
             height: picLength,
             marginTop: '0.12rem',
             marginRight: '0.12rem'
