@@ -68,7 +68,7 @@ export class ShareBusinessPage extends React.PureComponent { // eslint-disable-l
     }).then((res) => {
       const { data } = res;
       const { category, reward_as, source_type, share_user } = data;
-      let title = (category === '3' || reward_as === '2') ? '需求详情' : ((category === '0' || reward_as === '1') ? '供应详情' : '动态详情');
+      let title = (category === '3' || reward_as === '2') ? '需求动态详情' : ((category === '0' || reward_as === '1') ? '供应动态详情' : '动态详情');
       const type = (category === '3' || reward_as === '2' || category === '0' || reward_as === '1') ? 'business' : 'communication';
 
       // if it is CMS
