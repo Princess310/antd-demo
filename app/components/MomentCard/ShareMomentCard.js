@@ -76,7 +76,6 @@ class ShareMomentCard extends React.PureComponent { // eslint-disable-line react
   handleView = (e, i) => {
     e.preventDefault();
     e.stopPropagation()
-    console.log('handle view');
     const { moment: { pictures } } = this.props;
 
     wx.previewImage({

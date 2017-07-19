@@ -74,6 +74,17 @@ export class ShareNotePage extends React.PureComponent { // eslint-disable-line 
     });
   }
 
+  handleView = (e, i) => {
+    e.preventDefault();
+    e.stopPropagation()
+    const { moment: { pictures } } = this.state;
+
+    wx.previewImage({
+      current: pictures[i],
+      urls: pictures,
+    });
+  }
+
   handleDownload = () => {
     window.location.href = getDownloadUrl();
   }
@@ -107,7 +118,7 @@ export class ShareNotePage extends React.PureComponent { // eslint-disable-line 
         <AppContent style={{
           top: 0,
           backgroundColor: pallete.white,
-          paddingBottom: '1.1rem',
+          paddingBottom: '1.32rem',
         }}>
           {moment && (
             <div>
