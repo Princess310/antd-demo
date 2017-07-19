@@ -78,8 +78,9 @@ const shareConfig = {
         title = `${name ? name : ''}邀请您加入健康商信APP`;
         timeLineTitle = `${name ? name : ''}邀请您加入健康商信APP，80万行业资源平台，找讲师、找厂家、找经销商就上健康商信！`;
         desc = `80万行业资源平台，找讲师、找厂家、找经销商就上健康商信！`;
-        link = `${link}&name=${name ? name : ''}`;
+        link = `http://${domain}/group_share.html?&name=${name ? name : ''}`;
         imgUrl = `${domain}${logo}`;
+        console.log('link', link);
         break;
       }
       case 'card': {
