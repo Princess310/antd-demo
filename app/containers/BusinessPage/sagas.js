@@ -18,6 +18,8 @@ import {
   fetchCommunicate
 } from 'containers/Communicate/sagas';
 
+import { loadSelectTab } from 'containers/HomePage/actions';
+
 import {
   FETCH_MOMENT_DETAIL,
 
