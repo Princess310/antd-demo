@@ -27,7 +27,7 @@ import { NavBar, Tabs, WhiteSpace, Icon, ActionSheet } from 'antd-mobile';
 
 import { makeSelectBusinessDetail } from 'containers/BusinessPage/selectors';
 import { makeSelectCurrentUser } from 'containers/HomePage/selectors';
-import { fetchMomentDetail, loadMomentDetail, likeMoment, sendComment, delComment, likeComment, collectMoment } from 'containers/BusinessPage/actions';
+import { fetchMomentDetail, loadMomentDetail, likeMoment, sendComment, delComment, likeComment, collectMoment, setTopMoment } from 'containers/BusinessPage/actions';
 
 const CommentWrapper = styled.div`
   fontSize: 0.26rem;
@@ -156,6 +156,14 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
           doCollectMoment(momentDetail.id);
         }
       });
+  }
+
+  handleSetTop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const { momentDetail, doSetTopMoment } = this.props;
+
+    doSetTopMoment(momentDetail.id, momentDetail.reward_as);
   }
 
   handleShare = (e) => {
@@ -291,7 +299,7 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
             </AppContent>
             <ActionWrapper style={{ color: themeColor }}>
               {(type === 'business' && String(currentUser.id) === uid) &&
-                <FlexCenter>
+                <FlexCenter onClick={this.handleSetTop}>
                   <Icon type={require('icons/ali/置顶.svg')} size="sm" />
                   <span style={{ marginLeft: '0.04rem' }}>置顶</span>
                 </FlexCenter>
@@ -334,6 +342,7 @@ MomentDetail.propTypes = {
   doSendComment: PropTypes.func,
   doDelComment: PropTypes.func,
   doCollectMoment: PropTypes.func,
+  doSetTopMoment: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -350,6 +359,7 @@ function mapDispatchToProps(dispatch) {
     doSendComment: (id, uid, content, from, pid) => dispatch(sendComment(id, uid, content, from, pid)),
     doDelComment: (id, cid) => dispatch(delComment(id, cid)),
     doCollectMoment: (id) => dispatch(collectMoment(id)),
+    doSetTopMoment: (id, reward_as) => dispatch(setTopMoment(id, reward_as)),
   };
 }
 
