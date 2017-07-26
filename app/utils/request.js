@@ -3,7 +3,7 @@ import { Toast } from 'antd-mobile';
 import { browserHistory } from 'react-router';
 
 export const API_ROOT = 'http://jkhz-api-dev.test.alijian.net/index.php?r=';
-export const WEB_ROOT = 'http://jkhz-web.test.alijian.net/';
+export const WEB_ROOT = 'http://jkhz-wap.test.alijian.net/';
 
 const fetchDao = {
   doGet(url, params) {
