@@ -27,7 +27,7 @@ export class UserCenterVisitor extends React.PureComponent { // eslint-disable-l
     super(props);
 
     this.state = {
-      type: 0, // type-> 0: 我的访客, 1:访问我的
+      type: 1, // type-> 0: 我的访客, 1:访问我的
       startPage: 1,
       users: {
         page: 1,
@@ -91,11 +91,11 @@ export class UserCenterVisitor extends React.PureComponent { // eslint-disable-l
       getVisitor(0);
       this.setState({
         usersLoaded: true,
-        type: key,
+        type: Number(key),
       });
     } else {
       this.setState({
-        type: key,
+        type: Number(key),
       });
     }
   }
@@ -108,11 +108,11 @@ export class UserCenterVisitor extends React.PureComponent { // eslint-disable-l
       getVisitor(0);
       this.setState({
         usersLoaded: true,
-        type: key,
+        type: Number(key),
       });
     } else {
       this.setState({
-        type: key,
+        type: Number(key),
       });
     }
   }
