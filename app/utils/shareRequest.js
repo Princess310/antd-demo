@@ -1,7 +1,7 @@
 import 'whatwg-fetch';
 import { Toast } from 'antd-mobile';
 
-export const API_ROOT = 'http://jkhz-api-dev.test.alijian.net//index.php?r=';
+export const API_ROOT = 'http://jkhz-api-dev.test.alijian.net/index.php?r=';
 export const WEB_ROOT = 'http://jkhz-web.test.alijian.net/';
 
 const fetchDao = {

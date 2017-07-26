@@ -16,6 +16,7 @@ import messages from './messages';
 
 export default class NotFound extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   render() {
+    console.log(this.props.location.pathname);
     return (
       <h1>
         <FormattedMessage {...messages.header} />

@@ -515,6 +515,14 @@ export default function createRoutes(store) {
           .catch(errorLoading);
       },
     }, {
+      path: 'index.html',
+      name: 'indexPage',
+      getComponent(location, cb) {
+        import('containers/IndexPage')
+          .then(loadModule(cb))
+          .catch(errorLoading);
+      },
+    }, {
       path: '*',
       name: 'notfound',
       getComponent(nextState, cb) {

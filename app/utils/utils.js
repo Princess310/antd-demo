@@ -60,3 +60,23 @@ export function getDownloadUrl() {
   const DOWNLOAD_URL = 'http://a.app.qq.com/o/simple.jsp?pkgname=com.alijian.jkhz&winzoom=1';
   return DOWNLOAD_URL;
 }
+
+export function parseHash(hash) {
+  const pathAndParam = hash.substring(1).split('!');
+  let params = {};
+
+  if (pathAndParam[1]) {
+    const ps = pathAndParam[1].split("&");
+    ps.forEach((param) => {
+      const keyVal = param.split('=');
+      const key = keyVal[0];
+      const val = keyVal[1];
+      params[key] = val;
+    });
+  }
+
+  return {
+    path: pathAndParam[0],
+    params: params,
+  };
+}

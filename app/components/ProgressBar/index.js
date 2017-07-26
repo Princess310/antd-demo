@@ -14,7 +14,6 @@ function withProgressBar(WrappedComponent) {
     }
 
     componentWillMount() {
-      console.log('this.props.router', this.props.router);
       // Store a reference to the listener.
       /* istanbul ignore next */
       this.unsubscribeHistory = this.props.router && this.props.router.listenBefore((location) => {
