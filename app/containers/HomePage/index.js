@@ -56,7 +56,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
   }
 
   componentWillReceiveProps(nextProps) {
-    const { currentUser } = nextProps;
+    const { currentUser, location } = nextProps;
 
     if (!currentUser.id) {
       browserHistory.replace('/preview');
@@ -76,7 +76,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
   }
 
   render() {
-    const { location, children, selectTab, setSelectTab, unreadDot } = this.props;
+    const { location, children, selectTab, setSelectTab, unreadDot, getUser } = this.props;
     const hideTabs = location.pathname !== '/';
     return (
       <div>
@@ -135,6 +135,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
             selected={selectTab === 'mine'}
             onPress={() => {
               setSelectTab('mine');
+              getUser();
             }}
           >
             <div className="home-container">

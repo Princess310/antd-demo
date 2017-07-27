@@ -10,7 +10,7 @@
  *   return state.set('yourStateVariable', true);
  */
 import { fromJS } from 'immutable';
-
+import { browserHistory } from 'react-router';
 import {
   CHANGE_USERNAME,
   LOAD_SELECT_TAB,
@@ -34,7 +34,11 @@ function homeReducer(state = initialState, action) {
         .set('username', action.name.replace(/@/gi, ''));
     case LOAD_SELECT_TAB: {
       const { selectTab } = action.payload;
+      const { pathname } = window.location;
 
+      if (pathname !== '/') {
+        browserHistory.goBack();
+      }
       return state.set('selectTab', selectTab);
     }
     case LOAD_UNREAD_DOT: {

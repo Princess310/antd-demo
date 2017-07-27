@@ -5,6 +5,9 @@ import { browserHistory } from 'react-router';
 export const API_ROOT = 'http://jkhz-api-dev.test.alijian.net/index.php?r=';
 export const WEB_ROOT = 'http://jkhz-wap.test.alijian.net/';
 
+const pathErrNeedToHandle = [
+  'moments/supply-and-demnd-top',
+];
 const fetchDao = {
   doGet(url, params) {
     return this.request('GET', url, params);
@@ -93,7 +96,12 @@ const fetchDao = {
           if (data.code === 603) {
             browserHistory.push('/preview');
           } else {
-            Toast.info(data.message, 2);
+            // XXX: some path need to handle result for code is not 200
+            if (pathErrNeedToHandle.findIndex(p => p === u) !== -1) {
+              resolve(data);
+            } else{
+              Toast.info(data.message, 2);
+            }
           }
         } else {
           resolve(data);

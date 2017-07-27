@@ -358,17 +358,31 @@ export function* setTopMoment(action) {
     const res = yield request.doPost('moments/supply-and-demnd-top', {
       moments_id: id,
     });
+    
+    if (res.code !== 200) {
+      const { data: { my_point, release_point } } = res;
 
-    yield fetchBusiness({
-      payload: {
-        type: reward_as,
-        page: 1,
-      },
-    });
+      if (my_point < release_point) {
+        alert('积分不足', `剩余${my_point}积分。您的账户不足${release_point}分，无法置顶，可到“动态”栏目评论、点赞、分享挣取积分。`, [
+          { text: '我知道了', onPress: () => console.log('cancel') },
+          { text: '立即前去', onPress: () => {
+            const store = getStore();
+            store.dispatch(loadSelectTab('communicate'));
+          }, style: { fontWeight: 'bold' } },
+        ]);
+      }
+    } else {
+       yield fetchBusiness({
+        payload: {
+          type: reward_as,
+          page: 1,
+        },
+      });
 
-    const { data: { is_popup }, message } = res;
-    if (is_popup === 0) {
-      Toast.info(message, 1.2);
+      const { data: { is_popup }, message } = res;
+      if (is_popup === 0) {
+        Toast.info(message, 1.2);
+      }
     }
   } catch (err) {
     // console.log(err);
@@ -430,10 +444,7 @@ export function* publishMoment(action) {
 
     const { data: { is_popup, messagePopup }, message } = res;
     if (is_popup === 1) {
-      alert('发布成功', <div>
-          <div style={{ color: '#50ABF1' }}>{messagePopup[0]}</div>
-          <div>{messagePopup[1]}</div>
-        </div>, [
+      alert('发布成功', `${messagePopup[0]}。${messagePopup[1]}`, [
         { text: '我知道了', onPress: () => console.log('cancel') },
         { text: '立即前去', onPress: () => {
           const store = getStore();
