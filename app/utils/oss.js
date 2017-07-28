@@ -74,8 +74,7 @@ const oss = {
 
     if (path.indexOf("__") >= 0 && path[path.length - 1] !== 'p') {
       if (Number(size) > checkPicSize) {
-        resizePercent = Math.round(checkPicSize / (size * 100));
-
+        resizePercent = Math.round((checkPicSize / size) * 100);
         if (resizePercent === 0) {
           resizePercent = 1;
         }
