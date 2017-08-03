@@ -45,7 +45,7 @@ const ContentWrapper = styled.div`
 const buttonStyle = {
   padding: 0,
   margin: '0.04rem 0.025rem',
-  width: '1.72rem',
+  width: 'calc((100% - 0.2rem) / 4)',
   height: '0.62rem',
   lineHeight: '0.62rem',
   backgroundColor: pallete.background.grey,

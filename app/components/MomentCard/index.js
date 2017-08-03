@@ -21,7 +21,8 @@ import logo from 'assets/images/logo-icon.png';
 import PhotoSwipe from 'photoswipe';
 import PhotoSwipeUIdefault from 'photoswipe/dist/photoswipe-ui-default';
 
-import { Icon, Modal, ActionSheet, Button } from 'antd-mobile';
+import { Icon, ActionSheet, Button } from 'antd-mobile';
+import operation from 'components/Operation';
 import FlexSB from 'components/FlexSB';
 import LineTag from 'components/LineTag';
 import chatTool from 'components/ChatTool';
@@ -93,7 +94,6 @@ if (brower.checkIfWeixin()) {
   });
 }
 
-const operation = Modal.operation;
 class MomentCard extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
     super(props);
@@ -209,7 +209,7 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
         { text: '取消', onPress: () => {
           // TODO: add action
         }, style: actionSheetStyle },
-      ]);
+      ], { platform: 'ios' });
     } else {
       operation([
         { text: '收藏', onPress: () => {
@@ -227,7 +227,7 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
         { text: '取消', onPress: () => {
           // TODO: add action
         }, style: actionSheetStyle },
-      ]);
+      ], { platform: 'ios' });
     }
   }
 
@@ -376,14 +376,7 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
         <div>需求数量：{section === '' ? '不限' : section}</div>
         <div>{contentResult}</div>
       </div>
-    ) : (
-      businessType === 'demand' ? (
-        <div style={{ marginBottom: '0.08rem' }}>
-          {item_name !== '' && <LineTag>{item_name}</LineTag>}
-          {section !== '' && <LineTag style={{ marginLeft: '0.08rem' }}>{section}</LineTag>}
-        </div>
-      ) : contentResult
-    );
+    ) : contentResult;
 
     const tagStyle = (businessType && businessType === 'demand') ? {
       borderColor: pallete.theme,
@@ -491,7 +484,7 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
                         borderBottom: `0.01rem ${pallete.border.normal} solid`,
                       }}
                     />                    
-                    <div dangerouslySetInnerHTML={{__html: contentView}} />
+                    <div className="app-cms-content" dangerouslySetInnerHTML={{__html: contentView}} />
                   </div>                  
                 ) : (
                   <div style={{ marginBottom: '0.12rem' }}>{contentView}</div>

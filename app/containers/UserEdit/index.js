@@ -24,8 +24,8 @@ const briefStyle = {
 const imgStyle = {
   marginTop: '0.08rem',
   marginRight: '0.08rem',
-  width: '2.34rem',
-  height: '2.34rem',
+  width: '2.2rem',
+  height: '2.2rem',
 }
 
 const Item = List.Item;

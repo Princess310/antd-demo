@@ -41,7 +41,6 @@ const UserWrapper = styled.div`
 
 const InfoWrapper = styled.div`
   margin-left: 0.2rem;
-  width: 4rem;
   color: ${pallete.white};
 `;
 

@@ -90,7 +90,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
           <TabItem
             title="动态"
             key="动态"
-            badge={unreadDot ? unreadDot.communication_red_dot : 0}
+            dot={unreadDot ? (unreadDot.communication_red_dot > 0 ? true : false) : false}
             icon={<Icon type={require('icons/ali/动态.svg')} />}
             selectedIcon={<Icon type={require('icons/ali/动态.svg')} />}
             selected={selectTab === 'communicate'}
