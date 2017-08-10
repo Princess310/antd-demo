@@ -100,6 +100,7 @@ export class ShareUserInfoPage extends React.PureComponent { // eslint-disable-l
   handleFetchMyMoments = (type, page) => {
     const self = this;
     const { id } = this.props;
+    const { myMomentsDemand, myMomentsSupplier } = this.state;
 
     if (page !== 1) {
       this.handleSetMomentsLoading(true);
@@ -124,7 +125,7 @@ export class ShareUserInfoPage extends React.PureComponent { // eslint-disable-l
             myMomentsDemand: {
               page: (page ? page.current_page : 1),
               loading: false,
-              list,
+              list: myMomentsDemand.list ? [...myMomentsDemand.list, ...list] : list,
               hasNext,
             },
           });
@@ -133,7 +134,7 @@ export class ShareUserInfoPage extends React.PureComponent { // eslint-disable-l
             myMomentsSupplier: {
               page: (page ? page.current_page : 1),
               loading: false,
-              list,
+              list: myMomentsSupplier.list ? [...myMomentsSupplier.list, ...list] : list,
               hasNext,
             },
           });
@@ -213,7 +214,10 @@ export class ShareUserInfoPage extends React.PureComponent { // eslint-disable-l
   }
 
   onEndReached = () => {
-    const { type } = this.state;
+    const { type, myMomentsDemand, myMomentsSupplier } = this.state;
+    const page = type === 2 ? myMomentsDemand.page : myMomentsSupplier.page;
+
+    this.handleFetchMyMoments(type, page + 1);
   }
 
   render() {
