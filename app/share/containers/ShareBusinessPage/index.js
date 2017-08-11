@@ -172,6 +172,7 @@ export class ShareBusinessPage extends React.PureComponent { // eslint-disable-l
               moment={moment}
               from="list"
               type="business"
+              style={{ marginBottom: '0.15rem' }}
             />
           </div>
         );
@@ -182,6 +183,7 @@ export class ShareBusinessPage extends React.PureComponent { // eslint-disable-l
         moment={moment}
         from="list"
         type="business"
+        style={{ marginBottom: '0.15rem' }}
       />
     }) : null;
 

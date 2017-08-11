@@ -171,4 +171,20 @@ injectGlobal`
     top: 0.12rem;
     right: 0.12rem;
   }
+
+  .introduce-input-item.am-list-item.am-input-item {
+    padding: 0 0.24rem;
+    height: 0.6rem;
+    min-height: 0.6rem;
+    background-color: #f0f0f0;
+
+    &:after {
+      display: none;
+    }
+  }
+
+  .am-button-primary {
+    background-color: rgb(80, 171, 241);
+    border: 1px solid rgb(80, 171, 241);
+  }
 `;

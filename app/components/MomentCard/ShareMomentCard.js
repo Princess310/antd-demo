@@ -10,11 +10,14 @@ import styled from 'styled-components';
 import pallete from 'styles/colors';
 import oss from 'utils/oss';
 
-import { Icon, Button, Toast } from 'antd-mobile';
+import { Icon, Button, Toast, ActionSheet } from 'antd-mobile';
 import FlexSB from 'components/FlexSB';
 import LineTag from 'components/LineTag';
 import chatTool from 'components/ChatTool';
 import CmsMomentHeader from 'components/MomentCard/CmsMomentHeader';
+import ShareIntroduceModal from 'components/IntroduceModal/ShareIntroduceModal';
+import showWeixinGuide from 'components/WeixinGuide';
+import { getDownloadUrl } from 'utils/utils';
 
 import MomentHeader from './MomentHeader';
 import MomentComment from './MomentComment';
@@ -44,6 +47,16 @@ const Remark = styled.span`
   color: ${pallete.theme};
 `;
 
+const ActionWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+`;
+
+const actionItemStyle = {
+  marginLeft: '0.36rem',
+};
+
 const contentActionStyle = {
   margin: '0.12rem 0',
   fontSize: '0.28rem',
@@ -71,6 +84,10 @@ const buttonStyle = {
 class ShareMomentCard extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
     super(props);
+
+    this.state = {
+      showModal: false,
+    };
   }
 
   handleView = (e, i) => {
@@ -88,6 +105,35 @@ class ShareMomentCard extends React.PureComponent { // eslint-disable-line react
     e.preventDefault();
     e.stopPropagation();
     Toast.info('请注册或登录', 2);
+  }
+
+  toggleModal = () => {
+    this.setState({
+      showModal: !this.state.showModal,
+    });
+  }
+
+  handleCall = () => {
+    const { moment } = this.props;
+    const BUTTONS = [<a style={{ display: 'block', color: '#000' }} href={`tel:${moment.mobile}`}>拨打电话</a>, 'APP中联系', '取消'];
+    ActionSheet.showActionSheetWithOptions({
+      options: BUTTONS,
+      cancelButtonIndex: BUTTONS.length - 1,
+      // title: '标题',
+      message: '为了更快的和对方衔接业务，您还可以',
+      maskClosable: true,
+    },
+    (buttonIndex) => {
+      if (buttonIndex === 0) {
+        window.location.href = 'tel:18227552785';
+      } else if (buttonIndex === 1) {
+        window.location.href = getDownloadUrl();
+      }
+    });
+  }
+
+  handleShare = () => {
+    showWeixinGuide();
   }
 
   render() {
@@ -119,6 +165,7 @@ class ShareMomentCard extends React.PureComponent { // eslint-disable-line react
       reward_as,
       created_at,
       demand_counts,
+      show_mobile,
       ...other,
     } = moment;
 
@@ -169,6 +216,42 @@ class ShareMomentCard extends React.PureComponent { // eslint-disable-line react
         </div>
       ) : contentResult
     );
+
+    const actionView = businessType === 'status' ? (
+      <ActionWrapper style={{ paddingLeft: (type === 'business' ? '2.6rem' : '3.6rem'), paddingRight: '0.12rem', fontSize: '0.28rem', color: pallete.text.help }}>
+        <FlexSB onClick={this.handleDownloadInfo} style={actionItemStyle}>
+          <Icon type={require('icons/ali/评论.svg')} size="sm" color={pallete.text.help} />
+          <span style={{ marginLeft: '0.04rem' }}>{comment_count > 0 ? comment_count : '评论'}</span>
+        </FlexSB>
+        <FlexSB onClick={this.handleDownloadInfo} style={actionItemStyle}>
+          <Icon type={require('icons/ali/点赞.svg')} size="sm" color={is_like > 0 ? pallete.theme : pallete.text.help} />
+          <span style={{ marginLeft: '0.04rem' }}>{like_count > 0 ? like_count : '点赞'}</span>
+        </FlexSB>
+        <FlexSB onClick={this.handleShare} style={actionItemStyle}>
+          <Icon type={require('icons/ali/分享.svg')} size="xxs" color={pallete.text.help} />
+          <span style={{ marginLeft: '0.04rem' }}>{share_count > 0 ? share_count : '分享'}</span>
+        </FlexSB>
+      </ActionWrapper>
+    ) : (
+      <ActionWrapper style={{ paddingRight: '0.12rem', fontSize: '0.28rem', color: pallete.text.content }}>
+        {Number(show_mobile) === 1 &&
+          <FlexSB onClick={this.handleCall} style={actionItemStyle}>
+            <Icon type={require('icons/ali/我有.svg')} size="sm" color={pallete.text.content} />
+            <span style={{ marginLeft: '0.08rem' }}>{businessType === 'demand' ? '我有' : '我需要'}</span>
+          </FlexSB>
+        }
+        <FlexSB onClick={this.toggleModal} style={actionItemStyle}>
+          <Icon type={require('icons/ali/转介绍.svg')} size="sm" color={is_like > 0 ? pallete.theme : pallete.text.content} />
+          <span style={{ marginLeft: '0.08rem' }}>转介绍</span>
+        </FlexSB>
+        {from !== 'list' &&
+          <FlexSB onClick={this.handleShare} style={actionItemStyle}>
+            <Icon type={require('icons/ali/分享.svg')} size="xxs" color={pallete.text.content} />
+            <span style={{ marginLeft: '0.08rem' }}>{share_count > 0 ? share_count : '分享'}</span>
+          </FlexSB>
+        }
+      </ActionWrapper>
+    )
 
     const tagStyle = {
       borderColor: pallete.theme,
@@ -239,22 +322,9 @@ class ShareMomentCard extends React.PureComponent { // eslint-disable-line react
             {Number(source_type) !== 1 && (
               (Number(hits) > 0 && from !== 'search') && <div style={{ fontSize: '0.26rem', color: pallete.text.help }}>{hits}人看过</div>
             )}
-            {type === 'business' && <Button style={buttonStyle} onClick={this.handleDownloadInfo}>加好友</Button>}
+            {type === 'business' && <Button style={buttonStyle} onClick={this.handleDownloadInfo}>对话</Button>}
           </ContentWrapper>
-          <FlexSB style={{ paddingLeft: (type === 'business' ? '2.6rem' : '3.6rem'), paddingRight: '0.12rem', fontSize: '0.28rem', color: pallete.text.help }}>
-            <FlexSB onClick={this.handleDownloadInfo}>
-              <Icon type={require('icons/ali/评论.svg')} size="sm" color={pallete.text.help} />
-              <span style={{ marginLeft: '0.04rem' }}>{comment_count > 0 ? comment_count : '评论'}</span>
-            </FlexSB>
-            <FlexSB onClick={this.handleDownloadInfo}>
-              <Icon type={require('icons/ali/点赞.svg')} size="sm" color={is_like > 0 ? pallete.theme : pallete.text.help} />
-              <span style={{ marginLeft: '0.04rem' }}>{like_count > 0 ? like_count : '点赞'}</span>
-            </FlexSB>
-            <FlexSB onClick={this.handleDownloadInfo}>
-              <Icon type={require('icons/ali/分享.svg')} size="xxs" color={pallete.text.help} />
-              <span style={{ marginLeft: '0.04rem' }}>{share_count > 0 ? share_count : '分享'}</span>
-            </FlexSB>
-          </FlexSB>
+          {actionView}
         </div>
         {(comments && comments.length > 0 && from === 'list') && 
           <MomentComment
@@ -265,6 +335,7 @@ class ShareMomentCard extends React.PureComponent { // eslint-disable-line react
             style={{ padding: '0.15rem' }}
           />
         }
+        {this.state.showModal && <ShareIntroduceModal id={id} onClose={this.toggleModal} />}
       </div>
     );
   }
