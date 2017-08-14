@@ -9,19 +9,7 @@ import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 import pallete from 'styles/colors';
 
-const ModelWrapper = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: rgba(0, 0, 0, 0.4);
-  height: 100%;
-  z-index: 1000;
-`;
+import Mask from 'components/Mask';
 
 const ContentWrapper = styled.div`
   padding: 0.32rem 0.6rem;
@@ -42,14 +30,14 @@ function introduceModal(...args) {
   }
 
   ReactDOM.render(
-    <ModelWrapper onClick={close}>
+    <Mask onClick={close}>
       <div style={{ backgroundColor: pallete.white, borderRadius: '0.08rem' }}>
         <ContentWrapper>
           <header style={{ fontSize: '0.3rem', textAlign: 'center' }}>转介绍</header>
           <section style={{ marginTop: '0.32rem', fontSize: '0.22rem', color: '#848b9f' }}>推荐商家给他人，也会让您认识更多生意伙伴哦~</section>
         </ContentWrapper>
       </div>
-    </ModelWrapper>, div,
+    </Mask>, div,
   );
 
   return {

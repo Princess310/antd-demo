@@ -9,21 +9,8 @@ import styled from 'styled-components';
 import pallete from 'styles/colors';
 import { InputItem, Icon, Button, Toast } from 'antd-mobile';
 import FlexRow from 'components/FlexRow';
+import Mask from 'components/Mask';
 import request from 'utils/shareRequest';
-
-const ModelWrapper = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: rgba(0, 0, 0, 0.4);
-  height: 100%;
-  z-index: 1000;
-`;
 
 const ContentWrapper = styled.div`
   position: relative;
@@ -96,7 +83,7 @@ class ShareIntroduceModal extends React.PureComponent { // eslint-disable-line r
     const { username, phone } = this.state;
     const { onClose } = this.props;
     return (
-      <ModelWrapper>
+      <Mask>
         <div style={{ backgroundColor: pallete.white, borderRadius: '0.08rem' }}>
           <ContentWrapper>
             <div
@@ -158,7 +145,7 @@ class ShareIntroduceModal extends React.PureComponent { // eslint-disable-line r
             >确定</Button>
           </FlexRow>
         </div>
-      </ModelWrapper>
+      </Mask>
     );
   }
 }

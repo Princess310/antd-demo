@@ -10,13 +10,14 @@ import styled from 'styled-components';
 import pallete from 'styles/colors';
 import oss from 'utils/oss';
 
-import { Icon, Button, Toast, ActionSheet } from 'antd-mobile';
+import { Icon, Button, Toast } from 'antd-mobile';
 import FlexSB from 'components/FlexSB';
 import LineTag from 'components/LineTag';
 import chatTool from 'components/ChatTool';
 import CmsMomentHeader from 'components/MomentCard/CmsMomentHeader';
 import ShareIntroduceModal from 'components/IntroduceModal/ShareIntroduceModal';
 import showWeixinGuide from 'components/WeixinGuide';
+import actionSheet from 'components/ActionSheet';
 import { getDownloadUrl } from 'utils/utils';
 
 import MomentHeader from './MomentHeader';
@@ -115,18 +116,13 @@ class ShareMomentCard extends React.PureComponent { // eslint-disable-line react
 
   handleCall = () => {
     const { moment } = this.props;
-    const BUTTONS = [<a style={{ display: 'block', color: '#000' }} href={`tel:${moment.mobile}`}>拨打电话</a>, 'APP中联系', '取消'];
-    ActionSheet.showActionSheetWithOptions({
+    const BUTTONS = [<a style={{ display: 'block' }} href={`tel:${moment.mobile}`}>拨打电话</a>, 'APP中联系'];
+    actionSheet({
       options: BUTTONS,
-      cancelButtonIndex: BUTTONS.length - 1,
-      // title: '标题',
-      message: '为了更快的和对方衔接业务，您还可以',
-      maskClosable: true,
+      title: '为了更快的和对方衔接业务，您还可以',
     },
     (buttonIndex) => {
-      if (buttonIndex === 0) {
-        window.location.href = 'tel:18227552785';
-      } else if (buttonIndex === 1) {
+      if (buttonIndex === 1) {
         window.location.href = getDownloadUrl();
       }
     });
@@ -241,7 +237,7 @@ class ShareMomentCard extends React.PureComponent { // eslint-disable-line react
           </FlexSB>
         }
         <FlexSB onClick={this.toggleModal} style={actionItemStyle}>
-          <Icon type={require('icons/ali/转介绍.svg')} size="sm" color={is_like > 0 ? pallete.theme : pallete.text.content} />
+          <Icon type={require('icons/ali/转介绍.svg')} size="sm" color={pallete.text.content} />
           <span style={{ marginLeft: '0.08rem' }}>转介绍</span>
         </FlexSB>
         {from !== 'list' &&
