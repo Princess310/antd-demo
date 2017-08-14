@@ -187,4 +187,25 @@ injectGlobal`
     background-color: rgb(80, 171, 241);
     border: 1px solid rgb(80, 171, 241);
   }
+
+  .animated {
+    animation-duration: 0.5s;
+    animation-fill-mode: both;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: .5;
+      transform: translate3d(0, 100%, 0);
+    }
+
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .fadeInUp {
+    animation-name: fadeInUp;
+  }
 `;

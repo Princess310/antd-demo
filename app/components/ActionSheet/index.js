@@ -63,16 +63,17 @@ function actionSheet(props, cb) {
       div.parentNode.removeChild(div);
     }
   }
-console.log('options', options);
+
   const btns = options.map((o, i) => (
-    <Button key={i} onClick={() => {
+    <Button key={i} onClick={(e) => {
+      e.stopPropagation();
       cb && cb(i);
     }}>{o}</Button>
   ));
 
   ReactDOM.render(
     <Mask onClick={close}>
-      <ContentWrapper>
+      <ContentWrapper className="fadeInUp animated">
         <TitleWrapper>{title}</TitleWrapper>
         {btns}
         <Button style={{ marginTop: '0.24rem' }}>取消</Button>
