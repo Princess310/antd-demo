@@ -216,7 +216,7 @@ class ShareMomentCard extends React.PureComponent { // eslint-disable-line react
     );
 
     const actionView = businessType === 'status' ? (
-      <ActionWrapper style={{ paddingLeft: (type === 'business' ? '2.6rem' : '3.6rem'), paddingRight: '0.12rem', fontSize: '0.28rem', color: pallete.text.help }}>
+      <ActionWrapper style={{ paddingRight: '0.12rem', fontSize: '0.28rem', color: pallete.text.help }}>
         <FlexSB onClick={this.handleDownloadInfo} style={actionItemStyle}>
           <Icon type={require('icons/ali/评论.svg')} size="sm" color={pallete.text.help} />
           <span style={{ marginLeft: '0.04rem' }}>{comment_count > 0 ? comment_count : '评论'}</span>
