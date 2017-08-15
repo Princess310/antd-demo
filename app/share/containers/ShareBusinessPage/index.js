@@ -54,6 +54,8 @@ const SectionTitle = styled.div`
   line-height: 0.8rem;
   text-align: center;
   background-color: ${pallete.white};
+  border-top: 0.01rem ${pallete.border.deep} solid;
+  border-bottom: 0.01rem ${pallete.border.deep} solid;
 `;
 
 const TabPane = Tabs.TabPane;

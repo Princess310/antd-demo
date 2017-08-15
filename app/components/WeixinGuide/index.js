@@ -7,18 +7,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import styled from 'styled-components';
+import Mask from 'components/Mask';
 import shareImg from 'assets/images/share-exhibition-ng.png';
-
-const ModelWrapper = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.4);
-  height: 100%;
-  z-index: 1000;
-`;
 
 function showWeixinGuide(...args) {
   const bgImg = args[0];
@@ -35,7 +25,7 @@ function showWeixinGuide(...args) {
   }
 
   ReactDOM.render(
-    <ModelWrapper onClick={close}>
+    <Mask onClick={close}>
       <div style={{
         backgroundImage: `url(${bgImg ? bgImg : shareImg})`,
         backgroundPosition: 'center center',
@@ -43,7 +33,7 @@ function showWeixinGuide(...args) {
         width: '100%',
         height: '100%',
       }} />
-    </ModelWrapper>, div,
+    </Mask>, div,
   );
 
   return {

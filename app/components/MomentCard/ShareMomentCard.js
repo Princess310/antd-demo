@@ -167,6 +167,8 @@ class ShareMomentCard extends React.PureComponent { // eslint-disable-line react
 
     const rootStyle = {
       backgroundColor: pallete.white,
+      borderTop: `0.01rem ${pallete.border.deep} solid`,
+      borderBottom: `0.01rem ${pallete.border.deep} solid`,
     };
     const contentStyle = Number(source_type) === 1 ? {
       paddingLeft: 0,
@@ -258,7 +260,7 @@ class ShareMomentCard extends React.PureComponent { // eslint-disable-line react
       <div
         style={Object.assign(rootStyle, style)}
       >
-        <div style={{ padding: '0.15rem', borderBottom: `0.01rem ${pallete.border.deep} solid` }}>
+        <div style={{ padding: '0.15rem' }}>
           {(Number(source_type) !== 1 || from !== 'detail') &&
           <MomentHeader
             user={{

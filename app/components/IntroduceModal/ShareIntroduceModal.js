@@ -84,7 +84,7 @@ class ShareIntroduceModal extends React.PureComponent { // eslint-disable-line r
     const { onClose } = this.props;
     return (
       <Mask>
-        <div style={{ backgroundColor: pallete.white, borderRadius: '0.08rem' }}>
+        <div style={{ backgroundColor: pallete.white, borderRadius: '0.08rem' }} className="animated fadeInDown">
           <ContentWrapper>
             <div
               style={{

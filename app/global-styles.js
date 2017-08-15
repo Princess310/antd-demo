@@ -208,4 +208,20 @@ injectGlobal`
   .fadeInUp {
     animation-name: fadeInUp;
   }
+
+  @keyframes fadeInDown {
+    from {
+      opacity: .5;
+      transform: translate3d(0, -100%, 0);
+    }
+
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .fadeInDown {
+    animation-name: fadeInDown;
+  }
 `;
