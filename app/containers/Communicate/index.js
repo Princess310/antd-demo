@@ -13,7 +13,8 @@ import { browserHistory } from 'react-router';
 import { ScrollContainer } from 'react-router-scroll';
 import TouchLoader from 'components/TouchLoader';
 import SearchBar from 'components/SearchBar';
-import CmsMomentCard from 'components/MomentCard/CmsMomentCard';
+import MomentCard from 'components/MomentCard';
+import FlexColumnCenter from 'components/FlexColumnCenter';
 import { NavBar, Icon, ListView, RefreshControl } from 'antd-mobile';
 
 import { makeSelectCurrentUser } from 'containers/HomePage/selectors';
@@ -58,9 +59,12 @@ export class Communicate extends React.PureComponent { // eslint-disable-line re
     const { communicationList, currentUser } = this.props;
 
     const listView = communicationList.list ? communicationList.list.map((moment) => (
-      <CmsMomentCard
+      <MomentCard
         key={moment.id}
         moment={moment}
+        currentUser={currentUser}
+        from="list"
+        type="communication"
         style={{ marginTop: '0.12rem' }}
       />
     )) : null;
@@ -70,13 +74,21 @@ export class Communicate extends React.PureComponent { // eslint-disable-line re
         <NavBar
           iconName={false}
           mode="light"
+          rightContent={[
+            <FlexColumnCenter key={1} onClick={() => {
+              browserHistory.push('/communicatePublish');
+            }}>
+              <Icon key={1} type={require('icons/ali/发布.svg')} color={pallete.theme} />
+              <span style={{ fontSize: '0.2rem', color: pallete.theme }}>发布</span>
+            </FlexColumnCenter>
+          ]}
         >
-          动态
+          讨论
         </NavBar>
         <div onClick={() => {
           browserHistory.push('/communicateSearch');
         }}>
-          <SearchBar title="搜索动态" />
+          <SearchBar title="搜索讨论" />
         </div>
         <ScrollContainer scrollKey="communicate">
           <TouchLoader

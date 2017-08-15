@@ -35,7 +35,6 @@ export class SelectUnits extends React.PureComponent { // eslint-disable-line re
   }
 
   handleSelect = (item) => {
-    console.log('item', item);
     this.props.setUnits({
       units: item,
     });

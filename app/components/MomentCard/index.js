@@ -16,8 +16,6 @@ import brower from 'utils/brower';
 
 import { browserHistory } from 'react-router';
 
-import logo from 'assets/images/logo-icon.png';
-
 import PhotoSwipe from 'photoswipe';
 import PhotoSwipeUIdefault from 'photoswipe/dist/photoswipe-ui-default';
 
@@ -361,11 +359,11 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
     // check type of moment
     const businessType = (category === '3' || reward_as === '2') ? 'demand' : ((category === '0' || reward_as === '1') ? 'supplier' : 'status');
     // defined the theme color for moment to show: special for business demand && supplier
-    let themeColor = pallete.text.help;
+    let themeColor = pallete.theme ;
 
-    if (businessType) {
-      themeColor = businessType === 'demand' ? pallete.theme : pallete.yellow;
-    }
+    // if (businessType) {
+    //   themeColor = businessType === 'demand' ? pallete.theme : pallete.yellow;
+    // }
 
     // content to show
     const contentResult = businessType === 'demand' ? `需求描述：${content}` : content;
@@ -464,7 +462,7 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
                   }
                 </div>
               ) : (
-                Number(source_type) === 1 ? (
+                (Number(source_type) === 1 && from === 'detail') ? (
                   <div>
                     <CmsMomentHeader
                       user={{

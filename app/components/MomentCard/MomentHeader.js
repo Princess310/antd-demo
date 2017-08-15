@@ -13,7 +13,6 @@ import FlexRow from 'components/FlexRow';
 import FlexRowCenter from 'components/FlexRowCenter';
 import FlexSB from 'components/FlexSB';
 import FlexColumn from 'components/FlexColumn';
-import LevelTag from 'components/LevelTag';
 import LineTag from 'components/LineTag';
 import DateInfo from 'components/DateInfo';
 
@@ -62,7 +61,8 @@ class MomentHeader extends React.PureComponent { // eslint-disable-line react/pr
       linkUser,
     } = this.props;
 
-    const themeColor = businessType === 'demand' ? pallete.theme : pallete.yellow;
+    // defined the theme color
+    const themeColor = pallete.theme;
 
     return (
       <Wrapper style={style}>
@@ -84,7 +84,7 @@ class MomentHeader extends React.PureComponent { // eslint-disable-line react/pr
                 <FlexSB>
                   <FlexRow>
                     <section style={{ fontSize: '0.28rem' }}>{user.nickname}</section>
-                    {user.tag_identity_name !== '' && <LevelTag style={tagStyle}>{user.tag_identity_name}</LevelTag>}
+                    {user.tag_identity_name !== '' && <LineTag style={tagStyle}>{user.tag_identity_name}</LineTag>}
                   </FlexRow>
                   {rightContent}
                 </FlexSB>

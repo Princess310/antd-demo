@@ -442,17 +442,10 @@ export function* publishMoment(action) {
       browserHistory.goBack();
     }
 
-    const { data: { is_popup, messagePopup }, message } = res;
-    if (is_popup === 1) {
-      alert('发布成功', `${messagePopup[0]}。${messagePopup[1]}`, [
-        { text: '我知道了', onPress: () => console.log('cancel') },
-        { text: '立即前去', onPress: () => {
-          const store = getStore();
-          store.dispatch(loadSelectTab('communicate'));
-        }, style: { fontWeight: 'bold' } },
-      ]);
+    if (Number(params.category) === 4) {
+      Toast.info('发布成功，审核通过后展示', 2);
     } else {
-      Toast.info(message, 1.2);
+      Toast.info('发布成功', 2);
     }
   } catch (err) {
     // console.log(err);

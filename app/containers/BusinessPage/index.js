@@ -16,7 +16,7 @@ import TouchLoader from 'components/TouchLoader';
 import MomentCard from 'components/MomentCard';
 import FlexColumnCenter from 'components/FlexColumnCenter';
 import FlexRow from 'components/FlexRow';
-import { NavBar, SegmentedControl, Icon, ActionSheet, Modal } from 'antd-mobile';
+import { NavBar, Icon, ActionSheet, Modal, Tabs, Badge } from 'antd-mobile';
 
 import { makeSelectUserBusinessDemand, makeSelectUserBusinessSupplier, makeSelectBusinessFilter } from './selectors';
 import { makeSelectCurrentUser, makeSelectUnreadDot } from 'containers/HomePage/selectors';
@@ -29,6 +29,7 @@ import { loadSelectTab } from 'containers/HomePage/actions';
 import './styles.scss';
 
 const alert = Modal.alert;
+const TabPane = Tabs.TabPane;
 export class BusinessPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
     super(props);
@@ -62,10 +63,14 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
   }
 
   componentWillMount() {
-    const { getBusiness, businessDemand } = this.props;
+    const { getBusiness, businessDemand, industryList, getIndustry } = this.props;
 
     if (!businessDemand.list) {
       getBusiness(this.state.type, 1, {}, true);
+    }
+
+    if (!industryList) {
+      getIndustry();
     }
   }
 
@@ -126,62 +131,6 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
     }
   }
 
-  onChangeTitle = (e) => {
-    const index = e.nativeEvent.selectedSegmentIndex;
-    const { getBusiness, unreadDot: { demand_red_dot, supplier_red_dot } } = this.props;
-    const { supplierLoaded, startPage } = this.state;
-
-    if (Number(index) === 1 && !supplierLoaded) {
-      getBusiness(1, startPage);
-      this.setState({
-        supplierLoaded: true,
-        type: 1,
-      });
-    } else if(Number(index) === 1) {
-      this.setState({
-        type: 1,
-      });
-
-      if (Number(supplier_red_dot) > 0) {
-        this.setState({
-          rewardSupplierFilter: {
-            id: 0,
-            value: '',
-          },
-          industryFilter: {
-            id: 0,
-            value: '',
-          },
-          priceFilter: {
-            id: 0,
-            value: '',
-          },
-        });
-
-        getBusiness(1, startPage);
-      }
-    } else {
-      this.setState({
-        type: 2,
-      });
-
-      if (Number(supplier_red_dot) > 0) {
-        this.setState({
-          rewardDemandFilter: {
-            id: 0,
-            value: '',
-          },
-          numberFilter: {
-            id: 0,
-            value: '',
-          },
-        });
-
-        getBusiness(2, startPage);
-      }
-    }
-  }
-
   handleFilter = (filter, item) => {
     const { getBusiness } = this.props;
     const { type, startPage, priceFilter, numberFilter, rewardDemandFilter, rewardSupplierFilter } = this.state; 
@@ -224,29 +173,27 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
     request.doGet('moments/check-release', {
       reward_as: type
     }).then((res) => {
-      const { natural_day_counts, my_point, release_point } = res;
-      if (natural_day_counts > 0) {
-        alert(res.message, '', [
-          { text: '我知道了' },
-        ])
-      } else {
+      const { my_point, release_point, free, show_mobile } = res;
+      if (Number(free) ===  0) {
         if (my_point < release_point) {
           alert('发布失败', <div>
               <div style={{ color: pallete.theme }}>{`剩余${my_point}积分`}</div>
-              <div>{`您的账户已不足${release_point}分，无法继续发布采购需求信息，可到“动态”栏目评论、点赞、分享挣取积分。`}</div>
+              <div>{`您的账户已不足${release_point}分，无法继续发布${type === 2 ? '采购需求信息' : '供应信息'}，可到“讨论”栏目评论（+5分）、点赞（+1分）、分享（+10分）挣取积分。`}</div>
             </div>, [
             { text: '我知道了', onPress: () => console.log('cancel') },
             { text: '立即前去', onPress: () => {
               setSelectTab('communicate');
             }, style: { fontWeight: 'bold' } },
           ]);
-        } else {
-          if (type === 2) {
-            browserHistory.push('businessPublish');
-          } else {
-            browserHistory.push('/businessPublishSupplier');
-          }
         }
+
+        return;
+      }
+
+      if (type === 2) {
+        browserHistory.push('businessPublish');
+      } else {
+        browserHistory.push('/businessPublishSupplier');
       }
     });
   }
@@ -260,6 +207,8 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
     const demandMenuClass = unreadDot.demand_red_dot && Number(unreadDot.demand_red_dot) > 0 ? 'demand-dot' : '';
     const supplierMenuClass = unreadDot.supplier_red_dot && Number(unreadDot.supplier_red_dot) > 0 ? 'supplier-dot' : '';
 
+    const resultIndustryList = [{ id: 0, name: '全部角色' }, ...industryList];
+
     return (
       <div>
         <NavBar
@@ -269,25 +218,30 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
             <FlexColumnCenter onClick={() => {
               browserHistory.push('/businessSearch');
             }}>
-              <Icon key={1} type={require('icons/ali/搜索.svg')} color={pallete.text.help} />
-              <span style={{ fontSize: '0.2rem', color: pallete.text.help }}>搜商机</span>
+              <Icon key={1} type={require('icons/ali/搜索-business.svg')} color={pallete.text.help} />
+              <span style={{ fontSize: '0.2rem', color: pallete.text.help }}>查询</span>
             </FlexColumnCenter>
           )}
           rightContent={[
-            <div key={1} onClick={this.handlePublish} style={{ color: themeColor }}>
-              发布
-            </div>,
+            <FlexColumnCenter key={1} onClick={this.handlePublish}>
+              <Icon key={1} type={require('icons/ali/发布.svg')} color={pallete.theme} />
+              <span style={{ fontSize: '0.2rem', color: pallete.theme }}>发布</span>
+            </FlexColumnCenter>
           ]}
         >
-          <SegmentedControl
-            selectedIndex={type === 2 ? 0 : 1}
-            values={['需求', '供应']}
-            style={{ height: '0.3rem', width: '3rem' }}
-            onChange={this.onChangeTitle}
-            tintColor={themeColor}
-            className={`${demandMenuClass} ${supplierMenuClass}`}
-          />
+          生意
         </NavBar>
+        {
+          industryList && (
+            <Tabs pageSize={4}>
+              {resultIndustryList.map((industry) => (
+                <TabPane tab={<Badge dot={industry.id === 0 ? true : false}>{industry.name}</Badge>} key={industry.id}>
+                  <div></div>
+                </TabPane>
+              ))}
+            </Tabs>
+          )
+        }
         {type === 2 ?
           (
             <FlexRow>

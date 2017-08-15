@@ -39,7 +39,8 @@ class MomentComment extends React.PureComponent { // eslint-disable-line react/p
       businessType,
     } = this.props;
 
-    const themeColor = businessType === 'demand' ? pallete.theme : pallete.yellow;
+    // defined the theme color
+    const themeColor = pallete.theme;
 
     const commentsView = comments.length > 0 ? comments.map((c) => {
       return (

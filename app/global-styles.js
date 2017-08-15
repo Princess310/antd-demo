@@ -145,6 +145,10 @@ injectGlobal`
     }
   }
 
+  .am-tabs-bar .am-tabs-tab {
+    align-items: center;
+  }
+
   .t-l {
     text-align: left;
   }

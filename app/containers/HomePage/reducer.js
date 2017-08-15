@@ -21,7 +21,7 @@ import {
 // The initial state of the App
 const initialState = fromJS({
   username: '',
-  selectTab: 'communicate',
+  selectTab: 'business',
   unreadDot: {},
 });
 

@@ -88,21 +88,8 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
           hidden={hideTabs}
         >
           <TabItem
-            title="动态"
-            key="动态"
-            dot={unreadDot ? (unreadDot.communication_red_dot > 0 ? true : false) : false}
-            icon={<Icon type={require('icons/ali/动态.svg')} />}
-            selectedIcon={<Icon type={require('icons/ali/动态.svg')} />}
-            selected={selectTab === 'communicate'}
-            onPress={() => {
-              setSelectTab('communicate');
-            }}
-          >
-            {!hideTabs && <Communicate />}
-          </TabItem>
-          <TabItem
             icon={<Icon type={require('icons/ali/生意.svg')} />}
-            selectedIcon={<Icon type={require('icons/ali/生意.svg')} />}
+            selectedIcon={<Icon type={require('icons/ali/生意-active.svg')} />}
             title="生意"
             key="生意"
             selected={selectTab === 'business'}
@@ -111,6 +98,19 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
             }}
           >
             {!hideTabs && <BusinessPage />}
+          </TabItem>
+          <TabItem
+            title="讨论"
+            key="讨论"
+            dot={unreadDot ? (unreadDot.communication_red_dot > 0 ? true : false) : false}
+            icon={<Icon type={require('icons/ali/讨论.svg')} />}
+            selectedIcon={<Icon type={require('icons/ali/讨论-active.svg')} />}
+            selected={selectTab === 'communicate'}
+            onPress={() => {
+              setSelectTab('communicate');
+            }}
+          >
+            {!hideTabs && <Communicate />}
           </TabItem>
           {/*<TabItem
             icon={<Icon type={require('icons/ali/消息.svg')} />}
@@ -128,8 +128,8 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
             {!hideTabs && <div>消息</div>}
           </TabItem>*/}
           <TabItem
-            icon={<Icon type={require('icons/ali/我的.svg')} />}
-            selectedIcon={<Icon type={require('icons/ali/我的.svg')} />}
+            icon={<Icon type={require('icons/ali/我.svg')} />}
+            selectedIcon={<Icon type={require('icons/ali/我-active.svg')} />}
             title="我的"
             key="我的"
             selected={selectTab === 'mine'}

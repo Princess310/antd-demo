@@ -88,7 +88,7 @@ export class CommunicatePublish extends React.PureComponent { // eslint-disable-
             <MenuBtn key="0" onClick={this.handleSave}>发送</MenuBtn>,
           ]}
         >
-          行业信息发布
+          讨论信息发布
         </NavBar>
         <WhiteSpace size="md" />
         <List>
@@ -104,16 +104,6 @@ export class CommunicatePublish extends React.PureComponent { // eslint-disable-
           onChange={this.onChange}
           selectable={files.length < filesMax}
         />
-        <List>
-          <Item
-            thumb={<Icon type={require('icons/ali/@.svg')} color={pallete.text.help} />}
-            arrow="horizontal"
-            extra={`${publishParams.selectFriend ? publishParams.selectFriend.length : 0}人`}
-            onClick={() => {
-              browserHistory.push('/selectFriend');
-            }}
-          >提醒谁看</Item>
-        </List>
       </div>
     );
   }
