@@ -89,20 +89,20 @@ export function* fetchMomentDetail(action) {
 
 export function* fetchBusiness(action) {
   try {
-    const { type, page, searchParams } = action.payload;
+    const { role, page } = action.payload;
     // add refresh status
     if (page === 1) {
-      yield put(loadBusinessRefresh(type, true));
+      yield put(loadBusinessRefresh(role, true));
     } else {
-      yield put(loadBusienssLoading(type, true));
+      yield put(loadBusienssLoading(role, true));
     }
 
-    const res = yield request.doGet('moments/filter-supplier-demand', { reward_as: type, page, ...searchParams });
+    const res = yield request.doGet('moments/filter-supplier-demand', { page, role });
 
     const { list, page: resPage } = res;
-    yield put(loadBusiness(type, list, resPage));
+    yield put(loadBusiness(role, list, resPage));
 
-    if (page === 1) {
+    if (page === 1 && Number(role) === 0) {
       yield fetchUnreadDot();
     }
   } catch (err) {
@@ -443,7 +443,7 @@ export function* publishMoment(action) {
     }
 
     if (Number(params.category) === 4) {
-      Toast.info('发布成功，审核通过后展示', 2);
+      Toast.info('发布成功，审核通过后展示并挣取10积分!', 2);
     } else {
       Toast.info('发布成功', 2);
     }

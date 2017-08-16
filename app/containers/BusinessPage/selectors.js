@@ -19,32 +19,9 @@ const makeSelectBusinessDetail = () => createSelector(
   (substate) => substate.get('detail')
 );
 
-const makeSelectUserBusinessDemand = () => createSelector(
+const makeSelectBusines = () => createSelector(
   selectBusiness,
-  (substate) => {
-    const info = substate.get('businessDemand');
-    return {
-      page: info.get('page'),
-      refresh: info.get('refresh'),
-      loading: info.get('loading'),
-      list: info.get('list'),
-      hasNext: info.get('hasNext'),
-    };
-  }
-);
-
-const makeSelectUserBusinessSupplier = () => createSelector(
-  selectBusiness,
-  (substate) => {
-    const info = substate.get('businessSupplier');
-    return {
-      page: info.get('page'),
-      refresh: info.get('refresh'),
-      loading: info.get('loading'),
-      list: info.get('list'),
-      hasNext: info.get('hasNext'),
-    };
-  }
+  (substate) => substate.get('businessMaps')
 );
 
 const makeSelectBusinessFilter = () => createSelector(
@@ -130,8 +107,7 @@ const makeSelectMyMomentsSupplier = () => createSelector(
 
 export {
   makeSelectBusinessDetail,
-  makeSelectUserBusinessDemand,
-  makeSelectUserBusinessSupplier,
+  makeSelectBusines,
   makeSelectBusinessFilter,
   makeSelectBusinessRewards,
   makeSelectBusinessPrice,

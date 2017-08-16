@@ -91,8 +91,8 @@ class FilterPanel extends React.PureComponent { // eslint-disable-line react/pre
     let currentItemTitle = defaultTitle;
 
     const buttonActiveStyle = {
-      backgroundColor: from === 'supplier' ? '#ffedd0' : pallete.background.lightBule,
-      color: from === 'supplier' ? pallete.yellow : pallete.theme,
+      backgroundColor: pallete.background.lightBule,
+      color: pallete.theme,
     };
 
     const itemsView = items ? items.map((item, i) => {

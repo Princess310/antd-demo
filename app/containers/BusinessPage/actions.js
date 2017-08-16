@@ -77,43 +77,42 @@ export function refreshListNewMoment(data) {
   };
 }
 
-export function fetchBusiness(type, page, searchParams) {
+export function fetchBusiness(role, page) {
   return {
     type: FETCH_BUSINESS,
     payload: {
-      type,
+      role,
       page,
-      searchParams,
     },
   };
 }
 
-export function loadBusiness(type, list, page) {
+export function loadBusiness(role, list, page) {
   return {
     type: LOAD_BUSINESS,
     payload: {
-      type,
+      role,
       list,
       page,
     },
   };
 }
 
-export function loadBusinessRefresh(type, refresh) {
+export function loadBusinessRefresh(role, refresh) {
   return {
     type: LOAD_BUSINESS_REFRESH,
     payload: {
-      type,
+      role,
       refresh,
     },
   };
 }
 
-export function loadBusienssLoading(type, loading) {
+export function loadBusienssLoading(role, loading) {
   return {
     type: LOAD_BUSINESS_LOADING,
     payload: {
-      type,
+      role,
       loading,
     }, 
   };

@@ -209,6 +209,8 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
       reward_as,
       category,
       title,
+      trade_status,
+      referral_count,
     } = momentDetail;
 
     const cmsTitle = title ? (title.length > 18 ? `${title.substring(0, 15)}...` : title) : '动态详情';
@@ -216,7 +218,7 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
     // check type of moment
     const businessType = (category === '3' || reward_as === '2') ? 'demand' : ((category === '0' || reward_as === '1') ? 'supplier' : 'status');
     // defined the theme color for moment to show: special for business demand && supplier
-    const themeColor = businessType === 'demand' ? pallete.theme : (businessType === 'supplier' ? pallete.yellow : pallete.text.help);
+    const themeColor = pallete.theme;
 
     return (
       <div>
@@ -248,7 +250,7 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
               >
                 <TabPane tab={`评论 ${comment_count}`} key="1">
                   <div>
-                    {comments.map((u)  => (
+                    {comments && comments.map((u)  => (
                       <div key={u.id} style={{ borderBottom: `0.01rem ${pallete.border.deep} solid` }} onClick={() => {
                         this.handleDoublueSendComment(u.id, u.created_by);
                       }}>
@@ -275,7 +277,7 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
                 </TabPane>
                 <TabPane tab={`赞 ${like_count}`} key="2">
                   <div>
-                    {likes.map((u)  => (
+                    {likes && likes.map((u)  => (
                       <div key={u.id} style={{ borderBottom: `0.01rem ${pallete.border.deep} solid` }}>
                         <UserHeaderBar
                           user={{...u, id: u.created_by}}
@@ -286,7 +288,7 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
                 </TabPane>
                 <TabPane tab={`分享 ${share_count}`} key="3">
                   <div>
-                    {shares.map((u)  => (
+                    {shares && shares.map((u)  => (
                       <div key={u.id} style={{ borderBottom: `0.01rem ${pallete.border.deep} solid` }}>
                         <UserHeaderBar
                           user={{...u, id: u.created_by}}
@@ -304,14 +306,27 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
                   <span style={{ marginLeft: '0.04rem' }}>置顶</span>
                 </FlexCenter>
               }
-              <FlexCenter onClick={this.handleShowChatTool}>
-                <Icon type={require('icons/ali/消息.svg')} size="sm" />
-                <span style={{ marginLeft: '0.04rem' }}>{comment_count > 0 ? comment_count : '评论'}</span>
-              </FlexCenter>
-              <FlexCenter onClick={this.handleLike}>
-                <Icon type={require('icons/ali/点赞.svg')} size="sm" color={(is_like > 0 && businessType === 'status') ? pallete.theme : themeColor} />
-                <span style={{ marginLeft: '0.04rem' }}>{like_count > 0 ? like_count : '点赞'}</span>
-              </FlexCenter>
+               {
+                type === 'business' && trade_status === '0' &&
+                <FlexCenter onClick={this.handleIntroduce}>
+                  <Icon type={require('icons/ali/转介绍.svg')} size="sm" />
+                  <span style={{ marginLeft: '0.04rem' }}>{referral_count > 0 ? referral_count : '转介绍'}</span>
+                </FlexCenter>
+              }
+              {
+                type !== 'business' &&
+                <FlexCenter onClick={this.handleShowChatTool}>
+                  <Icon type={require('icons/ali/消息.svg')} size="sm" />
+                  <span style={{ marginLeft: '0.04rem' }}>{comment_count > 0 ? comment_count : '评论'}</span>
+                </FlexCenter>
+              }
+              {
+                type !== 'business' &&
+                <FlexCenter onClick={this.handleLike}>
+                  <Icon type={require('icons/ali/点赞.svg')} size="sm" />
+                  <span style={{ marginLeft: '0.04rem' }}>{like_count > 0 ? like_count : '点赞'}</span>
+                </FlexCenter>
+              }
               <FlexCenter onClick={this.handleShare}>
                 <Icon type={require('icons/ali/分享.svg')} size="xxs" />
                 <span style={{ marginLeft: '0.04rem' }}>{share_count > 0 ? share_count : '分享'}</span>

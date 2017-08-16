@@ -113,22 +113,6 @@ export default function createRoutes(store) {
             importModules.catch(errorLoading);
           },
         }, {
-          path: 'resetPassword',
-          name: 'resetPassword',
-          getComponent(nextState, cb) {
-            const importModules = Promise.all([
-              import('containers/ResetPassword'),
-            ]);
-
-            const renderRoute = loadModule(cb);
-
-            importModules.then(([component]) => {
-              renderRoute(component);
-            });
-
-            importModules.catch(errorLoading);
-          },
-        }, {
           path: 'resetMobile',
           name: 'resetMobile',
           getComponent(nextState, cb) {
@@ -485,6 +469,22 @@ export default function createRoutes(store) {
         importModules.then(([reducer, sagas, component]) => {
           injectReducer('loginPage', reducer.default);
           injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
+      path: 'resetPassword',
+      name: 'resetPassword',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          import('containers/ResetPassword'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([component]) => {
           renderRoute(component);
         });
 

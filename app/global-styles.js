@@ -71,6 +71,10 @@ injectGlobal`
     }
   }
 
+  .am-tabs-bar {
+    z-index: 10;
+  }
+
   .moment-detail-tabs {
     .am-tabs-bar {
       padding-right: 3rem;
@@ -79,15 +83,6 @@ injectGlobal`
 
       .am-tabs-tab {
         border-bottom: none;
-      }
-    }
-
-    &.moment-detail-tabs-supplier {
-      .am-tabs-tab-active {
-        color: #F39C12;
-      }
-      .am-tabs-ink-bar {
-        background-color: #F39C12;
       }
     }
   }

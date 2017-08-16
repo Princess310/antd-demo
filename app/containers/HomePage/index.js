@@ -89,6 +89,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
         >
           <TabItem
             icon={<Icon type={require('icons/ali/生意.svg')} />}
+            dot={unreadDot ? (unreadDot.business_red_dot > 0 ? true : false) : false}
             selectedIcon={<Icon type={require('icons/ali/生意-active.svg')} />}
             title="生意"
             key="生意"

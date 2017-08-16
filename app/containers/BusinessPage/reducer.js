@@ -40,22 +40,9 @@ const initialState = fromJS({
   searchPanel: false,
   // record params when publish moment
   publishParams: {},
+  businessMaps: false,
   searchAll: {
     page: 1,
-    loading: false,
-    list: false,
-    hasNext: false,
-  },
-  businessSupplier: {
-    page: 1,
-    refresh: false,
-    loading: false,
-    list: false,
-    hasNext: false,
-  },
-  businessDemand: {
-    page: 1,
-    refresh: false,
     loading: false,
     list: false,
     hasNext: false,
@@ -148,13 +135,14 @@ function businessPageReducer(state = initialState, action) {
       return state.set('businessSupplier', supplier).set('businessDemand', demand);
     }
     case LOAD_BUSINESS: {
-      const { type, list, page } = action.payload;
-      const info = type === 1 ? state.get('businessSupplier') : state.get('businessDemand');
+      const { role, list, page } = action.payload;
+      const maps = state.get('businessMaps');
+      const info = maps[role];
 
-      const oldList = info.get('list') ? info.get('list') : [];
+      const oldList = info ? info.list : [];
       let newList = [];
       let hasNext = true;
-      let newPage = info.get('page');
+      let newPage = info ? info.page : 1;
 
       if (page) {
         if (page.current_page === 1) {
@@ -172,27 +160,48 @@ function businessPageReducer(state = initialState, action) {
         hasNext = false;
       }
 
-      const result = info.set('list', newList)
-        .set('page', newPage)
-        .set('hasNext', hasNext)
-        .set('refresh', false)
-        .set('loading', false);
+      const newMaps = {
+        ...maps,
+        [role]: {
+          list: newList,
+          page: newPage,
+          hasNext,
+          refresh: false,
+          loading: false,
+        },
+      };
 
-      return type === 1 ? state.set('businessSupplier', result) : state.set('businessDemand', result);
+      return state.set('businessMaps', newMaps);
     }
     case LOAD_BUSINESS_REFRESH: {
-      const { type, refresh } = action.payload;
-      const info = type === 1 ? state.get('businessSupplier') : state.get('businessDemand');
+      const { role, refresh } = action.payload;
+      const maps = state.get('businessMaps');
+      const info = maps[role];
 
-      const result = info.set('refresh', refresh);
-      return type === 1 ? state.set('businessSupplier', result) : state.set('businessDemand', result);
+      const newMaps = info ? {
+        ...maps,
+        [role]: {
+          refresh: true,
+          ...info,
+        },
+      } : maps;
+
+      return state.set('businessMaps', newMaps);
     }
     case LOAD_BUSINESS_LOADING: {
-      const { type, loading } = action.payload;
-      const info = type === 1 ? state.get('businessSupplier') : state.get('businessDemand');
+      const { role, loading } = action.payload;
+      const maps = state.get('businessMaps');
+      const info = maps[role];
 
-      const result = info.set('loading', loading);
-      return type === 1 ? state.set('businessSupplier', result) : state.set('businessDemand', result);
+      const newMaps = info ? {
+        ...maps,
+        [role]: {
+          loading: true,
+          ...info,
+        },
+      } : maps;
+
+      return state.set('businessMaps', newMaps);
     }
     case LOAD_BUSINESS_PRICE: {
       const { list } = action.payload;

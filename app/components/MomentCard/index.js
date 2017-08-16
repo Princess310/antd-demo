@@ -27,6 +27,7 @@ import chatTool from 'components/ChatTool';
 import showWeixinGuide from 'components/WeixinGuide';
 import { likeMoment, sendComment, delMoment, collectMoment, setTopMoment, changeMomentTrade } from 'containers/BusinessPage/actions';
 import MomentHeader from './MomentHeader';
+import TypeHeader from './TypeHeader';
 import CmsMomentHeader from 'components/MomentCard/CmsMomentHeader';
 import MomentComment from './MomentComment';
 
@@ -56,6 +57,12 @@ const Remark = styled.span`
   color: ${pallete.theme};
 `;
 
+const ActionWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+`;
+
 const contentActionStyle = {
   margin: '0.12rem 0',
   fontSize: '0.28rem',
@@ -76,6 +83,16 @@ const buttonStyle = {
   width: '1rem',
   lineHeight: '0.4rem',
   fontSize: '0.24rem',
+  color: pallete.white,
+}
+
+const actionItemStyle = {
+  marginLeft: '0.36rem',
+};
+
+const tagStyle = {
+  borderColor: pallete.theme,
+  backgroundColor: pallete.theme,
   color: pallete.white,
 }
 
@@ -313,6 +330,7 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
       comment_count,
       like_count,
       share_count,
+      referral_count,
       is_like,
       comments,
       item_name,
@@ -330,6 +348,7 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
     // dom root style
     const rootStyle = {
       backgroundColor: pallete.white,
+      borderBottom: `0.01rem ${pallete.border.deep} solid`,
     };
 
     // moment content wrapper style
@@ -376,16 +395,6 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
       </div>
     ) : contentResult;
 
-    const tagStyle = (businessType && businessType === 'demand') ? {
-      borderColor: pallete.theme,
-      backgroundColor: pallete.theme,
-      color: pallete.white,
-    } : {
-      borderColor: pallete.yellow,
-      backgroundColor: pallete.yellow,
-      color: pallete.white,
-    };
-
     // check is self
     const isSelf = String(currentUser.id) === String(uid);
 
@@ -406,7 +415,11 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
           }
         }}
       >
-        <div style={{ padding: '0.15rem', borderBottom: `0.01rem ${pallete.border.deep} solid` }}>
+        {
+          from === 'list' && type === 'business' &&
+          <TypeHeader type={businessType} trade_status={trade_status} />
+        }
+        <div style={{ padding: '0.15rem'}}>
           {(Number(source_type) !== 1 || from !== 'detail') &&
           <MomentHeader
             user={{
@@ -421,7 +434,6 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
             }}
             type={type}
             source_type={source_type}
-            trade_status={trade_status}
             businessType={businessType}
             created_at={created_at}
             {...other}
@@ -509,26 +521,39 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
             }}>加好友</Button>}
           </ContentWrapper>
           {from === 'list' && 
-            <FlexSB style={{ paddingLeft: (type === 'business' ? '2.6rem' : '3.6rem'), paddingRight: '0.12rem', fontSize: '0.28rem', color: themeColor }}>
+            <ActionWrapper style={{ paddingRight: '0.12rem', fontSize: '0.28rem', color: themeColor }}>
               {(type === 'business' && isSelf) &&
-                <FlexSB onClick={this.handleSetTop}>
+                <FlexSB onClick={this.handleSetTop} style={actionItemStyle}>
                   <Icon type={require('icons/ali/置顶.svg')} size="sm" />
                   <span style={{ marginLeft: '0.04rem' }}>置顶</span>
                 </FlexSB>
               }
-              <FlexSB onClick={this.handleShowChatTool}>
-                <Icon type={require('icons/ali/消息.svg')} size="sm" />
-                <span style={{ marginLeft: '0.04rem' }}>{comment_count > 0 ? comment_count : '评论'}</span>
-              </FlexSB>
-              <FlexSB onClick={this.handleLike}>
-                <Icon type={require('icons/ali/点赞.svg')} size="sm" />
-                <span style={{ marginLeft: '0.04rem' }}>{like_count > 0 ? like_count : '点赞'}</span>
-              </FlexSB>
-              <FlexSB onClick={this.handleShare}>
+              {
+                type === 'business' && trade_status === '0' &&
+                <FlexSB onClick={this.handleIntroduce} style={actionItemStyle}>
+                  <Icon type={require('icons/ali/转介绍.svg')} size="sm" />
+                  <span style={{ marginLeft: '0.04rem' }}>{referral_count > 0 ? referral_count : '转介绍'}</span>
+                </FlexSB>
+              }
+              {
+                type !== 'business' &&
+                <FlexSB onClick={this.handleShowChatTool} style={actionItemStyle}>
+                  <Icon type={require('icons/ali/消息.svg')} size="sm" />
+                  <span style={{ marginLeft: '0.04rem' }}>{comment_count > 0 ? comment_count : '评论'}</span>
+                </FlexSB>
+              }
+              {
+                type !== 'business' &&
+                <FlexSB onClick={this.handleLike} style={actionItemStyle}>
+                  <Icon type={require('icons/ali/点赞.svg')} size="sm" />
+                  <span style={{ marginLeft: '0.04rem' }}>{like_count > 0 ? like_count : '点赞'}</span>
+                </FlexSB>
+              }
+              <FlexSB onClick={this.handleShare} style={actionItemStyle}>
                 <Icon type={require('icons/ali/分享.svg')} size="xxs" />
                 <span style={{ marginLeft: '0.04rem' }}>{share_count > 0 ? share_count : '分享'}</span>
               </FlexSB>
-            </FlexSB>
+            </ActionWrapper>
           }
         </div>
         {(comments && comments.length > 0 && from === 'list') && 

@@ -93,7 +93,7 @@ export class ResetPassword extends React.PureComponent { // eslint-disable-line 
       code,
       password,
     }).then(() => {
-      browserHistory.go(-2);
+      browserHistory.push('/');
     });
   }
 

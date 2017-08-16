@@ -16,14 +16,15 @@ import TouchLoader from 'components/TouchLoader';
 import MomentCard from 'components/MomentCard';
 import FlexColumnCenter from 'components/FlexColumnCenter';
 import FlexRow from 'components/FlexRow';
+import UpdateMessage from 'components/UpdateMessage';
 import { NavBar, Icon, ActionSheet, Modal, Tabs, Badge } from 'antd-mobile';
 
-import { makeSelectUserBusinessDemand, makeSelectUserBusinessSupplier, makeSelectBusinessFilter } from './selectors';
+import { makeSelectBusines } from './selectors';
 import { makeSelectCurrentUser, makeSelectUnreadDot } from 'containers/HomePage/selectors';
 import { makeSelectUserCenterIndustry } from 'containers/UserCenter/selectors';
 
 import FilterPanel from './FilterPanel';
-import { fetchBusiness, fetchBusinessPrice, fetchBusinessNumber, fetchReward } from './actions';
+import { fetchBusiness } from './actions';
 import { fetchIndustry } from 'containers/UserCenter/actions';
 import { loadSelectTab } from 'containers/HomePage/actions';
 import './styles.scss';
@@ -36,37 +37,17 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
 
     this.initData = [];
     this.state = {
-      type: 2, // type-> 1: 我的供应, 2:我的需求
       startPage: 1,
-      supplierLoaded: false,
-      priceFilter: {
-        id: 0,
-        value: '',
-      },
-      numberFilter: {
-        id: 0,
-        value: '',
-      },
-      rewardDemandFilter: {
-        id: 0,
-        value: '',
-      },
-      rewardSupplierFilter: {
-        id: 0,
-        value: '',
-      },
-      industryFilter: {
-        id: 0,
-        value: '',
-      },
+      role: 0,
     };
   }
 
   componentWillMount() {
-    const { getBusiness, businessDemand, industryList, getIndustry } = this.props;
+    const { role, startPage } = this.state;
+    const { getBusiness, business, industryList, getIndustry } = this.props;
 
-    if (!businessDemand.list) {
-      getBusiness(this.state.type, 1, {}, true);
+    if (!business[role]) {
+      getBusiness(role, startPage);
     }
 
     if (!industryList) {
@@ -74,105 +55,37 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
     }
   }
 
-  getSearchParams = () => {
-    const { type, priceFilter, numberFilter, rewardDemandFilter, rewardSupplierFilter } = this.state; 
-    let searchParams = {};
-
-    if (type === 1) {
-      searchParams = {
-        reward_item: rewardSupplierFilter.id,
-        section: priceFilter.value,
-      };
-    } else {
-      searchParams = {
-        reward_item: rewardDemandFilter.id,
-        section: numberFilter.value,
-      };
+  handleTabChange = (key) => {
+    const { startPage } = this.state;
+    const { business, getBusiness } = this.props;
+    if (!business[key]) {
+      getBusiness(key, startPage);
     }
 
-    return searchParams;
+    this.setState({
+      role: key,
+    });
   }
 
   onRefresh = () => {
     const { getBusiness } = this.props;
-    const { type, startPage } = this.state;
-    const searchParams = this.getSearchParams();
-    
-    if (type === 1) {
-      this.setState({
-        supplierPage: startPage,
-      });
-    } else {
-      this.setState({
-        demandPage: startPage,
-      });
-    }
+    const { role, startPage } = this.state;
 
-    getBusiness(type, startPage, searchParams);
+    getBusiness(role, startPage);
   }
 
   onEndReached = () => {
-    const { type, supplierPage, demandPage } = this.state;
-    const { businessDemand, businessSupplier, getBusiness } = this.props;
-    const searchParams = this.getSearchParams();
+    const { role } = this.state;
+    const { business, getBusiness } = this.props;
 
-    if (type === 1) {
-      if (businessSupplier.loading || !businessSupplier.hasNext) {
-        return;
-      }
-
-      getBusiness(type, businessSupplier.page + 1, searchParams);
-    } else {
-      if (businessDemand.loading || !businessDemand.hasNext) {
-        return;
-      }
-
-      getBusiness(type, businessDemand.page + 1, searchParams);
-    }
-  }
-
-  handleFilter = (filter, item) => {
-    const { getBusiness } = this.props;
-    const { type, startPage, priceFilter, numberFilter, rewardDemandFilter, rewardSupplierFilter } = this.state; 
-    let searchParams = this.getSearchParams();
-
-    if (type === 1) {
-      this.setState({
-        supplierPage: startPage,
-        [filter]: {
-          id: item.id,
-          value: item.value,
-        },
-      });
-    } else {
-      this.setState({
-        demandPage: startPage,
-        [filter]: {
-          id: item.id,
-          value: item.value,
-        },
-      });
-    }
-
-    if (filter === 'priceFilter' || filter === 'numberFilter') {
-      searchParams.section = item.value;
-    } else if (filter === 'industryFilter') {
-      searchParams.role = item.id;
-    } else {
-      searchParams.reward_item = item.id;
-    }
-
-    // do the filter for business
-    getBusiness(type, startPage, searchParams);
+    getBusiness(role, Number(business[role].page) + 1);
   }
 
   handlePublish = () => {
     const { setSelectTab } = this.props;
     const { type } = this.state;
 
-    request.doGet('moments/check-release', {
-      reward_as: type
-    }).then((res) => {
+    request.doGet('moments/check-release').then((res) => {
       const { my_point, release_point, free, show_mobile } = res;
       if (Number(free) ===  0) {
         if (my_point < release_point) {
@@ -190,22 +103,13 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
         return;
       }
 
-      if (type === 2) {
-        browserHistory.push('businessPublish');
-      } else {
-        browserHistory.push('/businessPublishSupplier');
-      }
+      browserHistory.push('businessPublish');
     });
   }
 
   render() {
-    const { type, priceFilter, numberFilter, rewardDemandFilter, rewardSupplierFilter, industryFilter } = this.state;
-    const { businessDemand, businessSupplier, currentUser, filters, industryList, unreadDot } = this.props;
-    const { price, number, reward } = filters;
-
-    const themeColor = type === 2 ? pallete.theme : pallete.yellow;
-    const demandMenuClass = unreadDot.demand_red_dot && Number(unreadDot.demand_red_dot) > 0 ? 'demand-dot' : '';
-    const supplierMenuClass = unreadDot.supplier_red_dot && Number(unreadDot.supplier_red_dot) > 0 ? 'supplier-dot' : '';
+    const { role } = this.state;
+    const { business, currentUser, industryList, unreadDot } = this.props;
 
     const resultIndustryList = [{ id: 0, name: '全部角色' }, ...industryList];
 
@@ -231,140 +135,45 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
         >
           生意
         </NavBar>
-        {
-          industryList && (
-            <Tabs pageSize={4}>
-              {resultIndustryList.map((industry) => (
-                <TabPane tab={<Badge dot={industry.id === 0 ? true : false}>{industry.name}</Badge>} key={industry.id}>
-                  <div></div>
-                </TabPane>
-              ))}
-            </Tabs>
-          )
-        }
-        {type === 2 ?
-          (
-            <FlexRow>
-              <FilterPanel
-                defaultTitle="产品类别"
-                selectTotalName="全部类别"
-                items={reward}
-                value={rewardDemandFilter.id}
-                field="name"
-                onSelect={(item) => this.handleFilter('rewardDemandFilter', item)}
-                onExpand={() => {
-                  !reward && this.props.getReward();
-                }}
-                from="demand"
-              />
-              <FilterPanel
-                defaultTitle="需求数量"
-                items={number}
-                value={numberFilter.id}
-                field="value"
-                onSelect={(item) => this.handleFilter('numberFilter', item)}
-                onExpand={() => {
-                  !number && this.props.getNumber();
-                }}
-                contentStyle={{ borderLeft: `0.01rem ${pallete.border.normal} solid` }}
-                from="demand"
-              />
-            </FlexRow>
-            ) : (
-              <FlexRow>
-                <FilterPanel
-                  defaultTitle="行业角色"
-                  selectTotalName="全部"
-                  items={industryList}
-                  value={industryFilter.id}
-                  field="name"
-                  onSelect={(item) => this.handleFilter('industryFilter', item)}
-                  onExpand={() => {
-                    !industryList && this.props.getIndustry();
-                  }}
-                  from="supplier"
-                />
-                <FilterPanel
-                  defaultTitle="产品类别"
-                  selectTotalName="全部类别"
-                  items={reward}
-                  value={rewardSupplierFilter.id}
-                  field="name"
-                  onSelect={(item) => this.handleFilter('rewardSupplierFilter', item)}
-                  onExpand={() => {
-                    !reward && this.props.getReward();
-                  }}
-                  contentStyle={{ borderLeft: `0.01rem ${pallete.border.normal} solid` }}
-                  from="supplier"
-                />
-                <FilterPanel
-                  defaultTitle="价格区间"
-                  items={price}
-                  value={priceFilter.id}
-                  field="value"
-                  onSelect={(item) => this.handleFilter('priceFilter', item)}
-                  onExpand={() => {
-                    !price && this.props.getPrice();
-                  }}
-                  contentStyle={{ borderLeft: `0.01rem ${pallete.border.normal} solid` }}
-                  from="supplier"
-                />
-              </FlexRow>
-          )
-        }
-        {(type === 2 && businessDemand.list && businessDemand.list.length > 0) &&
-          <ScrollContainer scrollKey="business_demand">
-            <TouchLoader
-              initializing={0}
-              refreshing={businessDemand.refresh}
-              onRefresh={this.onRefresh}
-              hasMore={businessDemand.hasNext}
-              loading={businessDemand.loading}
-              onLoadMore={this.onEndReached}
-              autoLoadMore={true}
-              className="tloader app-content"
-              style={{ top: '1.8rem', bottom: '1rem' }}
-            >
-              {businessDemand.list.map((moment) => (
-                <MomentCard
-                  key={moment.id}
-                  moment={moment}
-                  currentUser={currentUser}
-                  from="list"
-                  type="business"
-                  style={{ marginTop: '0.12rem' }}
-                />
-              ))}
-            </TouchLoader>
-          </ScrollContainer>
-        }
-
-        {(type === 1 && businessSupplier.list && businessSupplier.list.length > 0) &&
-          <ScrollContainer scrollKey="business_supplier">
-            <TouchLoader
-              initializing={0}
-              refreshing={businessSupplier.refresh}
-              onRefresh={this.onRefresh}
-              hasMore={businessSupplier.hasNext}
-              loading={businessSupplier.loading}
-              onLoadMore={this.onEndReached}
-              autoLoadMore={true}
-              className="tloader app-content"
-              style={{ top: '1.8rem', bottom: '1rem' }}
-            >
-              {businessSupplier.list.map((moment) => (
-                <MomentCard
-                  key={moment.id}
-                  moment={moment}
-                  currentUser={currentUser}
-                  from="list"
-                  type="business"
-                  style={{ marginTop: '0.12rem' }}
-                />
-              ))}
-            </TouchLoader>
-          </ScrollContainer>
-        }
+          {
+            industryList && (
+              <Tabs pageSize={4} onChange={this.handleTabChange} animated={false}>
+                {resultIndustryList.map((industry) => (
+                  <TabPane tab={<Badge dot={industry.id === 0 && unreadDot ? (unreadDot.business_red_dot > 0 ? true : false) : false}>{industry.name}</Badge>} key={industry.id}>
+                    <ScrollContainer scrollKey={`business_index_${industry.id}`}>
+                      <TouchLoader
+                        initializing={0}
+                        refreshing={business[role] && business[role].refresh}
+                        onRefresh={this.onRefresh}
+                        hasMore={business[role] && business[role].hasNext}
+                        loading={business[role] && business[role].loading}
+                        onLoadMore={this.onEndReached}
+                        autoLoadMore={true}
+                        className="tloader app-content"
+                        style={{ top: '1.8rem', bottom: '1rem' }}
+                      >
+                      {business[industry.id] ? business[industry.id].list.map((moment) => (
+                        <MomentCard
+                          key={moment.id}
+                          moment={moment}
+                          currentUser={currentUser}
+                          from="list"
+                          type="business"
+                          style={{ marginTop: '0.12rem' }}
+                        />
+                      )) : null}
+                      </TouchLoader>
+                    </ScrollContainer>
+                  </TabPane>
+                ))}
+              </Tabs>
+            )
+          }
+          <UpdateMessage message="更新了16条生意" style={{
+            position: 'absolute',
+            top: '1.8rem',
+            left: 0,
+          }} />
       </div>
     );
   }
@@ -372,13 +181,11 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
 
 BusinessPage.propTypes = {
   getBusiness: PropTypes.func,
-  getPrice: PropTypes.func,
-  getNumber: PropTypes.func,
-  getReward: PropTypes.func,
-  businessDemand: PropTypes.object,
-  businessSupplier: PropTypes.object,
+  business: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.bool,
+  ]),
   currentUser: PropTypes.object,
-  filters: PropTypes.object,
   getIndustry: PropTypes.func,
   industryList: PropTypes.oneOfType([
     PropTypes.array,
@@ -389,10 +196,8 @@ BusinessPage.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  businessDemand: makeSelectUserBusinessDemand(),
-  businessSupplier: makeSelectUserBusinessSupplier(),
+  business: makeSelectBusines(),
   currentUser: makeSelectCurrentUser(),
-  filters: makeSelectBusinessFilter(),
   industryList: makeSelectUserCenterIndustry(),
   unreadDot: makeSelectUnreadDot(),
 });
@@ -400,9 +205,6 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     getBusiness: (type, page, searchParams) => dispatch(fetchBusiness(type, page, searchParams)),
-    getPrice: () => dispatch(fetchBusinessPrice()),
-    getNumber: () => dispatch(fetchBusinessNumber()),
-    getReward: () => dispatch(fetchReward()),
     getIndustry: () => dispatch(fetchIndustry()),
     setSelectTab: (selectTab) => dispatch(loadSelectTab(selectTab)),
   };
