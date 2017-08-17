@@ -19,12 +19,12 @@ import FlexRow from 'components/FlexRow';
 import UpdateMessage from 'components/UpdateMessage';
 import { NavBar, Icon, ActionSheet, Modal, Tabs, Badge } from 'antd-mobile';
 
-import { makeSelectBusines } from './selectors';
+import { makeSelectBusiness, makeSelectBusinessUpdateMessage } from './selectors';
 import { makeSelectCurrentUser, makeSelectUnreadDot } from 'containers/HomePage/selectors';
 import { makeSelectUserCenterIndustry } from 'containers/UserCenter/selectors';
 
 import FilterPanel from './FilterPanel';
-import { fetchBusiness } from './actions';
+import { fetchBusiness, loadUpdateMessage } from './actions';
 import { fetchIndustry } from 'containers/UserCenter/actions';
 import { loadSelectTab } from 'containers/HomePage/actions';
 import './styles.scss';
@@ -81,6 +81,15 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
     getBusiness(role, Number(business[role].page) + 1);
   }
 
+  handleMessage = () => {
+    const { setUpdateMessage } = this.props;
+
+    // remove the update message after 2s
+    setTimeout(() => {
+      setUpdateMessage('business', false, 0);
+    }, 2E3);
+  }
+
   handlePublish = () => {
     const { setSelectTab } = this.props;
     const { type } = this.state;
@@ -109,7 +118,7 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
 
   render() {
     const { role } = this.state;
-    const { business, currentUser, industryList, unreadDot } = this.props;
+    const { business, currentUser, industryList, unreadDot, updateInfo } = this.props;
 
     const resultIndustryList = [{ id: 0, name: '全部角色' }, ...industryList];
 
@@ -169,11 +178,17 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
               </Tabs>
             )
           }
-          <UpdateMessage message="更新了16条生意" style={{
-            position: 'absolute',
-            top: '1.8rem',
-            left: 0,
-          }} />
+          {(updateInfo.business && updateInfo.business.show) &&
+            <UpdateMessage
+              message={`更新了${updateInfo.business.count}条生意`}
+              style={{
+                position: 'absolute',
+                top: '1.8rem',
+                left: 0,
+              }}
+              callback={this.handleMessage}
+            />
+          }
       </div>
     );
   }
@@ -193,13 +208,19 @@ BusinessPage.propTypes = {
   ]),
   setSelectTab: PropTypes.func,
   unreadDot: PropTypes.object,
+  updateInfo: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.bool,
+  ]),
+  setUpdateMessage: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
-  business: makeSelectBusines(),
+  business: makeSelectBusiness(),
   currentUser: makeSelectCurrentUser(),
   industryList: makeSelectUserCenterIndustry(),
   unreadDot: makeSelectUnreadDot(),
+  updateInfo: makeSelectBusinessUpdateMessage(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -207,6 +228,7 @@ function mapDispatchToProps(dispatch) {
     getBusiness: (type, page, searchParams) => dispatch(fetchBusiness(type, page, searchParams)),
     getIndustry: () => dispatch(fetchIndustry()),
     setSelectTab: (selectTab) => dispatch(loadSelectTab(selectTab)),
+    setUpdateMessage: (type, show, count) => dispatch(loadUpdateMessage(type, show, count)),
   };
 }
 

@@ -44,6 +44,8 @@ import {
   PUBLISH_MOMENT,
 
   FETCH_MY_MOMENTS,
+
+  DO_REFRESH_MOMENT,
 } from './constants';
 
 import {
@@ -69,6 +71,8 @@ import {
 
   loadMyMoments,
   loadMyMomentsLoading,
+
+  loadUpdateMessage,
 } from './actions';
 
 import {
@@ -99,11 +103,15 @@ export function* fetchBusiness(action) {
 
     const res = yield request.doGet('moments/filter-supplier-demand', { page, role });
 
-    const { list, page: resPage } = res;
+    const { list, page: resPage, update_counts } = res;
     yield put(loadBusiness(role, list, resPage));
 
     if (page === 1 && Number(role) === 0) {
       yield fetchUnreadDot();
+
+      if (update_counts > 0) {
+        yield put(loadUpdateMessage('business', true, update_counts));
+      }
     }
   } catch (err) {
     // console.log(err);
@@ -201,6 +209,25 @@ export function* doRefreshMoment(id) {
 
     yield put(refreshListNewMoment(newData));
     yield put(refreshListNewCommunicate(newData));
+  } catch (err) {
+    // console.log(err);
+  }
+}
+
+// XXX: add the fresh moment func to refresh detail and list info
+export function* refreshMoment(action) {
+  try {
+    const { id } = action.payload;
+
+    yield fetchMomentDetail({
+      payload: {
+        id,
+      }
+    });
+
+    yield doRefreshMoment(id);
+    
+    browserHistory.goBack();
   } catch (err) {
     // console.log(err);
   }
@@ -487,6 +514,7 @@ export function* defaultSaga() {
   const watcherChangeMomentTrade = yield takeLatest(CHANGE_MOMENT_TRADE, changeMomentTrade);
   const watcherPublishMoment = yield takeLatest(PUBLISH_MOMENT, publishMoment);
   const watcherMyMoments = yield takeLatest(FETCH_MY_MOMENTS, fetchMyMoments);
+  const watcherRefreshMoment = yield takeLatest(DO_REFRESH_MOMENT, refreshMoment);
 
   // Suspend execution until location changes
   yield take(LOCATION_CHANGE);
@@ -507,6 +535,7 @@ export function* defaultSaga() {
   yield cancel(watcherChangeMomentTrade);
   yield cancel(watcherPublishMoment);
   yield cancel(watcherMyMoments);
+  yield cancel(watcherRefreshMoment);
 }
 
 // All sagas to be loaded

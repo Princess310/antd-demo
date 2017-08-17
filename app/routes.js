@@ -452,6 +452,14 @@ export default function createRoutes(store) {
               .then(loadModule(cb))
               .catch(errorLoading);
           },
+        }, {
+          path: 'introducePublish',
+          name: 'introducePublish',
+          getComponent(location, cb) {
+            import('containers/IntroducePublish')
+              .then(loadModule(cb))
+              .catch(errorLoading);
+          },
         },
       ],
     }, {

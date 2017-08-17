@@ -46,3 +46,7 @@ export const LOAD_PUBLISH_PARAMS = 'app/BusinessPage/LOAD_PUBLISH_PARAMS';
 export const FETCH_MY_MOMENTS = 'app/UserCenter/FETCH_MY_MOMENTS';
 export const LOAD_MY_MOMENTS = 'app/UserCenter/LOAD_MY_MOMENTS';
 export const LOAD_MY_MOMENTS_LOADING = 'app/UserCenter/LOAD_MY_MOMENTS_LOADING';
+
+export const LOAD_UPDATE_MESSAGE = 'app/UserCenter/LOAD_UPDATE_MESSAGE';
+
+export const DO_REFRESH_MOMENT = 'app/UserCenter/DO_REFRESH_MOMENT';

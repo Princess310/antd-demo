@@ -29,6 +29,8 @@ import {
 
   LOAD_MY_MOMENTS,
   LOAD_MY_MOMENTS_LOADING,
+
+  LOAD_UPDATE_MESSAGE,
 } from './constants';
 
 const initialState = fromJS({
@@ -41,6 +43,7 @@ const initialState = fromJS({
   // record params when publish moment
   publishParams: {},
   businessMaps: false,
+  updateMessage: false,
   searchAll: {
     page: 1,
     loading: false,
@@ -70,69 +73,49 @@ function businessPageReducer(state = initialState, action) {
     }
     case REFRESH_LIST_NEW_MOMENT: {
       const { data } = action.payload;
-      let supplier = state.get('businessSupplier');
-      const supplierList = supplier.get('list');
-      let demand = state.get('businessDemand');
-      const demandList = demand.get('list');
-      const newSupplierList = [];
-      const newDemandList = [];
+      const maps = state.get('businessMaps');
+      let newMaps = {};
+      if (maps) {
+        Object.keys(maps).forEach((k) => {
+          let business = maps[k];
+          const list = business.list.map((moment) => {
+            if (moment.id === data.id) {
+              return data;
+            }
 
-      // try to refresh moment for list
-      if (supplierList) {
-        supplierList.forEach((m, i) => {
-          if (m.id === data.id) {
-            newSupplierList[i] = data;
-          } else {
-            newSupplierList[i] = m;
-          }
+            return moment;
+          }); 
+
+          business = {
+            ...business,
+            list: list,
+          };
+
+          newMaps[k] = business;
         });
-
-        supplier = supplier.set('list', newSupplierList);
       }
 
-      if (demandList) {
-        demandList.forEach((m, i) => {
-          if (m.id === data.id) {
-            newDemandList[i] = data;
-          } else {
-            newDemandList[i] = m;
-          }
-        });
-
-        demand = demand.set('list', newDemandList);
-      }
-
-      return state.set('businessSupplier', supplier).set('businessDemand', demand);
+      return state.set('businessMaps', newMaps);
     }
     case REMOVE_LIST_MOMENT: {
       const { id } = action.payload;
+      const maps = state.get('businessMaps');
+      let newMaps = {};
 
-      const { data } = action.payload;
-      let supplier = state.get('businessSupplier');
-      let supplierList = supplier.get('list');
-      let demand = state.get('businessDemand');
-      let demandList = demand.get('list');
-      let newSupplierList = [];
-      let newDemandList = [];
+      if (maps) {
+        Object.keys(maps).forEach((k) => {
+          let business = maps[k];
+          const list = business.list.filter((m) => m.id !== id);
+          business = {
+            ...business,
+            list: list,
+          };
 
-      // try to refresh moment for list
-      if (supplierList) {
-        supplierList = supplierList.filter((m) => (
-          m.id !== id
-        ));
-
-        supplier = supplier.set('list', supplierList);
+          newMaps[k] = business;
+        });
       }
 
-      if (demandList) {
-        demandList = demandList.filter((m) => (
-          m.id !== id
-        ));
-
-        demand = demand.set('list', demandList);
-      }
-
-      return state.set('businessSupplier', supplier).set('businessDemand', demand);
+       return state.set('businessMaps', newMaps);
     }
     case LOAD_BUSINESS: {
       const { role, list, page } = action.payload;
@@ -328,6 +311,19 @@ function businessPageReducer(state = initialState, action) {
 
       const result = info.set('loading', loading);
       return type === 1 ? state.set('myMomentsSupplier', result) : state.set('myMomentsDemand', result);
+    }
+    case LOAD_UPDATE_MESSAGE: {
+      const { type, count, show } = action.payload;
+      const messageInfo = state.get('updateMessage');
+      const newInfo = {
+        ...messageInfo,
+        [type]: {
+          show,
+          count,
+        },
+      };
+
+      return state.set('updateMessage', newInfo);
     }
     default:
       return state;

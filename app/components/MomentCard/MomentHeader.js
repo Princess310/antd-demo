@@ -16,6 +16,8 @@ import FlexColumn from 'components/FlexColumn';
 import LineTag from 'components/LineTag';
 import DateInfo from 'components/DateInfo';
 
+import momentSuccess from 'assets/images/moment-success.png';
+
 const Wrapper = styled(FlexRow)`
   position: relative;
   display: flex;

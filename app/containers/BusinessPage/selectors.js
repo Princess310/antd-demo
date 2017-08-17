@@ -19,7 +19,7 @@ const makeSelectBusinessDetail = () => createSelector(
   (substate) => substate.get('detail')
 );
 
-const makeSelectBusines = () => createSelector(
+const makeSelectBusiness = () => createSelector(
   selectBusiness,
   (substate) => substate.get('businessMaps')
 );
@@ -105,9 +105,14 @@ const makeSelectMyMomentsSupplier = () => createSelector(
   }
 );
 
+const makeSelectBusinessUpdateMessage = () =>createSelector(
+  selectBusiness,
+  (substate) => substate.get('updateMessage')
+);
+
 export {
   makeSelectBusinessDetail,
-  makeSelectBusines,
+  makeSelectBusiness,
   makeSelectBusinessFilter,
   makeSelectBusinessRewards,
   makeSelectBusinessPrice,
@@ -118,4 +123,5 @@ export {
   makeSelectPublishParams,
   makeSelectMyMomentsDemand,
   makeSelectMyMomentsSupplier,
+  makeSelectBusinessUpdateMessage,
 };

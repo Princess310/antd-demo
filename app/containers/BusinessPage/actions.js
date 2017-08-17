@@ -48,6 +48,10 @@ import {
   FETCH_MY_MOMENTS,
   LOAD_MY_MOMENTS,
   LOAD_MY_MOMENTS_LOADING,
+
+  LOAD_UPDATE_MESSAGE,
+
+  DO_REFRESH_MOMENT,
 } from './constants';
 
 export function fetchMomentDetail(id) {
@@ -360,6 +364,26 @@ export function loadMyMomentsLoading(type, loading) {
     payload: {
       type,
       loading,
+    },
+  };
+}
+
+export function loadUpdateMessage(type, show, count) {
+  return {
+    type: LOAD_UPDATE_MESSAGE,
+    payload: {
+      type,
+      show,
+      count,
+    },
+  };
+}
+
+export function doRefreshMoment(id) {
+  return {
+    type: DO_REFRESH_MOMENT,
+    payload:{
+      id,
     },
   };
 }

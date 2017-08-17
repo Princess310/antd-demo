@@ -15,8 +15,11 @@ import TouchLoader from 'components/TouchLoader';
 import SearchBar from 'components/SearchBar';
 import MomentCard from 'components/MomentCard';
 import FlexColumnCenter from 'components/FlexColumnCenter';
+import UpdateMessage from 'components/UpdateMessage';
 import { NavBar, Icon, ListView, RefreshControl } from 'antd-mobile';
 
+import { makeSelectBusinessUpdateMessage } from 'containers/BusinessPage/selectors';
+import { loadUpdateMessage }from 'containers/BusinessPage/actions';
 import { makeSelectCurrentUser } from 'containers/HomePage/selectors';
 import { makeSelectCommunicate } from './selectors';
 import { fetchCommunicate } from './actions';
@@ -55,8 +58,17 @@ export class Communicate extends React.PureComponent { // eslint-disable-line re
     getList(communicationList.page + 1);
   }
 
+  handleMessage = () => {
+    const { setUpdateMessage } = this.props;
+
+    // remove the update message after 2s
+    setTimeout(() => {
+      setUpdateMessage('communication', false, 0);
+    }, 2E3);
+  }
+
   render() {
-    const { communicationList, currentUser } = this.props;
+    const { communicationList, currentUser, updateInfo } = this.props;
 
     const listView = communicationList.list ? communicationList.list.map((moment) => (
       <MomentCard
@@ -105,6 +117,17 @@ export class Communicate extends React.PureComponent { // eslint-disable-line re
             {listView}
           </TouchLoader>
         </ScrollContainer>
+        {(updateInfo.communication && updateInfo.communication.show) &&
+          <UpdateMessage
+            message={`更新了${updateInfo.communication.count}条讨论`}
+            style={{
+              position: 'absolute',
+              top: '1.8rem',
+              left: 0,
+            }}
+            callback={this.handleMessage}
+          />
+        }
       </div>
     );
   }
@@ -114,16 +137,23 @@ Communicate.propTypes = {
   communicationList: PropTypes.object,
   getList: PropTypes.func,
   currentUser: PropTypes.object,
+  updateInfo: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.bool,
+  ]),
+  setUpdateMessage: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
   communicationList: makeSelectCommunicate(),
   currentUser: makeSelectCurrentUser(),
+  updateInfo: makeSelectBusinessUpdateMessage(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     getList: (page) => dispatch(fetchCommunicate(page)),
+    setUpdateMessage: (type, show, count) => dispatch(loadUpdateMessage(type, show, count)),
   };
 }
 

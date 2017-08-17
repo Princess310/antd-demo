@@ -211,6 +211,7 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
       title,
       trade_status,
       referral_count,
+      referrals,
     } = momentDetail;
 
     const cmsTitle = title ? (title.length > 18 ? `${title.substring(0, 15)}...` : title) : '动态详情';
@@ -242,50 +243,57 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
 
               <WhiteSpace size="md" />
               <Tabs
-                defaultActiveKey="1"
+                defaultActiveKey={businessType === 'status' ? '1' : '3'}
                 animated={false}
                 onChange={this.callback}
                 onTabClick={this.handleTabClick}
                 className={`moment-detail-tabs moment-detail-tabs-${businessType}`}
               >
-                <TabPane tab={`评论 ${comment_count}`} key="1">
-                  <div>
-                    {comments && comments.map((u)  => (
-                      <div key={u.id} style={{ borderBottom: `0.01rem ${pallete.border.deep} solid` }} onClick={() => {
-                        this.handleDoublueSendComment(u.id, u.created_by);
-                      }}>
-                        <UserHeaderBar
-                          user={{...u, id: u.created_by}}
-                        />
-                        <CommentWrapper>
-                          <div>
-                            {u.to_name !== '' && <span>回复<span style={{ color: pallete.theme }}>{u.to_name}</span>：</span>}
-                            {u.content}
-                          </div>
-                          <LikeWrapper style={{ color: businessType === 'status' ? (u.is_like > 0 ? pallete.theme : pallete.text.help) : themeColor }} onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            this.handleLikeComment(u.id, u.created_by);
-                          }}>
-                            <Icon type={require('icons/ali/点赞.svg')} size="sm" />
-                            {u.like_count}
-                          </LikeWrapper>
-                        </CommentWrapper>
-                      </div>
-                    ))}
-                  </div>
-                </TabPane>
-                <TabPane tab={`赞 ${like_count}`} key="2">
-                  <div>
-                    {likes && likes.map((u)  => (
-                      <div key={u.id} style={{ borderBottom: `0.01rem ${pallete.border.deep} solid` }}>
-                        <UserHeaderBar
-                          user={{...u, id: u.created_by}}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </TabPane>
+                {businessType === 'status' && (
+                  <TabPane tab={`评论 ${comment_count}`} key="1">
+                    <div>
+                      {comments && comments.map((u)  => (
+                        <div key={u.id} style={{ borderBottom: `0.01rem ${pallete.border.deep} solid` }} onClick={() => {
+                          this.handleDoublueSendComment(u.id, u.created_by);
+                        }}>
+                          <UserHeaderBar
+                            user={{...u, id: u.created_by}}
+                          />
+                          <CommentWrapper>
+                            <div>
+                              {u.to_name !== '' && <span>回复<span style={{ color: pallete.theme }}>{u.to_name}</span>：</span>}
+                              {u.content}
+                            </div>
+                            <LikeWrapper
+                              style={{ color: businessType === 'status' ? (u.is_like > 0 ? pallete.theme : pallete.text.help) : themeColor }}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                this.handleLikeComment(u.id, u.created_by);
+                              }}
+                            >
+                              <Icon type={require('icons/ali/点赞.svg')} size="sm" />
+                              {u.like_count}
+                            </LikeWrapper>
+                          </CommentWrapper>
+                        </div>
+                      ))}
+                    </div>
+                  </TabPane>
+                )}
+                {businessType === 'status' && (
+                  <TabPane tab={`赞 ${like_count}`} key="2">
+                    <div>
+                      {likes && likes.map((u)  => (
+                        <div key={u.id} style={{ borderBottom: `0.01rem ${pallete.border.deep} solid` }}>
+                          <UserHeaderBar
+                            user={{...u, id: u.created_by}}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </TabPane>
+                )}
                 <TabPane tab={`分享 ${share_count}`} key="3">
                   <div>
                     {shares && shares.map((u)  => (
@@ -297,6 +305,19 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
                     ))}
                   </div>
                 </TabPane>
+                {businessType !== 'status' && (
+                  <TabPane tab={`转介绍 ${referral_count}`} key="4">
+                    <div>
+                      {referrals && referrals.map((u)  => (
+                        <div key={u.id} style={{ borderBottom: `0.01rem ${pallete.border.deep} solid` }}>
+                          <UserHeaderBar
+                            user={{...u, id: u.created_by}}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </TabPane>
+                )}
               </Tabs>
             </AppContent>
             <ActionWrapper style={{ color: themeColor }}>

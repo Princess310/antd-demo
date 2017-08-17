@@ -3,6 +3,14 @@ import { LOCATION_CHANGE } from 'react-router-redux';
 import request from 'utils/request';
 
 import {
+  fetchUnreadDot,
+} from 'containers/HomePage/sagas';
+
+import {
+  loadUpdateMessage,
+} from 'containers/BusinessPage/actions';
+
+import {
   FETCH_COMMUNICATE,
   
   FETCH_COMMUNICATE_SEARCH,
@@ -17,10 +25,6 @@ import {
   loadCommunicateSearchLoading,
 } from './actions';
 
-import {
-  fetchUnreadDot,
-} from 'containers/HomePage/sagas';
-
 export function* fetchCommunicate(action) {
   try {
     const { page } = action.payload;
@@ -33,9 +37,16 @@ export function* fetchCommunicate(action) {
 
     const res = yield request.doGet('moments/communication', { page });
 
-    const { list, page: resPage } = res;
+    const { list, page: resPage, update_counts } = res;
     yield put(loadCommunicate(list, resPage));
-    yield fetchUnreadDot();
+
+    if (page === 1) {
+      yield fetchUnreadDot();
+
+      if (update_counts > 0) {
+        yield put(loadUpdateMessage('communication', true, update_counts));
+      }
+    }
   } catch (err) {
     // console.log(err);
   }

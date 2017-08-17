@@ -20,8 +20,22 @@ const Wrapper = styled.div`
 `;
 
 function UpdateMessage(props) {
+  const prefix = [
+    'onAnimationEnd',
+    'onWebKitAnimationEnd',
+    'onMozAnimationEnd',
+    'onMsAnimationEnd',
+  ];
+  const animProps = {};
+
+  prefix.forEach((p) => {
+    animProps[p] = () => {
+      props.callback && props.callback();
+    };
+  });
+
   return (
-    <Wrapper className="animated fadeInDown" style={props.style}>
+    <Wrapper className="animated fadeInDown" style={props.style} {...animProps}>
       {props.message}
     </Wrapper>
   );

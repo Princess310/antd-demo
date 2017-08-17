@@ -310,6 +310,23 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
     });
   }
 
+  handleIntroduce = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const { moment } = this.props;
+
+    request.doGet('moments/check-referral', {
+      moments_id: moment.id,
+    }).then((res) => {
+      browserHistory.push({
+        pathname: 'introducePublish',
+        query: {
+          id: moment.id,
+        },
+      });
+    });
+  }
+
   render() {
     const { moreContent, expanded } = this.state;
     const { moment, style, from, type, currentUser } = this.props;

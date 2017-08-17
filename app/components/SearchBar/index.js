@@ -10,12 +10,14 @@ import pallete from 'styles/colors';
 import { Icon } from 'antd-mobile';
 
 const Wrapper = styled.div`
+  position: relative;
   font-size: 0.28rem;
   color: ${pallete.text.help};
   padding: 0.2rem 0.24rem;
   height: 0.96rem;
   background-color: ${pallete.white};
   border-bottom: 0.01rem ${pallete.border.normal} solid;
+  z-index: 10;
 `;
 
 const Container = styled.div`
