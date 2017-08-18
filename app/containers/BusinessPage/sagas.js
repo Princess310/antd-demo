@@ -29,6 +29,7 @@ import {
   FETCH_BUSINESS_NUMBER,
   FETCH_BUSINESS_UNITS,
   FETCH_BUSINESS_REWARD,
+  FETCH_BUSINESS_CHARACTER_SERVICE,
 
   FETCH_BUSINESS_SEARCH,
 
@@ -46,6 +47,8 @@ import {
   FETCH_MY_MOMENTS,
 
   DO_REFRESH_MOMENT,
+
+  FETCH_BUSINESS_RECOMMEND,
 } from './constants';
 
 import {
@@ -60,6 +63,7 @@ import {
   loadBusinessNumber,
   loadBusinessUnits,
   loadReward,
+  loadCharacterService,
 
   loadSearchPanel,
   loadSearchAll,
@@ -73,6 +77,10 @@ import {
   loadMyMomentsLoading,
 
   loadUpdateMessage,
+
+  loadBusinessRecommend,
+  loadBusinessRecommendRefresh,
+  loadBusinessRecommendLoading,
 } from './actions';
 
 import {
@@ -162,15 +170,27 @@ export function* fetchBusinessReward() {
   }
 }
 
+export function* fetchCharacterService() {
+  try {
+    const res = yield request.doGet('moments/characteristic-service');
+
+    // load all filter things
+    yield put(loadCharacterService(res.list));
+  } catch (err) {
+    // console.log(err);
+  }
+}
+
 export function* fetchBusinessSearch(action) {
   try {
-    const { panel, keyword, reward_as, page } = action.payload;
+    const { panel, keyword, reward_as, type, page } = action.payload;
 
     if (panel === '7' || reward_as) {
       const res = yield request.doGet('moments/search', {
         panel,
         keyword,
         reward_as,
+        type,
         page,
       });
 
@@ -454,6 +474,7 @@ export function* publishMoment(action) {
       pictures: pics.join(','),
       ...params,
     });
+    const { moments_id } = res;
 
     yield fetchCommunicate({
       payload: {
@@ -463,16 +484,24 @@ export function* publishMoment(action) {
     // reset publish params
     yield put(loadPublishParams(false));
 
-    if (step) {
-      browserHistory.go(-step);
-    } else {
-      browserHistory.goBack();
-    }
-
     if (Number(params.category) === 4) {
       Toast.info('发布成功，审核通过后展示并挣取10积分!', 2);
+
+      if (step) {
+        browserHistory.go(-step);
+      } else {
+        browserHistory.goBack();
+      }
     } else {
       Toast.info('发布成功', 2);
+
+      yield fetchRecommend({
+        payload: {
+          id: moments_id,
+          page: 1,
+          step,
+        },
+      });
     }
   } catch (err) {
     // console.log(err);
@@ -496,6 +525,36 @@ export function* fetchMyMoments(action) {
   }
 }
 
+export function* fetchRecommend(action) {
+  const { id, page, step } = action.payload;
+    // add refresh status
+    if (page === 1) {
+      yield put(loadBusinessRecommendRefresh(true));
+    } else {
+      yield put(loadBusinessRecommendLoading(true));
+    }
+
+    const res = yield request.doGet('moments/recommend', { moments_id: id, page });
+
+    const { list, page: resPage } = res;
+    yield put(loadBusinessRecommend(list, resPage));
+
+    if (list.length > 0) {
+      browserHistory.replace({
+        pathname: 'businessRecommend',
+        query: {
+          id,
+        },
+      });
+    } else {
+      if (step) {
+        browserHistory.go(-step);
+      } else {
+        browserHistory.goBack();
+      }
+    }
+}
+
 export function* defaultSaga() {
   const watcher = yield takeLatest(FETCH_MOMENT_DETAIL, fetchMomentDetail);
   const watcherBusiness = yield takeLatest(FETCH_BUSINESS, fetchBusiness);
@@ -503,6 +562,7 @@ export function* defaultSaga() {
   const watcherBusinessNumber = yield takeLatest(FETCH_BUSINESS_NUMBER, fetchBusinessNumber);
   const watcherBusinessUnits = yield takeLatest(FETCH_BUSINESS_UNITS, fetchBusinessUnits);
   const watcherBusinessReward = yield takeLatest(FETCH_BUSINESS_REWARD, fetchBusinessReward);
+  const watcherBusinessCharacterService = yield takeLatest(FETCH_BUSINESS_CHARACTER_SERVICE, fetchCharacterService);
   const watcherBusinessSearch = yield takeLatest(FETCH_BUSINESS_SEARCH, fetchBusinessSearch);
   const watcherLikeMoment = yield takeLatest(DO_LIKE_MOMENT, likeMoment);
   const watcherDelMoment = yield takeLatest(DO_DELETE_MOMENT, delMoment);
@@ -515,6 +575,7 @@ export function* defaultSaga() {
   const watcherPublishMoment = yield takeLatest(PUBLISH_MOMENT, publishMoment);
   const watcherMyMoments = yield takeLatest(FETCH_MY_MOMENTS, fetchMyMoments);
   const watcherRefreshMoment = yield takeLatest(DO_REFRESH_MOMENT, refreshMoment);
+  const watcherBusinessRecommend = yield takeLatest(FETCH_BUSINESS_RECOMMEND, fetchRecommend);
 
   // Suspend execution until location changes
   yield take(LOCATION_CHANGE);
@@ -524,6 +585,7 @@ export function* defaultSaga() {
   yield cancel(watcherBusinessNumber);
   yield cancel(watcherBusinessUnits);
   yield cancel(watcherBusinessReward);
+  yield cancel(watcherBusinessCharacterService);
   yield cancel(watcherBusinessSearch);
   yield cancel(watcherLikeMoment);
   yield cancel(watcherDelMoment);
@@ -536,6 +598,7 @@ export function* defaultSaga() {
   yield cancel(watcherPublishMoment);
   yield cancel(watcherMyMoments);
   yield cancel(watcherRefreshMoment);
+  yield cancel(watcherBusinessRecommend);
 }
 
 // All sagas to be loaded

@@ -32,6 +32,7 @@ const makeSelectBusinessFilter = () => createSelector(
       number: substate.get('number'),
       units: substate.get('units'),
       reward: substate.get('reward'),
+      service: substate.get('characterService'),
     };
   }
 );
@@ -54,6 +55,11 @@ const makeSelectBusinessNumber = () => createSelector(
 const makeSelectBusinessUnits = () => createSelector(
   selectBusiness,
   (substate) => substate.get('units')
+);
+
+const makeSelectBusinessCharacterService = () => createSelector(
+  selectBusiness,
+  (substate) => substate.get('characterService')
 );
 
 const makeSelectBusinessSearchPanel = () => createSelector(
@@ -110,6 +116,21 @@ const makeSelectBusinessUpdateMessage = () =>createSelector(
   (substate) => substate.get('updateMessage')
 );
 
+const makeSelectBusinessRecommend = () => createSelector(
+  selectBusiness,
+  (substate) => {
+    const info = substate.get('recommend');
+    return {
+      page: info.get('page'),
+      refresh: info.get('refresh'),
+      loading: info.get('loading'),
+      list: info.get('list'),
+      hasNext: info.get('hasNext'),
+    };
+  }
+);
+
+
 export {
   makeSelectBusinessDetail,
   makeSelectBusiness,
@@ -118,10 +139,12 @@ export {
   makeSelectBusinessPrice,
   makeSelectBusinessNumber,
   makeSelectBusinessUnits,
+  makeSelectBusinessCharacterService,
   makeSelectBusinessSearchPanel,
   makeSelectBusinessSearchAll,
   makeSelectPublishParams,
   makeSelectMyMomentsDemand,
   makeSelectMyMomentsSupplier,
   makeSelectBusinessUpdateMessage,
+  makeSelectBusinessRecommend,
 };

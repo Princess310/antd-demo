@@ -187,6 +187,10 @@ injectGlobal`
     border: 1px solid rgb(80, 171, 241);
   }
 
+  .am-list .am-switch input[type="checkbox"]:checked + .checkbox {
+    background: #50abf1;
+  }
+
   .animated {
     animation-duration: 0.5s;
     animation-fill-mode: both;

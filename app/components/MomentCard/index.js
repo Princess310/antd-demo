@@ -19,7 +19,7 @@ import { browserHistory } from 'react-router';
 import PhotoSwipe from 'photoswipe';
 import PhotoSwipeUIdefault from 'photoswipe/dist/photoswipe-ui-default';
 
-import { Icon, ActionSheet, Button } from 'antd-mobile';
+import { Icon, ActionSheet, Button, Toast } from 'antd-mobile';
 import operation from 'components/Operation';
 import FlexSB from 'components/FlexSB';
 import LineTag from 'components/LineTag';
@@ -209,6 +209,11 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
         { text: '关闭或打开需求', onPress: () => {
           doChangeMomentTrade(moment.id, from);
         }, style: actionSheetStyle },
+        { text: '公布或隐藏电话', onPress: () => {
+          request.doPost('moments/show-mobile').then(() => {
+            Toast.info('操作成功!', 2);
+          });
+        }, style: actionSheetStyle },
       ];
     }
 
@@ -359,6 +364,7 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
       reward_as,
       demand_counts,
       is_my_friend,
+      characteristic_service,
       ...other,
     } = moment;
 
@@ -469,6 +475,7 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
               <div style={{ marginBottom: '0.08rem' }}>
                 {item_name !== '' && <LineTag style={tagStyle}>{item_name}</LineTag>}
                 {section !== '' && <LineTag style={{ marginLeft: '0.08rem', ...tagStyle }}>{section}</LineTag>}
+                {characteristic_service !== '' && <LineTag style={{ marginLeft: '0.08rem', ...tagStyle }}>{characteristic_service}</LineTag>}
               </div>
             )}
             {moreContent ?

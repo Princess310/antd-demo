@@ -138,14 +138,14 @@ class FilterPanel extends React.PureComponent { // eslint-disable-line react/pre
             <MaskBg onClick={this.handleExpand}>
               <MaskWrapper onClick={this.handleExpand}>
                 <ContentWrapper>
-                  <Button
+                  {/* <Button
                     key={0}
                     className="btn"
                     inline
                     style={value === 0 ? {...buttonStyle, ...buttonActiveStyle} : buttonStyle} activeStyle={buttonActiveStyle}
                     onClick={() => onSelect({ id: 0, [field]: '' })}>
                     {selectTotalName}
-                  </Button>
+                  </Button> */}
                   {itemsView}
                 </ContentWrapper>
               </MaskWrapper>

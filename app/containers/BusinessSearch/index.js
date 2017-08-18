@@ -23,7 +23,7 @@ import MomentCard from 'components/MomentCard';
 import MomentHeader from 'components/MomentCard/MomentHeader';
 import FilterPanel from 'containers/BusinessPage/FilterPanel';
 
-import { fetchSearch, fetchBusinessPrice, fetchBusinessNumber, fetchReward } from 'containers/BusinessPage/actions';
+import { fetchSearch, fetchBusinessPrice, fetchBusinessNumber, fetchReward, fetchCharacterService } from 'containers/BusinessPage/actions';
 import { makeSelectBusinessSearchPanel, makeSelectBusinessSearchAll, makeSelectBusinessFilter } from 'containers/BusinessPage/selectors';
 import { makeSelectCurrentUser } from 'containers/HomePage/selectors';
 
@@ -67,9 +67,10 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
 
     this.state = {
       step: 1, // 1 -> search, 2 -> search panel view, 3 -> search all view
-      panel: '7', // default panel is 7
+      panel: '7', // default panel is 7 单独搜索 / 聚合
       keyword: '',
       reward_as: 0,
+      type: 0,
       page: 1,
       seeMore: false,
       historyList: historyList ? JSON.parse(historyList) : [],
@@ -90,6 +91,10 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
         value: '',
       },
       industryFilter: {
+        id: 0,
+        value: '',
+      },
+      serviceFilter: {
         id: 0,
         value: '',
       },
@@ -143,7 +148,7 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
   }
 
   handleSearch = () => {
-    const { panel, keyword, reward_as } = this.state;
+    const { panel, keyword, reward_as, type } = this.state;
 
     if (panel === '7') {
       this.setState({
@@ -155,12 +160,12 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
       });
     }
 
-    this.props.doSearch(panel, keyword, reward_as, 1);
+    this.props.doSearch(panel, keyword, reward_as, type, 1);
     this.storeHistore(keyword);
   }
 
   handleSeeMore = (reward_as) => {
-    const { panel, keyword, page } = this.state;
+    const { panel, keyword, type, page } = this.state;
 
     this.setState({
       panel: '6',
@@ -169,7 +174,7 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
       reward_as,
     });
 
-    this.props.doSearch('6', keyword, reward_as, page);
+    this.props.doSearch('6', keyword, reward_as, type, page);
   }
 
   handleBack = () => {
@@ -208,40 +213,72 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
   }
 
   handleHistorySearch = (keyword) => {
-    const { panel, reward_as } = this.state;
+    const { panel, reward_as, type } = this.state;
     
     this.setState({
       keyword,
       step: 2,
     });
-    this.props.doSearch(panel, keyword, reward_as, 1);
+    this.props.doSearch(panel, keyword, reward_as, type, 1);
     this.storeHistore(keyword);
   }
 
   handleFilter = (filter, item) => {
-    const { getBusiness } = this.props;
+    const { panel, reward_as } = this.state;
+    const { doSearch } = this.props;
 
-    if (type === 1) {
+    // do not set the select status for item, now.
+    // if (type === 1) {
+    //   this.setState({
+    //     [filter]: {
+    //       id: item.id,
+    //       value: item.value,
+    //     },
+    //   });
+    // } else {
+    //   this.setState({
+    //     [filter]: {
+    //       id: item.id,
+    //       value: item.value,
+    //     },
+    //   });
+    // }
+
+    // TODO: do the filter for business
+    const typeMaps = {
+      rewardDemandFilter: 1,
+      numberFilter: 2,
+      rewardSupplierFilter: 1,
+      serviceFilter: 3,
+      priceFilter: 2,
+    };
+    const fieldMaps = {
+      rewardDemandFilter: 'id',
+      numberFilter: 'value',
+      rewardSupplierFilter: 'id',
+      serviceFilter: 'name',
+      priceFilter: 'value',
+    };
+    const type = typeMaps[filter];
+    const keyword = item[fieldMaps[filter]];
+
+    doSearch(panel, keyword, reward_as, type, 1);
+
+    if (panel === '7') {
       this.setState({
-        [filter]: {
-          id: item.id,
-          value: item.value,
-        },
+        step: 2,
+        keyword,
       });
     } else {
       this.setState({
-        [filter]: {
-          id: item.id,
-          value: item.value,
-        },
+        step: 3,
+        keyword,
       });
     }
-
-    // TODO: do the filter for business
   }
 
   onEndReached = () => {
-    const { panel, keyword, reward_as, page } = this.state;
+    const { panel, keyword, reward_as, type, page } = this.state;
     
     if (panel === '7') {
       this.setState({
@@ -254,13 +291,13 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
         page: page + 1,
       });
     }
-    this.props.doSearch(panel, keyword, reward_as, page + 1);
+    this.props.doSearch(panel, keyword, reward_as, type, page + 1);
   }
 
   render() {
-    const { keyword, step, panel, reward_as, historyList, priceFilter, numberFilter, rewardDemandFilter, rewardSupplierFilter } = this.state;
+    const { keyword, step, panel, reward_as, historyList, priceFilter, numberFilter, rewardDemandFilter, rewardSupplierFilter, serviceFilter } = this.state;
     const { searchPanel, searchAll, currentUser, filters } = this.props;
-    const { price, number, reward } = filters;
+    const { price, number, reward, service } = filters;
     let placeholder = '搜索动态';
     if (panel !== '7') {
       if (step !== 1 && reward_as === 0) {
@@ -284,7 +321,10 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
               browserHistory.goBack();
             }}
             onChange={(value) => {
-              this.setState({ keyword: value });
+              this.setState({
+                keyword: value,
+                type: 0,
+              });
             }}
           />
         </FlexSB>
@@ -292,7 +332,7 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
           (
             <FlexRow>
               <FilterPanel
-                defaultTitle="产品类别"
+                defaultTitle="需求类别"
                 selectTotalName="全部类别"
                 items={reward}
                 value={rewardDemandFilter.id}
@@ -319,7 +359,7 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
             ) : (
               <FlexRow>
                 <FilterPanel
-                  defaultTitle="产品类别"
+                  defaultTitle="供应类别"
                   selectTotalName="全部类别"
                   items={reward}
                   value={rewardSupplierFilter.id}
@@ -327,6 +367,18 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
                   onSelect={(item) => this.handleFilter('rewardSupplierFilter', item)}
                   onExpand={() => {
                     !reward && this.props.getReward();
+                  }}
+                  contentStyle={{ borderLeft: `0.01rem ${pallete.border.normal} solid` }}
+                  from="supplier"
+                />
+                <FilterPanel
+                  defaultTitle="产品类别"
+                  items={service ? service.slice(1) : service}
+                  value={serviceFilter.id}
+                  field="name"
+                  onSelect={(item) => this.handleFilter('serviceFilter', item)}
+                  onExpand={() => {
+                    !reward && this.props.getService();
                   }}
                   contentStyle={{ borderLeft: `0.01rem ${pallete.border.normal} solid` }}
                   from="supplier"
@@ -518,6 +570,7 @@ BusinessSearch.propTypes = {
   getPrice: PropTypes.func,
   getNumber: PropTypes.func,
   getReward: PropTypes.func,
+  getService: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -529,10 +582,11 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    doSearch: (panel, keyword, reward_as, page) => dispatch(fetchSearch(panel, keyword, reward_as, page)),
+    doSearch: (panel, keyword, reward_as, type, page) => dispatch(fetchSearch(panel, keyword, reward_as, type, page)),
     getPrice: () => dispatch(fetchBusinessPrice()),
     getNumber: () => dispatch(fetchBusinessNumber()),
     getReward: () => dispatch(fetchReward()),
+    getService: () => dispatch(fetchCharacterService()),
   };
 }
 

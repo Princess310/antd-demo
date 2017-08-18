@@ -112,7 +112,12 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
         return;
       }
 
-      browserHistory.push('businessPublish');
+      browserHistory.push({
+        pathname: 'businessPublish',
+        state: {
+          show_mobile,
+        },
+      });
     });
   }
 

@@ -460,6 +460,22 @@ export default function createRoutes(store) {
               .then(loadModule(cb))
               .catch(errorLoading);
           },
+        }, {
+          path: 'selectCharacterService',
+          name: 'selectCharacterService',
+          getComponent(location, cb) {
+            import('containers/SelectCharacterService')
+              .then(loadModule(cb))
+              .catch(errorLoading);
+          },
+        }, {
+          path: 'businessRecommend',
+          name: 'businessRecommend',
+          getComponent(location, cb) {
+            import('containers/BusinessRecommend')
+              .then(loadModule(cb))
+              .catch(errorLoading);
+          },
         },
       ],
     }, {

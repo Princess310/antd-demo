@@ -9,10 +9,12 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { browserHistory } from 'react-router';
 import pallete from 'styles/colors';
+import request from 'utils/request';
 
-import { NavBar, List, TextareaItem, WhiteSpace, WingBlank, ImagePicker, Toast, Icon, SegmentedControl } from 'antd-mobile';
+import { NavBar, List, TextareaItem, WhiteSpace, WingBlank, ImagePicker, Toast, Icon, SegmentedControl, Switch } from 'antd-mobile';
 import MenuBtn from 'components/MenuBtn';
 import FlexCenter from 'components/FlexCenter';
+import FlexRow from 'components/FlexRow';
 
 import { publishMoment, loadPublishParams } from 'containers/BusinessPage/actions';
 import { makeSelectPublishParams } from 'containers/BusinessPage/selectors';
@@ -21,34 +23,37 @@ const Item = List.Item;
 export class BusinessPublish extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
     super(props);
-    const { publishParams }  = this.props;
+    const { publishParams, location: { state } }  = this.props;
 
     this.state = {
       content: publishParams.content ? publishParams.content : '',
       files: publishParams.files ? publishParams.files : [],
       filesMax: 9,
+      showMobile: typeof publishParams.showMobile === 'boolean' ? publishParams.showMobile : state.show_mobile === '1',
     }
   }
 
   componentWillMount() {
-    const { location: { action } } = this.props;
+    const { location: { action, state } } = this.props;
 
-    if (action === 'PUSH') {
+    if (action !== 'POP') {
       this.props.setPublishParams(false);
       this.setState({
         content: '',
         files: [],
+        showMobile: state.show_mobile === '1',
       });
     }
   }
 
   componentWillUnmount() {
     const { location: { action } } = this.props;
-    const { content, files } = this.state;
+    const { content, files, showMobile } = this.state;
 
     this.props.setPublishParams({
       content,
       files,
+      showMobile,
     });
   }
 
@@ -56,6 +61,8 @@ export class BusinessPublish extends React.PureComponent { // eslint-disable-lin
     this.setState({
       files,
     });
+
+    
   };
 
   handleContent = (value) => {
@@ -66,10 +73,25 @@ export class BusinessPublish extends React.PureComponent { // eslint-disable-lin
 
   onChangeTitle = (e) => {
     const index = e.nativeEvent.selectedSegmentIndex;
+    const { showMobile } = this.state;
 
     if (Number(index) === 1) {
-      browserHistory.replace('/businessPublishSupplier');
+      browserHistory.replace({
+        pathname: '/businessPublishSupplier',
+        state: {
+          show_mobile: showMobile ? '1' : '0',
+        },
+      });
     }
+  }
+
+  handleMobile = (value) => {
+    const self = this;
+    request.doPost('moments/show-mobile').then(() => {
+      self.setState({
+        showMobile: value,
+      });
+    });
   }
 
   handleSave = () => {
@@ -96,7 +118,7 @@ export class BusinessPublish extends React.PureComponent { // eslint-disable-lin
   }
 
   render() {
-    const { content, files, filesMax } = this.state;
+    const { content, files, filesMax, showMobile } = this.state;
     const { publishParams } = this.props;
 
     return (
@@ -110,21 +132,22 @@ export class BusinessPublish extends React.PureComponent { // eslint-disable-lin
             <MenuBtn key="0" onClick={this.handleSave}>发送</MenuBtn>,
           ]}
         >
-          发需求
+          发布采购需求
         </NavBar>
         <WhiteSpace size="md" />
         <List>
-          <Item>
+          <div style={{ padding: '0.24rem 0.64rem' }}>
             <FlexCenter style={{ fontSize: '0.3rem'}}>
               <SegmentedControl
                 selectedIndex={0}
-                values={['需求', '供应']}
+                values={['发需求', '发供应']}
                 style={{ height: '0.3rem', width: '3rem' }}
                 onChange={this.onChangeTitle}
                 tintColor={pallete.theme}
               />
             </FlexCenter>
-          </Item>
+            <FlexCenter style={{ marginTop: '0.15rem', fontSize: '0.24rem', color: '#FE6270' }}>你平时爱采购什么？你平时都在寻找什么？填写完整信息可以帮你解决需求</FlexCenter>
+          </div>
         </List>
         <WhiteSpace size="md" />
         <List>
@@ -134,7 +157,7 @@ export class BusinessPublish extends React.PureComponent { // eslint-disable-lin
             onClick={() => {
               browserHistory.push('/selectReward');
             }}
-          >产品类别（必选）</Item>
+          >产品类别<span style={{ color: '#FE6270' }}>（必选）</span></Item>
           <Item
             arrow="horizontal"
             extra={!publishParams.number || publishParams.number.value === '' ? "不限" : publishParams.number.value }
@@ -171,9 +194,16 @@ export class BusinessPublish extends React.PureComponent { // eslint-disable-lin
           onChange={this.onChange}
           selectable={files.length < filesMax}
         />
-        <WingBlank>
-          <div style={{ fontSize: '0.28rem', color: pallete.text.message }}>友情提示：这里是发布采购需求的地方，请不要在此发布广告，不然会有降权或封号的风险，谢谢您的配合和理解！</div>
-        </WingBlank>
+        <List>
+          <Item
+            extra={<Switch checked={showMobile} onChange={this.handleMobile} />}
+          >
+            <FlexRow>
+              <FlexCenter style={{ marginRight: '0.24rem' }}><Icon type={require('icons/ali/公布电话.svg')} color={pallete.text.help} /></FlexCenter>
+              <span>公布电话，让供应方联系您</span>
+            </FlexRow>
+          </Item>
+        </List>
       </div>
     );
   }

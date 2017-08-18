@@ -26,6 +26,9 @@ import {
   FETCH_BUSINESS_REWARD,
   LOAD_BUSINESS_REWARD,
 
+  FETCH_BUSINESS_CHARACTER_SERVICE,
+  LOAD_BUSINESS_CHARACTER_SERVICE,
+
   FETCH_BUSINESS_SEARCH,
   LOAD_BUSINESS_SEARCH_PANEL,
   LOAD_BUSINESS_SEARCH_ALL,
@@ -52,6 +55,11 @@ import {
   LOAD_UPDATE_MESSAGE,
 
   DO_REFRESH_MOMENT,
+
+  FETCH_BUSINESS_RECOMMEND,
+  LOAD_BUSINESS_RECOMMEND,
+  LOAD_BUSINESS_RECOMMEND_REFRESH,
+  LOAD_BUSINESS_RECOMMEND_LOADING,
 } from './constants';
 
 export function fetchMomentDetail(id) {
@@ -182,13 +190,29 @@ export function loadReward(list) {
   };
 }
 
-export function fetchSearch(panel, keyword, reward_as, page) {
+export function fetchCharacterService() {
+  return {
+    type: FETCH_BUSINESS_CHARACTER_SERVICE,
+  };
+}
+
+export function loadCharacterService(list) {
+  return {
+    type: LOAD_BUSINESS_CHARACTER_SERVICE,
+    payload: {
+      list,
+    },
+  };
+}
+
+export function fetchSearch(panel, keyword, reward_as, type, page) {
   return {
     type: FETCH_BUSINESS_SEARCH,
     payload: {
       panel,
       keyword,
       reward_as,
+      type,
       page,
     },
   };
@@ -384,6 +408,44 @@ export function doRefreshMoment(id) {
     type: DO_REFRESH_MOMENT,
     payload:{
       id,
+    },
+  };
+}
+
+export function fetchBuinessRecommend(id, page) {
+  return {
+    type: FETCH_BUSINESS_RECOMMEND,
+    payload: {
+      id,
+      page,
+    },
+  };
+}
+
+export function loadBusinessRecommend(list, page) {
+  return {
+    type: LOAD_BUSINESS_RECOMMEND,
+    payload: {
+      list,
+      page
+    },
+  };
+}
+
+export function loadBusinessRecommendRefresh(refresh) {
+  return {
+    type: LOAD_BUSINESS_RECOMMEND_REFRESH,
+    payload: {
+      refresh,
+    },
+  };
+}
+
+export function loadBusinessRecommendLoading(loading) {
+  return {
+    type: LOAD_BUSINESS_RECOMMEND_LOADING,
+    payload: {
+      loading,
     },
   };
 }
