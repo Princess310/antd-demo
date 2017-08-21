@@ -182,6 +182,10 @@ injectGlobal`
     }
   }
 
+  .cms-service-item.am-list-item {
+    padding-left: 0;
+  }
+
   .am-button-primary {
     background-color: rgb(80, 171, 241);
     border: 1px solid rgb(80, 171, 241);

@@ -72,7 +72,7 @@ class MomentHeader extends React.PureComponent { // eslint-disable-line react/pr
           avatar={user.avatar}
           isVip={Number(user.verify_status) === 2}
           linkUser={linkUser}
-          linkUrl={ Number(source_type) === 1 ? {
+          linkParmas={ Number(source_type) === 1 ? {
             pathname: 'service'
           } : false }
         />

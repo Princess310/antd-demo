@@ -372,13 +372,13 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
                   from="supplier"
                 />
                 <FilterPanel
-                  defaultTitle="产品类别"
+                  defaultTitle="特色服务"
                   items={service ? service.slice(1) : service}
                   value={serviceFilter.id}
                   field="name"
                   onSelect={(item) => this.handleFilter('serviceFilter', item)}
                   onExpand={() => {
-                    !reward && this.props.getService();
+                    !service && this.props.getService();
                   }}
                   contentStyle={{ borderLeft: `0.01rem ${pallete.border.normal} solid` }}
                   from="supplier"

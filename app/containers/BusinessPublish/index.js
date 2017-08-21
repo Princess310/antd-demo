@@ -11,7 +11,7 @@ import { browserHistory } from 'react-router';
 import pallete from 'styles/colors';
 import request from 'utils/request';
 
-import { NavBar, List, TextareaItem, WhiteSpace, WingBlank, ImagePicker, Toast, Icon, SegmentedControl, Switch } from 'antd-mobile';
+import { NavBar, List, TextareaItem, WhiteSpace, WingBlank, ImagePicker, Toast, Icon, SegmentedControl, Switch, Modal } from 'antd-mobile';
 import MenuBtn from 'components/MenuBtn';
 import FlexCenter from 'components/FlexCenter';
 import FlexRow from 'components/FlexRow';
@@ -19,6 +19,7 @@ import FlexRow from 'components/FlexRow';
 import { publishMoment, loadPublishParams } from 'containers/BusinessPage/actions';
 import { makeSelectPublishParams } from 'containers/BusinessPage/selectors';
 
+const alert = Modal.alert;
 const Item = List.Item;
 export class BusinessPublish extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
@@ -73,14 +74,32 @@ export class BusinessPublish extends React.PureComponent { // eslint-disable-lin
 
   onChangeTitle = (e) => {
     const index = e.nativeEvent.selectedSegmentIndex;
-    const { showMobile } = this.state;
 
     if (Number(index) === 1) {
-      browserHistory.replace({
-        pathname: '/businessPublishSupplier',
-        state: {
-          show_mobile: showMobile ? '1' : '0',
-        },
+      request.doGet('moments/check-release', { reward_as: 1 }).then((res) => {
+        const { my_point, release_point, free, show_mobile } = res;
+        if (Number(free) ===  0) {
+          if (my_point < release_point) {
+            alert('发布失败', <div>
+                <div style={{ color: pallete.theme }}>{`剩余${my_point}积分`}</div>
+                <div>{`您的账户已不足${release_point}分，无法继续发布采购需求信息，可到“讨论”栏目评论（+5分）、点赞（+1分）、分享（+10分）挣取积分。`}</div>
+              </div>, [
+              { text: '我知道了', onPress: () => console.log('cancel') },
+              { text: '立即前去', onPress: () => {
+                setSelectTab('communicate');
+              }, style: { fontWeight: 'bold' } },
+            ]);
+          }
+
+          return;
+        }
+
+        browserHistory.replace({
+          pathname: 'businessPublishSupplier',
+          state: {
+            show_mobile,
+          },
+        });
       });
     }
   }

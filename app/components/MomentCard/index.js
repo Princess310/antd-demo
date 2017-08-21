@@ -521,7 +521,7 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
                     <div className="app-cms-content" dangerouslySetInnerHTML={{__html: contentView}} />
                   </div>                  
                 ) : (
-                  <div style={{ marginBottom: '0.12rem' }}>{contentView}</div>
+                  <div style={{ paddingTop: '0.12rem', marginBottom: '0.12rem' }}>{contentView}</div>
                 )
               )
             }
@@ -545,7 +545,7 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
             }}>加好友</Button>}
           </ContentWrapper>
           {from === 'list' && 
-            <ActionWrapper style={{ paddingRight: '0.12rem', fontSize: '0.28rem', color: themeColor }}>
+            <ActionWrapper style={{ paddingRight: '0.12rem', fontSize: '0.28rem', color: themeColor}}>
               {(type === 'business' && isSelf) &&
                 <FlexSB onClick={this.handleSetTop} style={actionItemStyle}>
                   <Icon type={require('icons/ali/置顶.svg')} size="sm" />
@@ -569,7 +569,7 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
               {
                 type !== 'business' &&
                 <FlexSB onClick={this.handleLike} style={actionItemStyle}>
-                  <Icon type={require('icons/ali/点赞.svg')} size="sm" />
+                  <Icon type={is_like > 0 ? require('icons/ali/点赞-active.svg') : require('icons/ali/点赞.svg')} size="sm" />
                   <span style={{ marginLeft: '0.04rem' }}>{like_count > 0 ? like_count : '点赞'}</span>
                 </FlexSB>
               }

@@ -11,7 +11,8 @@ import { browserHistory } from 'react-router';
 
 const Wrapper = styled.div`
   position: relative;
-  padding: '0.15rem';
+  padding: 0.15rem;
+  border-top: 0.01rem ${pallete.border.normal} solid;
 `;
 
 const CommentWrapper = styled.div`

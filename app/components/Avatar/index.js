@@ -81,7 +81,10 @@ Avatar.propTypes = {
   isVip: PropTypes.bool,
   size: PropTypes.string,
   linkUser: PropTypes.bool,
-  linkParmas: PropTypes.object,
+  linkParmas: PropTypes.oneOfType(
+    PropTypes.object,
+    PropTypes.bool,
+  ),
 };
 
 export default Avatar;

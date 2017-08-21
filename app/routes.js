@@ -476,6 +476,14 @@ export default function createRoutes(store) {
               .then(loadModule(cb))
               .catch(errorLoading);
           },
+        }, {
+          path: 'service',
+          name: 'serviceListPage',
+          getComponent(location, cb) {
+            import('containers/ServiceListPage')
+              .then(loadModule(cb))
+              .catch(errorLoading);
+          },
         },
       ],
     }, {

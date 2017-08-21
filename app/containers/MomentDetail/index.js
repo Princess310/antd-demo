@@ -272,7 +272,7 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
                                 this.handleLikeComment(u.id, u.created_by);
                               }}
                             >
-                              <Icon type={require('icons/ali/点赞.svg')} size="sm" />
+                              <Icon type={u.is_like > 0 ? require('icons/ali/点赞-active.svg') : require('icons/ali/点赞.svg')} size="sm" />
                               {u.like_count}
                             </LikeWrapper>
                           </CommentWrapper>
@@ -344,7 +344,7 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
               {
                 type !== 'business' &&
                 <FlexCenter onClick={this.handleLike}>
-                  <Icon type={require('icons/ali/点赞.svg')} size="sm" />
+                  <Icon type={is_like > 0 ? require('icons/ali/点赞-active.svg') : require('icons/ali/点赞.svg')} size="sm" />
                   <span style={{ marginLeft: '0.04rem' }}>{like_count > 0 ? like_count : '点赞'}</span>
                 </FlexCenter>
               }

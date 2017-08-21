@@ -54,9 +54,7 @@ class CmsMomentHeader extends React.PureComponent { // eslint-disable-line react
           avatar={user.avatar}
           isVip={Number(user.verify_status) === 2}
           linkUser={true}
-          linkUrl={ Number(source_type) === 1 ? {
-            pathname: 'service'
-          } : false }
+          linkParmas={{ pathname: 'service' }}
         />
         <FlexSB style={{ width: '100%', alignSelf: 'flex-start' }}>
           <FlexColumn style={{ padding: '0.04rem 0.12rem', width: '100%' }}>
