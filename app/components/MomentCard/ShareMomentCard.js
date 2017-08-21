@@ -177,7 +177,7 @@ class ShareMomentCard extends React.PureComponent { // eslint-disable-line react
       marginTop: '0.2rem',
     };
 
-    const picLength = pictures.length === 1 ? '7.2rem' : ((pictures.length === 4 || pictures.length === 2) ? '3.4rem' : '2.2rem')
+    const picLength = pictures.length === 1 ? '7.2rem' : ((pictures.length === 4 || pictures.length === 2) ? 'calc((100vw - 0.6rem) / 2)' : 'calc((100vw - 0.8rem) / 3)');
     const picturesView = pictures.map((pic, i) => (
       <div
         key={i}

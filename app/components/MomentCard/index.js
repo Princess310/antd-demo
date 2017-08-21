@@ -381,7 +381,7 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
     } : {};
 
     // check pic length to show
-    const picLength = pictures.length === 1 ? '3.5rem' : ((pictures.length === 4 || pictures.length === 2) ? '2.2rem' : '1.88rem')
+    const picLength = pictures.length === 1 ? '7.2rem' : ((pictures.length === 4 || pictures.length === 2) ? 'calc((100vw - 0.6rem) / 2)' : 'calc((100vw - 0.8rem) / 3)');
     const picturesView = pictures.map((pic, i) => (
       <div
         key={i}
