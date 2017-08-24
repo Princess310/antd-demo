@@ -210,8 +210,8 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
           doChangeMomentTrade(moment.id, from);
         }, style: actionSheetStyle },
         { text: '公布或隐藏电话', onPress: () => {
-          request.doPost('moments/show-mobile').then(() => {
-            Toast.info('操作成功!', 2);
+          request.doPost('moments/show-mobile').then((res) => {
+            Toast.info(res.message, 2);
           });
         }, style: actionSheetStyle },
       ];
@@ -381,7 +381,7 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
     } : {};
 
     // check pic length to show
-    const picLength = pictures.length === 1 ? '7.2rem' : ((pictures.length === 4 || pictures.length === 2) ? 'calc((100vw - 0.6rem) / 2)' : 'calc((100vw - 0.8rem) / 3)');
+    const picLength = pictures.length === 1 ? '3.5rem' : ((pictures.length === 4 || pictures.length === 2) ? 'calc((100vw - 1.68rem) / 2)' : 'calc((100vw - 1.88rem) / 3)');
     const picturesView = pictures.map((pic, i) => (
       <div
         key={i}
@@ -439,7 +439,7 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
         }}
       >
         {
-          from === 'list' && type === 'business' &&
+          type === 'business' &&
           <TypeHeader type={businessType} trade_status={trade_status} />
         }
         <div style={{ padding: '0.15rem'}}>

@@ -105,7 +105,7 @@ class ShareMomentCard extends React.PureComponent { // eslint-disable-line react
   handleDownloadInfo = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    Toast.info('请注册或登录', 2);
+    Toast.info('请下载健康商信APP', 2);
   }
 
   toggleModal = () => {
