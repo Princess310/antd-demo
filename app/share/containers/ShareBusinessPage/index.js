@@ -74,7 +74,7 @@ export class ShareBusinessPage extends React.PureComponent { // eslint-disable-l
   }
 
   handleDownloadInfo = () => {
-    Toast.info('请注册或登录', 2);
+    Toast.info('请下载健康商信APP', 2);
   }
 
   componentWillMount() {
