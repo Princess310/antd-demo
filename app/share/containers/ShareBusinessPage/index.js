@@ -169,7 +169,7 @@ export class ShareBusinessPage extends React.PureComponent { // eslint-disable-l
                 lineHeight: '0.64rem',
                 backgroundColor: pallete.white,
               }}
-            >{year}</section>
+            >{year}年</section>
             <ShareMomentCard
               moment={moment}
               from="list"
