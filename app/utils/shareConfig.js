@@ -79,7 +79,7 @@ const shareConfig = {
         timeLineTitle = `${name ? name : ''}邀请您加入健康商信APP，80万行业资源平台，找讲师、找厂家、找经销商就上健康商信！`;
         desc = `80万行业资源平台，找讲师、找厂家、找经销商就上健康商信！`;
         link = `http://${domain}/group_share.html?&name=${name ? encodeURIComponent(name) : ''}`;
-        imgUrl = `${domain}${logo}`;
+        imgUrl = `http://${domain}${logo}`;
         break;
       }
       case 'card': {
@@ -97,7 +97,7 @@ const shareConfig = {
         timeLineTitle = `${emptyHtml(content)}分享${nickname}的健康商信动态.健康产业APP：${user ? `${user.company}.${user.position}.${user.nickname}` : `${company}.${position}.${nickname}`}在分享动态，邀请您也来分享`;
         desc = `${cmsTitle ? cmsTitle + ' ' : ''}健康商信APP：${user ? `${user.company}.${user.position}.${user.nickname}` : `${company}.${position}.${nickname}`}在分享动态，邀请您也来分享`;
         link = `${link}&id=${id}&uid=${uid}`;
-        imgUrl = pictures.length > 0 ? pictures[0] : `${domain}${logo}`;
+        imgUrl = pictures.length > 0 ? pictures[0] : `http://${domain}${logo}`;
         break;
       }
       case 'note': {
@@ -106,7 +106,7 @@ const shareConfig = {
         timeLineTitle = `${user ? `${user.company}.${user.position}.${user.nickname}` : `${company}.${position}.${nickname}`}在分享群公告，点击了解详情`;
         desc = timeLineTitle;
         link = `${link}&id=${id}&uid=${uid}`;
-        imgUrl = pictures.length > 0 ? pictures[0] : `${domain}${logo}`;
+        imgUrl = pictures.length > 0 ? pictures[0] : `http://${domain}${logo}`;
         break;
       }
       case 'jk_group': {
