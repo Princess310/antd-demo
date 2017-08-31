@@ -187,6 +187,7 @@ class ShareMomentCard extends React.PureComponent { // eslint-disable-line react
           backgroundImage: `url(${oss.getImgSuitablePath(pic)})`,
           backgroundPosition: 'center center',
           backgroundSize: 'cover',
+          backgroundColor: '#eee',
           width: (Number(source_type) === 1 ? '100%' : picLength),
           height: picLength,
           marginTop: '0.12rem',
