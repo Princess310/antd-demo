@@ -1,7 +1,8 @@
 /**
 *
-* MomentInfoCard
+* ShareMomentInfoCard
 *
+* The moment info card used in share user page, not same logic in app.
 */
 
 import React, { PropTypes } from 'react';
@@ -83,7 +84,13 @@ class ShareMomentInfoCard extends React.PureComponent { // eslint-disable-line r
 }
 
 ShareMomentInfoCard.propTypes = {
+  /**
+   * the moment info
+   */
   moment: PropTypes.object,
+  /**
+   * override the style
+   */
   style: PropTypes.object,
 };
 

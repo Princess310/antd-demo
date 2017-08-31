@@ -1,6 +1,6 @@
 /**
 *
-* MomentHeader
+* MomentComment
 *
 */
 
@@ -80,10 +80,25 @@ class MomentComment extends React.PureComponent { // eslint-disable-line react/p
 }
 
 MomentComment.propTypes = {
+  /**
+   * override the style
+   */
   style: PropTypes.object,
+  /**
+   * the comment list info
+   */
   comments: PropTypes.array,
+  /**
+   * the type maybe used to link to moment detail page
+   */
   type: PropTypes.string,
+  /**
+   * business type info
+   */
   businessType: PropTypes.string,
+  /**
+   * the total count for comment
+   */
   comment_count: PropTypes.oneOfType([
     PropTypes.number,
     PropTypes.string,

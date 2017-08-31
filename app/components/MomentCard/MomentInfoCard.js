@@ -2,6 +2,7 @@
 *
 * MomentInfoCard
 *
+* used in user info page for now.
 */
 
 import React, { PropTypes } from 'react';
@@ -92,7 +93,13 @@ class MomentInfoCard extends React.PureComponent { // eslint-disable-line react/
 }
 
 MomentInfoCard.propTypes = {
+  /**
+   * moment info
+   */
   moment: PropTypes.object,
+  /**
+   * override the style
+   */
   style: PropTypes.object,
 };
 

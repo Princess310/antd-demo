@@ -1,7 +1,8 @@
 /**
 *
-* MomentCard
+* ShareMomentCard
 *
+* The moment card used in business page, which it not same with app, and has diff logic.
 */
 
 import React, { PropTypes } from 'react';
@@ -232,16 +233,18 @@ class ShareMomentCard extends React.PureComponent { // eslint-disable-line react
       </ActionWrapper>
     ) : (
       <ActionWrapper style={{ paddingRight: '0.12rem', fontSize: '0.28rem', color: pallete.text.content }}>
-        {Number(show_mobile) === 1 &&
+        {(Number(show_mobile) === 1 && Number(trade_status) === 0) &&
           <FlexSB onClick={this.handleCall} style={actionItemStyle}>
             <Icon type={require('icons/ali/我有.svg')} size="sm" color={pallete.text.content} />
             <span style={{ marginLeft: '0.08rem' }}>{businessType === 'demand' ? '我有' : '我需要'}</span>
           </FlexSB>
         }
-        <FlexSB onClick={this.toggleModal} style={actionItemStyle}>
-          <Icon type={require('icons/ali/转介绍.svg')} size="sm" color={pallete.text.content} />
-          <span style={{ marginLeft: '0.08rem' }}>转介绍</span>
-        </FlexSB>
+        {Number(trade_status) === 0 && 
+          <FlexSB onClick={this.toggleModal} style={actionItemStyle}>
+            <Icon type={require('icons/ali/转介绍.svg')} size="sm" color={pallete.text.content} />
+            <span style={{ marginLeft: '0.08rem' }}>转介绍</span>
+          </FlexSB>
+        }
         {from !== 'list' &&
           <FlexSB onClick={this.handleShare} style={actionItemStyle}>
             <Icon type={require('icons/ali/分享.svg')} size="xxs" color={pallete.text.content} />
@@ -340,11 +343,17 @@ class ShareMomentCard extends React.PureComponent { // eslint-disable-line react
 }
 
 ShareMomentCard.propTypes = {
+  /**
+   * the moment info
+   */
   moment: PropTypes.object,
   // from: check where to show & how to control view
   from: PropTypes.string,
   // communication or business
   type: PropTypes.string,
+  /**
+   * override the style
+   */
   style: PropTypes.object,
 };
 

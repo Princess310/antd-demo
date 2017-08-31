@@ -2,6 +2,7 @@
 *
 * MomentHeader
 *
+* Moment card header, which is spit to code easily
 */
 
 import React, { PropTypes } from 'react';
@@ -143,13 +144,37 @@ class MomentHeader extends React.PureComponent { // eslint-disable-line react/pr
 }
 
 MomentHeader.propTypes = {
+  /**
+   * override the style
+   */
   style: PropTypes.object,
+  /**
+   * the user info from card
+   */
   user: PropTypes.object.isRequired,
+  /**
+   * override the avatar size
+   */
   avatarSize: PropTypes.string,
+  /**
+   * where to call the comp && control the view to show
+   */
   from: PropTypes.string,
+  /**
+   * type to control view: business or communication
+   */
   type: PropTypes.string,
+  /**
+   * business type of card: status, demand or supplier
+   */
   businessType: PropTypes.string,
+  /**
+   * boolean: means to weather link avatar to user info page
+   */
   linkUser: PropTypes.bool,
+  /**
+   * right content node
+   */
   rightContent: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.node,

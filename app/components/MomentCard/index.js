@@ -2,6 +2,7 @@
 *
 * MomentCard
 *
+* the most used card in app, maybe used in business page, communicate page, status page of user center...
 */
 
 import React, { PropTypes } from 'react';
@@ -596,17 +597,41 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
 }
 
 MomentCard.propTypes = {
+  /**
+   * moment info
+   */
   moment: PropTypes.object,
+  /**
+   * the app user info
+   */
   currentUser: PropTypes.object,
   // from: check where to show & how to control view
   from: PropTypes.string,
   // communication or business
   type: PropTypes.string,
+  /**
+   * override the style
+   */
   style: PropTypes.object,
+  /**
+   * do like action cb
+   */
   doLikeMoment: PropTypes.func,
+  /**
+   * do send comment action cb
+   */
   doSendComment: PropTypes.func,
+  /**
+   * do deletet moment action cb
+   */
   doDelMoment: PropTypes.func,
+  /**
+   * do collect moment cb
+   */
   doCollectMoment: PropTypes.func,
+  /**
+   * do set top moment cb
+   */
   doSetTopMoment: PropTypes.func,
 };
 

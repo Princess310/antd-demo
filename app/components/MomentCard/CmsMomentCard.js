@@ -1,7 +1,8 @@
 /**
 *
-* MomentCard
+* CmsMomentCard
 *
+* used for search communicate page, but after 1.8 version will not use it.
 */
 
 import React, { PropTypes } from 'react';
@@ -113,7 +114,13 @@ class CmsMomentCard extends React.PureComponent { // eslint-disable-line react/p
 }
 
 CmsMomentCard.propTypes = {
+  /**
+   * moment info
+   */
   moment: PropTypes.object,
+  /**
+   * override the style
+   */
   style: PropTypes.object,
 };
 

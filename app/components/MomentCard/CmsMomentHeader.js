@@ -1,7 +1,8 @@
 /**
 *
-* MomentHeader
+* CmsMomentHeader
 *
+* another header style for cms card, like in moment detail page
 */
 
 import React, { PropTypes } from 'react';
@@ -90,9 +91,21 @@ class CmsMomentHeader extends React.PureComponent { // eslint-disable-line react
 }
 
 CmsMomentHeader.propTypes = {
+  /**
+   * override the style
+   */
   style: PropTypes.object,
+  /**
+   * the user info
+   */
   user: PropTypes.object.isRequired,
+  /**
+   * override the avatar size to show
+   */
   avatarSize: PropTypes.string,
+  /**
+   * des the where to call this component
+   */
   from: PropTypes.string,
   type: PropTypes.string,
   rightContent: PropTypes.oneOfType([

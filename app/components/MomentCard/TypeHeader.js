@@ -2,6 +2,7 @@
 *
 * TypeHeader
 *
+* Show the type & desc for Business page
 */
 
 import React, { PropTypes } from 'react';
@@ -53,7 +54,13 @@ function TypeHeader(props) {
 }
 
 TypeHeader.propTypes = {
+  /**
+   * the type info
+   */
   type: PropTypes.string,
+  /**
+   * the the trade status for demand card
+   */
   trade_status: PropTypes.string,
 };
 
