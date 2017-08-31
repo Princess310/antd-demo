@@ -2,6 +2,9 @@
  *
  * AddFriendPage
  *
+ * path --> /addFriend
+ * 
+ * this component is uesed for some page to call add friend action
  */
 
 import React, { PropTypes } from 'react';

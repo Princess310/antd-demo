@@ -2,6 +2,9 @@
  *
  * ResetMobile
  *
+ * path --> resetMobile
+ * 
+ * reset the phone number for user
  */
 
 import React, { PropTypes } from 'react';

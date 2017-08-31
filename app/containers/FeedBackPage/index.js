@@ -2,6 +2,9 @@
  *
  * FeedBackPage
  *
+ * path --> feedBack
+ * 
+ * the way for user to send the feed back info.
  */
 
 import React, { PropTypes } from 'react';
@@ -83,6 +86,9 @@ export class FeedBackPage extends React.PureComponent { // eslint-disable-line r
 }
 
 FeedBackPage.propTypes = {
+  /**
+   * action: send the feed back info
+   */
   saveFeedBack: PropTypes.func,
 };
 

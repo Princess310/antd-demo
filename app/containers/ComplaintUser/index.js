@@ -2,6 +2,9 @@
  *
  * ComplaintUser
  *
+ * path --> complaintUser
+ * 
+ * the page for user to send complaint with another user
  */
 
 import React, { PropTypes } from 'react';
@@ -24,6 +27,7 @@ export class ComplaintUser extends React.PureComponent { // eslint-disable-line 
     selected: '',
   }
 
+  // get the complaint reason list frist
   componentWillMount() {
     const { complaintList, fetchList } = this.props;
 
@@ -32,12 +36,14 @@ export class ComplaintUser extends React.PureComponent { // eslint-disable-line 
     }
   }
 
+  // handle change the item
   onChange = (id) => {
     this.setState({
       selected: id,
     });
   }
 
+  // handle save action
   handleSave = () => {
     const { selected } = this.state;
     const { location: { state }, saveInfo } = this.props;
@@ -91,11 +97,20 @@ export class ComplaintUser extends React.PureComponent { // eslint-disable-line 
 }
 
 ComplaintUser.propTypes = {
+  /**
+   * reducer: complaint reason list info
+   */
   complaintList: PropTypes.oneOfType([
     PropTypes.bool,
     PropTypes.array,
   ]),
+  /**
+   * action: get complaint info
+   */
   fetchList: PropTypes.func,
+  /**
+   * reducer: the initial app info for get the client phone number
+   */
   initialInfo: PropTypes.object,
 };
 

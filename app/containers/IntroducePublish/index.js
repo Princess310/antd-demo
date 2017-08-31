@@ -2,6 +2,7 @@
  *
  * IntroducePublish
  *
+ * path --> introducePublish
  */
 
 import React, { PropTypes } from 'react';
@@ -117,6 +118,9 @@ export class IntroducePublish extends React.PureComponent { // eslint-disable-li
 }
 
 IntroducePublish.propTypes = {
+  /**
+   * action: refresh moment info
+   */
   refreshMoment: PropTypes.func,
 };
 

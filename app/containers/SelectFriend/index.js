@@ -2,6 +2,9 @@
  *
  * SelectFriend
  *
+ * path --> selectFriend
+ * 
+ * NOTE: the page is not used for now after version 1.6
  */
 
 import React, { PropTypes } from 'react';
@@ -102,11 +105,20 @@ export class SelectFriend extends React.PureComponent { // eslint-disable-line r
 }
 
 SelectFriend.propTypes = {
+  /**
+   * reducer: the friend list info
+   */
   friendList: PropTypes.oneOfType([
     PropTypes.bool,
     PropTypes.array,
   ]),
+  /**
+   * action: get the list
+   */
   getList: PropTypes.func,
+  /**
+   * reducer: the publish params
+   */
   publishParams: PropTypes.object,
 };
 

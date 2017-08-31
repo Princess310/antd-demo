@@ -2,6 +2,7 @@
  *
  * UserEditService
  *
+ * path --> userEditService
  */
 
 import React, { PropTypes } from 'react';
@@ -105,12 +106,24 @@ export class UserEditService extends React.PureComponent { // eslint-disable-lin
 }
 
 UserEditService.propTypes = {
+  /**
+   * reducer: the current user info
+   */
   currentUser: PropTypes.object,
+  /**
+   * reducer: the service list
+   */
   serviceList: PropTypes.oneOfType([
     PropTypes.array,
     PropTypes.bool,
   ]),
+  /**
+   * action: save the user info
+   */
   saveUserInfo: PropTypes.func,
+  /**
+   * action: get the service list
+   */
   getService: PropTypes.func,
 };
 

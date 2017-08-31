@@ -2,6 +2,7 @@
  *
  * SelectNumber
  *
+ * path --> selectNumber
  */
 
 import React, { PropTypes } from 'react';
@@ -67,9 +68,21 @@ export class SelectNumber extends React.PureComponent { // eslint-disable-line r
 }
 
 SelectNumber.propTypes = {
+  /**
+   * action: get the number info from backend
+   */
   getNumber: PropTypes.func,
+  /**
+   * action: set the number for reducer
+   */
   setNumber: PropTypes.func,
+  /**
+   * reducer: the publish params
+   */
   publishParams: PropTypes.object,
+  /**
+   * reducer: the number list
+   */
   numberList: PropTypes.oneOfType([
     PropTypes.bool,
     PropTypes.array,

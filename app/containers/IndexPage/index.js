@@ -2,6 +2,11 @@
  *
  * IndexPage
  * Try to handle old project hash things.
+ * path --> index.html [see routes.js]
+ * 
+ * Note: this is try fix some things for old project: https://code.aliyun.com/alj/jkhz-mobile.git
+ * So, try to know why to handle this param to link to current project.
+ * maybe this page will handle some special index page things, so set it to state component
  */
 
 import React, { PropTypes } from 'react';

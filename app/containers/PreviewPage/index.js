@@ -2,6 +2,9 @@
  *
  * PreviewPage
  *
+ * path --> preview
+ * 
+ * this page is used to show slide things before login
  */
 
 import React, { PropTypes } from 'react';

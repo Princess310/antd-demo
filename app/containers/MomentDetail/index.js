@@ -2,6 +2,9 @@
  *
  * MomentDetail
  *
+ * path --> momentDetail
+ * 
+ * the page to diplay for moment detail info
  */
 
 import React, { PropTypes } from 'react';
@@ -77,6 +80,7 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
     getMoment(id);
   }
 
+  // clear the reducer info
   componentWillUnmount() {
     this.props.saveMoment(false);
   }
@@ -89,18 +93,21 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
 
   }
 
+  // handle do like moment action
   handleLike = () => {
     const { momentDetail, doLikeMoment } = this.props;
 
     doLikeMoment(momentDetail.id, momentDetail.uid, 'detail');
   }
 
+  // handle do like comment action
   handleLikeComment = (cid, uid) => {
     const { momentDetail, doLikeComment } = this.props;
 
     doLikeComment(momentDetail.id, cid, uid);
   }
 
+  // handle to show the send message tool
   handleShowChatTool = (e) => {
     const { momentDetail, doSendComment } = this.props;
 
@@ -109,6 +116,7 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
     });
   }
 
+  // the action to handle send comment for another comment
   handleDoublueSendComment = (id, uid) => {
     const { currentUser, momentDetail, doSendComment, doDelComment } = this.props;
 
@@ -142,6 +150,7 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
     }
   }
 
+  // handle more menu actions
   handleMore = () => {
     const { momentDetail, doCollectMoment } = this.props;
 
@@ -158,6 +167,7 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
       });
   }
 
+  // set moment to top action
   handleSetTop = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -166,6 +176,7 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
     doSetTopMoment(momentDetail.id, momentDetail.reward_as);
   }
 
+  // handle show the share panel
   handleShare = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -367,17 +378,44 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
 }
 
 MomentDetail.propTypes = {
+  /**
+   * reducer: moment detail info
+   */
   momentDetail: PropTypes.oneOfType([
     PropTypes.bool,
     PropTypes.object,
   ]),
+  /**
+   * action: get the moment detail info
+   */
   getMoment: PropTypes.func,
+  /**
+   * reducer: the current user info
+   */
   currentUser: PropTypes.object,
+  /**
+   * action: do like moment
+   */
   doLikeMoment: PropTypes.func,
+  /**
+   * action: do like comment
+   */
   doLikeComment: PropTypes.func,
+  /**
+   * action: send comment
+   */
   doSendComment: PropTypes.func,
+  /**
+   * action: del the comment for self
+   */
   doDelComment: PropTypes.func,
+  /**
+   * action: do collect for this moment
+   */
   doCollectMoment: PropTypes.func,
+  /**
+   * action: do set top for moment
+   */
   doSetTopMoment: PropTypes.func,
 };
 

@@ -1,7 +1,10 @@
 /*
  *
  * ResetPassword
- *
+ * 
+ * path --> resetPassword
+ * 
+ * reset the passworad for the user
  */
 
 import React, { PropTypes } from 'react';

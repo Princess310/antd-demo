@@ -2,6 +2,9 @@
  *
  * UserEditBasic
  *
+ * path --> userEditBasic
+ * 
+ * the page to edit like name, company...basic info
  */
 
 import React, { PropTypes } from 'react';
@@ -229,7 +232,13 @@ export class UserEditBasic extends React.PureComponent { // eslint-disable-line 
 }
 
 UserEditBasic.propTypes = {
+  /**
+   * reducer: the current user info
+   */
   currentUser: PropTypes.object,
+  /**
+   * action: save the user info
+   */
   saveUserInfo: PropTypes.func,
 };
 

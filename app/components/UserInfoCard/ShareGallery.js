@@ -1,7 +1,8 @@
 /**
 *
-* UserHeaderBar
+* ShareGallery
 *
+* the gallery comp for share page
 */
 
 import React, { PropTypes } from 'react';
@@ -84,7 +85,13 @@ class Gallery extends React.PureComponent { // eslint-disable-line react/prefer-
 }
 
 Gallery.propTypes = {
+  /**
+   * the title to show
+   */
   title: PropTypes.string,
+  /**
+   * the pictures for user
+   */
   pictures: PropTypes.array,
 };
 

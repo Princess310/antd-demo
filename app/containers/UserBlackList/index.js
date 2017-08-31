@@ -2,6 +2,7 @@
  *
  * UserBlackList
  *
+ * path --> userBlackList
  */
 
 import React, { PropTypes } from 'react';
@@ -148,12 +149,24 @@ export class UserBlackList extends React.PureComponent { // eslint-disable-line 
 }
 
 UserBlackList.propTypes = {
+  /**
+   * action: get the black list
+   */
   getList: PropTypes.func,
+  /**
+   * reducer: the black list info
+   */
   userBlackList: PropTypes.oneOfType([
     PropTypes.array,
     PropTypes.bool,
   ]),
+  /**
+   * reducer: (XXX: the info to store the list status)
+   */
   listStatus: PropTypes.object,
+  /**
+   * action: do delete the black user from list
+   */
   delBlack: PropTypes.func,
 };
 

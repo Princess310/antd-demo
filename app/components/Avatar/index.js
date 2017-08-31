@@ -1,7 +1,8 @@
 /**
 *
-* ChatLoadMore
+* Avatar
 *
+* the avatar for user to show
 */
 
 import React, { PropTypes } from 'react';
@@ -73,14 +74,32 @@ class Avatar extends React.PureComponent { // eslint-disable-line react/prefer-s
 }
 
 Avatar.propTypes = {
+  /**
+   * the id of user, to link to user info page
+   */
   id: PropTypes.oneOfType([
     PropTypes.number,
     PropTypes.string,
   ]).isRequired,
+  /**
+   * the link url for avatar to show
+   */
   avatar: PropTypes.string,
+  /**
+   * if the user is vip, show the vip tag
+   */
   isVip: PropTypes.bool,
+  /**
+   * override the avatar size to show
+   */
   size: PropTypes.string,
+  /**
+   * if set true, click to link to user info page
+   */
   linkUser: PropTypes.bool,
+  /**
+   * sometimes, should link it to another page
+   */
   linkParmas: PropTypes.oneOfType(
     PropTypes.object,
     PropTypes.bool,

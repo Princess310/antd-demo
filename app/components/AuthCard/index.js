@@ -1,6 +1,6 @@
 /**
 *
-* ChatLoadMore
+* AuthCard
 *
 */
 
@@ -63,13 +63,37 @@ class AuthCard extends React.PureComponent { // eslint-disable-line react/prefer
 }
 
 AuthCard.propTypes = {
+  /**
+   * the image for default background img
+   */
   backUrl: PropTypes.string,
+  /**
+   * diff with url, it means the value has setted
+   */
   url: PropTypes.string,
+  /**
+   * style object to override
+   */
   style: PropTypes.object,
+  /**
+   * when the card is editable, has the change func
+   */
   onChange: PropTypes.func,
+  /**
+   * influence for auth card
+   */
   influence: PropTypes.number,
+  /**
+   * experience for auth card
+   */
   exp: PropTypes.number,
+  /**
+   * card is editable ?
+   */
   editable: PropTypes.bool,
+  /**
+   * children for card to show
+   */
   children: PropTypes.node,
 };
 

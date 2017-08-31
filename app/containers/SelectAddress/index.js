@@ -2,6 +2,9 @@
  *
  * SelectAddress
  *
+ * path --> selectAddress
+ * 
+ * the address for user select
  */
 
 import React, { PropTypes } from 'react';
@@ -124,12 +127,24 @@ export class SelectAddress extends React.PureComponent { // eslint-disable-line 
 }
 
 SelectAddress.propTypes = {
+  /**
+   * action: get the city list info from backend
+   */
   getCityInfo: PropTypes.func,
+  /**
+   * reducer: the city info
+   */
   cityInfo: PropTypes.oneOfType([
     PropTypes.bool,
     PropTypes.object,
   ]),
+  /**
+   * reducer: the current user info
+   */
   currentUser: PropTypes.object,
+  /**
+   * action: save the info for user
+   */
   saveUserInfo: PropTypes.func,
 };
 

@@ -2,6 +2,7 @@
  *
  * RegisterPage
  *
+ * path --> register
  */
 
 import React, { PropTypes } from 'react';
@@ -197,6 +198,9 @@ export class RegisterPage extends React.PureComponent { // eslint-disable-line r
 
 RegisterPage.propTypes = {
   dispatch: PropTypes.func.isRequired,
+  /**
+   * reducer: the initial info for app
+   */
   initialInfo: PropTypes.object,
 };
 

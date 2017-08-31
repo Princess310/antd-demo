@@ -41,6 +41,9 @@ function SearchBar(props) {
 }
 
 SearchBar.propTypes = {
+  /**
+   * The title to show in the seach bar center
+   */
   title: PropTypes.string,
 };
 

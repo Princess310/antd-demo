@@ -2,6 +2,7 @@
  *
  * SelectPrice
  *
+ * path --> selectPrice
  */
 
 import React, { PropTypes } from 'react';
@@ -67,9 +68,21 @@ export class SelectPrice extends React.PureComponent { // eslint-disable-line re
 }
 
 SelectPrice.propTypes = {
+  /**
+   * action: get te price info from backend
+   */
   getPrice: PropTypes.func,
+  /**
+   * action: set the price for reducer
+   */
   setPrice: PropTypes.func,
+  /**
+   * reducer: the publish params
+   */
   publishParams: PropTypes.object,
+  /**
+   * reducer: the price list
+   */
   priceList: PropTypes.oneOfType([
     PropTypes.bool,
     PropTypes.array,

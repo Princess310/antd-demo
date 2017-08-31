@@ -1,7 +1,11 @@
 /*
  *
  * CommunicatePublish
+ * 
+ * path --> communicatePublish
  *
+ * publish the communication page
+ * 
  */
 
 import React, { PropTypes } from 'react';
@@ -20,6 +24,7 @@ const Item = List.Item;
 export class CommunicatePublish extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
     super(props);
+    // for some special demand, we need to save some publish params for redux, the get it from props first.
     const { publishParams }  = this.props;
 
     this.state = {
@@ -29,6 +34,7 @@ export class CommunicatePublish extends React.PureComponent { // eslint-disable-
     }
   }
 
+  // when get in page from index page, we need to clear the publish params
   componentWillMount() {
     const { location: { action } } = this.props;
 
@@ -41,6 +47,7 @@ export class CommunicatePublish extends React.PureComponent { // eslint-disable-
     }
   }
 
+  // when get out of this page, save the publish params
   componentWillUnmount() {
     const { location: { action } } = this.props;
     const { content, files } = this.state;
@@ -51,18 +58,21 @@ export class CommunicatePublish extends React.PureComponent { // eslint-disable-
     });
   }
 
+  // handle the files change
   onChange = (files) => {
     this.setState({
       files,
     });
   };
 
+  // handle content words value
   handleContent = (value) => {
     this.setState({
       content: value,
     });
   }
 
+  // do save the publish info
   handleSave = () => {
     const { content, files } = this.state;
     const { publishParams, saveMoment } = this.props;
@@ -110,7 +120,17 @@ export class CommunicatePublish extends React.PureComponent { // eslint-disable-
 }
 
 CommunicatePublish.propTypes = {
+  /**
+   * action: set the publish info to redux
+   */
   setPublishParams: PropTypes.func,
+  /**
+   * action: the save action
+   */
+  saveMoment: PropTypes.func,
+   /**
+   * reducer: the publish params from reselect
+   */
   publishParams: PropTypes.object,
 };
 

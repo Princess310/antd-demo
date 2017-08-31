@@ -2,6 +2,8 @@
  *
  * EditUserRemark
  *
+ * edit the back info for another user.
+ * Note: it's not used for now after version 1.6.
  */
 
 import React, { PropTypes } from 'react';

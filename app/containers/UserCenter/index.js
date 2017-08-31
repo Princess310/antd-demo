@@ -2,6 +2,7 @@
  *
  * UserCenter
  *
+ * the user center page to show current most info
  */
 
 import React, { PropTypes } from 'react';
@@ -286,7 +287,13 @@ export class UserCenter extends React.PureComponent { // eslint-disable-line rea
 }
 
 UserCenter.propTypes = {
+  /**
+   * reducer: the current user info
+   */
   currentUser: PropTypes.object,
+  /**
+   * action: set the active tab for home page
+   */
   setSelectTab: PropTypes.func,
 };
 

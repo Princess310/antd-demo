@@ -2,6 +2,9 @@
  *
  * UserAuthorizeFiles
  *
+ * path --> userAuthorizeFiles
+ * 
+ * publish the authorize file for current user
  */
 
 import React, { PropTypes } from 'react';
@@ -61,6 +64,7 @@ const Wrapper = styled.div`
   flex-wrap: wrap;
 `;
 
+// define the cards info
 const cards = [
   {
     feild: 'verify_by_business_card',
@@ -69,6 +73,7 @@ const cards = [
     backUrl: card,
     influence: 10,
     exp: 20,
+    // weather can be uploaded again
     editable: true,
   }, {
     feild: 'verify_by_work_card',
@@ -286,16 +291,31 @@ export class UserAuthorizeFiles extends React.PureComponent { // eslint-disable-
 }
 
 UserAuthorizeFiles.propTypes = {
+  /**
+   * reducer: the auth info
+   */
   authInfo: PropTypes.oneOfType([
     PropTypes.object,
     PropTypes.bool,
   ]),
+  /**
+   * action: get the auth info
+   */
   getAuthInfo: PropTypes.func,
+  /**
+   * action: save the auth files
+   */
   saveAuthFiles: PropTypes.func,
+  /**
+   * reducer: the card info like: influence, exp...
+   */
   pointsRules: PropTypes.oneOfType([
     PropTypes.object,
     PropTypes.bool,
   ]),
+  /**
+   * action: get the card info
+   */
   getPointsRules: PropTypes.func,
 };
 

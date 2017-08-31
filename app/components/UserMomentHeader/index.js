@@ -1,7 +1,8 @@
 /**
 *
-* UserHeaderBar
+* UserMomentHeader
 *
+* For the special user header bar style for moment page
 */
 
 import React, { PropTypes } from 'react';
@@ -84,10 +85,25 @@ class UserMomentHeader extends React.PureComponent { // eslint-disable-line reac
 }
 
 UserMomentHeader.propTypes = {
+  /**
+   * override the style
+   */
   style: PropTypes.object,
+  /**
+   * the user info
+   */
   user: PropTypes.object.isRequired,
+  /**
+   * override the avatar size
+   */
   avatarSize: PropTypes.string,
+  /**
+   * check if do link for the user
+   */
   linkUser: PropTypes.bool,
+  /**
+   * right content node
+   */
   rightContent: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.node,

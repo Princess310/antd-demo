@@ -2,6 +2,7 @@
 *
 * Card
 *
+* simple card, which has header, content, footer
 */
 
 import React, { PropTypes } from 'react';
@@ -46,11 +47,29 @@ function Card(props) {
 }
 
 Card.propTypes = {
+  /**
+   * override the style
+   */
   style: PropTypes.object,
+  /**
+   * the title to show in the header
+   */
   title: PropTypes.any,
+  /**
+   * subtitle under the title
+   */
   subTitle: PropTypes.any,
+  /**
+   * the pic to show after header
+   */
   pic: PropTypes.string,
+  /**
+   * content in this card
+   */
   content: PropTypes.any,
+  /**
+   * footer in this card
+   */
   footer: PropTypes.any,
 };
 

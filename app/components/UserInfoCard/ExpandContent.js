@@ -1,7 +1,8 @@
 /**
 *
-* UserHeaderBar
+* ExpandContent
 *
+* when words are to many, show the expand mode
 */
 
 import React, { PropTypes } from 'react';
@@ -93,8 +94,17 @@ class ExpandContent extends React.PureComponent { // eslint-disable-line react/p
 }
 
 ExpandContent.propTypes = {
+  /**
+   * title to show
+   */
   title: PropTypes.string,
+  /**
+   * content to show
+   */
   content: PropTypes.string,
+  /**
+   * override the style
+   */
   style: PropTypes.object,
 };
 

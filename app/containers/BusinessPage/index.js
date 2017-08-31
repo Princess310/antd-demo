@@ -42,6 +42,7 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
     };
   }
 
+  // basicly, fetch the list info in react componentWillMount func first.
   componentWillMount() {
     const { role, startPage } = this.state;
     const { getBusiness, business, industryList, getIndustry } = this.props;
@@ -55,6 +56,7 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
     }
   }
 
+  // handle the change event for tab, to fetch current tab list info
   handleTabChange = (key) => {
     const { startPage } = this.state;
     const { business, getBusiness } = this.props;
@@ -67,6 +69,7 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
     });
   }
 
+  // handle the pull to refresh page event
   onRefresh = () => {
     const { getBusiness } = this.props;
     const { role, startPage } = this.state;
@@ -74,6 +77,7 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
     getBusiness(role, startPage);
   }
 
+  // handle the pagination by scrolling to bottom
   onEndReached = () => {
     const { role } = this.state;
     const { business, getBusiness } = this.props;
@@ -81,6 +85,7 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
     getBusiness(role, Number(business[role].page) + 1);
   }
 
+  // when update message bar animated, we should handle the props for it.
   handleMessage = () => {
     const { setUpdateMessage } = this.props;
 
@@ -90,6 +95,7 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
     }, 2E3);
   }
 
+  // check the publish condition, then go to the publish page
   handlePublish = () => {
     const { setSelectTab } = this.props;
     const { type } = this.state;
@@ -97,6 +103,18 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
     request.doGet('moments/check-release').then((res) => {
       const { my_point, release_point, free, show_mobile } = res;
       if (Number(free) ===  0) {
+        // the point only enough for demand publish
+        if (my_point >= 5 && my_point < 10) {
+          browserHistory.push({
+            pathname: 'businessPublish',
+            state: {
+              show_mobile,
+            },
+          });
+
+          return;
+        }
+
         if (my_point < release_point) {
           alert('发布失败', <div>
               <div style={{ color: pallete.theme }}>{`剩余${my_point}积分`}</div>
@@ -107,13 +125,13 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
               setSelectTab('communicate');
             }, style: { fontWeight: 'bold' } },
           ]);
-        }
 
-        return;
+          return;
+        }
       }
 
       browserHistory.push({
-        pathname: 'businessPublish',
+        pathname: 'businessPublishSupplier',
         state: {
           show_mobile,
         },
@@ -200,23 +218,50 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
 }
 
 BusinessPage.propTypes = {
+  /**
+   * action: fetch the business info
+   */
   getBusiness: PropTypes.func,
+  /**
+   * reducer: business props
+   */
   business: PropTypes.oneOfType([
     PropTypes.object,
     PropTypes.bool,
   ]),
+  /**
+   * reducer: current user
+   */
   currentUser: PropTypes.object,
+  /**
+   * action: fetch the industry info
+   */
   getIndustry: PropTypes.func,
+  /**
+   * reducer: industry list info
+   */
   industryList: PropTypes.oneOfType([
     PropTypes.array,
     PropTypes.bool,
   ]),
+  /**
+   * action: change the tab to show
+   */
   setSelectTab: PropTypes.func,
+  /**
+   * reducer: undread dot
+   */
   unreadDot: PropTypes.object,
+  /**
+   * reducer: update message info
+   */
   updateInfo: PropTypes.oneOfType([
     PropTypes.object,
     PropTypes.bool,
   ]),
+  /**
+   * action: change the message ber to show or hide
+   */
   setUpdateMessage: PropTypes.func,
 };
 

@@ -2,6 +2,9 @@
  *
  * BusinessRecommend
  *
+ * path --> businessRecommend
+ * 
+ * The recommand list page after publish status to show
  */
 
 import React, { PropTypes } from 'react';
@@ -31,6 +34,7 @@ export class BusinessRecommend extends React.PureComponent { // eslint-disable-l
     };
   }
 
+  // handle pull to refresh
   onRefresh = () => {
     const { startPage } = this.state;
     const { location: { query }, getList } = this.props;
@@ -38,6 +42,7 @@ export class BusinessRecommend extends React.PureComponent { // eslint-disable-l
     getList(query.id, startPage);
   }
 
+  // pagination
   onEndReached = () => {
     const { location: { query }, getList, recommendList } = this.props;
 
@@ -96,11 +101,20 @@ export class BusinessRecommend extends React.PureComponent { // eslint-disable-l
 }
 
 BusinessRecommend.propTypes = {
+  /**
+   * reducer: recommend list info
+   */
   recommendList: PropTypes.oneOfType([
     PropTypes.object,
     PropTypes.array
   ]),
+  /**
+   * action: get the recommend list
+   */
   getList: PropTypes.func,
+  /**
+   * reducer: current user info
+   */
   currentUser: PropTypes.object,
 };
 

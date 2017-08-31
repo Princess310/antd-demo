@@ -2,6 +2,11 @@
 *
 * ActionSheet
 *
+* show the actions of btns from  bottom
+* format: actionSheet({
+*   options: BUTTONS,
+*   title: title,
+* }
 */
 
 import React from 'react';

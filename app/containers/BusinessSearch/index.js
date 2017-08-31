@@ -2,6 +2,9 @@
  *
  * BusinessSearch
  *
+ * path --> /businessSearch
+ * 
+ * search business page
  */
 
 import React, { PropTypes } from 'react';
@@ -74,6 +77,7 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
       page: 1,
       seeMore: false,
       historyList: historyList ? JSON.parse(historyList) : [],
+      // the filter state is to save which filter value selected, but not used for now.
       priceFilter: {
         id: 0,
         value: '',
@@ -101,10 +105,12 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
     }
   }
 
+  // handle keyword change
   onChange = (keyword) => {
     this.setState({ keyword });
   }
 
+  // store the keyword search for localstorage
   storeHistore = (keyword) => {
     let { historyList } = this.state;
     let id = 0;
@@ -140,6 +146,7 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
     }
   }
 
+  // clear the keyword storage
   handleClearHistory = () => {
     this.setState({
       historyList: [],
@@ -147,6 +154,7 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
     localStorage.setItem('search_business', JSON.stringify([]));
   }
 
+  // do the search action
   handleSearch = () => {
     const { panel, keyword, reward_as, type } = this.state;
 
@@ -164,6 +172,7 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
     this.storeHistore(keyword);
   }
 
+  // handle the see more action, to link step 3 page
   handleSeeMore = (reward_as) => {
     const { panel, keyword, type, page } = this.state;
 
@@ -177,6 +186,7 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
     this.props.doSearch('6', keyword, reward_as, type, page);
   }
 
+  // handle back btn action
   handleBack = () => {
     const { step, panel, seeMore } = this.state;
 
@@ -204,6 +214,7 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
     }
   }
 
+  // change the reward
   handleReward = (reward_as) => {
     this.setState({
       reward_as,
@@ -212,6 +223,7 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
     });
   }
 
+  // when click the keyword for localstorage to search
   handleHistorySearch = (keyword) => {
     const { panel, reward_as, type } = this.state;
     
@@ -223,6 +235,7 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
     this.storeHistore(keyword);
   }
 
+  // click the filter panel to search
   handleFilter = (filter, item) => {
     const { panel, reward_as } = this.state;
     const { doSearch } = this.props;
@@ -277,6 +290,7 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
     }
   }
 
+  // handle pagination
   onEndReached = () => {
     const { panel, keyword, reward_as, type, page } = this.state;
     
@@ -556,20 +570,47 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
 }
 
 BusinessSearch.propTypes = {
+  /**
+   * action: to do search
+   */
   doSearch: PropTypes.func,
+  /**
+   * reducer: get the search panel params
+   */
   searchPanel: PropTypes.oneOfType([
     PropTypes.bool,
     PropTypes.object,
   ]),
+  /**
+   * reducer: check weather search all
+   */
   searchAll: PropTypes.oneOfType([
     PropTypes.bool,
     PropTypes.object,
   ]),
+  /**
+   * reducer: the current user info
+   */
   currentUser: PropTypes.object,
+  /**
+   * reducer: get the filters info
+   */
   filters: PropTypes.object,
+  /**
+   * action: get the price info from backend
+   */
   getPrice: PropTypes.func,
+  /**
+   * action: get the number info from backend
+   */
   getNumber: PropTypes.func,
+  /**
+   * action: get the reward info from backend
+   */
   getReward: PropTypes.func,
+  /**
+   * action: get the service info from backend
+   */
   getService: PropTypes.func,
 };
 

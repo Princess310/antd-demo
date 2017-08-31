@@ -1,7 +1,8 @@
 /**
 *
-* ChatLoadMore
+* ExpProgress
 *
+* the exp progress to show
 */
 
 import React, { PropTypes } from 'react';
@@ -40,6 +41,9 @@ class ExpProgress extends React.PureComponent { // eslint-disable-line react/pre
 }
 
 ExpProgress.propTypes = {
+  /**
+   * number: progess from backend
+   */
   progress: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number

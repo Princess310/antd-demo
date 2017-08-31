@@ -2,6 +2,7 @@
  *
  * SelectCharacterService
  *
+ * path --> selectCharacterService
  */
 
 import React, { PropTypes } from 'react';
@@ -67,9 +68,21 @@ export class SelectCharacterService extends React.PureComponent { // eslint-disa
 }
 
 SelectCharacterService.propTypes = {
+  /**
+   * action: get the service info
+   */
   getService: PropTypes.func,
+  /**
+   * action: set the service info
+   */
   setService: PropTypes.func,
+  /**
+   * reducer: the publish params
+   */
   publishParams: PropTypes.object,
+  /**
+   * reducer: the service list info
+   */
   serviceList: PropTypes.oneOfType([
     PropTypes.bool,
     PropTypes.array,

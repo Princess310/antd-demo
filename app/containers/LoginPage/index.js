@@ -2,6 +2,9 @@
  *
  * LoginPage
  *
+ * path --> login
+ * 
+ * Login page for the access token is invalid of current user
  */
 
 import React, { PropTypes } from 'react';
@@ -44,6 +47,7 @@ export class LoginPage extends React.PureComponent { // eslint-disable-line reac
     });
   }
 
+  // do the login action
   handleLogin = () => {
     const { phone, password } = this.state;
 
@@ -125,7 +129,13 @@ export class LoginPage extends React.PureComponent { // eslint-disable-line reac
 }
 
 LoginPage.propTypes = {
+  /**
+   * action: do login action
+   */
   doLogin: PropTypes.func,
+  /**
+   * reducer: the initial info for app
+   */
   initialInfo: PropTypes.object,
 };
 

@@ -2,6 +2,9 @@
  *
  * UserCommunication
  *
+ * path --> userCommunicate
+ * 
+ * the page to show the status for current user self
  */
 
 import React, { PropTypes } from 'react';
@@ -102,8 +105,17 @@ export class UserCommunication extends React.PureComponent { // eslint-disable-l
 }
 
 UserCommunication.propTypes = {
+  /**
+   * reducer: the list info
+   */
   communicationList: PropTypes.object,
+  /**
+   * action: get the list
+   */
   getList: PropTypes.func,
+  /**
+   * reducer: the current user info
+   */
   currentUser: PropTypes.object,
 };
 

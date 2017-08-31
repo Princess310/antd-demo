@@ -1,7 +1,8 @@
 /**
 *
-* ChatLoadMore
+* UploadGrid
 *
+* upload grid comp for user authorize page
 */
 
 import React, { PropTypes } from 'react';
@@ -62,9 +63,21 @@ class UploadGrid extends React.PureComponent { // eslint-disable-line react/pref
 }
 
 UploadGrid.propTypes = {
+  /**
+   * the value for it
+   */
   url: PropTypes.string,
+  /**
+   * override the style
+   */
   style: PropTypes.object,
+  /**
+   * click func cb
+   */
   onClick: PropTypes.func,
+  /**
+   * the child node
+   */
   children: PropTypes.node,
 };
 

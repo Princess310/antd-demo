@@ -219,11 +219,26 @@ class TouchLoader extends React.PureComponent { // eslint-disable-line react/pre
 }
 
 TouchLoader.propTypes = {
+  /**
+   * set class name for root dom
+   */
   className: PropTypes.string,
+  /**
+   * boolean: check if has more data
+   */
   hasMore: PropTypes.bool,
   initializing: PropTypes.number,
+  /**
+   * override the style
+   */
   style: PropTypes.object,
+  /**
+   * boolean: check weather do refresh
+   */
   refreshing: PropTypes.bool,
+  /**
+   * boolean: check weather show loading
+   */
   loading: PropTypes.bool,
 };
 

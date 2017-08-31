@@ -2,6 +2,7 @@
  *
  * UserPointsRule
  *
+ * path --> userPointsRule
  */
 
 import React, { PropTypes } from 'react';

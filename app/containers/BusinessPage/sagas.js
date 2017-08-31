@@ -348,7 +348,7 @@ export function* sendComment(action) {
 
     const { data: { is_popup, messagePopup }, message } = res;
     if (is_popup === 1) {
-      alert('发布成功', <div>
+      alert('评论成功', <div>
           <div style={{ color: '#50ABF1' }}>{messagePopup[0]}</div>
           <div>{messagePopup[1]}</div>
         </div>, [

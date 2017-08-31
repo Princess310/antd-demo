@@ -2,6 +2,7 @@
 *
 * UserHeaderBar
 *
+* the common user header bar
 */
 
 import React, { PropTypes } from 'react';
@@ -71,10 +72,25 @@ class UserHeaderBar extends React.PureComponent { // eslint-disable-line react/p
 }
 
 UserHeaderBar.propTypes = {
+  /**
+   * override the style
+   */
   style: PropTypes.object,
+  /**
+   * the user info
+   */
   user: PropTypes.object.isRequired,
+  /**
+   * override the avatar size
+   */
   avatarSize: PropTypes.string,
+  /**
+   * do check if link to the user page
+   */
   linkUser: PropTypes.bool,
+  /**
+   * right content node
+   */
   rightContent: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.node,

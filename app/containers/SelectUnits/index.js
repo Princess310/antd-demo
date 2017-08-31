@@ -2,6 +2,7 @@
  *
  * SelectUnits
  *
+ * path --> selectUnits
  */
 
 import React, { PropTypes } from 'react';
@@ -67,9 +68,21 @@ export class SelectUnits extends React.PureComponent { // eslint-disable-line re
 }
 
 SelectUnits.propTypes = {
+  /**
+   * action: get the units info from backend
+   */
   getUnits: PropTypes.func,
+  /**
+   * action: set the unit for reducer
+   */
   setUnits: PropTypes.func,
+  /**
+   * reducer: the publish params
+   */
   publishParams: PropTypes.object,
+  /**
+   * reducer: the units list
+   */
   unitsList: PropTypes.oneOfType([
     PropTypes.bool,
     PropTypes.array,

@@ -42,7 +42,13 @@ function UpdateMessage(props) {
 }
 
 UpdateMessage.propTypes = {
+  /**
+   * the message to show
+   */
   message: PropTypes.string,
+  /**
+   * when animate end, call the cb func
+   */
   onShowEnd: PropTypes.func,
 };
 

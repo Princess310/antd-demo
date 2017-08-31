@@ -2,6 +2,7 @@
 *
 * CallPhone
 *
+* It can call the phone in the web, for client service for now
 */
 
 import React, { PropTypes } from 'react';
@@ -30,6 +31,9 @@ function CallPhone(props) {
 }
 
 CallPhone.propTypes = {
+  /**
+   * the phone number
+   */
   phone: PropTypes.string.isRequired,
 };
 

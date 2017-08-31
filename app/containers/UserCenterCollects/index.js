@@ -2,6 +2,7 @@
  *
  * UserCenterCollects
  *
+ * path --> userCenterCollects
  */
 
 import React, { PropTypes } from 'react';
@@ -180,8 +181,17 @@ export class UserCenterCollects extends React.PureComponent { // eslint-disable-
 }
 
 UserCenterCollects.propTypes = {
+  /**
+   * action: get the collect status
+   */
   getCollects: PropTypes.func,
+  /**
+   * reducer: the collect info
+   */
   collectInfo: PropTypes.object,
+  /**
+   * action: delete the collect from list
+   */
   deleteCollect: PropTypes.func,
 };
 

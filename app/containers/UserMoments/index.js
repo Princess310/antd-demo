@@ -2,6 +2,7 @@
  *
  * UserMoments
  *
+ * path --> userMoments
  */
 
 import React, { PropTypes } from 'react';
@@ -174,9 +175,21 @@ export class UserMoments extends React.PureComponent { // eslint-disable-line re
 }
 
 UserMoments.propTypes = {
+  /**
+   * action: get the moments info
+   */
   getMoments: PropTypes.func,
+  /**
+   * reducer: demand status for user
+   */
   momentDemand: PropTypes.object,
+  /**
+   * reducer: supplier status for user
+   */
   momentSupplier: PropTypes.object,
+  /**
+   * reducer: the current user info
+   */
   currentUser: PropTypes.object,
 };
 

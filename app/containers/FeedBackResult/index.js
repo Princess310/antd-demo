@@ -2,6 +2,9 @@
  *
  * FeedBackResult
  *
+ * path --> feedBackResult
+ * 
+ * show the success page after send feed back info: see FeedBackPage container
  */
 
 import React, { PropTypes } from 'react';

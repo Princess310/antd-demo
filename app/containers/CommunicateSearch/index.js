@@ -18,7 +18,7 @@ import FlexCenter from 'components/FlexCenter';
 import AppContent from 'components/AppContent';
 import { List, Button, WhiteSpace, Icon } from 'antd-mobile';
 import SearchWithCancelBar from 'components/SearchBar/SearchWithCancelBar';
-import CmsMomentCard from 'components/MomentCard/CmsMomentCard';
+import MomentCard from 'components/MomentCard';
 
 import { fetchCommunicateSearch } from 'containers/Communicate/actions';
 import { makeSelectCommunicateSearch } from 'containers/Communicate/selectors';
@@ -179,10 +179,13 @@ export class CommunicateSearch extends React.PureComponent { // eslint-disable-l
               className="tloader app-content"
               style={{ top: 0 }}
             >
-              {searchPanel.list && searchPanel.list.map((d) => (
-                <CmsMomentCard
-                  key={d.id}
-                  moment={d}
+              {searchPanel.list && searchPanel.list.map((moment) => (
+                <MomentCard
+                  key={moment.id}
+                  moment={moment}
+                  currentUser={currentUser}
+                  from="search"
+                  type="communication"
                   style={{ marginTop: '0.12rem' }}
                 />
               ))}

@@ -2,6 +2,7 @@
  *
  * SelectReward
  *
+ * path --> selectReward
  */
 
 import React, { PropTypes } from 'react';
@@ -67,9 +68,21 @@ export class SelectReward extends React.PureComponent { // eslint-disable-line r
 }
 
 SelectReward.propTypes = {
+  /**
+   * action: get the reward info from backend
+   */
   getReward: PropTypes.func,
+  /**
+   * action: set the reward for reducer
+   */
   setReward: PropTypes.func,
+  /**
+   * reducer: the publish params
+   */
   publishParams: PropTypes.object,
+  /**
+   * reducer: the reward list
+   */
   rewardList: PropTypes.oneOfType([
     PropTypes.bool,
     PropTypes.array,

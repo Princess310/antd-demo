@@ -11,7 +11,9 @@ import Mask from 'components/Mask';
 import shareImg from 'assets/images/share-exhibition-ng.png';
 
 function showWeixinGuide(...args) {
+  // the weixin guide background-image property
   const bgImg = args[0];
+  // the close cb func
   const onClose = args[1];
   let div = document.createElement('div');
   document.body.appendChild(div);

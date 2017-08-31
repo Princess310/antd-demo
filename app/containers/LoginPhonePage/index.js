@@ -2,6 +2,9 @@
  *
  * LoginPhonePage
  *
+ * path --> loginPhone
+ * 
+ * the login page for just use phone number && verify code to login
  */
 
 import React, { PropTypes } from 'react';

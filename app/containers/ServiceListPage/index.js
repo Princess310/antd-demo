@@ -2,6 +2,9 @@
  *
  * ServiceListPage
  *
+ * path --> service
+ * 
+ * the list page for cms
  */
 
 import React, { PropTypes } from 'react';
@@ -116,6 +119,7 @@ export class ServiceListPage extends React.PureComponent { // eslint-disable-lin
                   pic={service.thumbnail}
                   subTitle={<DateInfo
                     time={service.created_at}
+                    format="YYYY-MM-DD"
                     style={{
                       color: pallete.text.help,
                       marginTop: '0.04rem',

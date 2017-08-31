@@ -1,7 +1,8 @@
 /**
 *
-* UserHeaderBar
+* ShareIntroduceModal
 *
+* the introduce popup modal for share page
 */
 
 import React, { PropTypes } from 'react';
@@ -151,10 +152,16 @@ class ShareIntroduceModal extends React.PureComponent { // eslint-disable-line r
 }
 
 ShareIntroduceModal.propTypes = {
+  /**
+   * the moment id from moment card
+   */
   id: PropTypes.oneOfType([
     PropTypes.number,
     PropTypes.string,
   ]),
+  /**
+   * call back func when closed
+   */
   onClose: PropTypes.func,
 };
 

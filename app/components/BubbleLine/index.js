@@ -2,6 +2,7 @@
 *
 * BubbleLine
 *
+* small bubble in one line to show
 */
 
 import React, { PropTypes } from 'react';
@@ -28,7 +29,13 @@ function BubbleLine(props) {
 }
 
 BubbleLine.propTypes = {
+  /**
+   * override the style
+   */
   style: PropTypes.object,
+  /**
+   * the name to show in the bubble line
+   */
   name: PropTypes.string,
 };
 

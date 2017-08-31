@@ -2,6 +2,7 @@
 *
 * SearchWithCancelBar
 *
+* Search bar has cancel btn
 */
 
 import React, { PropTypes } from 'react';
@@ -74,11 +75,29 @@ class SearchWithCancelBar extends React.PureComponent { // eslint-disable-line r
 }
 
 SearchWithCancelBar.propTypes = {
+  /**
+   * search value
+   */
   value: PropTypes.string,
+  /**
+   * placeholder value
+   */
   placeholder: PropTypes.string,
+  /**
+   * search function cb
+   */
   onSearch: PropTypes.func,
+  /**
+   * when click cancel btn, call the cb func
+   */
   onCancel: PropTypes.func,
+  /**
+   * when change the value of keyword
+   */
   onChange: PropTypes.func,
+  /**
+   * override the style
+   */
   style: PropTypes.object,
 };
 

@@ -1,6 +1,6 @@
 /**
 *
-* ChatLoadMore
+* LevelProgress
 *
 */
 
@@ -50,6 +50,9 @@ class LevelProgress extends React.PureComponent { // eslint-disable-line react/p
 }
 
 LevelProgress.propTypes = {
+  /**
+   * progess info from backend
+   */
   progress: PropTypes.string,
 };
 

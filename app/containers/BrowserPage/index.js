@@ -2,6 +2,7 @@
  *
  * BrowserPage
  *
+ * path --> /browser
  */
 
 import React, { PropTypes } from 'react';
@@ -37,6 +38,9 @@ export class BrowserPage extends React.PureComponent { // eslint-disable-line re
 }
 
 BrowserPage.propTypes = {
+  /**
+   * the link user prop
+   */
   location: PropTypes.object,
 };
 

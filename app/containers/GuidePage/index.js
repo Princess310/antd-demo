@@ -2,6 +2,9 @@
  *
  * GuidePage
  *
+ * path --> guide
+ * 
+ * when user did not complete his basic info, when link to this page to add the info.
  */
 
 import React, { PropTypes } from 'react';
@@ -102,6 +105,7 @@ export class GuidePage extends React.PureComponent { // eslint-disable-line reac
     });
   }
 
+  // listed actions below to handle control value set for basic info
   handleNickname = (value) => {
     this.setState({
       nickname: value,
@@ -194,6 +198,7 @@ export class GuidePage extends React.PureComponent { // eslint-disable-line reac
     const { currentUser } = this.props;
     const editNumber = currentUser.role_edit_number;
 
+    // should see the api detail to make suer number is not greater then 2
     if (editNumber && editNumber >= 2) {
       alert('您已经修改过行业角色信息，不能再次修改', '', [
         { text: '我知道了', onPress: () => console.log('confirm') },
@@ -411,21 +416,42 @@ export class GuidePage extends React.PureComponent { // eslint-disable-line reac
 }
 
 GuidePage.propTypes = {
+  /**
+   * reducer: current user info
+   */
   currentUser: PropTypes.oneOfType([
     PropTypes.bool,
     PropTypes.object,
   ]),
+  /**
+   * reducer: industry son info
+   */
   industrySon: PropTypes.string,
+  /**
+   * reducer: industry list info
+   */
   industryList: PropTypes.oneOfType([
     PropTypes.array,
     PropTypes.bool,
   ]),
+  /**
+   * reducer: service list inof
+   */
   serviceList: PropTypes.oneOfType([
     PropTypes.array,
     PropTypes.bool,
   ]),
+  /**
+   * action: get the industry list
+   */
   getIndustry: PropTypes.func,
+  /**
+   * action: get the service list
+   */
   getService: PropTypes.func,
+  /**
+   * action: set the user info for reducer currentUser
+   */
   setUser: PropTypes.func,
 };
 

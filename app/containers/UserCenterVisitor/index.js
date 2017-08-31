@@ -2,6 +2,7 @@
  *
  * UserCenterVisitor
  *
+ * path --> userCenterVisitor
  */
 
 import React, { PropTypes } from 'react';
@@ -216,8 +217,17 @@ export class UserCenterVisitor extends React.PureComponent { // eslint-disable-l
 }
 
 UserCenterVisitor.propTypes = {
+  /**
+   * action: get the visitor info
+   */
   getVisitor: PropTypes.func,
+  /**
+   * reducer: the visitor users, who I visited
+   */
   visitorUsers: PropTypes.object,
+  /**
+   * reducer: the visitor users, who visited me
+   */
   visitorMine: PropTypes.object,
 };
 

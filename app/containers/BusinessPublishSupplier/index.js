@@ -2,6 +2,9 @@
  *
  * BusinessPublishSupplier
  *
+ * path --> /businessPublishSupplier
+ * 
+ * this comp is used for publish supplier business status
  */
 
 import React, { PropTypes } from 'react';
@@ -24,6 +27,7 @@ const Item = List.Item;
 export class BusinessPublishSupplier extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
     super(props);
+    // for some special demand, we need to save some publish params for redux, the get it from props first.
     const { publishParams, location: { state } }  = this.props;
 
     this.state = {
@@ -34,6 +38,7 @@ export class BusinessPublishSupplier extends React.PureComponent { // eslint-dis
     }
   }
 
+  // when get in page from index page, we need to clear the publish params
   componentWillMount() {
     const { location: { action } } = this.props;
 
@@ -46,6 +51,7 @@ export class BusinessPublishSupplier extends React.PureComponent { // eslint-dis
     }
   }
 
+  // when get out of this page, save the publish params
   componentWillUnmount() {
     const { location: { action } } = this.props;
     const { content, files } = this.state;
@@ -56,23 +62,26 @@ export class BusinessPublishSupplier extends React.PureComponent { // eslint-dis
     });
   }
 
+  // handle the files change
   onChange = (files) => {
     this.setState({
       files,
     });
   };
 
+  // handle content words value
   handleContent = (value) => {
     this.setState({
       content: value,
     });
   }
 
+  // when change the title, we should chech the release info, and link to another publish page
   onChangeTitle = (e) => {
     const index = e.nativeEvent.selectedSegmentIndex;
     const { showMobile } = this.state;
 
-    if (Number(index) === 0) {
+    if (Number(index) === 1) {
       request.doGet('moments/check-release', { reward_as: 2 }).then((res) => {
         const { my_point, release_point, free, show_mobile } = res;
         if (Number(free) ===  0) {
@@ -86,9 +95,9 @@ export class BusinessPublishSupplier extends React.PureComponent { // eslint-dis
                 setSelectTab('communicate');
               }, style: { fontWeight: 'bold' } },
             ]);
-          }
 
-          return;
+            return;
+          }
         }
 
         browserHistory.replace({
@@ -100,6 +109,8 @@ export class BusinessPublishSupplier extends React.PureComponent { // eslint-dis
       });
     }
   }
+
+  // handle mobile change event
   handleMobile = (value) => {
     const self = this;
     request.doPost('moments/show-mobile').then(() => {
@@ -109,6 +120,7 @@ export class BusinessPublishSupplier extends React.PureComponent { // eslint-dis
     });
   }
 
+   // do save the publish info
   handleSave = () => {
     const { content, files } = this.state;
     const { publishParams, saveMoment, location: { state } } = this.props;
@@ -160,8 +172,8 @@ export class BusinessPublishSupplier extends React.PureComponent { // eslint-dis
           <Item>
             <FlexCenter style={{ fontSize: '0.3rem'}}>
               <SegmentedControl
-                selectedIndex={1}
-                values={['发需求', '发供应']}
+                selectedIndex={0}
+                values={['发供应', '发需求']}
                 style={{ height: '0.3rem', width: '3rem' }}
                 onChange={this.onChangeTitle}
                 tintColor={pallete.theme}
@@ -237,8 +249,17 @@ export class BusinessPublishSupplier extends React.PureComponent { // eslint-dis
 }
 
 BusinessPublishSupplier.propTypes = {
+  /**
+   * action: set the publish info to redux
+   */
   setPublishParams: PropTypes.func,
+  /**
+   * action: the save action
+   */
   saveMoment: PropTypes.func,
+  /**
+   * reducer: the publish params from reselect
+   */
   publishParams: PropTypes.object,
 };
 

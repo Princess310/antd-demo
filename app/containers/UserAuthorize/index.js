@@ -2,6 +2,9 @@
  *
  * UserAuthorize
  *
+ * path --> userAuthorize
+ * 
+ * the page to show user authorize info
  */
 
 import React, { PropTypes } from 'react';
@@ -67,6 +70,7 @@ export class UserAuthorize extends React.PureComponent { // eslint-disable-line 
       const { friend, material } = auth;
       const materialInfo = material[0];
 
+      // check the verify info
       let verifyItem = null;
       switch (Number(user_info.verify_status)) {
         case 0:
@@ -159,16 +163,31 @@ export class UserAuthorize extends React.PureComponent { // eslint-disable-line 
 }
 
 UserAuthorize.propTypes = {
+  /**
+   * reducer: the auth info from backend
+   */
   authInfo: PropTypes.oneOfType([
     PropTypes.object,
     PropTypes.bool,
   ]),
+  /**
+   * reducer: auth files info
+   */
   authFiles: PropTypes.oneOfType([
     PropTypes.array,
     PropTypes.bool,
   ]),
+  /**
+   * action: get the auth info
+   */
   getAuthInfo: PropTypes.func,
+  /**
+   * action: save the auth fils for reducer
+   */
   saveAuthFiles: PropTypes.func,
+  /**
+   * action: save the auth info
+   */
   saveAuth: PropTypes.func,
 };
 

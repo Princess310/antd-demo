@@ -2,6 +2,7 @@
  *
  * AboutPage
  *
+ * path --> /about
  */
 
 import React, { PropTypes } from 'react';

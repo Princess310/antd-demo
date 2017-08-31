@@ -1,7 +1,8 @@
 /**
 *
-* UserHeaderBar
+* UserInfoCard
 *
+* the card comp for user info page
 */
 
 import React, { PropTypes } from 'react';
@@ -82,7 +83,13 @@ class UserInfoCard extends React.PureComponent { // eslint-disable-line react/pr
 }
 
 UserInfoCard.propTypes = {
+  /**
+   * the user info
+   */
   user: PropTypes.object,
+  /**
+   * override the style
+   */
   style: PropTypes.object,
 };
 

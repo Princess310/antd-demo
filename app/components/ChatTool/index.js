@@ -2,6 +2,9 @@
 *
 * ChatTool
 *
+* simple send message tool.
+*
+* onSendMessage props is required, and it should be a promised func
 */
 
 import React, { PropTypes } from 'react';

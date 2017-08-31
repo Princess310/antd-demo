@@ -2,6 +2,9 @@
  *
  * RecentDemandPage
  *
+ * path -> recentDemand
+ * 
+ * this page is used after finish the guide page for user
  */
 
 import React, { PropTypes } from 'react';
@@ -135,6 +138,9 @@ export class RecentDemandPage extends React.PureComponent { // eslint-disable-li
 }
 
 RecentDemandPage.propTypes = {
+  /**
+   * action: get the reward info
+   */
   getReward: PropTypes.func,
 };
 

@@ -2,6 +2,9 @@
  *
  * UserInfo
  *
+ * path --> userInfo
+ * 
+ * the page to show the user info for everyone, most linked by the avatar compnent
  */
 
 import React, { PropTypes } from 'react';
@@ -398,13 +401,28 @@ export class UserInfo extends React.PureComponent { // eslint-disable-line react
 }
 
 UserInfo.propTypes = {
+  /**
+   * reducer: the user info
+   */
   userInfo: PropTypes.oneOfType([
     PropTypes.bool,
     PropTypes.object,
   ]),
+  /**
+   * reducer: the current user info
+   */
   currentUser: PropTypes.object,
+  /**
+   * action: get the user info
+   */
   getUserInfo: PropTypes.func,
+  /**
+   * action: do follow
+   */
   followUser: PropTypes.func,
+  /**
+   * 
+   */
   myDemand: PropTypes.object,
   mySupplier: PropTypes.object,
   getMyMoments: PropTypes.func,

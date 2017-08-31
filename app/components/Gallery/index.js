@@ -2,6 +2,7 @@
 *
 * Gallery
 *
+* Gallery plug-in from https://github.com/dimsemenov/PhotoSwipe
 */
 
 import React from 'react';

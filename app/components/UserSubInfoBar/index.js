@@ -54,14 +54,32 @@ class UserSubInfoBar extends React.PureComponent { // eslint-disable-line react/
 }
 
 UserSubInfoBar.propTypes = {
+  /**
+   * the influence info from backend
+   */
   influence: PropTypes.string,
+  /**
+   * the progress info from backend
+   */
   progress: PropTypes.string,
+  /**
+   * the level info from backend
+   */
   level: PropTypes.string,
+  /**
+   * distance info
+   */
   distance: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number,
   ]),
+  /**
+   * city info
+   */
   city: PropTypes.string,
+  /**
+   * override the style
+   */
   style: PropTypes.object,
 };
 

@@ -2,6 +2,7 @@
  *
  * UserSettingPage
  *
+ * path --> userSetting
  */
 
 import React, { PropTypes } from 'react';
@@ -86,6 +87,9 @@ export class UserSettingPage extends React.PureComponent { // eslint-disable-lin
 }
 
 UserSettingPage.propTypes = {
+  /**
+   * action: set current user info
+   */
   setUser: PropTypes.func,
 };
 

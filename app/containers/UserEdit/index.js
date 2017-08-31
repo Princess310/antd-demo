@@ -2,6 +2,9 @@
  *
  * UserEdit
  *
+ * path --> userEdit
+ * 
+ * page to show user detail info and edit for them
  */
 
 import React, { PropTypes } from 'react';
@@ -177,6 +180,9 @@ export class UserEdit extends React.PureComponent { // eslint-disable-line react
 }
 
 UserEdit.propTypes = {
+  /**
+   * reducer: the current user info
+   */
   currentUser: PropTypes.object,
 };
 

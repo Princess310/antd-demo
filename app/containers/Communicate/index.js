@@ -33,6 +33,7 @@ export class Communicate extends React.PureComponent { // eslint-disable-line re
     };
   }
 
+  // get list info first
   componentWillMount() {
     const { getList, communicationList } = this.props;
 
@@ -41,6 +42,7 @@ export class Communicate extends React.PureComponent { // eslint-disable-line re
     }
   }
 
+  // handle refresh action
   onRefresh = () => {
     const { startPage } = this.state;
     const { getList } = this.props;
@@ -48,6 +50,7 @@ export class Communicate extends React.PureComponent { // eslint-disable-line re
     getList(startPage);
   }
 
+  // handle pagination
   onEndReached = () => {
     const { communicationList, getList } = this.props;
 
@@ -134,13 +137,28 @@ export class Communicate extends React.PureComponent { // eslint-disable-line re
 }
 
 Communicate.propTypes = {
+  /**
+   * reducer: communication list info
+   */
   communicationList: PropTypes.object,
+  /**
+   * action: get list info
+   */
   getList: PropTypes.func,
+  /**
+   * reducer: current user info
+   */
   currentUser: PropTypes.object,
+  /**
+   * reducer: handle the update message info
+   */
   updateInfo: PropTypes.oneOfType([
     PropTypes.object,
     PropTypes.bool,
   ]),
+  /**
+   * action: set the update message info
+   */
   setUpdateMessage: PropTypes.func,
 };
 

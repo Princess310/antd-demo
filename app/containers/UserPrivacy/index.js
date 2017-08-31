@@ -2,6 +2,7 @@
  *
  * UserPrivacy
  *
+ * path --> userPrivacy
  */
 
 import React, { PropTypes } from 'react';
