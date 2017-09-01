@@ -94,7 +94,7 @@ const shareConfig = {
       case 'momment': {
         const { id, nickname, title:cmsTitle, content, pictures, company, position } = data;
         title = cmsTitle ? cmsTitle : (content.trim() !== '' ? emptyHtml(content) : `分享${nickname}的健康商信动态`);
-        timeLineTitle = `${emptyHtml(content)}分享${nickname}的健康商信动态.健康产业APP：${user ? `${user.company}.${user.position}.${user.nickname}` : `${company}.${position}.${nickname}`}在分享动态，邀请您也来分享`;
+        timeLineTitle = `${cmsTitle} 健康商信APP：${user ? `${user.company}.${user.position}.${user.nickname}` : `${company}.${position}.${nickname}`}在分享动态，邀请您也来分享`;
         desc = `${cmsTitle ? cmsTitle + ' ' : ''}健康商信APP：${user ? `${user.company}.${user.position}.${user.nickname}` : `${company}.${position}.${nickname}`}在分享动态，邀请您也来分享`;
         link = `${link}&id=${id}&uid=${uid}`;
         imgUrl = pictures.length > 0 ? pictures[0] : `http://${domain}${logo}`;
