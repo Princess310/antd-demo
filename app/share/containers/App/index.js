@@ -64,7 +64,7 @@ export default class App extends React.PureComponent { // eslint-disable-line re
       uid: 6,
     });
 
-    m.schemeWakeup();
+    m.wakeupOrInstall({timeout:500});
 
     return (
       <div>
