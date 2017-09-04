@@ -10,7 +10,7 @@
  *  http://wap-jkhz.alijian.net/public_share.html?type=' + type + "&id=" + id + "&uid" = 分享人的id
  *
  * APP:
- *  链接: http://wap-jkhz.alijian.net/group_share.html?name=人的名字
+ *   链接: http://wap-jkhz.alijian.net/group_share.html?name=人的名字
  *
  * 名片:
  *   type: card
@@ -26,7 +26,7 @@
  *
  * 健康会展app分享和群分享:
  *   type: jk_group
-  *  id: (1.分享群组的话，带群组id，2.分享app不用传)
+ *   id: (1.分享群组的话，带群组id，2.分享app不用传)
  */
 
 import React from 'react';
@@ -64,7 +64,7 @@ export default class App extends React.PureComponent { // eslint-disable-line re
       uid: 6,
     });
 
-    m.wakeupOrInstall({timeout:500});
+    m.schemeWakeup();
 
     return (
       <div>
