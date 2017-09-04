@@ -61,7 +61,7 @@ export default class App extends React.PureComponent { // eslint-disable-line re
         个别andriod浏览器下载时，中文文件名显示乱码，请慎用中文文件名！*/
       //apkFileName : "OpenInstallDemo-v2-1.1.1.apk",
     }, {
-      uid: 6,
+      uid: uid,
     });
 
     m.wakeupOrInstall({timeout:500});
