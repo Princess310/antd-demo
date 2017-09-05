@@ -2,21 +2,147 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Make the page mobile compatible -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
+  <title>健康商信 - 下载</title>
+  <link rel="stylesheet" href="//cdn.bootcss.com/Swiper/3.4.2/css/swiper.min.css" type="text/css" />
+  <style>
+    html, body {
+      margin: 0;
+    }
+
+    .swiper-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+
+    .swiper-container-horizontal>.swiper-pagination-bullets, .swiper-pagination-custom, .swiper-pagination-fraction {
+      bottom: 45px;
+    }
+
+    .swiper-pagination-bullet-active {
+      background: #50abf1;
+    }
+
+    .wrapper {
+      height: 100%;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .wrapper .title {
+      margin-bottom: 32px;
+      font-size: 24px;
+      color: #50abf1;
+    }
+
+    .wrapper img {
+      width: 250px;
+      box-shadow: 0 0 8px 2px #ccc;
+    }
+
+    .btn-wrapper {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 45px;
+      padding: 0 15px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 99;
+    }
+
+    .download-btn {
+      width: 100%;
+      padding: 6px 12px;
+      margin-bottom: 0;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.42857143;
+      text-align: center;
+      white-space: nowrap;
+      vertical-align: middle;
+      -ms-touch-action: manipulation;
+      touch-action: manipulation;
+      cursor: pointer;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      background-image: none;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      background-color: #50abf1;
+      color: #fff;
+    }
+  </style>
 </head>
 <body>
-  <p>Welcome to download page!</p>
+    <div class="swiper-container">
+      <div class="swiper-wrapper">
+          <div class="swiper-slide">
+            <div class="wrapper">
+              <header class="title">朋友圈模式，轻松社交</header>
+              <img src="./guide-download-1.png" alt="朋友圈模式，轻松社交" />
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="wrapper">
+              <header class="title">广告放首页，人气暴涨</header>
+              <img src="./guide-download-2.png" alt="广告放首页，人气暴涨" />
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="wrapper">
+              <header class="title">推荐人脉更方便成交</header>
+              <img src="./guide-download-3.png" alt="推荐人脉更方便成交" />
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="wrapper">
+              <header class="title">供应需求智能推送</header>
+              <img src="./guide-download-4.png" alt="供应需求智能推送" />
+            </div>
+          </div>
+      </div>
+      <!-- 如果需要分页器 -->
+      <div class="swiper-pagination"></div>
+  </div>
 
+  <div class="btn-wrapper">
+    <button class="download-btn" id="download">立即下载</button>
+  </div>
+
+  <script type="text/javascript" src="//cdn.bootcss.com/Swiper/3.4.2/js/swiper.min.js"></script>
   <script type="text/javascript" src="//res.cdn.openinstall.io/openinstall.js"></script>
   <script>
+    /**
+    * Query string from url
+    */
     function getQueryString(name) {
       var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
       var r = window.location.search.substr(1).match(reg);
 
       return r == null ? (arguments[1] === undefined ? null : arguments[1]) : decodeURIComponent(r[2]);
     }
+
+    /**
+    * Swipper
+    */
+    var mySwiper = new Swiper ('.swiper-container', {
+      loop: true,
+      // 如果需要分页器
+      pagination: '.swiper-pagination',
+    })
 
     var uid = getQueryString('uid');
     var m = new OpenInstall({
@@ -29,7 +155,13 @@
       uid: uid,
     });
 
-    m.wakeupOrInstall({timeout:500});
+    /**
+    * Action
+    */
+    const btn = document.getElementById('download');
+    btn.addEventListener('click', function () {
+      m.wakeupOrInstall({timeout:500});
+    });
   </script>
 </body>
 </html>
