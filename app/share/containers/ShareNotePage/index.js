@@ -19,7 +19,7 @@ import oss from 'utils/oss';
 
 import shareConfig from 'utils/shareConfig';
 
-import { getDownloadUrl } from 'utils/utils';
+import { linkOpenInstall } from 'utils/utils';
 
 const PicWrapper = styled.div`
   margin-bottom: 0.12rem;
@@ -86,7 +86,8 @@ export class ShareNotePage extends React.PureComponent { // eslint-disable-line 
   }
 
   handleDownload = () => {
-    window.location.href = getDownloadUrl();
+    // window.location.href = getDownloadUrl();
+    linkOpenInstall();
   }
 
   render() {

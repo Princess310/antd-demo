@@ -13,7 +13,7 @@ import FlexCenter from 'components/FlexCenter';
 import ExpProgress from 'components/ExpProgress';
 import { Button } from 'antd-mobile';
 
-import { getDownloadUrl } from 'utils/utils';
+import { linkOpenInstall } from 'utils/utils';
 
 const Wrapper = styled.div`
   position: fixed;
@@ -35,7 +35,8 @@ const buttonStyle = {
 
 class DownloadBar extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   handleDownload = () => {
-    window.location.href = getDownloadUrl();
+    // window.location.href = getDownloadUrl();
+    linkOpenInstall();
   }
   render() {
     return (
