@@ -37,6 +37,12 @@ const WordsWrapper = styled.div`
   text-overflow: ellipsis;
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
+  white-space: pre-wrap;
+`;
+
+const WordsContent = styled.div`
+  white-space: pre-wrap;
+  word-break: break-word;
 `;
 
 const PicWrapper = styled.div`
@@ -206,7 +212,7 @@ class ShareMomentCard extends React.PureComponent { // eslint-disable-line react
         <div>{nickname}已经发布了<Remark>{demand_counts}</Remark>条需求</div>
         <div>需求类别：<Remark>{item_name}</Remark></div>
         <div>需求数量：{section === '' ? '不限' : section}</div>
-        <pre>{contentResult}</pre>
+        <WordsContent>{contentResult}</WordsContent>
       </div>
     ) : (
       businessType === 'demand' ? (
@@ -214,7 +220,7 @@ class ShareMomentCard extends React.PureComponent { // eslint-disable-line react
           {item_name !== '' && <LineTag>{item_name}</LineTag>}
           {section !== '' && <LineTag style={{ marginLeft: '0.08rem' }}>{section}</LineTag>}
         </div>
-      ) : <pre>{contentResult}</pre>
+      ) : <WordsContent>{contentResult}</WordsContent>
     );
 
     const actionView = businessType === 'status' ? (

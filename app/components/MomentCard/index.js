@@ -46,6 +46,13 @@ const WordsWrapper = styled.div`
   text-overflow: ellipsis;
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
+  white-space: pre-wrap;
+  word-break: break-word;
+`;
+
+const WordsContent = styled.div`
+  white-space: pre-wrap;
+  word-break: break-word;
 `;
 
 const PicWrapper = styled.div`
@@ -416,9 +423,9 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
         <div>{nickname}已经发布了<Remark>{demand_counts}</Remark>条需求</div>
         <div>需求类别：<Remark>{item_name}</Remark></div>
         <div>需求数量：{section === '' ? '不限' : section}</div>
-        <pre>{contentResult}</pre>
+        <WordsContent>{contentResult}</WordsContent>
       </div>
-    ) : <pre>{contentResult}</pre>;
+    ) : <WordsContent>{contentResult}</WordsContent>;
 
     // check is self
     const isSelf = String(currentUser.id) === String(uid);
