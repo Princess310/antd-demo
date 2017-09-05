@@ -416,9 +416,9 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
         <div>{nickname}已经发布了<Remark>{demand_counts}</Remark>条需求</div>
         <div>需求类别：<Remark>{item_name}</Remark></div>
         <div>需求数量：{section === '' ? '不限' : section}</div>
-        <div>{contentResult}</div>
+        <pre>{contentResult}</pre>
       </div>
-    ) : contentResult;
+    ) : <pre>{contentResult}</pre>;
 
     // check is self
     const isSelf = String(currentUser.id) === String(uid);
@@ -520,7 +520,7 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
                         borderBottom: `0.01rem ${pallete.border.normal} solid`,
                       }}
                     />                    
-                    <div className="app-cms-content" dangerouslySetInnerHTML={{__html: contentView}} />
+                    <div className="app-cms-content" dangerouslySetInnerHTML={{__html: contentResult}} />
                   </div>                  
                 ) : (
                   <div style={{ paddingTop: '0.12rem', marginBottom: '0.12rem' }}>{contentView}</div>
