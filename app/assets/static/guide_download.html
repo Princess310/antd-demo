@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <p>Welcome to download page!</p>
+
+  <script type="text/javascript" src="//res.cdn.openinstall.io/openinstall.js"></script>
+  <script>
+    function getQueryString(name) {
+      var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+      var r = window.location.search.substr(1).match(reg);
+
+      return r == null ? (arguments[1] === undefined ? null : arguments[1]) : decodeURIComponent(r[2]);
+    }
+
+    var uid = getQueryString('uid');
+    var m = new OpenInstall({
+      /*appKey必选参数，openinstall平台为每个应用分配的ID,在开发者平台可查看此appKey*/
+      appKey : 'ewrjhz',
+      /*可选参数，自定义android平台的apk下载文件名，只有apk在openinstall托管时才有效；
+        个别andriod浏览器下载时，中文文件名显示乱码，请慎用中文文件名！*/
+      //apkFileName : "OpenInstallDemo-v2-1.1.1.apk",
+    }, {
+      uid: uid,
+    });
+
+    m.wakeupOrInstall({timeout:500});
+  </script>
+</body>
+</html>
