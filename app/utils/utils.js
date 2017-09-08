@@ -99,3 +99,27 @@ export function parseHash(hash) {
     params: params,
   };
 }
+
+
+/**
+ * 缓动函数，由快到慢
+ * @param {Num} t 当前时间
+ * @param {Num} b 初始值
+ * @param {Num} c 变化值
+ * @param {Num} d 持续时间
+ */
+export function easeOut(t, b, c, d) {
+  if ((t /= d / 2) < 1) return c / 2 * t * t + b;
+  return -c / 2 * ((--t) * (t - 2) - 1) + b;
+};
+
+/**
+ * 缓动函数，由慢到快
+ * @param {Num} t 当前时间
+ * @param {Num} b 初始值
+ * @param {Num} c 变化值
+ * @param {Num} d 持续时间
+ */
+export function easeIn(t,b,c,d){
+    return c*(t/=d)*t + b;
+}

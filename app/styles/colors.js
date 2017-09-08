@@ -39,6 +39,7 @@ const pallete = {
     antd: '#f5f5f9',
     grey: '#EAEAEA',
     lightBule: '#DDF0FF',
+    blue: '#7cd8e3',
   },
   button: {
     default: {

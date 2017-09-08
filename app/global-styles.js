@@ -13,6 +13,7 @@ injectGlobal`
   body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     color: #4d5059;
+    font-size: 0.32rem;
   }
 
   body.fontLoaded {
@@ -200,6 +201,11 @@ injectGlobal`
     animation-fill-mode: both;
   }
 
+  .animated-2 {
+    animation-duration: 1s;
+    animation-fill-mode: both;
+  }
+
   @keyframes fadeInUp {
     from {
       opacity: .5;
@@ -230,5 +236,20 @@ injectGlobal`
 
   .fadeInDown {
     animation-name: fadeInDown;
+  }
+
+  @keyframes zoomIn {
+    from {
+      opacity: 0;
+      transform: scale3d(.3, .3, .3);
+    }
+  
+    50% {
+      opacity: 1;
+    }
+  }
+  
+  .zoomIn {
+    animation-name: zoomIn;
   }
 `;
