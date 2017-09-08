@@ -155,6 +155,7 @@
     })
 
     var uid = getQueryString('uid');
+    var from = getQueryString('from');
     var m = new OpenInstall({
       /*appKey必选参数，openinstall平台为每个应用分配的ID,在开发者平台可查看此appKey*/
       appKey : 'ewrjhz',
@@ -163,6 +164,7 @@
       //apkFileName : "OpenInstallDemo-v2-1.1.1.apk",
     }, {
       uid: uid,
+      from: from,
     });
 
     /**
