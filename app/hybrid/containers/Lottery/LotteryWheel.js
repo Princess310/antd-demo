@@ -101,6 +101,7 @@ export class LotteryWheel extends React.PureComponent { // eslint-disable-line r
     const container = this.container;
     const canvas = this.canvas;
     this.context = canvas.getContext('2d');
+    this.images = [];
 
     // set style for canvas
     canvas.width = container.offsetWidth;
@@ -119,6 +120,11 @@ export class LotteryWheel extends React.PureComponent { // eslint-disable-line r
     const images = [];
     for (let i = 0; i < awards.length; i ++) {
       images.push(awards[i].img);
+      const img = new Image();
+      img.onload = () => {
+        this.images.push(img);
+      }
+      img.src = awards[i].img;
     }
     const ip = new ImagePreloader();
     const self = this;
@@ -185,9 +191,7 @@ export class LotteryWheel extends React.PureComponent { // eslint-disable-line r
       );
       context.rotate(_startRadian + awardRadian / 2 + Math.PI / 2);
       context.fillText(awards[i].name, -context.measureText(awards[i].name).width / 2, 0);
-      const img = new Image();
-      img.src = awards[i].img;
-      context.drawImage(img, -64, 0);
+      context.drawImage(this.images[i], -64, 0);
       context.restore();
       // -----
     }
