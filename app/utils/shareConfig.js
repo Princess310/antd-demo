@@ -85,8 +85,8 @@ const shareConfig = {
       case 'card': {
         const { id, avatar, nickname, company, position } = data;
         title = `${nickname}的健康商信名片`;
-        timeLineTitle = `${nickname}的健康商信名片，点击查看详情；80万健康行业资源平台邀请您加入！`;
-        desc = `点击查看详情；${user ? `${user.company}.${user.position}.${user.nickname}` : `${company}.${position}.${nickname}`}邀请你加入80万行业资源平台，找讲师、找厂家、找经销商就上健康商信！`;
+        timeLineTitle = `分享${nickname}的名片，公司：${company}，职位：${position}`;
+        desc = `公司：${company}，职位：${position}`;
         link = `${link}&id=${id}&uid=${uid}`;
         imgUrl = avatar;
         break;

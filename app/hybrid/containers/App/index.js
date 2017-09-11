@@ -29,6 +29,11 @@ export default class App extends React.PureComponent { // eslint-disable-line re
     children: React.PropTypes.node,
   };
 
+  componentWillMount() {
+    const token = getQueryString('token', '');
+    localStorage.setItem('access_token', token);
+  }
+
   render() {
     return (
       <div style={{ fontSize: '0.24rem' }}>

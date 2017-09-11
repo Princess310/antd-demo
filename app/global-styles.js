@@ -252,4 +252,43 @@ injectGlobal`
   .zoomIn {
     animation-name: zoomIn;
   }
+
+  .ball-pulse > div:nth-child(0) {
+    animation: loaderScale 0.75s 0s infinite cubic-bezier(.2, .68, .18, 1.08);
+  }
+  .ball-pulse > div:nth-child(1) {
+    animation: loaderScale 0.75s 0.12s infinite cubic-bezier(.2, .68, .18, 1.08);
+  }
+  .ball-pulse > div:nth-child(2) {
+    animation: loaderScale 0.75s 0.24s infinite cubic-bezier(.2, .68, .18, 1.08);
+  }
+  .ball-pulse > div:nth-child(3) {
+    animation: loaderScale 0.75s 0.36s infinite cubic-bezier(.2, .68, .18, 1.08);
+  }
+
+  .ball-pulse > div {
+    background-color: #fff;
+    width: 0.3rem;
+    height: 0.3rem;
+    border-radius: 100%;
+    margin: 0.04rem;
+    display: inline-block;
+  }
+
+  @keyframes loaderScale {
+    0% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  
+    45% {
+      transform: scale(0.1);
+      opacity: 0.7;
+    }
+  
+    80% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
 `;

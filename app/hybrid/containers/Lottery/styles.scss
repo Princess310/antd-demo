@@ -1,0 +1,41 @@
+.lottery-grid {
+  position: relative;
+  width: 6.94rem;
+  height: 5.2rem;
+
+  table {
+    width: 100%;
+    height: 100%;
+  }
+
+  td {
+    width: 25%;
+    height: 33.33%;
+    font-size: 0.28rem;
+    color: #ffffff;
+    text-align: center;
+    &.active {
+      background-color: #fcef86 !important;
+      color: #fa5758;
+    }
+  }
+
+  tr:nth-of-type(n) td {
+    &:nth-of-type(n) {
+      background: #fe6869;
+    }
+
+    &:nth-of-type(2n) {
+      background: #ff9190;
+    }
+  }
+
+  tr:nth-of-type(2n) td{
+    &:nth-of-type(n) {
+      background: #ff9190;
+    }
+    &:nth-of-type(2n) {
+      background: #fe6869;
+    }
+  }
+}

@@ -44,23 +44,6 @@ let   RADIUAS = 270,           // 转盘的半径
       DOT_RADIUAS = 255,        // 小点半径
 
       awards = [               // 转盘内的奖品个数以及内容
-          {
-            index: 0,
-            name: '一元红包',
-            img: hongbaoImg,
-          }, {
-            index: 1,
-            name: '1次好友机会',
-            img: countImg,
-          }, {
-            index: 2,
-            name: '5积分',
-            img: phoneImg,
-          }, {
-            index: 3,
-            name: '谢谢惠顾',
-            img: emojiImg,
-          }
       ],
 
       startRadian = 0,                             // 绘制奖项的起始角，改变该值实现旋转效果
@@ -94,9 +77,36 @@ let   RADIUAS = 270,           // 转盘的半径
   let checkFlag = false;
   let changeFetchedRadian = 0;
   let resultRadian = 0;
+  let isRunnig = false;
 // -------------- /config params --------------//
 
 export class LotteryWheel extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+  componentWillMount() {
+    const { prizeList } = this.props;
+    // reset awards param
+    awards = [];
+
+    prizeList.forEach((award, index) => {
+      const { id, name, type } = award;
+      let img = emojiImg;
+      if (type === '1') {
+        img = phoneImg;
+      } else if (type === '2') {
+        img = hongbaoImg;
+      } else if (type === '3') {
+        img = countImg;
+      }
+      awards.push({
+        index,
+        id,
+        name,
+        img,
+      });
+    });
+
+    awardRadian = (Math.PI * 2) / awards.length; // 每一个奖项所占的弧度
+  }
+
   componentDidMount() {
     const container = this.container;
     const canvas = this.canvas;
@@ -120,17 +130,11 @@ export class LotteryWheel extends React.PureComponent { // eslint-disable-line r
     const images = [];
     for (let i = 0; i < awards.length; i ++) {
       images.push(awards[i].img);
-      const img = new Image();
-      img.onload = () => {
-        this.images.push(img);
-      }
-      img.src = awards[i].img;
     }
-    const ip = new ImagePreloader();
-    const self = this;
 
-    ip.queue(images);
-    ip.preload().then(() => {
+    const self = this;
+    ImagePreloader(images).then((res) => {
+      self.images = res;
       self.drawRouletteWheel();
     });
   }
@@ -191,6 +195,7 @@ export class LotteryWheel extends React.PureComponent { // eslint-disable-line r
       );
       context.rotate(_startRadian + awardRadian / 2 + Math.PI / 2);
       context.fillText(awards[i].name, -context.measureText(awards[i].name).width / 2, 0);
+
       context.drawImage(this.images[i], -64, 0);
       context.restore();
       // -----
@@ -223,6 +228,7 @@ export class LotteryWheel extends React.PureComponent { // eslint-disable-line r
         spinningTime = 20;
         checkFlag = false;
         FETCH_STATUS = 'static';
+        isRunnig = false;
         return;
       }
 
@@ -250,7 +256,7 @@ export class LotteryWheel extends React.PureComponent { // eslint-disable-line r
   getBackendData = () => {
     FETCH_STATUS = 'fetching';
     setTimeout(() => {
-      const radamIndex = parseInt(Math.random() * 10 % 4);
+      const radamIndex = parseInt(Math.random() * 10 % awards.length);
       result = awards[radamIndex];
       FETCH_STATUS = 'fetched';
       spinningTime = 0;
@@ -259,6 +265,11 @@ export class LotteryWheel extends React.PureComponent { // eslint-disable-line r
   }
 
   handleAction = () => {
+    if (isRunnig) {
+      return false;
+    }
+
+    isRunnig = true;
     spinningTime = 0;                                // 初始化当前时间
     spinTotalTime = Math.random() * 3 + duration;    // 随机定义一个时间总量
     spinningChange = velocity;  // 随机顶一个旋转速率
