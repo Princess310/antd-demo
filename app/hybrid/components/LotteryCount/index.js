@@ -23,7 +23,7 @@ const Wrapper = styled.div`
 `;
 
 function LotteryCount(props) {
-  const { style } = props;
+  const { style, count } = props;
 
   return (
     <FlexRowContentCenter style={{ position: 'relative', ...style }}>
@@ -31,7 +31,7 @@ function LotteryCount(props) {
       <Wrapper>
         <Icon type={require('icons/ali/礼物.svg')} color="#51514f" />
         <div style={{ fontSize: '0.36rem', color: 'rgba(81, 81, 79, 0.7)', marginLeft: '0.16rem' }}>
-          你还有<span style={{ color: '#ff5c5d'}}>1</span>次机会
+          你还有<span style={{ color: '#ff5c5d'}}>{count}</span>次机会
         </div>
       </Wrapper>
     </FlexRowContentCenter>

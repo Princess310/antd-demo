@@ -35,11 +35,12 @@ export default class App extends React.PureComponent { // eslint-disable-line re
   }
 
   render() {
+    const path = getQueryString('path', '');
     return (
       <div style={{ fontSize: '0.24rem' }}>
         {React.Children.toArray(this.props.children)}
-        {/* <Welcome /> */}
-        <Lottery />
+        {path === 'welcome' && <Welcome />}
+        {path === 'prize' && <Lottery />}
       </div>
     );
   }

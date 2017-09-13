@@ -8,6 +8,7 @@ import React, { PropTypes } from 'react';
 import styled from 'styled-components';
 
 import ImagePreloader from 'utils/ImagePreloader';
+import request from 'utils/request';
 
 import hongbaoImg from 'assets/images/hybrid-grid-1.png';
 import scoreImg from 'assets/images/hybrid-grid-2.png';
@@ -16,6 +17,7 @@ import thanksImg from 'assets/images/hybrid-grid-4.png';
 import borderImg from 'assets/images/hybrid-border.png';
 
 import FlexRowContentCenter from 'components/FlexRowContentCenter';
+import showLotteryResult from 'hybrid/components/LotteryResult';
 import styles from './styles.scss';
 
 const Contaienr = styled.div`
@@ -51,6 +53,11 @@ const Button = styled.div`
   background-color: #ffdc44;
 `;
 
+const ItemDesc = styled.section`
+  height: 0.36rem;
+  overflow: hidden;
+`;
+
 const ImgWraper = styled.img`
   margin-top: 0.1rem;
   height: 0.3rem;
@@ -75,7 +82,9 @@ const appendPrize = {
     name: '谢谢参与',
     type: '4',
 };
-
+let FETCH_STATUS = 'static';  // 状态记录
+let resultIndex = -1;         // 抽奖结果索引
+let result = null;              // 抽奖结果数据
 const indexMap10 = {
   0: 0,
   1: 1,
@@ -117,7 +126,7 @@ export class LotteryGrid extends React.PureComponent { // eslint-disable-line re
     // reset awards config
     awards = [];
     // the grid count maybe 10 or 12, the count is stable
-    this.maxPrizeCount = (prizeList.length > 6 && prizeList.length < 10) ? 10 : 12;
+    this.maxPrizeCount = (prizeList.length > 6 && prizeList.length <= 10) ? 10 : 12;
     this.indexMap = this.maxPrizeCount === 10 ? indexMap10 : indexMap12;
     let needAddCount = this.maxPrizeCount - prizeList.length;
 
@@ -154,12 +163,10 @@ export class LotteryGrid extends React.PureComponent { // eslint-disable-line re
         });
       }
     }
-
-    console.log('awards', awards);
   }
 
   componentDidMount() {
-    lottery.count = 10;
+    lottery.count = this.maxPrizeCount;
 
     this.selectPrize();
   }
@@ -189,16 +196,32 @@ export class LotteryGrid extends React.PureComponent { // eslint-disable-line re
     lottery.times += 1;
     this.rollLottery();
 
-    if (lottery.times > lottery.cycle + 10 && lottery.prize == lottery.index) {
+    if (lottery.times > lottery.cycle + 10 && lottery.prize == lottery.index && FETCH_STATUS === 'fetched') {
       clearTimeout(lottery.timer);
+      let { name, type } = result;
+      type = Number(type);
+      name = type === 4 ? name : `恭喜抽中${name}`;
+      const msgMap = {
+        1: '已存入您的积分中',
+        2: '已存入您的红包中',
+        3: '增加您添加好友的次数',
+      };
+      const msg = type === 4 ? null : msgMap[type];
+
+      showLotteryResult(name, msg);
+      
+      // reset all config params
       lottery.times = 0;
       lottery.isRunning = false;
+      FETCH_STATUS = 'static';
+      resultIndex = -1;
+      result = null;
     } else {
       if (lottery.times < lottery.cycle) {
         lottery.speed -= 10;
       } else if (lottery.times === lottery.cycle) {
-        let index = Math.random() * (lottery.count) | 0; //静态演示，随机产生一个奖品序号，实际需请求接口产生
-        lottery.prize = index;
+        // 设置结果
+        lottery.prize = resultIndex;
       } else {
         if (lottery.times > lottery.cycle + 10 && ((lottery.prize == 0 && lottery.index == 7) || lottery.prize == lottery.index + 1)) {
           lottery.speed += 110;
@@ -215,19 +238,48 @@ export class LotteryGrid extends React.PureComponent { // eslint-disable-line re
     }
   }
 
+  setResultIndex = (data) => {
+    const indexMap = this.maxPrizeCount === 10 ? indexMap10 : indexMap12;
+
+    awards.forEach((award, i) => {
+      if (award.id === data.id) {
+        resultIndex = indexMap[i];
+      }
+    });
+  }
+
   handleAction = () => {
+    // check count first
+    const { count } = this.props;
+    if (Number(count) <= 0) {
+      showLotteryResult('抽奖次数不够啦');
+      return;
+    }
     if (lottery.isRunning) {
       return false;
     }
-    
+
     lottery.isRunning = true;
     lottery.speed = 100;
     this.roll();
+
+    // start get result
+    FETCH_STATUS = 'fetching';
+    request.doGet('user/prize-draw').then((res) => {
+      const { data } = res;
+
+      result = data;
+      this.setResultIndex(data);
+
+      FETCH_STATUS = 'fetched';
+      this.props.onStartLottery && this.props.onStartLottery();
+    });
   }
 
   render() {
     const indexMap = this.maxPrizeCount === 10 ? indexMap10 : indexMap12;
     const renderArr = [];
+    const cellHeight = this.maxPrizeCount === 10 ? '33.33%' : '25%';
     for (let i = 0; i < awards.length; i += 4) {
       renderArr.push(awards.slice(i, i + 4));
     }
@@ -245,11 +297,22 @@ export class LotteryGrid extends React.PureComponent { // eslint-disable-line re
             img = countImg;
           }
           return type === 'empty' ? (
-            <td key={j}></td>
+            <td
+              key={j}
+              style={{
+                height: cellHeight,
+              }}
+            ></td>
           ) :
           (
-            <td className={`lottery-unit lottery-unit-${indexMap[i * 4 + j]}`} key={j}>
-            <section>{award.name}</section>
+            <td
+              className={`lottery-unit lottery-unit-${indexMap[i * 4 + j]}`}
+              key={j}
+              style={{
+                height: cellHeight,
+              }}
+            >
+            <ItemDesc>{award.name}</ItemDesc>
             <ImgWraper src={img} />
           </td>
           )
@@ -266,7 +329,12 @@ export class LotteryGrid extends React.PureComponent { // eslint-disable-line re
             </tbody>
           </table>
           <BtnWrapper>
-            <Button onClick={this.handleAction}>
+            <Button
+              onClick={this.handleAction}
+              style={{
+                height: this.maxPrizeCount === 10 ? '33.33%' : '50%',
+              }}
+            >
               <span>点击抽奖</span>
             </Button>
           </BtnWrapper>

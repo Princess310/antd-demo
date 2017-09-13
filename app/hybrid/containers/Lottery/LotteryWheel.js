@@ -9,6 +9,7 @@ import styled from 'styled-components';
 
 import { easeOut, easeIn } from 'utils/utils';
 import ImagePreloader from 'utils/ImagePreloader';
+import request from 'utils/request';
 
 import hongbaoImg from 'assets/images/hybrid-hongbao.png';
 import countImg from 'assets/images/hybrid-count.png';
@@ -17,6 +18,7 @@ import emojiImg from 'assets/images/hybrid-emoji.png';
 import pointerImg from 'assets/images/hybrid-pointer.png';
 
 import FlexRowContentCenter from 'components/FlexRowContentCenter';
+import showLotteryResult from 'hybrid/components/LotteryResult';
 
 const BtnWrapper = styled.div`
   position: absolute;
@@ -83,6 +85,7 @@ let   RADIUAS = 270,           // 转盘的半径
 export class LotteryWheel extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   componentWillMount() {
     const { prizeList } = this.props;
+    const needAddAward = (prizeList.length === 1 || prizeList.length === 3 || prizeList.length === 5);
     // reset awards param
     awards = [];
 
@@ -96,13 +99,25 @@ export class LotteryWheel extends React.PureComponent { // eslint-disable-line r
       } else if (type === '3') {
         img = countImg;
       }
+      
       awards.push({
         index,
         id,
         name,
         img,
+        type,
       });
     });
+
+    if (needAddAward) {
+      awards.push({
+        index: awards.length,
+        id: -1,
+        name: '谢谢参与',
+        img:　emojiImg,
+        type: 4,
+      });
+    }
 
     awardRadian = (Math.PI * 2) / awards.length; // 每一个奖项所占的弧度
   }
@@ -224,7 +239,18 @@ export class LotteryWheel extends React.PureComponent { // eslint-disable-line r
     } else if (FETCH_STATUS === 'fetched') {
       // 当 当前时间 大于 总时间，停止旋转，并返回当前值
       if (spinningTime >= spinTotalTime) {
-        console.log('value', this.getValue());
+        let { name, type } = result;
+        type = Number(type);
+        name = type === 4 ? name : `恭喜抽中${name}`;
+        const msgMap = {
+          1: '已存入您的积分中',
+          2: '已存入您的红包中',
+          3: '增加您添加好友的次数',
+        };
+        const msg = type === 4 ? null : msgMap[type];
+  
+        showLotteryResult(name, msg);
+
         spinningTime = 20;
         checkFlag = false;
         FETCH_STATUS = 'static';
@@ -255,16 +281,31 @@ export class LotteryWheel extends React.PureComponent { // eslint-disable-line r
 
   getBackendData = () => {
     FETCH_STATUS = 'fetching';
-    setTimeout(() => {
-      const radamIndex = parseInt(Math.random() * 10 % awards.length);
-      result = awards[radamIndex];
-      FETCH_STATUS = 'fetched';
-      spinningTime = 0;
-      console.log('模拟后台获取结果得:' + result.name);
-    }, 1000);
+
+    request.doGet('user/prize-draw').then((res) => {
+      const { data } = res;
+
+      awards.forEach((award) => {
+        if (award.id === data.id) {
+          result = award;
+        }
+      });
+
+      setTimeout(() => {
+        FETCH_STATUS = 'fetched';
+        spinningTime = 0;
+      }, 1000);
+    });
   }
 
   handleAction = () => {
+    // check count first
+    const { count } = this.props;
+    if (Number(count) <= 0) {
+      showLotteryResult('抽奖次数不够啦');
+      return;
+    }
+
     if (isRunnig) {
       return false;
     }

@@ -25,22 +25,37 @@ export class Lottery extends React.PureComponent { // eslint-disable-line react/
 
     this.state = {
       prizeList: [],
+      count: 0,
     };
   }
 
   componentWillMount() {
     const self = this;
 
+    // get prize list
     request.doGet('user/prize-draw-items').then((res) => {
       const { list } = res;
       self.setState({
         prizeList: list,
       });
     });
+
+    this.handleCount();
+  }
+
+  handleCount = () => {
+    const self = this;
+    // get lottery count
+    request.doGet('user/prize-draw-number').then((res) => {
+      const { data } = res;
+      self.setState({
+        count: data.number,
+      });
+    });
   }
 
   render() {
-    const { prizeList } = this.state;
+    const { count, prizeList } = this.state;
     let contentView = null;
     if (prizeList.length === 0) {
       contentView = (
@@ -51,15 +66,14 @@ export class Lottery extends React.PureComponent { // eslint-disable-line react/
         </div>
       );
     } else if (prizeList.length > 0 && prizeList.length <= 6) {
-      contentView = <LotteryWheel prizeList={prizeList} />;
+      contentView = <LotteryWheel onStartLottery={this.handleCount} prizeList={prizeList} count={count} />;
     } else {
-      contentView = <LotteryGrid prizeList={prizeList} />;
+      contentView = <LotteryGrid onStartLottery={this.handleCount} prizeList={prizeList} count={count} />;
     }
-    console.log('this.state', this.state);
 
     return (
       <LotteryBackground>
-        <LotteryCount style={{ marginTop: '0.12rem' }} />
+        <LotteryCount count={count} style={{ marginTop: '0.12rem' }} />
         {contentView}
         <LotteryMessage />
       </LotteryBackground>
