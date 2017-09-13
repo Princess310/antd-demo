@@ -10,6 +10,7 @@ module.exports = require('./webpack.base.babel')({
     index: path.join(process.cwd(), 'app/app.js'),
     share: path.join(process.cwd(), 'app/share/app.js'),
     shareApp: path.join(process.cwd(), 'app/share/share.js'),
+    hybrid: path.join(process.cwd(), 'app/hybrid/app.js'),
   },
 
   // Utilize long-term caching by adding content hashes (not compilation hashes) to compiled assets
