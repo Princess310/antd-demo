@@ -8,7 +8,7 @@ import React, { PropTypes } from 'react';
 import styled from 'styled-components';
 
 import { easeOut, easeIn } from 'utils/utils';
-import ImagePreloader from 'utils/ImagePreloader';
+import imagePreloader from 'utils/imagePreloader';
 import request from 'utils/request';
 
 import hongbaoImg from 'assets/images/hybrid-hongbao.png';
@@ -148,7 +148,7 @@ export class LotteryWheel extends React.PureComponent { // eslint-disable-line r
     }
 
     const self = this;
-    ImagePreloader(images).then((res) => {
+    imagePreloader(images).then((res) => {
       self.images = res;
       self.drawRouletteWheel();
     });

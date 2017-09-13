@@ -7,7 +7,7 @@
 import React, { PropTypes } from 'react';
 import styled from 'styled-components';
 
-import ImagePreloader from 'utils/ImagePreloader';
+import imagePreloader from 'utils/imagePreloader';
 import request from 'utils/request';
 
 import hongbaoImg from 'assets/images/hybrid-grid-1.png';
