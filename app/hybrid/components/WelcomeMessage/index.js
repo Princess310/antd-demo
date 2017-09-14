@@ -25,6 +25,9 @@ function WelcomeMessage(props) {
             color: '#ff5c5d',
             fontWeight: 'bold',
           }}
+          onClick={() => {
+            android && android.showPopupWindow();
+          }}
         >
         立即分享到朋友圈
         </Button>

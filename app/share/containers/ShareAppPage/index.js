@@ -17,6 +17,12 @@ import { zeroFull } from 'utils/utils';
 import { getQueryString } from 'utils/utils';
 import shareConfig from 'utils/shareConfig';
 
+import HongbaoTitle from './HongbaoTitle';
+import HongbaoBackground from './HongbaoBackground';
+import HongbaoFooter from './HongbaoFooter';
+import HongBaoList from './HongBaoList';
+import HongbaoDesc from './HongbaoDesc';
+
 import gif from 'assets/images/exhibition-share.gif';
 
 const ItemWrapper = styled.div`
@@ -32,6 +38,8 @@ export class ShareAppPage extends React.PureComponent { // eslint-disable-line r
       isLike: false,
       likeCount: 3024,
       viewCount: 100000,
+      hongbaoList: [],
+      hongbaoTotal: 0,
     };
   }
 
@@ -39,6 +47,14 @@ export class ShareAppPage extends React.PureComponent { // eslint-disable-line r
     const name = getQueryString('name');
 
     shareConfig.share('app', { name });
+
+    request.doGet('user/scroll-red-packet-list').then((res) => {
+      const { data: { list, total } } = res;
+      this.setState({
+        hongbaoList: list,
+        hongbaoTotal: total,
+      });
+    });
   }
 
   handleLike = () => {
@@ -48,11 +64,21 @@ export class ShareAppPage extends React.PureComponent { // eslint-disable-line r
   }
 
   render() {
-    const { isLike, likeCount, viewCount } = this.state;
+    const { isLike, likeCount, viewCount, hongbaoList, hongbaoTotal } = this.state;
     const date = new Date();
-    const dateStr = `${zeroFull(date.getFullYear())}-${zeroFull(date.getMonth() + 1)}-${zeroFull(date.getDate())}`
+    const dateStr = `${zeroFull(date.getFullYear())}-${zeroFull(date.getMonth() + 1)}-${zeroFull(date.getDate())}`;
+    const isHongbao = true;
 
-    return (
+    const contentView = isHongbao ? (
+      <div style={{ backgroundColor: pallete.white, paddingBottom: '1.74rem' }}>
+        <HongbaoTitle />
+        <HongbaoBackground>
+          {hongbaoList.length > 0 && <HongBaoList list={hongbaoList}/>}
+          <HongbaoDesc count={hongbaoTotal}/>
+        </HongbaoBackground>
+        <HongbaoFooter />
+      </div>
+    ) : (
       <div style={{
         padding: '0.48rem 0',
         backgroundColor: pallete.white,
@@ -89,6 +115,12 @@ export class ShareAppPage extends React.PureComponent { // eslint-disable-line r
             <div style={{ marginLeft: '0.08rem' }}>{isLike ? likeCount + 1 : likeCount}</div>
           </ItemWrapper>
         </ItemWrapper>
+      </div>
+    );
+
+    return (
+      <div>
+        {contentView}
       </div>
     );
   }
