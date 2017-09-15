@@ -16,7 +16,7 @@ import LotteryWheel from './LotteryWheel';
 import LotteryGrid from './LotteryGrid';
 
 import { linkOpenInstall } from 'utils/utils';
-import request from 'utils/request';
+import request from 'utils/hybridRequest';
 
 
 export class Lottery extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function

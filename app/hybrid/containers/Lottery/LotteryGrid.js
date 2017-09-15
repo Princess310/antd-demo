@@ -8,7 +8,7 @@ import React, { PropTypes } from 'react';
 import styled from 'styled-components';
 
 import imagePreloader from 'utils/imagePreloader';
-import request from 'utils/request';
+import request from 'utils/hybridRequest';
 
 import hongbaoImg from 'assets/images/hybrid-grid-1.png';
 import scoreImg from 'assets/images/hybrid-grid-2.png';

@@ -9,7 +9,7 @@ import styled from 'styled-components';
 
 import { easeOut, easeIn } from 'utils/utils';
 import imagePreloader from 'utils/imagePreloader';
-import request from 'utils/request';
+import request from 'utils/hybridRequest';
 
 import hongbaoImg from 'assets/images/hybrid-hongbao.png';
 import countImg from 'assets/images/hybrid-count.png';
