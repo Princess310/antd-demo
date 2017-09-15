@@ -317,6 +317,8 @@ export class LotteryWheel extends React.PureComponent { // eslint-disable-line r
     this.rotateWheel();
     // 模拟后台获取数据
     this.getBackendData();
+
+    this.props.onStartLottery && this.props.onStartLottery();
   }
 
   render() {
