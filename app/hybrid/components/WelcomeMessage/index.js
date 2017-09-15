@@ -27,7 +27,7 @@ function WelcomeMessage(props) {
           }}
           onClick={() => {
             android && android.showPopupWindow();
-            RedWebACtrl && RedWebACtrl.showShare();
+            WebViewJavascriptBridge && WebViewJavascriptBridge.showShare();
           }}
         >
         立即分享到朋友圈
