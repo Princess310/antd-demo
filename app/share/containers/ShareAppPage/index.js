@@ -125,14 +125,44 @@ export class ShareAppPage extends React.PureComponent { // eslint-disable-line r
     const date = new Date();
     const dateStr = `${zeroFull(date.getFullYear())}-${zeroFull(date.getMonth() + 1)}-${zeroFull(date.getDate())}`;
     const isHongbao = true;
+    const loading = otherList.loading;
+    const hasNext = otherList.hasNext;
+    const yearList = [];
+
+    const listView = (otherList.list && otherList.list.length > 0) ? otherList.list.map((moment) => (
+      <ShareMomentCard
+        key={moment.id}
+        moment={moment}
+        from="list"
+        type="business"
+        showTypeHeader={true}
+        style={{ marginBottom: '0.15rem' }}
+      />
+    )) : null;
 
     const contentView = isHongbao ? (
-      <div style={{ backgroundColor: pallete.white }}>
-        <HongbaoTitle name={name} />
-        <HongbaoBackground>
-          {hongbaoList.length > 0 && <HongBaoList list={hongbaoList}/>}
-          <HongbaoDesc count={hongbaoTotal}/>
-        </HongbaoBackground>
+      <div>
+        <TouchLoader
+          initializing={0}
+          hasMore={hasNext}
+          loading={loading}
+          onLoadMore={this.onEndReached}
+          autoLoadMore={true}
+          className="tloader app-content"
+          style={{ top: 0, paddingBottom: '1.74rem' }}
+        >
+          <div style={{ backgroundColor: pallete.white }}>
+            <HongbaoTitle name={name} />
+            <HongbaoBackground>
+              {hongbaoList.length > 0 && <HongBaoList list={hongbaoList}/>}
+              <HongbaoDesc count={hongbaoTotal}/>
+            </HongbaoBackground>
+          </div>
+          <WhiteSpace size="md" />
+          <SectionTitle>健康商信生意动态</SectionTitle>
+          <WhiteSpace size="md" />
+          {listView}
+        </TouchLoader>
         <HongbaoFooter />
       </div>
     ) : (
@@ -175,37 +205,10 @@ export class ShareAppPage extends React.PureComponent { // eslint-disable-line r
       </div>
     );
 
-    const loading = otherList.loading;
-    const hasNext = otherList.hasNext;
-    const yearList = [];
-
-    const listView = (otherList.list && otherList.list.length > 0) ? otherList.list.map((moment) => (
-      <ShareMomentCard
-        key={moment.id}
-        moment={moment}
-        from="list"
-        type="business"
-        showTypeHeader={true}
-        style={{ marginBottom: '0.15rem' }}
-      />
-    )) : null;
-
     return (
-      <TouchLoader
-        initializing={0}
-        hasMore={hasNext}
-        loading={loading}
-        onLoadMore={this.onEndReached}
-        autoLoadMore={true}
-        className="tloader app-content"
-        style={{ top: 0, paddingBottom: '1.74rem' }}
-      >
+      <div>
         {contentView}
-        <WhiteSpace size="md" />
-        <SectionTitle>健康商信生意动态</SectionTitle>
-        <WhiteSpace size="md" />
-        {listView}
-      </TouchLoader>
+      </div>
     );
   }
 }
