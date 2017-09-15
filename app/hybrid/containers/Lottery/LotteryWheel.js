@@ -291,6 +291,8 @@ export class LotteryWheel extends React.PureComponent { // eslint-disable-line r
         }
       });
 
+      this.props.onStartLottery && this.props.onStartLottery();
+
       setTimeout(() => {
         FETCH_STATUS = 'fetched';
         spinningTime = 0;
@@ -305,8 +307,6 @@ export class LotteryWheel extends React.PureComponent { // eslint-disable-line r
       showLotteryResult('抽奖次数不够啦');
       return;
     }
-
-    this.props.onStartLottery && this.props.onStartLottery();
 
     if (isRunnig) {
       return false;
