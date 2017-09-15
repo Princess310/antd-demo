@@ -1,5 +1,8 @@
 import React from 'react';
 // import styled from 'styled-components';
+
+import brower from 'utils/brower';
+
 import FlexRowContentCenter from 'components/FlexRowContentCenter';
 import { Icon, Button } from 'antd-mobile';
 
@@ -26,8 +29,11 @@ function WelcomeMessage(props) {
             fontWeight: 'bold',
           }}
           onClick={() => {
-            // android && android.showPopupWindow();
-            WebViewJavascriptBridge && WebViewJavascriptBridge.showShare();
+            if (brower.checkIfIOS()) {
+              WebViewJavascriptBridge && WebViewJavascriptBridge.showShare();
+            } else {
+              android && android.showPopupWindow();
+            }
           }}
         >
         立即分享到朋友圈
