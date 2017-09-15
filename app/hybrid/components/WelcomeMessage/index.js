@@ -26,7 +26,7 @@ function WelcomeMessage(props) {
             fontWeight: 'bold',
           }}
           onClick={() => {
-            android && android.showPopupWindow();
+            // android && android.showPopupWindow();
             WebViewJavascriptBridge && WebViewJavascriptBridge.showShare();
           }}
         >
