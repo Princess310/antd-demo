@@ -34,10 +34,12 @@ class DownloadBtn extends React.PureComponent { // eslint-disable-line react/pre
   }
   render() {
     const { label } = this.props;
+    const isHongbao = true;
+    const name = isHongbao ? '下载登录领现金红包' : (label ? label : '点击下载');
     return (
       <Wrapper>
         <FlexCenter>
-          <Button style={buttonStyle} onClick={this.handleDownload}>{label ? label : '点击下载'}</Button>
+          <Button style={buttonStyle} onClick={this.handleDownload}>{name}</Button>
         </FlexCenter>
       </Wrapper>
     );

@@ -39,10 +39,12 @@ class DownloadBar extends React.PureComponent { // eslint-disable-line react/pre
     linkOpenInstall();
   }
   render() {
+    const isHongbao = true;
+    const name = isHongbao ? '下载登录领现金红包' : '免费下载，已有10000+人下载';
     return (
       <Wrapper>
         <FlexCenter>
-          <Button style={buttonStyle} onClick={this.handleDownload}>免费下载，已有10000+人下载</Button>
+          <Button style={buttonStyle} onClick={this.handleDownload}>{name}</Button>
         </FlexCenter>
       </Wrapper>
     );

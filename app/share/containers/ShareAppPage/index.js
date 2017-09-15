@@ -9,6 +9,8 @@ import styled from 'styled-components';
 
 import { WhiteSpace, Icon } from 'antd-mobile';
 import AppContent from 'components/AppContent';
+import ShareMomentCard from 'components/MomentCard/ShareMomentCard';
+import TouchLoader from 'components/TouchLoader';
 import DownloadBtn from 'share/components/DownloadBtn';
 
 import pallete from 'styles/colors';
@@ -30,31 +32,86 @@ const ItemWrapper = styled.div`
   align-items: center;
 `;
 
+const SectionTitle = styled.div`
+  height: 0.8rem;
+  font-size: 0.3rem;
+  line-height: 0.8rem;
+  text-align: center;
+  background-color: ${pallete.white};
+  border-top: 0.01rem ${pallete.border.deep} solid;
+  border-bottom: 0.01rem ${pallete.border.deep} solid;
+`;
+
 export class ShareAppPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
     super(props);
 
     this.state = {
+      name: '',
       isLike: false,
       likeCount: 3024,
       viewCount: 100000,
       hongbaoList: [],
       hongbaoTotal: 0,
+      otherList: {
+        page: 1,
+        loading: false,
+        list: false,
+        hasNext: false,
+      },
     };
   }
 
   componentWillMount() {
-    const name = getQueryString('name');
+    const name = getQueryString('name', '');
 
     shareConfig.share('app', { name });
 
     request.doGet('user/scroll-red-packet-list').then((res) => {
       const { data: { list, total } } = res;
       this.setState({
+        name,
         hongbaoList: list,
         hongbaoTotal: total,
       });
     });
+
+    this.getOtherStatus(1);
+  }
+
+  getOtherStatus = (page) => {
+    const self = this;
+    const { otherList } = this.state;
+
+    request.doGet('moments/business-page-share', {
+      page,
+    }).then((res) => {
+      const { list, page } = res;
+      let hasNext = true;
+
+      if (page) {
+        if (page.current_page >= page.page_count) {
+          hasNext = false;
+        }
+      } else {
+        hasNext = false;
+      }
+
+      self.setState({
+        otherList: {
+          page: (page ? page.current_page : 1),
+          loading: false,
+          list: otherList.list ? [...otherList.list, ...list] : list,
+          hasNext,
+        },
+      });
+    });
+  }
+
+  onEndReached = () => {
+    const { otherList } = this.state;
+
+    this.getOtherStatus(otherList.page + 1);
   }
 
   handleLike = () => {
@@ -64,14 +121,14 @@ export class ShareAppPage extends React.PureComponent { // eslint-disable-line r
   }
 
   render() {
-    const { isLike, likeCount, viewCount, hongbaoList, hongbaoTotal } = this.state;
+    const { isLike, likeCount, name, viewCount, hongbaoList, hongbaoTotal, otherList } = this.state;
     const date = new Date();
     const dateStr = `${zeroFull(date.getFullYear())}-${zeroFull(date.getMonth() + 1)}-${zeroFull(date.getDate())}`;
     const isHongbao = true;
 
     const contentView = isHongbao ? (
-      <div style={{ backgroundColor: pallete.white, paddingBottom: '1.74rem' }}>
-        <HongbaoTitle />
+      <div style={{ backgroundColor: pallete.white }}>
+        <HongbaoTitle name={name} />
         <HongbaoBackground>
           {hongbaoList.length > 0 && <HongBaoList list={hongbaoList}/>}
           <HongbaoDesc count={hongbaoTotal}/>
@@ -118,10 +175,37 @@ export class ShareAppPage extends React.PureComponent { // eslint-disable-line r
       </div>
     );
 
+    const loading = otherList.loading;
+    const hasNext = otherList.hasNext;
+    const yearList = [];
+
+    const listView = (otherList.list && otherList.list.length > 0) ? otherList.list.map((moment) => (
+      <ShareMomentCard
+        key={moment.id}
+        moment={moment}
+        from="list"
+        type="business"
+        showTypeHeader={true}
+        style={{ marginBottom: '0.15rem' }}
+      />
+    )) : null;
+
     return (
-      <div>
+      <TouchLoader
+        initializing={0}
+        hasMore={hasNext}
+        loading={loading}
+        onLoadMore={this.onEndReached}
+        autoLoadMore={true}
+        className="tloader app-content"
+        style={{ top: 0, paddingBottom: '1.74rem' }}
+      >
         {contentView}
-      </div>
+        <WhiteSpace size="md" />
+        <SectionTitle>健康商信生意动态</SectionTitle>
+        <WhiteSpace size="md" />
+        {listView}
+      </TouchLoader>
     );
   }
 }

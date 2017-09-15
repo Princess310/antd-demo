@@ -23,6 +23,7 @@ import { getDownloadUrl } from 'utils/utils';
 
 import MomentHeader from './MomentHeader';
 import MomentComment from './MomentComment';
+import TypeHeader from './TypeHeader';
 
 const ContentWrapper= styled.div`
   padding: 0 0 0.12rem 0;
@@ -140,7 +141,7 @@ class ShareMomentCard extends React.PureComponent { // eslint-disable-line react
   }
 
   render() {
-    const { moment, style, from, type } = this.props;
+    const { moment, style, from, type, showTypeHeader } = this.props;
     const {
       id,
       uid,
@@ -271,6 +272,10 @@ class ShareMomentCard extends React.PureComponent { // eslint-disable-line react
         style={Object.assign(rootStyle, style)}
       >
         <div style={{ padding: '0.15rem' }}>
+          {
+            showTypeHeader &&
+            <TypeHeader type={businessType} />
+          }
           {(Number(source_type) !== 1 || from !== 'detail') &&
           <MomentHeader
             user={{
@@ -330,7 +335,7 @@ class ShareMomentCard extends React.PureComponent { // eslint-disable-line react
             {Number(source_type) !== 1 && (
               (Number(hits) > 0 && from !== 'search') && <div style={{ fontSize: '0.26rem', color: pallete.text.help }}>{hits}人看过</div>
             )}
-            {type === 'business' && <Button style={buttonStyle} onClick={this.handleDownloadInfo}>对话</Button>}
+            {(type === 'business' && from !== 'list') && <Button style={buttonStyle} onClick={this.handleDownloadInfo}>对话</Button>}
           </ContentWrapper>
           {actionView}
         </div>
@@ -358,6 +363,8 @@ ShareMomentCard.propTypes = {
   from: PropTypes.string,
   // communication or business
   type: PropTypes.string,
+  // weather to show type hear
+  showTypeHeader: PropTypes.bool,
   /**
    * override the style
    */
