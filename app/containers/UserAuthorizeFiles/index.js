@@ -50,6 +50,7 @@ const VerifyCicle = styled.div`
   right: .16rem;
   width: 1.1rem;
   height: 1.1rem;
+  font-size: 0.24rem;
   line-height: 1.1rem;
   text-align: center;
   color: ${pallete.theme};
