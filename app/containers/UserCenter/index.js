@@ -242,7 +242,7 @@ export class UserCenter extends React.PureComponent { // eslint-disable-line rea
             onClick={() => {
               browserHistory.push('/userCommunicate');
             }}
-          >我的讨论</Item>
+          >我的社交</Item>
           <Item
             thumb={<Icon type={require('icons/ali/收藏.svg')} color={pallete.theme} />}
             arrow="horizontal"

@@ -101,8 +101,8 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
             {!hideTabs && <BusinessPage />}
           </TabItem>
           <TabItem
-            title="讨论"
-            key="讨论"
+            title="社交"
+            key="社交"
             dot={unreadDot ? (unreadDot.communication_red_dot > 0 ? true : false) : false}
             icon={<Icon type={require('icons/ali/讨论.svg')} />}
             selectedIcon={<Icon type={require('icons/ali/讨论-active.svg')} />}

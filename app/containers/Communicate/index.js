@@ -98,12 +98,12 @@ export class Communicate extends React.PureComponent { // eslint-disable-line re
             </FlexColumnCenter>
           ]}
         >
-          讨论
+          社交
         </NavBar>
         <div onClick={() => {
           browserHistory.push('/communicateSearch');
         }}>
-          <SearchBar title="搜索讨论" />
+          <SearchBar title="搜索社交" />
         </div>
         <ScrollContainer scrollKey="communicate">
           <TouchLoader
@@ -122,7 +122,7 @@ export class Communicate extends React.PureComponent { // eslint-disable-line re
         </ScrollContainer>
         {(updateInfo.communication && updateInfo.communication.show) &&
           <UpdateMessage
-            message={`更新了${updateInfo.communication.count}条讨论`}
+            message={`更新了${updateInfo.communication.count}条社交`}
             style={{
               position: 'absolute',
               top: '1.8rem',

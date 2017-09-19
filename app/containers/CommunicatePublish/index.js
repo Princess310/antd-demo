@@ -98,7 +98,7 @@ export class CommunicatePublish extends React.PureComponent { // eslint-disable-
             <MenuBtn key="0" onClick={this.handleSave}>发送</MenuBtn>,
           ]}
         >
-          讨论信息发布
+          社交信息发布
         </NavBar>
         <WhiteSpace size="md" />
         <List>

@@ -25,7 +25,7 @@ function LotteryMessage(props) {
           <MessageItem>3.评论</MessageItem>
           <MessageItem>4.点赞</MessageItem>
           <MessageItem>5.转介绍</MessageItem>
-          <MessageItem>6.发布讨论</MessageItem>
+          <MessageItem>6.发布社交</MessageItem>
           <MessageItem>7.分享动态</MessageItem>
           <MessageItem>8.发布供应</MessageItem>
           <MessageItem>9.发布需求</MessageItem>
