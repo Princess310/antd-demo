@@ -13,7 +13,7 @@ import FlexCenter from 'components/FlexCenter';
 import ExpProgress from 'components/ExpProgress';
 import { Button } from 'antd-mobile';
 
-import { linkOpenInstall } from 'utils/utils';
+import { linkOpenInstall, getHongbaoInfo } from 'utils/utils';
 
 const Wrapper = styled.div`
   position: fixed;
@@ -39,8 +39,8 @@ class DownloadBar extends React.PureComponent { // eslint-disable-line react/pre
     linkOpenInstall();
   }
   render() {
-    const isHongbao = true;
-    const name = isHongbao ? '下载登录领现金红包' : '免费下载，已有10000+人下载';
+    const hongbaoInfo = getHongbaoInfo();
+    const name = hongbaoInfo.isHongbao ? '下载登录领现金红包' : '免费下载，已有10000+人下载';
     return (
       <Wrapper>
         <FlexCenter>

@@ -12,7 +12,7 @@ import FlexCenter from 'components/FlexCenter';
 import ExpProgress from 'components/ExpProgress';
 import { Button } from 'antd-mobile';
 
-import { linkOpenInstall } from 'utils/utils';
+import { linkOpenInstall, getHongbaoInfo } from 'utils/utils';
 
 const Wrapper = styled.div`
   margin: 0.72rem 0;
@@ -34,8 +34,8 @@ class DownloadBtn extends React.PureComponent { // eslint-disable-line react/pre
   }
   render() {
     const { label } = this.props;
-    const isHongbao = true;
-    const name = isHongbao ? '下载登录领现金红包' : (label ? label : '点击下载');
+    const hongbaoInfo = getHongbaoInfo();
+    const name = hongbaoInfo.isHongbao ? '下载登录领现金红包' : (label ? label : '点击下载');
     return (
       <Wrapper>
         <FlexCenter>

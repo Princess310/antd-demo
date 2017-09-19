@@ -15,7 +15,7 @@ import DownloadBtn from 'share/components/DownloadBtn';
 
 import pallete from 'styles/colors';
 import request from 'utils/shareRequest';
-import { zeroFull } from 'utils/utils';
+import { zeroFull, getHongbaoInfo } from 'utils/utils';
 import { getQueryString } from 'utils/utils';
 import shareConfig from 'utils/shareConfig';
 
@@ -64,19 +64,22 @@ export class ShareAppPage extends React.PureComponent { // eslint-disable-line r
 
   componentWillMount() {
     const name = getQueryString('name', '');
+    const hongbaoInfo = getHongbaoInfo();
 
     shareConfig.share('app', { name });
 
-    request.doGet('user/scroll-red-packet-list').then((res) => {
-      const { data: { list, total } } = res;
-      this.setState({
-        name,
-        hongbaoList: list,
-        hongbaoTotal: total,
+    if (hongbaoInfo.isHongbao) {
+      request.doGet('user/scroll-red-packet-list').then((res) => {
+        const { data: { list, total } } = res;
+        this.setState({
+          name,
+          hongbaoList: list,
+          hongbaoTotal: total,
+        });
       });
-    });
-
-    this.getOtherStatus(1);
+  
+      this.getOtherStatus(1);
+    }
   }
 
   getOtherStatus = (page) => {
@@ -124,7 +127,8 @@ export class ShareAppPage extends React.PureComponent { // eslint-disable-line r
     const { isLike, likeCount, name, viewCount, hongbaoList, hongbaoTotal, otherList } = this.state;
     const date = new Date();
     const dateStr = `${zeroFull(date.getFullYear())}-${zeroFull(date.getMonth() + 1)}-${zeroFull(date.getDate())}`;
-    const isHongbao = true;
+    const hongbaoInfo = getHongbaoInfo();
+    const isHongbao = hongbaoInfo.isHongbao;
     const loading = otherList.loading;
     const hasNext = otherList.hasNext;
     const yearList = [];

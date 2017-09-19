@@ -68,12 +68,23 @@ const Wrapper = styled.div`
 // define the cards info
 const cards = [
   {
+    field: 'verify_by_other',
+    flag: 6,
+    url: '',
+    backUrl: other,
+    influence: 10,
+    exp: 20,
+    msg: '身份证护照',
+    editable: true,
+  },
+  {
     feild: 'verify_by_business_card',
     flag: 2,
     url: '',
     backUrl: card,
     influence: 10,
     exp: 20,
+    msg: '名片',
     // weather can be uploaded again
     editable: true,
   }, {
@@ -83,6 +94,7 @@ const cards = [
     backUrl: work,
     influence: 5,
     exp: 10,
+    msg: '工作牌',
     editable: true,
   }, {
     field: 'verify_by_occupational_certificate',
@@ -91,6 +103,7 @@ const cards = [
     backUrl: position,
     influence: 20,
     exp: 40,
+    msg: '职业资格证明',
     editable: true,
   }, {
     field: 'verify_by_business_license',
@@ -99,6 +112,7 @@ const cards = [
     backUrl: license,
     influence: 30,
     exp: 60,
+    msg: '企业法人营业执照',
     editable: true,
   }, {
     field: 'verify_by_email',
@@ -107,14 +121,7 @@ const cards = [
     backUrl: email,
     influence: 5,
     exp: 10,
-    editable: true,
-  }, {
-    field: 'verify_by_other',
-    flag: 6,
-    url: '',
-    backUrl: other,
-    influence: 10,
-    exp: 20,
+    msg: '企业邮箱',
     editable: true,
   },
 ];
@@ -260,6 +267,7 @@ export class UserAuthorizeFiles extends React.PureComponent { // eslint-disable-
           influence={card.influence}
           exp={card.exp}
           editable={card.editable}
+          msg={card.msg}
         >{materialCircle}</AuthCard>
       );
     });

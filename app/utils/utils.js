@@ -123,3 +123,13 @@ export function easeOut(t, b, c, d) {
 export function easeIn(t,b,c,d){
     return c*(t/=d)*t + b;
 }
+
+let hongbaoInfo = {};
+export function setHongbaoInfo(info) {
+  hongbaoInfo = info;
+  hongbaoInfo.isHongbao = info['prize-draw-switch'] && info['prize-draw-switch'] === 1
+}
+
+export function getHongbaoInfo() {
+  return hongbaoInfo;
+}

@@ -6,6 +6,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import request from 'utils/shareRequest';
+import { setHongbaoInfo } from 'utils/utils';
 
 // Import root app
 import ShareAppPage from 'share/containers/ShareAppPage';
@@ -41,10 +42,11 @@ request.doGet('user/js-api-config', {
   url: encodeURIComponent(location.href.split('#')[0]),
 })
   .then((res) => {
-    let { list } = res;
+    let { data, list } = res;
     list.debug = false;
 
     wx.config(list);
+    setHongbaoInfo(data);
     render();
   })
   .catch(() => {

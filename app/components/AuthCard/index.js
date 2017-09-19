@@ -28,7 +28,7 @@ const FileItem = styled.input`
 
 class AuthCard extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   render() {
-    const { url, backUrl, style, onChange, influence, exp, editable, children } = this.props;
+    const { url, backUrl, style, onChange, influence, exp, editable, msg, children } = this.props;
     const rootStyle = {
       position: 'relative',
       width: '3.18rem',
@@ -47,8 +47,8 @@ class AuthCard extends React.PureComponent { // eslint-disable-line react/prefer
     return (
       <FlexColumn style={Object.assign(rootStyle, style)}>
         {contentView}
-        <FlexCenter style={{ height: '0.56rem', color: pallete.white, backgroundColor: pallete.theme, fontSize: '0.28rem' }}>
-          +{influence}诚信值  +{exp}活跃度
+        <FlexCenter style={{ height: '0.56rem', color: pallete.white, backgroundColor: (editable ? pallete.theme : '#999999'), fontSize: '0.28rem' }}>
+          {editable ? `${msg}认证` : `${msg}已认证`}
         </FlexCenter>
         {editable &&
         <FileItem type="file" accept="image/jpg,image/jpeg,image/png,image/gif" onChange={(e) => {
