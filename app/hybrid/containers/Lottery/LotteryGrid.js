@@ -196,7 +196,7 @@ export class LotteryGrid extends React.PureComponent { // eslint-disable-line re
     lottery.times += 1;
     this.rollLottery();
 
-    if (lottery.times > lottery.cycle + 10 && lottery.prize == lottery.index && FETCH_STATUS === 'fetched') {
+    if (lottery.times > lottery.cycle + 10 && resultIndex == lottery.index && FETCH_STATUS === 'fetched') {
       clearTimeout(lottery.timer);
       let { name, type } = result;
       type = Number(type);
