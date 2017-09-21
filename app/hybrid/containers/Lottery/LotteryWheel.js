@@ -301,15 +301,15 @@ export class LotteryWheel extends React.PureComponent { // eslint-disable-line r
   }
 
   handleAction = () => {
+    if (isRunnig) {
+      return false;
+    }
+
     // check count first
     const { count } = this.props;
     if (Number(count) <= 0) {
       showLotteryResult('抽奖次数不够啦');
       return;
-    }
-
-    if (isRunnig) {
-      return false;
     }
 
     isRunnig = true;

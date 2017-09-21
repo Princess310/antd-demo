@@ -249,14 +249,15 @@ export class LotteryGrid extends React.PureComponent { // eslint-disable-line re
   }
 
   handleAction = () => {
+    if (lottery.isRunning) {
+      return false;
+    }
+
     // check count first
     const { count } = this.props;
     if (Number(count) <= 0) {
       showLotteryResult('抽奖次数不够啦');
       return;
-    }
-    if (lottery.isRunning) {
-      return false;
     }
 
     lottery.isRunning = true;
