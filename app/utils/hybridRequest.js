@@ -98,6 +98,7 @@ const fetchDao = {
               resolve(data);
             } else{
               Toast.info(data.message, 2);
+              reject(data);
             }
           }
         } else {
