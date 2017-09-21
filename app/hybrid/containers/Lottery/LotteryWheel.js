@@ -80,6 +80,7 @@ let   RADIUAS = 270,           // 转盘的半径
   let changeFetchedRadian = 0;
   let resultRadian = 0;
   let isRunnig = false;
+  let timer = null;
 // -------------- /config params --------------//
 
 export class LotteryWheel extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
@@ -276,7 +277,7 @@ export class LotteryWheel extends React.PureComponent { // eslint-disable-line r
     }
 
     this.drawRouletteWheel();
-    window.requestAnimationFrame(this.rotateWheel);
+    timer = window.requestAnimationFrame(this.rotateWheel);
   }
 
   getBackendData = () => {
@@ -297,6 +298,12 @@ export class LotteryWheel extends React.PureComponent { // eslint-disable-line r
         FETCH_STATUS = 'fetched';
         spinningTime = 0;
       }, 1000);
+    }, () => {
+      window.cancelAnimationFrame(timer);
+      spinningTime = 20;
+      checkFlag = false;
+      FETCH_STATUS = 'static';
+      isRunnig = false;
     });
   }
 

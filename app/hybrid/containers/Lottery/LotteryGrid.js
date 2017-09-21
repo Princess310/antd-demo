@@ -274,6 +274,14 @@ export class LotteryGrid extends React.PureComponent { // eslint-disable-line re
 
       FETCH_STATUS = 'fetched';
       this.props.onStartLottery && this.props.onStartLottery();
+    }, () => {
+      // reset all config params
+      clearTimeout(lottery.timer);
+      lottery.times = 0;
+      lottery.isRunning = false;
+      FETCH_STATUS = 'static';
+      resultIndex = -1;
+      result = null;
     });
   }
 
