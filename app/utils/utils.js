@@ -127,7 +127,7 @@ export function easeIn(t,b,c,d){
 let hongbaoInfo = {};
 export function setHongbaoInfo(info) {
   hongbaoInfo = info;
-  hongbaoInfo.isHongbao = info['prize-draw-switch'] && info['prize-draw-switch'] === 1
+  hongbaoInfo.isHongbao = info['prize_draw_switch'] && info['prize_draw_switch'] === 1
 }
 
 export function getHongbaoInfo() {
