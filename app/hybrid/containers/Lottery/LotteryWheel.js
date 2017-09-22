@@ -314,7 +314,7 @@ export class LotteryWheel extends React.PureComponent { // eslint-disable-line r
 
     // check is on line first
     if (!navigator.onLine) {
-      showLotteryResult('没有网络连接，请稍后再试');
+      showLotteryResult('没有网络连接，请稍后再试', null, true);
       return;
     }
 

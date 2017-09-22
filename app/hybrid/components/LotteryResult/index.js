@@ -45,6 +45,7 @@ const delStyle = {
 function showLotteryResult(...args) {
   const title = args[0];
   const message = args[1];
+  const hideImge = args[2];
   let div = document.createElement('div');
   document.body.appendChild(div);
 
@@ -58,8 +59,8 @@ function showLotteryResult(...args) {
   ReactDOM.render(
     <Mask>
       <ContentWrapper className="zoomIn animated">
-        <img src={img} style={imgStyle} />
-        <img src={delImg} style={delStyle} onClick={() => { close() }} />
+        {!hideImge && <img src={img} style={imgStyle} />}
+        {!hideImge && <img src={delImg} style={delStyle} onClick={() => { close() }} />}
         {title && <header style={{ fontSize: '0.48rem', color: '#ff6365' }}>{title}</header>}
         {message && <section style={{ marginTop: '0.32rem', fontSize: '0.3rem', color: '#6c7170' }}>{message}</section>}
         <Button
