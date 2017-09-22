@@ -51,10 +51,16 @@ class HongbaoDesc extends React.PureComponent { // eslint-disable-line react/pre
     const { count } = this.props;
     let countStr = count.toString();
     
-    if (countStr.length < 5) {
+    if (countStr.length <= 5) {
       countStr = '0'.repeat(5 - countStr.length) + countStr;
-    } else if (countStr.length > 5) {
+    } else if (countStr.length === 6) {
       countStr = `${countStr[0]}${countStr[1]}.${countStr[2]}${countStr[3]}`;
+    } else if (countStr.length === 7) {
+      countStr = `${countStr[0]}${countStr[1]}${countStr[2]}.${countStr[3]}`;
+    } else {
+      const needAddCount = 9 - countStr.length;
+      countStr = '0'.repeat(needAddCount) + countStr;
+      countStr = countStr.substring(0, 5);
     }
 
     return countStr.substring(i, i + 1);
