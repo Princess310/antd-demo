@@ -312,6 +312,12 @@ export class LotteryWheel extends React.PureComponent { // eslint-disable-line r
       return false;
     }
 
+    // check is on line first
+    if (!navigator.onLine) {
+      showLotteryResult('没有网络连接，请稍后再试');
+      return;
+    }
+
     // check count first
     const { count } = this.props;
     if (Number(count) <= 0) {
