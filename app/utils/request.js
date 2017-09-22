@@ -1,6 +1,7 @@
 import 'whatwg-fetch';
 import { Toast } from 'antd-mobile';
 import { browserHistory } from 'react-router';
+import md5 from 'md5';
 
 export const API_ROOT = 'http://jkhz-api-dev.test.alijian.net/index.php?r=';
 export const WEB_ROOT = 'http://jkhz-wap.test.alijian.net/';
@@ -66,12 +67,30 @@ const fetchDao = {
     }
 
     // only post method to add body config
+    if (method !== 'GET') {
+      const t = new Date();
+      const times = t.getTime();
+      params['_ts'] = times
+    }
     if ((method !== 'GET') && typeof params !== 'undefined') {
       const payload = [];
+      let signParams = [];
       Object.keys(params).forEach((key) => {
         payload.push(`${key}=${params[key]}`);
+        signParams.push(`${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`);
       });
+
       config.body = payload.join('&');
+      signParams = signParams.sort((a, b) => {
+        return a.localeCompare(b);
+      });
+      signParams = signParams.reverse();
+
+      // add x-sign header for params sign
+      const s = md5(signParams.join('&'));
+      const s2 = md5(s + 'web_123456');
+      let signStr = s2.toUpperCase();
+      config.headers['X-Sign'] = btoa(signStr);
 
       if (file) {
         const formData = new FormData();
