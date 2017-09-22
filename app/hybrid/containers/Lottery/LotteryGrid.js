@@ -248,7 +248,7 @@ export class LotteryGrid extends React.PureComponent { // eslint-disable-line re
     });
   }
 
-  handleAction = () => {
+  handleAction = () => {alert(navigator.onLine);
     if (lottery.isRunning) {
       return false;
     }
