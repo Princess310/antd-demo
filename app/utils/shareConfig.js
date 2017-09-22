@@ -3,6 +3,7 @@ import { emptyHtml } from 'utils/utils';
 import { getQueryString } from 'utils/utils';
 import request from 'utils/request';
 import brower from 'utils/brower';
+import { getHongbaoInfo } from 'utils/utils';
 
 import logo from 'assets/images/logo-icon.png';
 
@@ -71,13 +72,14 @@ const shareConfig = {
     let success = data.success ? data.success : () => {};
     let cancel = data.cancel ? data.cancel : () => {};
     const uid = getQueryString('uid');
+    const hongbaoInfo = getHongbaoInfo();
 
     switch (type) {
       case 'app': {
         const { name } = data;
-        title = `${name ? name : ''}邀请您加入健康商信APP`;
-        timeLineTitle = `${name ? name : ''}邀请您加入健康商信APP，80万行业资源平台，找讲师、找厂家、找经销商就上健康商信！`;
-        desc = `80万行业资源平台，找讲师、找厂家、找经销商就上健康商信！`;
+        title = hongbaoInfo.isHongbao ? '邀请健康行业朋友下载赢现金红包' : `${name ? name : ''}邀请您加入健康商信APP`;
+        timeLineTitle = hongbaoInfo.isHongbao ? `${name ? name : ''}下载健康商信APP获得5元现金红包，邀请健康行业的朋友也来下载。` : `${name ? name : ''}邀请您加入健康商信APP，80万行业资源平台，找讲师、找厂家、找经销商就上健康商信！`;
+        desc = hongbaoInfo.isHongbao ? `${name ? name : ''}下载健康商信APP获得5元现金红包，邀请健康行业的朋友也来下载。` : `80万行业资源平台，找讲师、找厂家、找经销商就上健康商信！`;
         link = `http://${domain}/group_share.html?&name=${name ? encodeURIComponent(name) : ''}&uid=${uid}`;
         imgUrl = `http://${domain}${logo}`;
         break;
