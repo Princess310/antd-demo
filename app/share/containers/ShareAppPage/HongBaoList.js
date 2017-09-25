@@ -8,6 +8,7 @@ import React from 'react';
 import styled from 'styled-components';
 import img from 'assets/images/share-hongbao.png';
 
+import { resetAnimationFrame } from 'utils/utils';
 import request from 'utils/shareRequest';
 
 const Container = styled.div`
@@ -51,9 +52,8 @@ class HongBaoItem extends React.PureComponent { // eslint-disable-line react/pre
 
 class HongBaoList extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   componentDidMount() {
-    setInterval(() => {
-      this.doAnimation()
-    }, 100 / 6);
+    resetAnimationFrame();
+    this.doAnimation();
   }
 
   doAnimation = () => {
@@ -63,7 +63,7 @@ class HongBaoList extends React.PureComponent { // eslint-disable-line react/pre
     this.container.style.transform = `translateY(${scrollY}px)`;
 
     scrollY -= 1;
-    // window.requestAnimationFrame(this.doAnimation);
+    window.requestAnimationFrame(this.doAnimation);
   }
 
   render() {
