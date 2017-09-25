@@ -256,6 +256,7 @@ export class LotteryWheel extends React.PureComponent { // eslint-disable-line r
         checkFlag = false;
         FETCH_STATUS = 'static';
         isRunnig = false;
+        clearInterval(timer);
         return;
       }
 
@@ -277,7 +278,7 @@ export class LotteryWheel extends React.PureComponent { // eslint-disable-line r
     }
 
     this.drawRouletteWheel();
-    timer = window.requestAnimationFrame(this.rotateWheel);
+    // timer = window.requestAnimationFrame(this.rotateWheel);
   }
 
   getBackendData = () => {
@@ -299,7 +300,7 @@ export class LotteryWheel extends React.PureComponent { // eslint-disable-line r
         spinningTime = 0;
       }, 1000);
     }, () => {
-      window.cancelAnimationFrame(timer);
+      window.clearInterval(timer);
       spinningTime = 20;
       checkFlag = false;
       FETCH_STATUS = 'static';
@@ -329,7 +330,9 @@ export class LotteryWheel extends React.PureComponent { // eslint-disable-line r
     spinningTime = 0;                                // 初始化当前时间
     spinTotalTime = Math.random() * 3 + duration;    // 随机定义一个时间总量
     spinningChange = velocity;  // 随机顶一个旋转速率
-    this.rotateWheel();
+    timer = window.setInterval(() => {
+      this.rotateWheel();
+    }, 100 / 6);
     // 模拟后台获取数据
     this.getBackendData();
   }

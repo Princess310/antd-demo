@@ -51,7 +51,9 @@ class HongBaoItem extends React.PureComponent { // eslint-disable-line react/pre
 
 class HongBaoList extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   componentDidMount() {
-    this.doAnimation();
+    setInterval(() => {
+      this.doAnimation()
+    }, 100 / 6);
   }
 
   doAnimation = () => {
@@ -61,7 +63,7 @@ class HongBaoList extends React.PureComponent { // eslint-disable-line react/pre
     this.container.style.transform = `translateY(${scrollY}px)`;
 
     scrollY -= 1;
-    window.requestAnimationFrame(this.doAnimation);
+    // window.requestAnimationFrame(this.doAnimation);
   }
 
   render() {
@@ -69,7 +71,7 @@ class HongBaoList extends React.PureComponent { // eslint-disable-line react/pre
     
     return (
       <Container>
-        <div ref={r => this.container = r}>
+        <div ref={r => this.container = r} style={{ willChange: 'transform' }}>
           {list.map((item) => (
             <HongBaoItem
               key={item.id}
