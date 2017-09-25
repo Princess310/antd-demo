@@ -72,7 +72,9 @@ let   RADIUAS = 270,           // 转盘的半径
       result = {
         name: '谢谢惠顾',
         img: './images/emoji.png'
-      };
+      },
+      wheelRadius = 280,
+      resizePercents = [30 / wheelRadius, 90 / wheelRadius,  15 / wheelRadius, 24 / (wheelRadius * 2), 128 / (wheelRadius * 2)];
 
   // 旋转判断辅助参数
   let lastChangeStart = 0;
@@ -139,9 +141,9 @@ export class LotteryWheel extends React.PureComponent { // eslint-disable-line r
 
     // reset config params
     RADIUAS = radius;
-    OUTSIDE_RADIUAS = radius - 30;
-    TEXT_RADIUAS = radius - 90;
-    DOT_RADIUAS = radius - 15;
+    OUTSIDE_RADIUAS = radius - (radius * resizePercents[0]);
+    TEXT_RADIUAS = radius - (radius * resizePercents[1]);
+    DOT_RADIUAS = radius - (radius * resizePercents[2]);
     CENTER_X = canvas.width / 2;
     CENTER_Y = canvas.height / 2;
 
@@ -206,7 +208,7 @@ export class LotteryWheel extends React.PureComponent { // eslint-disable-line r
 
       // ----- ③ 绘制文字
       context.save();
-      context.font = 'bold 24px Helvetica, Arial';
+      context.font = `bold ${canvas.width * resizePercents[3]}px Helvetica, Arial`;
       context.fillStyle = '#fff';
       context.translate(
           CENTER_X + Math.cos(_startRadian + awardRadian / 2) * TEXT_RADIUAS,
@@ -215,7 +217,8 @@ export class LotteryWheel extends React.PureComponent { // eslint-disable-line r
       context.rotate(_startRadian + awardRadian / 2 + Math.PI / 2);
       context.fillText(awards[i].name, -context.measureText(awards[i].name).width / 2, 0);
 
-      context.drawImage(this.images[i], -64, 0);
+      const imageLength = canvas.width * resizePercents[4];
+      context.drawImage(this.images[i], -(imageLength / 2), 0, imageLength, imageLength);
       context.restore();
       // -----
     }
