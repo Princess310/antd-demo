@@ -143,20 +143,21 @@ export function resetAnimationFrame() {
                                     window[vendors[x] + 'CancelRequestAnimationFrame'];
   }
 
-  if (!window.requestAnimationFrame) {
+  //if (!window.requestAnimationFrame) {
       window.requestAnimationFrame = function(callback, element) {
           let currTime = new Date().getTime();
           let timeToCall = Math.max(0, 16.7 - (currTime - lastTime));
+          console.log('timeToCall', timeToCall);
           let id = window.setTimeout(function() {
               callback(currTime + timeToCall);
           }, timeToCall);
           lastTime = currTime + timeToCall;
           return id;
       };
-  }
-  if (!window.cancelAnimationFrame) {
+  //}
+  //if (!window.cancelAnimationFrame) {
       window.cancelAnimationFrame = function(id) {
           clearTimeout(id);
       };
-  }
+  //}
 }
