@@ -109,8 +109,7 @@ export function parseHash(hash) {
  * @param {Num} d 持续时间
  */
 export function easeOut(t, b, c, d) {
-  if ((t /= d / 2) < 1) return c / 2 * t * t + b;
-  return -c / 2 * ((--t) * (t - 2) - 1) + b;
+  return -c *(t/=d)*(t-2) + b;
 };
 
 /**
@@ -136,18 +135,17 @@ export function getHongbaoInfo() {
 
 export function resetAnimationFrame() {
   let lastTime = 0;
-  let vendors = ['webkit', 'moz'];
-  for(let x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
-      window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
-      window.cancelAnimationFrame = window[vendors[x] + 'CancelAnimationFrame'] ||    // name has changed in Webkit
-                                    window[vendors[x] + 'CancelRequestAnimationFrame'];
-  }
+  // let vendors = ['webkit', 'moz'];
+  // for(let x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+  //     window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
+  //     window.cancelAnimationFrame = window[vendors[x] + 'CancelAnimationFrame'] ||    // name has changed in Webkit
+  //                                   window[vendors[x] + 'CancelRequestAnimationFrame'];
+  // }
 
   //if (!window.requestAnimationFrame) {
-      window.requestAnimationFrame = function(callback, element) {
+      window.customRequestAnimationFrame = function(callback, element) {
           let currTime = new Date().getTime();
           let timeToCall = Math.max(0, 16.7 - (currTime - lastTime));
-          console.log('timeToCall', timeToCall);
           let id = window.setTimeout(function() {
               callback(currTime + timeToCall);
           }, timeToCall);
@@ -156,7 +154,7 @@ export function resetAnimationFrame() {
       };
   //}
   //if (!window.cancelAnimationFrame) {
-      window.cancelAnimationFrame = function(id) {
+      window.cancelCustomAnimationFrame = function(id) {
           clearTimeout(id);
       };
   //}

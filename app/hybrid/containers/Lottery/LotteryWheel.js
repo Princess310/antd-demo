@@ -52,7 +52,7 @@ let   RADIUAS = 270,           // 转盘的半径
       awardRadian = (Math.PI * 2) / awards.length, // 每一个奖项所占的弧度
 
       duration = 4000,     // 旋转事件
-      velocity = 10,       // 旋转速率
+      velocity = 90,       // 旋转速率
       spinningTime = 0,    // 旋转当前时间
       dotCount = 18,
       dotRadian = (Math.PI * 2) / dotCount,
@@ -280,7 +280,7 @@ export class LotteryWheel extends React.PureComponent { // eslint-disable-line r
     }
 
     this.drawRouletteWheel();
-    timer = window.requestAnimationFrame(this.rotateWheel);
+    timer = window.customRequestAnimationFrame(this.rotateWheel);
   }
 
   getBackendData = () => {
@@ -302,7 +302,7 @@ export class LotteryWheel extends React.PureComponent { // eslint-disable-line r
         spinningTime = 0;
       }, 1000);
     }, () => {
-      window.cancelAnimationFrame(timer);
+      window.cancelCustomAnimationFrame(timer);
       spinningTime = 20;
       checkFlag = false;
       FETCH_STATUS = 'static';

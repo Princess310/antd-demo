@@ -63,7 +63,7 @@ class HongBaoList extends React.PureComponent { // eslint-disable-line react/pre
     this.container.style.transform = `translateY(${scrollY}px)`;
 
     scrollY -= 1;
-    window.requestAnimationFrame(this.doAnimation);
+    window.customRequestAnimationFrame(this.doAnimation);
   }
 
   render() {
