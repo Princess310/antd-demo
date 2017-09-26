@@ -25,6 +25,7 @@ export class Lottery extends React.PureComponent { // eslint-disable-line react/
 
     this.state = {
       prizeList: [],
+      display_list: [],
       count: 0,
     };
   }
@@ -34,9 +35,10 @@ export class Lottery extends React.PureComponent { // eslint-disable-line react/
 
     // get prize list
     request.doGet('user/prize-draw-items').then((res) => {
-      const { list } = res;
+      const { display_list, list } = res;
       self.setState({
         prizeList: list,
+        display_list,
       });
     });
 
@@ -55,7 +57,7 @@ export class Lottery extends React.PureComponent { // eslint-disable-line react/
   }
 
   render() {
-    const { count, prizeList } = this.state;
+    const { count, prizeList, display_list } = this.state;
     let contentView = null;
     if (prizeList.length === 0) {
       contentView = (
@@ -75,7 +77,7 @@ export class Lottery extends React.PureComponent { // eslint-disable-line react/
       <LotteryBackground>
         <LotteryCount count={count} style={{ marginTop: '0.12rem' }} />
         {contentView}
-        <LotteryMessage />
+        <LotteryMessage list={display_list} />
       </LotteryBackground>
     );
   }

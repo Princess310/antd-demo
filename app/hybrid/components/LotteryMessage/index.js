@@ -21,7 +21,7 @@ const MessageItem = styled.span`
 `;
 
 function LotteryMessage(props) {
-  const { style } = props;
+  const { style, list } = props;
   const rootStyle = {
     fontWeight: 'bold',
     fontSize: '0.21rem',
@@ -35,15 +35,9 @@ function LotteryMessage(props) {
       </FlexRowContentCenter>
       <FlexRowContentCenter style={{ marginTop: '0.2rem' }}>
         <div style={{ width: '6.8rem', lineHeight: '0.4rem' }}>
-          <MessageItem>每日领取登录红包</MessageItem>
-          <MessageItem>邀请好友下载</MessageItem>
-          <MessageItem>评论</MessageItem>
-          <MessageItem>点赞</MessageItem>
-          <MessageItem>转介绍</MessageItem>
-          <MessageItem>发布社交</MessageItem>
-          <MessageItem>分享动态</MessageItem>
-          <MessageItem>发布供应</MessageItem>
-          <MessageItem>发布需求</MessageItem>
+          {(list && list.length > 0) && list.map((item) => (
+            <MessageItem key={item.id}>{item.action}</MessageItem>
+          ))}
         </div>
       </FlexRowContentCenter>
     </div>
