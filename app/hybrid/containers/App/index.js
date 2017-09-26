@@ -36,10 +36,11 @@ export default class App extends React.PureComponent { // eslint-disable-line re
 
   render() {
     const path = getQueryString('path', '');
+    const money = getQueryString('money', '');
     return (
       <div style={{ fontSize: '0.24rem' }}>
         {React.Children.toArray(this.props.children)}
-        {path === 'welcome' && <Welcome />}
+        {path === 'welcome' && <Welcome money={money} />}
         {path === 'prize' && <Lottery />}
       </div>
     );

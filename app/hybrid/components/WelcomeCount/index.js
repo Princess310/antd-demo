@@ -18,10 +18,10 @@ const Wrapper = styled.div`
 `;
 
 function WelcomeCount(props) {
-  const { style } = props;
+  const { style, count } = props;
   return (
     <FlexRowContentCenter style={style} className="zoomIn animated-2">
-      <Wrapper>5元</Wrapper>
+      <Wrapper>{`${count}元`}</Wrapper>
     </FlexRowContentCenter>
   );
 }

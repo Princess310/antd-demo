@@ -21,12 +21,13 @@ export class Welcome extends React.PureComponent { // eslint-disable-line react/
   }
 
   render() {
+    const { money } = this.props;
 
     return (
       <WelcomeBackground>
         <WelcomeUser />
-        <WelcomeCount style={{ marginTop: '0.4rem' }} />
-        <WelcomeMessage style={{ marginTop: '0.5rem' }} />
+        <WelcomeCount count={money} style={{ marginTop: '0.4rem' }} />
+        <WelcomeMessage count={money} style={{ marginTop: '0.5rem' }} />
       </WelcomeBackground>
     );
   }
