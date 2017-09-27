@@ -247,7 +247,7 @@ export class LotteryWheel extends React.PureComponent { // eslint-disable-line r
       _spinningChange = spinningChange * (Math.PI / 180);
     } else if (FETCH_STATUS === 'fetched') {
       // 当 当前时间 大于 总时间，停止旋转，并返回当前值
-      if (spinningTime >= spinTotalTime) {
+      if (spinningTime >= spinTotalTime && checkFlag) {
         let { name, type } = result;
         type = Number(type);
         name = type === 4 ? name : `恭喜抽中${name}`;
