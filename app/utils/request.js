@@ -75,19 +75,24 @@ const fetchDao = {
     if ((method !== 'GET') && typeof params !== 'undefined') {
       const payload = [];
       let signParams = [];
+      let signParamsResult = [];
       Object.keys(params).forEach((key) => {
         payload.push(`${key}=${params[key]}`);
-        signParams.push(`${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`);
       });
 
       config.body = payload.join('&');
-      signParams = signParams.sort((a, b) => {
+      signParams = payload.sort((a, b) => {
         return a.localeCompare(b);
       });
       signParams = signParams.reverse();
+      // do resort
+      signParams.forEach((p) => {
+        const ps = p.split('=');
+        signParamsResult.push(`${btoa(ps[0])}=${btoa(ps[1])}`);
+      });
 
       // add x-sign header for params sign
-      const s = md5(signParams.join('&'));
+      const s = md5(signParamsResult.join('&'));
       const s2 = md5(s + 'web_123456');
       let signStr = s2.toUpperCase();
       config.headers['X-Sign'] = btoa(signStr);
