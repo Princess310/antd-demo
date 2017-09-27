@@ -50,6 +50,7 @@ let   RADIUAS = 270,           // 转盘的半径
 
       startRadian = 0,                             // 绘制奖项的起始角，改变该值实现旋转效果
       awardRadian = (Math.PI * 2) / awards.length, // 每一个奖项所占的弧度
+      awardRaianRange = awardRadian * 0.1,         // 指针落地最小范围
 
       duration = 4000,     // 旋转事件
       velocity = 90,       // 旋转速率
@@ -126,6 +127,7 @@ export class LotteryWheel extends React.PureComponent { // eslint-disable-line r
     }
 
     awardRadian = (Math.PI * 2) / awards.length; // 每一个奖项所占的弧度
+    awardRaianRange = awardRadian * 0.1;
   }
 
   componentDidMount() {
@@ -268,7 +270,15 @@ export class LotteryWheel extends React.PureComponent { // eslint-disable-line r
       if (!checkFlag) {
         const value = this.getValue();
         const rangeRadian = 5 * 2 * Math.PI + (value.index - result.index) * awardRadian;
-        resultRadian = rangeRadian;
+        // 这里主要为了避免指针最终可能会落到边线上做了一个误差处理。
+        const diffRadian = (lastChangeStart + rangeRadian - Math.PI / 2) % awardRadian;
+        if (diffRadian < awardRaianRange) {
+          resultRadian = rangeRadian + awardRaianRange;
+        } else if (diffRadian > (awardRadian - awardRaianRange)) {
+          resultRadian = rangeRadian - awardRaianRange;
+        } else {
+          resultRadian = rangeRadian;
+        }
       }
 
       changeFetchedRadian = easeOut(spinningTime, 0, resultRadian, spinTotalTime);
