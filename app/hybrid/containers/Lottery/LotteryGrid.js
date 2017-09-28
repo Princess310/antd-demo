@@ -208,7 +208,9 @@ export class LotteryGrid extends React.PureComponent { // eslint-disable-line re
       };
       const msg = type === 4 ? null : msgMap[type];
 
-      showLotteryResult(name, msg);
+      setTimeout(() => {
+        showLotteryResult(name, msg);
+      }, 200)
       
       // reset all config params
       lottery.times = 0;
