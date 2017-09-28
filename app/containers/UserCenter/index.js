@@ -212,7 +212,7 @@ export class UserCenter extends React.PureComponent { // eslint-disable-line rea
             >编辑资料</Button>
           </FlexSB>
         </UserWrapper>
-        <List>
+        {/* <List>
           <SubInfoWrapper onClick={() => {
             browserHistory.push('/userPointsRule');
           }}>
@@ -220,7 +220,7 @@ export class UserCenter extends React.PureComponent { // eslint-disable-line rea
             <Icon type={require('icons/ali/个人中心-积分帮助.svg')} size="xs" color="#AAAAAA" style={{ marginLeft: '0.08rem' }} />
           </SubInfoWrapper>
         </List>
-        <WhiteSpace size="md" />
+        <WhiteSpace size="md" /> */}
         <List>
           <Item
             thumb={<Icon type={require('icons/ali/多人.svg')} color={pallete.theme} />}

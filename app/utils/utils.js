@@ -125,7 +125,9 @@ export function easeIn(t,b,c,d){
 
 let hongbaoInfo = {};
 export function setHongbaoInfo(info) {
-  hongbaoInfo = info;
+  if (info) {
+    hongbaoInfo = info;
+  }
   hongbaoInfo.isHongbao = info['switch_newer'] && info['switch_newer'] === 1
 }
 
