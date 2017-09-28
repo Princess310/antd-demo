@@ -47,6 +47,7 @@ function showLotteryResult(...args) {
   const message = args[1];
   const hideImge = args[2];
   let div = document.createElement('div');
+  div.style = "position: absolute; top: 0; left: 0; right: 0; bottom: 0";
   document.body.appendChild(div);
 
   function close() {
