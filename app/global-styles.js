@@ -61,6 +61,14 @@ injectGlobal`
     }
   }
 
+  .mark-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
   .home-container {
     height: 100%;
     padding-bottom: 1rem;
