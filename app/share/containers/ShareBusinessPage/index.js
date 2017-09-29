@@ -88,12 +88,13 @@ export class ShareBusinessPage extends React.PureComponent { // eslint-disable-l
       const { category, reward_as, source_type, share_user, privilege_type } = data;
       let title = (category === '3' || reward_as === '2') ? '需求动态详情' : ((category === '0' || reward_as === '1') ? '供应动态详情' : '社交详情');
       let type = (category === '3' || reward_as === '2' || category === '0' || reward_as === '1') ? 'business' : 'communication';
-      const businessType = (category === '3' || reward_as === '2') ? 'demand' : ((category === '0' || reward_as === '1') ? 'supplier' : 'status');
+      let businessType = (category === '3' || reward_as === '2') ? 'demand' : ((category === '0' || reward_as === '1') ? 'supplier' : 'status');
 
       // group status
       if (category === '0' && privilege_type === '4') {
         title = "群动态详情";
         type = "communication";
+        businessType = "status";
       }
       // if it is CMS
       if (source_type === 1) {
