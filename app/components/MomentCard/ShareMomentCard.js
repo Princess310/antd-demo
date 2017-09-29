@@ -170,6 +170,7 @@ class ShareMomentCard extends React.PureComponent { // eslint-disable-line react
       created_at,
       demand_counts,
       show_mobile,
+      privilege_type,
       ...other,
     } = moment;
 
@@ -204,7 +205,11 @@ class ShareMomentCard extends React.PureComponent { // eslint-disable-line react
     ));
 
     // check type of moment
-    const businessType = (category === '3' || reward_as === '2') ? 'demand' : ((category === '0' || reward_as === '1') ? 'supplier' : 'status');
+    let businessType = (category === '3' || reward_as === '2') ? 'demand' : ((category === '0' || reward_as === '1') ? 'supplier' : 'status');
+    // group status
+    if (category === '0' && privilege_type === '4') {
+      businessType = "status";
+    }
 
     // content to show
     const contentResult = businessType === 'demand' ? `需求描述：${content}` : content;
