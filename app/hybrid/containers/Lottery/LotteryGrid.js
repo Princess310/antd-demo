@@ -53,11 +53,6 @@ const Button = styled.div`
   background-color: #ffdc44;
 `;
 
-const ItemDesc = styled.section`
-  height: 0.36rem;
-  overflow: hidden;
-`;
-
 const ImgWraper = styled.img`
   margin-top: 0.1rem;
   height: 0.3rem;
@@ -329,7 +324,7 @@ export class LotteryGrid extends React.PureComponent { // eslint-disable-line re
                 height: cellHeight,
               }}
             >
-            <ItemDesc>{award.name}</ItemDesc>
+            <section>{award.name}</section>
             <ImgWraper src={img} />
           </td>
           )
