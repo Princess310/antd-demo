@@ -87,22 +87,25 @@ export class GuidePage extends React.PureComponent { // eslint-disable-line reac
 
   componentWillReceiveProps(nextProps) {
     const { currentUser, industrySon } = nextProps;
+    const { tag_identity_id } = this.state;
 
-    this.setState({
-      id: currentUser.id,
-      verify_status: currentUser.verify_status,
-      avatar: currentUser.avatar,
-      nickname: currentUser.nickname,
-      company: currentUser.company,
-      position: currentUser.position,
-      nature: currentUser.nature,
-      industry_son_id: industrySon,
-      tag_identity_id: currentUser.tag_identity_id,
-      tag_identity_name: currentUser.tag_identity_name,
-      main_service_id: currentUser.main_service_id,
-      main_service_name: currentUser.main_service_name,
-      skipPublish: (currentUser.tag_identity_id && currentUser.tag_identity_id !== '0'),
-    });
+    if (!tag_identity_id) {
+      this.setState({
+        id: currentUser.id,
+        verify_status: currentUser.verify_status,
+        avatar: currentUser.avatar,
+        nickname: currentUser.nickname,
+        company: currentUser.company,
+        position: currentUser.position,
+        nature: currentUser.nature,
+        industry_son_id: industrySon,
+        tag_identity_id: currentUser.tag_identity_id,
+        tag_identity_name: currentUser.tag_identity_name,
+        main_service_id: currentUser.main_service_id,
+        main_service_name: currentUser.main_service_name,
+        skipPublish: (currentUser.tag_identity_id && currentUser.tag_identity_id !== '0'),
+      });
+    }
   }
 
   // listed actions below to handle control value set for basic info

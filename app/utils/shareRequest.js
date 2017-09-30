@@ -1,6 +1,7 @@
 import 'whatwg-fetch';
 import { Toast } from 'antd-mobile';
 import md5 from 'md5';
+import base64 from 'utils/base64';
 
 export const API_ROOT = 'http://jkhz-api-dev.test.alijian.net/index.php?r=';
 export const WEB_ROOT = 'http://jkhz-wap.test.alijian.net/';
@@ -84,14 +85,14 @@ const fetchDao = {
       // do resort
       signParams.forEach((p) => {
         const ps = p.split('=');
-        signParamsResult.push(`${btoa(ps[0])}=${btoa(ps[1])}`);
+        signParamsResult.push(`${base64.encode(ps[0])}=${base64.encode(ps[1])}`);
       });
 
       // add x-sign header for params sign
       const s = md5(signParamsResult.join('&'));
       const s2 = md5(s + 'web_123456');
       let signStr = s2.toUpperCase();
-      config.headers['X-Sign'] = btoa(signStr);
+      config.headers['X-Sign'] = base64.encode(signStr);
 
       if (file) {
         const formData = new FormData();

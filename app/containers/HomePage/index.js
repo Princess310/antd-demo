@@ -57,6 +57,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
 
   componentWillReceiveProps(nextProps) {
     const { currentUser, location } = nextProps;
+    const { pathname } = location;
 
     if (!currentUser.id) {
       browserHistory.replace('/preview');
@@ -65,8 +66,8 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
     // do change loaction if user info not complete
     const { industry_son_id, main_service_id, company, position, mobile } = currentUser;
 
-    if (industry_son_id === '0' || main_service_id === '0' || company === '' || position === '') {
-      browserHistory.push('/guide');
+    if ((industry_son_id === '0' || main_service_id === '0' || company === '' || position === '') && pathname !== '/guide') {
+      // browserHistory.push('/guide');
     }
 
     // do register mobile
