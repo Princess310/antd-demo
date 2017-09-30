@@ -16,6 +16,7 @@ import LotteryWheel from './LotteryWheel';
 import LotteryGrid from './LotteryGrid';
 
 import { linkOpenInstall } from 'utils/utils';
+import brower from 'utils/brower';
 import request from 'utils/hybridRequest';
 
 
@@ -73,11 +74,15 @@ export class Lottery extends React.PureComponent { // eslint-disable-line react/
       contentView = <LotteryGrid onStartLottery={this.handleCount} prizeList={prizeList} count={count} />;
     }
 
+    // check brower
+    const isIos = brower.checkIfIOS();
+
     return (
       <LotteryBackground>
         <LotteryCount count={count} style={{ marginTop: '0.12rem' }} />
         {contentView}
         <LotteryMessage list={display_list} />
+        {isIos && <section style={{ marginTop: '0.32rem', textAlign: 'center' }}>所有产品抽奖活动与苹果公司（Apple Inc）无关</section>}
       </LotteryBackground>
     );
   }

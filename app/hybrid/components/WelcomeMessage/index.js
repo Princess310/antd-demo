@@ -8,6 +8,8 @@ import { Icon, Button } from 'antd-mobile';
 
 function WelcomeMessage(props) {
   const { style, count } = props;
+  const isIos = brower.checkIfIOS();
+
   return (
     <div style={style}>
       <div style={{ textAlign: 'center', fontWeight: 'bold' }}>
@@ -39,6 +41,7 @@ function WelcomeMessage(props) {
         立即分享到朋友圈
         </Button>
       </FlexRowContentCenter>
+      {isIos && <section style={{ marginTop: '0.32rem', textAlign: 'center' }}>所有产品抽奖活动与苹果公司（Apple Inc）无关</section>}
     </div>
   );
 }
