@@ -67,7 +67,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
     const { industry_son_id, main_service_id, company, position, mobile } = currentUser;
 
     if ((industry_son_id === '0' || main_service_id === '0' || company === '' || position === '') && pathname !== '/guide') {
-      // browserHistory.push('/guide');
+      browserHistory.push('/guide');
     }
 
     // do register mobile
