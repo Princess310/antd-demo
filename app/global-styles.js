@@ -204,6 +204,26 @@ injectGlobal`
     background: #50abf1;
   }
 
+  .pswp__top-bar {
+    height: 0.88rem;
+  }
+
+  .pswp__button, .pswp__button--arrow--left:before, .pswp__button--arrow--right:before {
+    background-size: 5.28rem 1.76rem;
+    height: 0.88rem;
+    width: 0.88rem;
+  }
+  
+  .pswp__button--close {
+    background-position: 0 -0.88rem;
+  }
+
+  .pswp__counter {
+    height: 0.88rem;
+    font-size: 0.26rem;
+    line-height: 0.88rem;
+  }
+
   .animated {
     animation-duration: 0.5s;
     animation-fill-mode: both;

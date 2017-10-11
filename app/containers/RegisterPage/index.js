@@ -190,7 +190,7 @@ export class RegisterPage extends React.PureComponent { // eslint-disable-line r
             browserHistory.push('/login');
           }}>登录</span>
         </FlexCenter>
-        {initialInfo && <CallPhone phone={initialInfo.phone.data} />}
+        {initialInfo && <CallPhone phone={initialInfo.phone} />}
       </div>
     );
   }

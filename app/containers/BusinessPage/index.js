@@ -191,6 +191,7 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
                           currentUser={currentUser}
                           from="list"
                           type="business"
+                          role={role}
                           style={{ marginTop: '0.12rem' }}
                         />
                       )) : null}

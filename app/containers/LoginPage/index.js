@@ -122,7 +122,7 @@ export class LoginPage extends React.PureComponent { // eslint-disable-line reac
             }}>免费注册</span>
         </FlexSB>
         </WingBlank>
-        {initialInfo && <CallPhone phone={initialInfo.phone.data} />}
+        {initialInfo && <CallPhone phone={initialInfo.phone} />}
       </div>
     );
   }

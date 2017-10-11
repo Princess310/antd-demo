@@ -125,11 +125,11 @@ class MomentHeader extends React.PureComponent { // eslint-disable-line react/pr
               </FlexColumn>
             )
           }
-          {(source_type_name && type === 'communication') && <LineTag style={{
+          {/* {(source_type_name && type === 'communication') && <LineTag style={{
             position: 'absolute',
             top: '0.72rem',
             right:'0.15rem',
-          }}>{source_type_name}</LineTag>}
+          }}>{source_type_name}</LineTag>} */}
         </FlexSB>
         {trade_status > 0 && <img role="presentation" src={momentSuccess} style={{
           position: 'absolute',

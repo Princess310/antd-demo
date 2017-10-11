@@ -289,9 +289,9 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
   handleSetTop = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    const { moment, doSetTopMoment } = this.props;
+    const { moment, doSetTopMoment, role } = this.props;
 
-    doSetTopMoment(moment.id, moment.reward_as);
+    doSetTopMoment(moment.id, moment.reward_as, role);
   }
 
   handleShare = (e) => {
@@ -384,8 +384,8 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
 
     // moment content wrapper style
     const contentStyle = Number(source_type) === 1 ? {
-      paddingLeft: 0,
-      paddingRight: 0,
+      // paddingLeft: 0,
+      // paddingRight: 0,
     } : {};
 
     // check pic length to show
@@ -649,7 +649,7 @@ function mapDispatchToProps(dispatch) {
     doSendComment: (id, uid, content, from) => dispatch(sendComment(id, uid, content, from)),
     doDelMoment: (id, from) => dispatch(delMoment(id, from)),
     doCollectMoment: (id) => dispatch(collectMoment(id)),
-    doSetTopMoment: (id, reward_as) => dispatch(setTopMoment(id, reward_as)),
+    doSetTopMoment: (id, reward_as, role) => dispatch(setTopMoment(id, reward_as, role)),
     doChangeMomentTrade: (id, from) => dispatch(changeMomentTrade(id, from)),
   };
 }

@@ -20,6 +20,7 @@ import FlexSB from 'components/FlexSB';
 import FlexRow  from 'components/FlexRow';
 import FlexCenter from 'components/FlexCenter';
 import AppContent from 'components/AppContent';
+import EmptyCard from 'components/EmptyCard';
 import { List, Button, WhiteSpace, Icon } from 'antd-mobile';
 import SearchWithCancelBar from 'components/SearchBar/SearchWithCancelBar';
 import MomentCard from 'components/MomentCard';
@@ -239,6 +240,7 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
   handleFilter = (filter, item) => {
     const { panel, reward_as } = this.state;
     const { doSearch } = this.props;
+    const isReward = (filter === 'rewardDemandFilter' || filter === 'rewardSupplierFilter');
 
     // do not set the select status for item, now.
     // if (type === 1) {
@@ -273,6 +275,7 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
       priceFilter: 'value',
     };
     const type = typeMaps[filter];
+
     const keyword = item[fieldMaps[filter]];
 
     doSearch(panel, keyword, reward_as, type, 1);
@@ -280,12 +283,12 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
     if (panel === '7') {
       this.setState({
         step: 2,
-        keyword,
+        keyword: isReward ? item.name : keyword,
       });
     } else {
       this.setState({
         step: 3,
-        keyword,
+        keyword: isReward ? item.name : keyword,
       });
     }
   }
@@ -524,6 +527,13 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
                     }
                   </div>
                 )}
+
+                {
+                  searchPanel.demand.length === 0 && searchPanel.supplier.length === 0 && searchPanel.users.length === 0 &&
+                  (
+                    <EmptyCard type="search" />
+                  )
+                }
             </div>
           )
         }
@@ -539,7 +549,7 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
               className="tloader app-content"
               style={{ top: 0 }}
             >
-              {searchAll.list && searchAll.list.map((d) => {
+              {searchAll.list && searchAll.list.length > 0 ? searchAll.list.map((d) => {
                 if (reward_as === 0) {
                   return (
                     <MomentHeader
@@ -559,7 +569,9 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
                     />
                   );
                 }
-              })}
+              }) : (
+                <EmptyCard type="search" />
+              )}
             </TouchLoader>
           </ScrollContainer>
         )}

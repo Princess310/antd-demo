@@ -94,7 +94,6 @@ export class UserMoments extends React.PureComponent { // eslint-disable-line re
   render() {
     const { type } = this.state;
     const { momentDemand, momentSupplier, currentUser } = this.props;
-    const themeColor = type === 2 ? pallete.theme : pallete.yellow;
 
     return (
       <div>
@@ -107,7 +106,6 @@ export class UserMoments extends React.PureComponent { // eslint-disable-line re
           <SegmentedControl
             selectedIndex={type === 2 ? 0 : 1}
             values={['需求', '供应']}
-            tintColor={themeColor}
             style={{ height: '0.3rem', width: '3rem' }}
             onChange={this.onChangeTitle}
           />

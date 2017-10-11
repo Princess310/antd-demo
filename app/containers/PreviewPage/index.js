@@ -76,12 +76,12 @@ export class PreviewPage extends React.PureComponent { // eslint-disable-line re
             <FlexSB style={{ marginTop: '0.24rem', marginBottom: '0.9rem' }}>
               <Button
                 type="ghost"
-                style={{ width: '50%', fontSize: '0.28rem', marginRight: '0.4rem' }}
+                style={{ width: '100%', fontSize: '0.28rem' }}
                 onClick={() => {
                   browserHistory.push('/login');
                 }}
               >账号密码登录</Button>
-              <Button type="ghost" style={{ width: '50%', fontSize: '0.28rem' }}>微信登录</Button>
+              {/* <Button type="ghost" style={{ width: '50%', fontSize: '0.28rem' }}>微信登录</Button> */}
             </FlexSB>
             <FlexCenter
               style={{ marginBottom: '0.5rem', color: pallete.theme, fontSize: '0.28rem'}}

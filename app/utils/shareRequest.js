@@ -65,6 +65,10 @@ const fetchDao = {
 
     // only post method to add body config
     if (method !== 'GET') {
+      if (typeof params === 'undefined') {
+        params = {};
+      }
+
       const t = new Date();
       const times = t.getTime();
       params['_ts'] = times
@@ -79,7 +83,9 @@ const fetchDao = {
 
       config.body = payload.join('&');
       signParams = payload.sort((a, b) => {
-        return a.localeCompare(b);
+        const key1 = a.split('=')[0];
+        const key2 = b.split('=')[0];
+        return key1.localeCompare(key2);
       });
       signParams = signParams.reverse();
       // do resort

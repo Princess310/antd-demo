@@ -153,7 +153,7 @@ export class LoginPhonePage extends React.PureComponent { // eslint-disable-line
         <WingBlank>
           <Button className="btn" type="primary" disabled={disableBtn} onClick={this.doLogin}>完成</Button>
         </WingBlank>
-         {initialInfo && <CallPhone phone={initialInfo.phone.data} />}
+         {initialInfo && <CallPhone phone={initialInfo.phone} />}
       </div>
     );
   }

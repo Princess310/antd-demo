@@ -59,6 +59,7 @@ export class ComplaintUser extends React.PureComponent { // eslint-disable-line 
   render() {
     const { selected } = this.state;
     const { complaintList, initialInfo } = this.props;
+
     return (
       <div>
         <NavBar
@@ -76,7 +77,7 @@ export class ComplaintUser extends React.PureComponent { // eslint-disable-line 
           renderHeader={() => (
             <FlexSB>
               <div>选择投诉原因</div>
-              {initialInfo && <a href={`tel:${initialInfo.phone.data}`} style={{ color: pallete.theme }}>
+              {initialInfo && <a href={`tel:${initialInfo.phone}`} style={{ color: pallete.theme }}>
                 <FlexRow>
                   <Icon type={require('icons/ali/投诉.svg')} size="sm" color={pallete.theme} />
                   <span style={{ marginLeft: '0.08rem' }}>客服电话</span>

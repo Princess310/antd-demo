@@ -207,20 +207,24 @@ export class GuidePage extends React.PureComponent { // eslint-disable-line reac
         { text: '我知道了', onPress: () => console.log('confirm') },
       ])
     } else {
-      if (currentUser.tag_identity_id !== '') {
-        alert('行业角色信息只能修改一次，并且会清空您之前的所有信息，请谨慎修改', '', [
-          { text: '我知道了', onPress: () => console.log('cancel') },
-          { text: '确定修改', onPress: () => {
-             self.setState({
-              showIndustry: true,
-            });
-          }, style: { fontWeight: 'bold' } },
-        ]);
-      } else {
-        this.setState({
-          showIndustry: true,
-        });
-      }
+      // if (currentUser.tag_identity_id !== '') {
+      //   alert('行业角色信息只能修改一次，并且会清空您之前的所有信息，请谨慎修改', '', [
+      //     { text: '我知道了', onPress: () => console.log('cancel') },
+      //     { text: '确定修改', onPress: () => {
+      //        self.setState({
+      //         showIndustry: true,
+      //       });
+      //     }, style: { fontWeight: 'bold' } },
+      //   ]);
+      // } else {
+      //   this.setState({
+      //     showIndustry: true,
+      //   });
+      // }
+
+      this.setState({
+        showIndustry: true,
+      });
     };
   }
 

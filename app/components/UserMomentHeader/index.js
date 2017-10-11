@@ -15,7 +15,7 @@ import FlexRowCenter from 'components/FlexRowCenter';
 import FlexSB from 'components/FlexSB';
 import FlexColumn from 'components/FlexColumn';
 import ExpTag from 'components/ExpTag';
-import LevelTag from 'components/LevelTag';
+import LineTag from 'components/LineTag';
 
 const Wrapper = styled(FlexRow)`
   display: flex;
@@ -59,8 +59,8 @@ class UserMomentHeader extends React.PureComponent { // eslint-disable-line reac
             (
               <FlexColumn style={{ padding: '0.04rem 0.24rem' }}>
                 <FlexRowCenter>
-                  <section style={{ fontSize: '0.28rem' }}>{user.nickname}</section>
-                  <LevelTag>{user.tag_identity_name}</LevelTag>
+                  <section style={{ fontSize: '0.28rem', marginRight: '0.16rem' }}>{user.nickname}</section>
+                  <LineTag>{user.tag_identity_name}</LineTag>
                 </FlexRowCenter>
                 <SubInfoWrapper>{user.position}</SubInfoWrapper>
               </FlexColumn>
@@ -70,8 +70,6 @@ class UserMomentHeader extends React.PureComponent { // eslint-disable-line reac
                 <FlexRowCenter>
                   <section style={{ fontSize: '0.28rem' }}>{user.nickname}</section>
                   {user.company && <ItemWrapper>{user.company}</ItemWrapper>}
-                  <LevelTag>{user.integrity_level}</LevelTag>
-                  <ExpTag>{user.integrity_exp}</ExpTag>
                 </FlexRowCenter>
                 <SubInfoWrapper>{user.tag_identity_name}</SubInfoWrapper>
               </FlexColumn>

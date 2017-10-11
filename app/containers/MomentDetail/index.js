@@ -206,6 +206,23 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
     });
   }
 
+  handleIntroduce = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const { momentDetail } = this.props;
+
+    request.doGet('moments/check-referral', {
+      moments_id: momentDetail.id,
+    }).then((res) => {
+      browserHistory.push({
+        pathname: 'introducePublish',
+        query: {
+          id: momentDetail.id,
+        },
+      });
+    });
+  }
+
   render() {
     const { momentDetail, currentUser, location: { state: { type } } } = this.props;
     const {

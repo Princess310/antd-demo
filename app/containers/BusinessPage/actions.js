@@ -319,12 +319,13 @@ export function collectMoment(id) {
   };
 }
 
-export function setTopMoment(id, reward_as) {
+export function setTopMoment(id, reward_as, role) {
   return {
     type: SET_TOP_MOMENT,
     payload: {
       id,
       reward_as,
+      role,
     },
   };
 }

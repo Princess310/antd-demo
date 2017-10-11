@@ -78,8 +78,8 @@ const shareConfig = {
       case 'app': {
         const { name } = data;
         title = hongbaoInfo.isHongbao ? '邀请健康行业朋友下载赢现金红包' : `${name ? name : ''}邀请您加入健康商信APP`;
-        timeLineTitle = hongbaoInfo.isHongbao ? `${name ? name : ''}下载健康商信APP获得5元现金红包，邀请健康行业的朋友也来下载。` : `${name ? name : ''}邀请您加入健康商信APP，80万行业资源平台，找讲师、找厂家、找经销商就上健康商信！`;
-        desc = hongbaoInfo.isHongbao ? `${name ? name : ''}下载健康商信APP获得5元现金红包，邀请健康行业的朋友也来下载。` : `80万行业资源平台，找讲师、找厂家、找经销商就上健康商信！`;
+        timeLineTitle = hongbaoInfo.isHongbao ? `${name ? name : ''}下载健康商信APP获得${hongbaoInfo.newer_money}元现金红包，邀请健康行业的朋友也来下载。` : `${name ? name : ''}邀请您加入健康商信APP，80万行业资源平台，找讲师、找厂家、找经销商就上健康商信！`;
+        desc = hongbaoInfo.isHongbao ? `${name ? name : ''}下载健康商信APP获得${hongbaoInfo.newer_money}元现金红包，邀请健康行业的朋友也来下载。` : `80万行业资源平台，找讲师、找厂家、找经销商就上健康商信！`;
         link = `http://${domain}/group_share.html?&name=${name ? encodeURIComponent(name) : ''}&uid=${uid}`;
         imgUrl = `http://${domain}${logo}`;
         break;

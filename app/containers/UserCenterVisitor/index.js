@@ -149,20 +149,12 @@ export class UserCenterVisitor extends React.PureComponent { // eslint-disable-l
                     style={{ top: '0', position: 'relative' }}
                   >
                     {visitorMine.list.map((user, i) => (
-                      <div key={i}>
+                      <div style={{ marginTop: '0.15rem' }} key={i}>
                         <UserHeaderBar
                           user={user}
                           rightContent={
                             <DateInfo time={user.created_at} style={{ alignSelf: 'flex-end' }} />
                           }
-                        />
-                        <UserSubInfoBar
-                          influence={user.influence}
-                          progress={user.integrity_progress}
-                          level={user.integrity_level}
-                          distance={user.distance}
-                          city={user.city_name}
-                          style={{ marginBottom: '0.16rem' }}
                         />
                       </div>
                     ))}
@@ -187,20 +179,12 @@ export class UserCenterVisitor extends React.PureComponent { // eslint-disable-l
                       style={{ top: '0', position: 'relative' }}
                     >
                       {visitorUsers.list.map((user, i) => (
-                        <div key={i}>
+                        <div style={{ marginTop: '0.15rem' }} key={i}>
                           <UserHeaderBar
                             user={user}
                             rightContent={
                               <DateInfo time={user.created_at} style={{ alignSelf: 'flex-end' }} />
                             }
-                          />
-                          <UserSubInfoBar
-                            influence={user.influence}
-                            progress={user.integrity_progress}
-                            level={user.integrity_level}
-                            distance={user.distance}
-                            city={user.city_name}
-                            style={{ marginBottom: '0.16rem' }}
                           />
                         </div>
                       ))}

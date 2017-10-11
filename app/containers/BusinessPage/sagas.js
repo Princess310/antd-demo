@@ -400,7 +400,7 @@ export function* collectMoment(action) {
 
 export function* setTopMoment(action) {
   try {
-    const { id, reward_as } = action.payload;
+    const { id, reward_as, role } = action.payload;
 
     const res = yield request.doPost('moments/supply-and-demnd-top', {
       moments_id: id,
@@ -423,6 +423,7 @@ export function* setTopMoment(action) {
         payload: {
           type: reward_as,
           page: 1,
+          role,
         },
       });
 

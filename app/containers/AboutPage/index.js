@@ -33,7 +33,7 @@ export class AboutPage extends React.PureComponent { // eslint-disable-line reac
           <Avatar id="" avatar={logo} />
         </FlexCenter>
         <WhiteSpace size="md" />
-        <FlexCenter style={{ fontSize: '0.24rem' }}>V1.5.0</FlexCenter>
+        <FlexCenter style={{ fontSize: '0.24rem' }}>V1.9.0</FlexCenter>
         <WhiteSpace size="md" />
         <List>
           <Item

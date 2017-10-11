@@ -13,21 +13,23 @@ import Avatar from 'components/Avatar';
 import FlexRow from 'components/FlexRow';
 import FlexSB from 'components/FlexSB';
 import FlexColumn from 'components/FlexColumn';
-import LevelTag from 'components/LevelTag';
-import ExpTag from 'components/ExpTag';
+import LineTag from 'components/LineTag';
 
 const Wrapper = styled(FlexRow)`
   display: flex;
   padding: 0.24rem;
   background-color: ${pallete.white};
 `;
+
 const ItemWrapper = styled.div`
-  marginLeft: 0.12rem;
-  paddingLeft: 0.12rem;
+  marginRight: 0.12rem;
   font-size: 0.24rem;
   color: ${pallete.text.words};
-  borderLeft: 1px ${pallete.border.normal} solid;
 `;
+
+const tagStyle = {
+  marginLeft: '0.12rem',
+};
 
 class UserHeaderBar extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   static defaultProps = {
@@ -51,18 +53,13 @@ class UserHeaderBar extends React.PureComponent { // eslint-disable-line react/p
           <FlexColumn style={{ padding: '0.04rem 0.24rem' }}>
             <FlexRow>
               <section style={{ fontSize: '0.28rem' }}>{user.nickname}</section>
-              {user.company && <ItemWrapper>{user.company}</ItemWrapper>}
-              {user.position && <ItemWrapper>{user.position}</ItemWrapper>}
-              {/*{user.integrity_level && <LevelTag>LV{user.integrity_level}</LevelTag>}
-              {user.influence && <ExpTag>{user.influence}</ExpTag>}*/}
+              {user.tag_identity_name !== '' && <LineTag style={{ ...tagStyle }}>{user.tag_identity_name}</LineTag>}
+              {(user.main_service_name && user.main_service_name !== '') && <LineTag style={{ ...tagStyle }}>{user.main_service_name}</LineTag>}
             </FlexRow>
-            <section
-              style={{
-                marginTop: '0.04rem',
-                color: pallete.text.words,
-                fontSize: '0.24rem',
-              }}
-            >{user.tag_identity_name}</section>
+            <FlexRow>
+              {user.company && <ItemWrapper>{user.company}</ItemWrapper>}
+              {user.position && <ItemWrapper style={{ borderLeft: `1px ${pallete.border.normal} solid` }}>{user.position}</ItemWrapper>}
+            </FlexRow>
           </FlexColumn>
           {rightContent && rightContent}
         </FlexSB>

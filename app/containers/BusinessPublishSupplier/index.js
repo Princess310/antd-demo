@@ -54,11 +54,12 @@ export class BusinessPublishSupplier extends React.PureComponent { // eslint-dis
   // when get out of this page, save the publish params
   componentWillUnmount() {
     const { location: { action } } = this.props;
-    const { content, files } = this.state;
+    const { content, files, showMobile } = this.state;
 
     this.props.setPublishParams({
       content,
       files,
+      showMobile,
     });
   }
 
