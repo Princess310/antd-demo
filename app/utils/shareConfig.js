@@ -3,7 +3,7 @@ import { emptyHtml } from 'utils/utils';
 import { getQueryString } from 'utils/utils';
 import request from 'utils/request';
 import brower from 'utils/brower';
-import { getHongbaoInfo } from 'utils/utils';
+import { getHongbaoInfo, filterEmojiStr } from 'utils/utils';
 
 import logo from 'assets/images/logo-icon.png';
 
@@ -125,9 +125,9 @@ const shareConfig = {
     }
 
     // title limit: 30, content limit: 50
-    title = title.substring(0, 30);
-    desc = desc.substring(0, 50);
-    timeLineTitle = timeLineTitle.substring(0, 50);
+    title = filterEmojiStr(title).substring(0, 30);
+    desc = filterEmojiStr(desc).substring(0, 50);
+    timeLineTitle = filterEmojiStr(timeLineTitle).substring(0, 50);
 
     onMenuShareTimeline(timeLineTitle, link, imgUrl, success, cancel);
     onMenuShareOther(title, desc, link, imgUrl, success, cancel);
