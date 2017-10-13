@@ -10,6 +10,7 @@ import styled from 'styled-components';
 import AppContent from 'components/AppContent';
 import FlexRowCenter from 'components/FlexRowCenter';
 import FlexColumnCenter from 'components/FlexColumnCenter';
+import HongbaoFooter from 'share/containers/ShareAppPage/HongbaoFooter';
 import { Button } from 'antd-mobile';
 import QRCode from 'qrcode.react';
 
@@ -19,7 +20,7 @@ import oss from 'utils/oss';
 
 import shareConfig from 'utils/shareConfig';
 
-import { linkOpenInstall } from 'utils/utils';
+import { linkOpenInstall, getHongbaoInfo } from 'utils/utils';
 
 const PicWrapper = styled.div`
   margin-bottom: 0.12rem;
@@ -92,6 +93,7 @@ export class ShareNotePage extends React.PureComponent { // eslint-disable-line 
 
   render() {
     const { moment } = this.state;
+    const hongbaoInfo = getHongbaoInfo();
 
     let picturesView = null;
     if (moment) {
@@ -163,7 +165,7 @@ export class ShareNotePage extends React.PureComponent { // eslint-disable-line 
             </div>
           )}
         </AppContent>
-        <Button style={buttonStyle} onClick={this.handleDownload}>立即加入</Button>
+        {hongbaoInfo.isHongbao ? <HongbaoFooter buttonStyle={{ backgroundColor: pallete.theme }} /> : <Button style={buttonStyle} onClick={this.handleDownload}>立即加入</Button>}
       </div>
     );
   }
