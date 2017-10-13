@@ -10,7 +10,9 @@ import styled from 'styled-components';
 
 import FlexSB from 'components/FlexSB';
 import FlexCenter from 'components/FlexCenter';
+import FlexColumnCenter from 'components/FlexColumnCenter';
 import ExpProgress from 'components/ExpProgress';
+import HongbaoUserInfo from 'share/components/HongbaoUserInfo';
 import { Button } from 'antd-mobile';
 
 import { linkOpenInstall, getHongbaoInfo } from 'utils/utils';
@@ -42,9 +44,12 @@ class DownloadBar extends React.PureComponent { // eslint-disable-line react/pre
     const hongbaoInfo = getHongbaoInfo();
     const name = hongbaoInfo.isHongbao ? '下载登录领现金红包' : '免费下载，已有10000+人下载';
     return (
-      <Wrapper>
+      <Wrapper style={hongbaoInfo.isHongbao ? { height: '2rem' } : {}}>
         <FlexCenter>
-          <Button style={buttonStyle} onClick={this.handleDownload}>{name}</Button>
+          <FlexColumnCenter>
+            <Button style={buttonStyle} onClick={this.handleDownload}>{name}</Button>
+            {hongbaoInfo.isHongbao ? <HongbaoUserInfo /> : null}
+          </FlexColumnCenter>
         </FlexCenter>
       </Wrapper>
     );
