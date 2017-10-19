@@ -58,7 +58,7 @@ export class PreviewPage extends React.PureComponent { // eslint-disable-line re
         <div className="company-pictures" style={rootStyle}>
           <div className="swiper-wrapper">
             {pictures.map((p, i) => (
-              <div className="swiper-slide" style={{ width: '7.5rem', height: '100%' }} key={i}>
+              <div className="swiper-slide" style={{ width: '100%', height: '100%' }} key={i}>
                  <img role="presentation" src={p} style={{ width: '100%', height: '100%' }} />
               </div>
             ))}

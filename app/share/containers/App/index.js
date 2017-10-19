@@ -26,7 +26,11 @@
  *
  * 健康会展app分享和群分享:
  *   type: jk_group
-  *  id: (1.分享群组的话，带群组id，2.分享app不用传)
+ *   id: (1.分享群组的话，带群组id，2.分享app不用传)
+ * 
+ * 库存清仓
+ *   type: stock
+ *   id: 传递被分享库存的id
  */
 
 import React from 'react';
@@ -35,6 +39,7 @@ import ShareBusinessPage from 'share/containers/ShareBusinessPage';
 import ShareUserInfoPage from 'share/containers/ShareUserInfoPage';
 import ShareGroupPage from 'share/containers/ShareGroupPage';
 import ShareNotePage from 'share/containers/ShareNotePage';
+import ShareStockPage from 'share/containers/ShareStockPage';
 
 import { getQueryString } from 'utils/utils';
 
@@ -61,6 +66,7 @@ export default class App extends React.PureComponent { // eslint-disable-line re
         {type === 'card' && <ShareUserInfoPage id={id} uid={uid} />}
         {type === 'jk_group' && <ShareGroupPage id={id} uid={uid} />}
         {type === 'note' && <ShareNotePage id={id} uid={uid} />}
+        {type === 'stock' && <ShareStockPage id={id} uid={uid} /> }
       </div>
     );
   }
