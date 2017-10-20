@@ -28,45 +28,121 @@
  *   type: jk_group
  *   id: (1.分享群组的话，带群组id，2.分享app不用传)
  * 
- * 库存清仓
+ * 库存清仓:
  *   type: stock
  *   id: 传递被分享库存的id
  */
 
 import React from 'react';
-
-import ShareBusinessPage from 'share/containers/ShareBusinessPage';
-import ShareUserInfoPage from 'share/containers/ShareUserInfoPage';
-import ShareGroupPage from 'share/containers/ShareGroupPage';
-import ShareNotePage from 'share/containers/ShareNotePage';
-import ShareStockPage from 'share/containers/ShareStockPage';
-
+import Loader from 'components/Loader';
+import FlexCenter from 'components/FlexCenter';
 import { getQueryString } from 'utils/utils';
 
+const rootStyle = {
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  backgroundColor: 'rgba(0, 0, 0, 0.1)',
+};
+
+let ShareContainerPage = null;
+
 export default class App extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      loaded: false,
+    };
+  }
 
   static propTypes = {
     children: React.PropTypes.node,
   };
 
-  render() {
+  componentDidMount() {
+    const self = this;
     let type = getQueryString('type', 'default');
-    const id = getQueryString('id');
-    const uid = getQueryString('uid');
-    const name = getQueryString('name');
 
     if (type.indexOf('share_') > -1) {
       type = type.slice(6, type.length);
     }
 
+    this.loadPage(type);
+  }
+
+  loadPage = (type) => {
+    const self = this;
+
+    // So, we do the asynchronous load containers for share page, which is better than load all things at first time
+    switch(type) {
+      case 'momment': {
+        import('share/containers/ShareBusinessPage')
+          .then((cb) => {
+            self.loadModule(cb);
+          });
+        
+        break;
+      }
+      case 'card': {
+        import('share/containers/ShareUserInfoPage')
+          .then((cb) => {
+            self.loadModule(cb);
+          });
+        
+        break;
+      }
+      case 'jk_group': {
+        import('share/containers/ShareGroupPage')
+          .then((cb) => {
+            self.loadModule(cb);
+          });
+
+        break;
+      }
+      case 'note': {
+        import('share/containers/ShareNotePage')
+          .then((cb) => {
+            self.loadModule(cb);
+          });
+
+        break;
+      }
+      case 'stock': {
+        import('share/containers/ShareStockPage')
+          .then((cb) => {
+            self.loadModule(cb);
+          });
+
+        break;
+      }
+    }
+  }
+
+  loadModule = (componentModule) => {
+    ShareContainerPage = componentModule.default;
+    this.setState({
+      loaded: true,
+    });
+  };
+
+  render() {
+    const id = getQueryString('id');
+    const uid = getQueryString('uid');
+    const name = getQueryString('name');
+
+    const { loaded } = this.state;
+
     return (
       <div>
         {React.Children.toArray(this.props.children)}
-        {type === 'momment' && <ShareBusinessPage id={id} uid={uid} />}
-        {type === 'card' && <ShareUserInfoPage id={id} uid={uid} />}
-        {type === 'jk_group' && <ShareGroupPage id={id} uid={uid} />}
-        {type === 'note' && <ShareNotePage id={id} uid={uid} />}
-        {type === 'stock' && <ShareStockPage id={id} uid={uid} /> }
+        {loaded ? <ShareContainerPage id={id} uid={uid} /> : (
+          <FlexCenter style={rootStyle}>
+            <Loader />
+          </FlexCenter>
+        )}
       </div>
     );
   }
