@@ -66,6 +66,17 @@ class Gallery extends React.PureComponent { // eslint-disable-line react/prefer-
     });
   }
 
+  handleView = (e, i) => {
+    e.preventDefault();
+    e.stopPropagation()
+    const { pictures } = this.props;
+
+    wx.previewImage({
+      current: pictures[i],
+      urls: pictures,
+    });
+  }
+
   render() {
     const { pictures } = this.props;
     const { activeIndex } = this.state;
@@ -76,7 +87,7 @@ class Gallery extends React.PureComponent { // eslint-disable-line react/prefer-
           <div className="swiper-wrapper">
             {pictures.map((p, i) => (
               <div className="swiper-slide" style={{ width: '100%', height: '100%' }} key={i}>
-                 <img role="presentation" src={p} style={imgStyle} />
+                 <img role="presentation" src={p} style={imgStyle} onClick={(e) => this.handleView(e, i)} />
               </div>
             ))}
           </div>

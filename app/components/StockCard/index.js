@@ -23,6 +23,16 @@ const Head = styled.div`
   font-weight: bolder;
 `;
 
+const Reward = styled.div`
+  display: inline-block;
+  margin-right: 0.08rem;
+  padding: 0 0.04rem;
+  font-size: 0.2rem;
+  color: #fc5210;
+  border: 0.01rem solid #fc5210;
+  border-radius: 0.04rem;
+`;
+
 const TagItem = styled.div`
   color: ${pallete.theme};
   font-size: 0.2rem;
@@ -82,10 +92,12 @@ const buttonStyle = {
   top: '0.48rem',
   right: '0.24rem',
   height: '0.4rem',
-  width: '1rem',
+  padding: '0 0.24rem',
   lineHeight: '0.4rem',
   fontSize: '0.24rem',
   color: pallete.white,
+  border: '1px solid #ddd',
+  borderRadius: '0.1rem',
   backgroundColor: pallete.theme,
 }
 
@@ -94,110 +106,77 @@ class StockCard extends React.PureComponent { // eslint-disable-line react/prefe
     style: {},
   }
 
-  render() {
-    const { style } = this.props;
-    const rootStyle = {
-    };
+  handleDownloadInfo = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    Toast.info('请下载健康商信APP', 2);
+  }
 
-    const mochaData = {
-      pictures: [
-        'http://alijian-yaoyue-uploads-1.img-cn-hangzhou.aliyuncs.com/moments/1/150840014611810__418566__.png',
-        'http://alijian-yaoyue-uploads-1.img-cn-hangzhou.aliyuncs.com/chat/5959a707d0f33243340/1508223020774031__193376__.jpg',
-        'http://alijian-yaoyue-uploads-1.img-cn-hangzhou.aliyuncs.com/chat/5959a707d0f33243340/1508223020515491__170977__.jpg',
-      ],
-      name: '甘源牌 蟹黄味瓜子仁青豆蚕豆酱汁牛肉味蚕豆 四连包 1140g 休闲零食大礼包小吃每日坚果',
-      tags: [
-        '样品',
-        '上门取货',
-        '保质期',
-        '批文批号',
-        '品牌',
-        '支持换货',
-      ],
-      price: '39.90',
-      sourcePrice: '59.99',
-      cut: '7',
-      count: 1000,
-      user: {
-        avatar: "http://alijian-yaoyue-uploads-1.img-cn-hangzhou.aliyuncs.com/avatar/26065/150674029619670__3526__.png",
-        company: "阿里健",
-        position: "Web前端",
-        created_at: "1506740351",
-        main_service_id: "7",
-        main_service_name: "食品",
-        mobile: "18227552785",
-        nickname: "王浩",
-        tag_identity_name: "生产厂家",
-        uid: "26065",
-        verify_status: "0",
-      },
+  render() {
+    const { style, stock } = this.props;
+    const rootStyle = {
     };
 
     return (
       <div style={Object.assign(rootStyle, style)}>
-        <Gallery pictures={mochaData.pictures} />
+        <Gallery pictures={stock.images} />
         <div style={{ padding: '0.24rem', backgroundColor: pallete.white }}>
-          <Head>{mochaData.name}</Head>
+          <Head><Reward>{stock.reward_item_name}</Reward>{stock.name}</Head>
           <FlexRow style={{ position: 'relative', left: '-0.12rem', marginTop: '0.16rem' }}>
-            {mochaData.tags.map((tag, i) => (
+            {stock.label.map((tag, i) => (
               <TagItem key={i}>
-                {`【${tag}】`}
+                {`【${tag.name}】`}
               </TagItem>
             ))}
           </FlexRow>
           <FlexSB style={{ marginTop: '0.16rem' }}>
             <FlexRow>
               <div style={{ marginRight: '0.16rem', fontSize: '0.24rem', color: pallete.text.help }}>处理价:</div>
-              <div style={{ marginRight: '0.16rem', fontSize: '0.36rem', color: '#fc353f' }}>￥{mochaData.price}</div>
-              <CutItem>{mochaData.cut}折</CutItem>
+              <div style={{ marginRight: '0.16rem', fontSize: '0.36rem', color: '#fc353f' }}>￥{stock.reduced_price}</div>
+              <CutItem>{Number(stock.discount).toFixed(1)}折</CutItem>
             </FlexRow>
             <TimeItem>
-              仅剩21分05秒
+              {stock.due_time}
             </TimeItem>
           </FlexSB>
           <FlexSB style={{ marginTop: '0.16rem', fontSize: '0.2rem', color: pallete.text.help }}>
-            <div style={{ textDecoration: 'line-through' }}>&nbsp;批发价:&nbsp;￥{mochaData.sourcePrice}&nbsp;</div>
-            <div>库存{mochaData.count}</div>
+            <div style={{ textDecoration: 'line-through' }}>&nbsp;批发价:&nbsp;￥{stock.wholesale_price}&nbsp;</div>
+            <div>库存{stock.number}</div>
           </FlexSB>
         </div>
         <UserCard>
           <UserCardHeader>商家信息</UserCardHeader>
           <MomentHeader
             user={{
-              id: mochaData.user.uid,
-              avatar: mochaData.user.avatar,
-              verify_status: mochaData.user.verify_status,
-              nickname: mochaData.user.nickname,
-              tag_identity_name: mochaData.user.tag_identity_name,
-              main_service_name: mochaData.user.main_service_name,
-              company: mochaData.user.company,
-              position: mochaData.user.position,
+              id: stock.user_info.uid,
+              avatar: stock.user_info.avatar,
+              verify_status: stock.user_info.verify_status,
+              nickname: stock.user_info.nickname,
+              tag_identity_name: stock.user_info.tag_identity_name,
+              main_service_name: stock.user_info.main_service_name,
+              company: stock.user_info.company,
+              position: stock.user_info.position,
             }}
-            created_at={mochaData.user.created_at}
+            created_at={stock.created_at}
             style={{
               marginTop: '0.16rem',
-              marginBottom: '0.16rem',
             }}
           />
-          <Button style={buttonStyle} onClick={this.handleDownloadInfo}>对话</Button>
-          <FlexRow
-            style={{
-              paddingTop: '0.24rem',
-              fontSize: '0.2rem',
-              color: pallete.text.help,
-              borderTop: `0.01rem ${pallete.border.normal} solid`,
-            }}
-          >
-            <TagItem>处理原因：</TagItem>
-            <div>因为市场竞争导致积压严重</div>
-          </FlexRow>
+          {stock.user_info.show_mobile === "1" ? (
+            <a style={buttonStyle} href={`tel:${stock.user_info.mobile}`}>拨打电话</a>
+          ) : (
+            <Button style={buttonStyle} onClick={this.handleDownloadInfo}>对话</Button>
+          )}
         </UserCard>
+
+        <div style={{ marginTop: '0.24rem', padding: '0.24rem', backgroundColor: pallete.white }} dangerouslySetInnerHTML={{__html: stock.content}} />
       </div>
     );
   }
 }
 
 StockCard.propTypes = {
+  stock: PropTypes.object,
 };
 
 export default StockCard;

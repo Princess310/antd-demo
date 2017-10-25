@@ -120,6 +120,15 @@ const shareConfig = {
         imgUrl = head;
         break;
       }
+      case 'stock': {
+        const { id, name, images } = data;
+        title = `${user ? user.nickname : ''}正在清仓处理${name}的库存，赶快来看看吧！`;
+        timeLineTitle = title;
+        desc = `下载健康商信APP，您也可以清理您积压的库存！`;
+        link = `${link}&id=${id}&uid=${uid}`;
+        imgUrl = images.length > 0 ? images[0] : `http://${domain}${logo}`;
+        break;
+      }
       default: {
       }
     }
