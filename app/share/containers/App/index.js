@@ -31,6 +31,10 @@
  * 库存清仓:
  *   type: stock
  *   id: 传递被分享库存的id
+ * 
+ * 红包:
+ *   type: hongbao
+ *   id: 传递被分享红包的id
  */
 
 import React from 'react';
@@ -112,6 +116,14 @@ export default class App extends React.PureComponent { // eslint-disable-line re
       }
       case 'stock': {
         import('share/containers/ShareStockPage')
+          .then((cb) => {
+            self.loadModule(cb);
+          });
+
+        break;
+      }
+      case 'hongbao': {
+        import('share/containers/ShareHongbaoPage')
           .then((cb) => {
             self.loadModule(cb);
           });

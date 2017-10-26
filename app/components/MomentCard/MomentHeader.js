@@ -24,6 +24,7 @@ const Wrapper = styled(FlexRow)`
   display: flex;
   background-color: ${pallete.white};
 `;
+
 const ItemWrapper = styled.div`
   margin-right: 0.24rem;
   font-size: 0.26rem;

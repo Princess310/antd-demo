@@ -12,9 +12,7 @@ import AppContent from 'components/AppContent';
 import StockCard from 'components/StockCard';
 import DownloadBar from 'share/components/DownloadBar';
 
-import pallete from 'styles/colors';
 import request from 'utils/shareRequest';
-import oss from 'utils/oss';
 
 import shareConfig from 'utils/shareConfig';
 

@@ -28,7 +28,7 @@ const Wrapper = styled.div`
   box-shadow: 0 0 10px rgba(51,51,112,.38);
 `;
 
-const buttonStyle = {
+const btnStyle = {
   width: '5.7rem',
   color: pallete.white,
   backgroundColor: pallete.theme,
@@ -41,13 +41,14 @@ class DownloadBar extends React.PureComponent { // eslint-disable-line react/pre
     linkOpenInstall();
   }
   render() {
+    const { name, buttonStyle } = this.props;
     const hongbaoInfo = getHongbaoInfo();
-    const name = hongbaoInfo.isHongbao ? '下载登录领现金红包' : '免费下载，已有10000+人下载';
+    const resultName = name ? name : (hongbaoInfo.isHongbao ? '下载登录领现金红包' : '免费下载，已有10000+人下载');
     return (
       <Wrapper style={hongbaoInfo.isHongbao ? { height: '2rem' } : {}}>
         <FlexCenter>
           <FlexColumnCenter>
-            <Button style={buttonStyle} onClick={this.handleDownload}>{name}</Button>
+            <Button style={{...btnStyle, ...buttonStyle}} onClick={this.handleDownload}>{resultName}</Button>
             {hongbaoInfo.isHongbao ? <HongbaoUserInfo /> : null}
           </FlexColumnCenter>
         </FlexCenter>

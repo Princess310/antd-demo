@@ -15,6 +15,7 @@ import FlexRow from 'components/FlexRow';
 import FlexSB from 'components/FlexSB';
 import MomentHeader from 'components/MomentCard/MomentHeader';
 import timeBg from 'assets/images/stock-time-bar.png';
+import overTimeBg from 'assets/images/stock-over-time-bar.png';
 
 import Gallery from './Gallery';
 
@@ -117,6 +118,8 @@ class StockCard extends React.PureComponent { // eslint-disable-line react/prefe
     const rootStyle = {
     };
 
+    const isOverTime = Number(stock.due_time) === 0 || stock.sale_status === '1';
+
     return (
       <div style={Object.assign(rootStyle, style)}>
         <Gallery pictures={stock.images} />
@@ -135,8 +138,8 @@ class StockCard extends React.PureComponent { // eslint-disable-line react/prefe
               <div style={{ marginRight: '0.16rem', fontSize: '0.36rem', color: '#fc353f' }}>￥{stock.reduced_price}</div>
               <CutItem>{Number(stock.discount).toFixed(1)}折</CutItem>
             </FlexRow>
-            <TimeItem>
-              {stock.due_time}
+            <TimeItem style={isOverTime ? { width: '1.38rem', backgroundImage: `url(${overTimeBg})` } : {}}>
+              {isOverTime ? '已下架' : stock.due_time}
             </TimeItem>
           </FlexSB>
           <FlexSB style={{ marginTop: '0.16rem', fontSize: '0.2rem', color: pallete.text.help }}>

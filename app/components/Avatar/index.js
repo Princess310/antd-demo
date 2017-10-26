@@ -39,10 +39,11 @@ class Avatar extends React.PureComponent { // eslint-disable-line react/prefer-s
     isVip: false,
     size: '1.04rem',
     linkUser: false,
+    style: {},
   }
 
   render() {
-    const { id, avatar, isVip, size, linkUser, linkParmas } = this.props;
+    const { id, avatar, isVip, size, linkUser, linkParmas, style } = this.props;
 
     return (
       <Wrapper>
@@ -52,6 +53,7 @@ class Avatar extends React.PureComponent { // eslint-disable-line react/prefer-s
             width: size,
             height: size,
             borderRadius: '0.08rem',
+            ...style,
           }}
           src={oss.getImgSuitablePath(avatar)}
           onClick={(e) => {
