@@ -8,7 +8,7 @@
 import React, { PropTypes } from 'react';
 import styled from 'styled-components';
 import pallete from 'styles/colors';
-import { zeroFull } from 'utils/utils';
+import { zeroFull, getQueryString } from 'utils/utils';
 
 import oss from 'utils/oss';
 import { browserHistory } from 'react-router';
@@ -46,12 +46,13 @@ class ShareMomentInfoCard extends React.PureComponent { // eslint-disable-line r
     };
 
     const date = new Date(created_at * 1000);
+    const uid = getQueryString('uid');
 
     return (
       <div
         style={Object.assign(rootStyle, style)}
         onClick={() => {
-          window.location.href = `public_share.html?type=momment&id=${id}`;
+          window.location.href = `public_share.html?type=momment&id=${id}&uid=${uid}`;
         }}
       >
         <Wrapper>

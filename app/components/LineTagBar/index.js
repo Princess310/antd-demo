@@ -13,7 +13,7 @@ const LineTagBar = styled.div`
     content: '';
     display: inline-block;
     position: relative;
-    right: 0.06rem;
+    right: 0.05rem;
     margin-right: 0.06rem;
     width: 0.06rem;
     height: 0.3rem;
@@ -25,7 +25,7 @@ const LineTagBar = styled.div`
     content: '';
     display: inline-block;
     position: relative;
-    left: 0.06rem;
+    left: 0.05rem;
     margin-left: 0.06rem;
     width: 0.06rem;
     height: 0.3rem;

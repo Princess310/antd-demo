@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import styled from 'styled-components';
 import pallete from 'styles/colors';
+import date from 'utils/date';
 
 import FlexRow from 'components/FlexRow';
 import FlexRowCenter from 'components/FlexRowCenter';
@@ -27,46 +28,56 @@ const ItemWrapper = styled(FlexRow)`
 
 class HongbaoList extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   render() {
-    const {  } = this.props;
+    const { hongbao, list } = this.props;
 
-    const user = {
-      avatar: "http://alijian-yaoyue-uploads-1.img-cn-hangzhou.aliyuncs.com/avatar/26065/150674029619670__3526__.png",
-      created_at: "1506740351",
-      nickname: "王浩",
-      uid: "26065",
-      count: 0.2,
-    };
+    // 显示抢红包用的时间
+    let usedTime = 0;
+    if (hongbao.is_finish) {
+      const lastTime = Number(list[list.length - 1].created_at);
+      const diffTime = lastTime - Number(hongbao.created_at);
+      usedTime = date.parseDiffTime(diffTime);
+    }
+
+    const listView = list && list.map((user) => (
+      <FlexSB key={user.id} style={{ width: '100%', alignSelf: 'flex-start' }}>
+        <Avatar
+          size="0.88rem"
+          id={user.id}
+          avatar={user.avatar}
+          isVip={Number(user.verify_status) === 2}
+        />
+        <FlexColumn style={{ padding: '0.04rem 0.12rem', width: '100%' }}>
+            <FlexSB style={{ fontSize: '0.28rem', color: '#333333' }}>
+              <section>{user.nickname}</section>
+              <section>{user.total_fee}元</section>
+            </FlexSB>
+            <FlexSB>
+              {user.created_at && <DateInfo
+                time={user.created_at}
+                style={{
+                  color: pallete.text.help,
+                }}
+              />}
+              {
+                user.luck > 0 && (
+                  <FlexRow>
+                    <img src={luckImg} role="presetation" style={{ width: '0.3rem', height: '0.24rem' }} />
+                    <div style={{ marginLeft: '0.08rem' ,fontSize: '0.22rem', color: '#fac216' }}>手气最佳</div>
+                  </FlexRow>
+                )
+              }
+            </FlexSB>
+          </FlexColumn>
+      </FlexSB>
+    ));
 
     return (
       <ListWrapper>
-        <div style={{ fontSize: '0.24rem', color: '#999999' }}>8个红包共2.00元，2分钟被抢完</div>
+        <div style={{ fontSize: '0.24rem', color: '#999999' }}>
+          {hongbao.total_number}个红包共{hongbao.total_fee}元，{hongbao.is_finish > 0 ? `${usedTime}被抢完` : `已领取${hongbao.get_count}个`}
+        </div>
         <ItemWrapper>
-          <Avatar
-            size="0.88rem"
-            id={user.id}
-            avatar={user.avatar}
-            isVip={Number(user.verify_status) === 2}
-          />
-          <FlexSB style={{ width: '100%', alignSelf: 'flex-start' }}>
-            <FlexColumn style={{ padding: '0.04rem 0.12rem', width: '100%' }}>
-                <FlexSB style={{ fontSize: '0.28rem', color: '#333333' }}>
-                  <section>{user.nickname}</section>
-                  <section>{user.count}元</section>
-                </FlexSB>
-                <FlexSB>
-                  {user.created_at && <DateInfo
-                    time={user.created_at}
-                    style={{
-                      color: pallete.text.help,
-                    }}
-                  />}
-                  <FlexRow>
-                    <imgx src={luckImg} role="presetation" style={{ width: '0.3rem', height: '0.24rem' }} />
-                    <div style={{ marginLeft: '0.08rem' ,fontSize: '0.22rem', color: '#fac216' }}>手气最佳</div>
-                  </FlexRow>
-                </FlexSB>
-              </FlexColumn>
-          </FlexSB>
+          {listView}
         </ItemWrapper>
       </ListWrapper>
     );

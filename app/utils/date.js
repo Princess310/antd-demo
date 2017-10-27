@@ -117,6 +117,14 @@ const dateUtil = {
 
     return result;
   },
+  parseDiffTime: (value) => {
+    const seconds = value % 60;
+    const totalMinutes = parseInt(value / 60);
+    const minutes = totalMinutes % 60;
+    const hours = parseInt(totalMinutes / 60);
+
+    return hours > 0 ? `${hours}小时${minutes}分${seconds}秒` : (minutes > 0 ? `${minutes}分${seconds}秒` : `${seconds}秒`);
+  }
 };
 
 export default dateUtil;

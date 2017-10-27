@@ -33,7 +33,7 @@
  *   id: 传递被分享库存的id
  * 
  * 红包:
- *   type: hongbao
+ *   type: packet
  *   id: 传递被分享红包的id
  */
 
@@ -122,7 +122,7 @@ export default class App extends React.PureComponent { // eslint-disable-line re
 
         break;
       }
-      case 'hongbao': {
+      case 'packet': {
         import('share/containers/ShareHongbaoPage')
           .then((cb) => {
             self.loadModule(cb);

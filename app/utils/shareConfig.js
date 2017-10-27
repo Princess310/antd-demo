@@ -129,6 +129,16 @@ const shareConfig = {
         imgUrl = images.length > 0 ? images[0] : `http://${domain}${logo}`;
         break;
       }
+      case 'hongbao': {
+        const { id, pictures } = data;
+        title = `${user ? user.nickname + '的' : ''}红包广告分享`;
+        timeLineTitle = `${user ? user.nickname : ''}在分享红包广告，邀请您也来分享！`;
+        desc = timeLineTitle;
+        link = `${link}&id=${id}&uid=${uid}`;
+        imgUrl = pictures.length > 0 ? pictures[0] : `http://${domain}${logo}`;
+
+        break;
+      }
       default: {
       }
     }
