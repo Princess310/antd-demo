@@ -8,6 +8,7 @@
 import React, { PropTypes } from 'react';
 import styled from 'styled-components';
 import pallete from 'styles/colors';
+import date from 'utils/date';
 
 import { Button, Toast } from 'antd-mobile';
 
@@ -102,10 +103,51 @@ const buttonStyle = {
   backgroundColor: pallete.theme,
 }
 
+let timer = null;
 class StockCard extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+  constructor(props) {
+    super(props);
+
+    const { stock } = this.props;
+    // check the status
+    const isOverTime = Number(stock.due_time) === 0 || stock.sale_status === '1';
+    this.state = {
+      isOverTime,
+      diffTime: Number(stock.due_time),
+      showTime: date.parseDiffTime(stock.due_time),
+    };
+  }
+
   static defaultProps = {
     style: {},
   }
+
+  componentDidMount() {
+    let { diffTime, showTime } = this.state;
+
+    if (diffTime <= 0) {
+      this.setState({
+        isOverTime: true,
+      });
+
+      timer = null;
+      return;
+    }
+
+    timer = setInterval(() => {
+      diffTime -= 1;
+      this.setState({
+        diffTime,
+        showTime: date.parseDiffTime(diffTime),
+      });
+    }, 1000);
+  }
+
+  componentWillUnmount() {
+    // clear the timer
+    timer = null;
+  }
+  
 
   handleDownloadInfo = (e) => {
     e.preventDefault();
@@ -114,11 +156,10 @@ class StockCard extends React.PureComponent { // eslint-disable-line react/prefe
   }
 
   render() {
+    const { isOverTime, showTime } = this.state;
     const { style, stock } = this.props;
     const rootStyle = {
     };
-
-    const isOverTime = Number(stock.due_time) === 0 || stock.sale_status === '1';
 
     return (
       <div style={Object.assign(rootStyle, style)}>
@@ -139,7 +180,7 @@ class StockCard extends React.PureComponent { // eslint-disable-line react/prefe
               <CutItem>{Number(stock.discount).toFixed(1)}折</CutItem>
             </FlexRow>
             <TimeItem style={isOverTime ? { width: '1.38rem', backgroundImage: `url(${overTimeBg})` } : {}}>
-              {isOverTime ? '已下架' : stock.due_time}
+              {isOverTime ? '已下架' : showTime}
             </TimeItem>
           </FlexSB>
           <FlexSB style={{ marginTop: '0.16rem', fontSize: '0.2rem', color: pallete.text.help }}>

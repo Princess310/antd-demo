@@ -56,7 +56,6 @@ export class ShareHongbaoPage extends React.PureComponent { // eslint-disable-li
     }).then((res) => {
       const { data, list, share_user, moments_newest } = res;
 
-      console.log('data', res);
       this.setState({
         info: data,
         list,
@@ -94,20 +93,20 @@ export class ShareHongbaoPage extends React.PureComponent { // eslint-disable-li
         />
         <AppContent style={{ top: 0, paddingBottom: '2rem', backgroundColor: pallete.white }} >
           <Title />
-          {moment && (
+          {info && (
             <div>
               <div onClick={this.handLink}>
                 <div style={{ position: 'relative', paddingLeft: '0.24rem', paddingRight: '0.24rem' }}>
                   <UserCard
                     user={{
-                      id: moment.user.uid,
-                      avatar: moment.user.avatar,
-                      verify_status: moment.user.verify_status,
-                      nickname: moment.user.nickname,
-                      tag_identity_name: moment.user.tag_identity_name,
-                      main_service_name: moment.user.main_service_name,
-                      company: moment.user.company,
-                      position: moment.user.position,
+                      id: info.uid,
+                      avatar: info.avatar,
+                      verify_status: info.verify_status,
+                      nickname: info.nickname,
+                      tag_identity_name: info.tag_identity_name,
+                      main_service_name: info.main_service_name,
+                      company: info.company,
+                      position: info.position,
                     }}
                     style={{
                       marginTop: '0.16rem',
@@ -116,7 +115,7 @@ export class ShareHongbaoPage extends React.PureComponent { // eslint-disable-li
                   />
                   <Button style={buttonStyle} onClick={this.handleDownloadInfo}>对话</Button>
                 </div>
-                <MomentCard moment={moment} />
+                {moment.id && <MomentCard moment={moment} />}
               </div>
               <HongbaoList hongbao={info} list={list} />
             </div>

@@ -94,21 +94,21 @@ const shareConfig = {
         break;
       }
       case 'momment': {
-        const { id, nickname, title:cmsTitle, content, pictures, company, position } = data;
+        const { id, nickname, title:cmsTitle, content, pictures, company, position, avatar } = data;
         title = cmsTitle ? cmsTitle : (content.trim() !== '' ? emptyHtml(content) : `分享${nickname}的健康商信动态`);
         timeLineTitle = `${cmsTitle ? cmsTitle : emptyHtml(content)} 健康商信APP：${user ? `${user.company}.${user.position}.${user.nickname}` : `${company}.${position}.${nickname}`}在分享动态，邀请您也来分享`;
         desc = `${cmsTitle ? cmsTitle + ' ' : ''}健康商信APP：${user ? `${user.company}.${user.position}.${user.nickname}` : `${company}.${position}.${nickname}`}在分享动态，邀请您也来分享`;
         link = `${link}&id=${id}&uid=${uid}`;
-        imgUrl = pictures.length > 0 ? pictures[0] : `http://${domain}${logo}`;
+        imgUrl = pictures.length > 0 ? pictures[0] : (avatar !== '' ? avatar : `http://${domain}${logo}`);
         break;
       }
       case 'note': {
-        const { id, nickname, content, pictures, company, position } = data;
+        const { id, nickname, content, pictures, company, position, avatar } = data;
         title = `${user ? user.nickname : nickname}分享了一条群公告`;
         timeLineTitle = `${user ? `${user.company}.${user.position}.${user.nickname}` : `${company}.${position}.${nickname}`}在分享群公告，点击了解详情`;
         desc = timeLineTitle;
         link = `${link}&id=${id}&uid=${uid}`;
-        imgUrl = pictures.length > 0 ? pictures[0] : `http://${domain}${logo}`;
+        imgUrl = pictures.length > 0 ? pictures[0] : (avatar !== '' ? avatar : `http://${domain}${logo}`);
         break;
       }
       case 'jk_group': {
