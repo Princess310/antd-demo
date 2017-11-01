@@ -383,8 +383,8 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
     };
 
     // moment content wrapper style
-    const contentStyle = Number(source_type) === 1 ? {
-      // paddingLeft: 0,
+    const contentStyle = (Number(source_type) === 1 && from === 'detail') ? {
+      paddingLeft: 0,
       // paddingRight: 0,
     } : {};
 

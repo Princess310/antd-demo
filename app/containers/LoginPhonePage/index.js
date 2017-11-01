@@ -87,8 +87,20 @@ export class LoginPhonePage extends React.PureComponent { // eslint-disable-line
       username: phone.replace(/\s/g, ''),
       code,
     }).then((res) => {
-      localStorage.setItem('access_token', res.data.access_token);
-      browserHistory.push('/');
+      const { is_signup } = res;
+
+      if (!is_signup) {
+        browserHistory.push({
+          pathname: 'loginSetPassword',
+          state: {
+            username: phone.replace(/\s/g, ''),
+            code,
+          },
+        });
+      } else {
+        localStorage.setItem('access_token', res.data.access_token);
+        browserHistory.push('/');
+      }
     });
   }
 

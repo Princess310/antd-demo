@@ -137,14 +137,6 @@ export default function createRoutes(store) {
               .catch(errorLoading);
           },
         }, {
-          path: 'browser',
-          name: 'browserPage',
-          getComponent(location, cb) {
-            import('containers/BrowserPage')
-              .then(loadModule(cb))
-              .catch(errorLoading);
-          },
-        }, {
           path: 'feedBack',
           name: 'feedBackPage',
           getComponent(nextState, cb) {
@@ -547,10 +539,26 @@ export default function createRoutes(store) {
           .catch(errorLoading);
       },
     }, {
+      path: 'browser',
+      name: 'browserPage',
+      getComponent(location, cb) {
+        import('containers/BrowserPage')
+          .then(loadModule(cb))
+          .catch(errorLoading);
+      },
+    }, {
       path: 'index.html',
       name: 'indexPage',
       getComponent(location, cb) {
         import('containers/IndexPage')
+          .then(loadModule(cb))
+          .catch(errorLoading);
+      },
+    }, {
+      path: 'loginSetPassword',
+      name: 'loginSetPassword',
+      getComponent(location, cb) {
+        import('containers/LoginSetPassword')
           .then(loadModule(cb))
           .catch(errorLoading);
       },

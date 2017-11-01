@@ -11,6 +11,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { browserHistory } from 'react-router';
+import request from 'utils/request';
 
 import { ScrollContainer } from 'react-router-scroll';
 import TouchLoader from 'components/TouchLoader';
@@ -31,16 +32,13 @@ import { fetchSearch, fetchBusinessPrice, fetchBusinessNumber, fetchReward, fetc
 import { makeSelectBusinessSearchPanel, makeSelectBusinessSearchAll, makeSelectBusinessFilter } from 'containers/BusinessPage/selectors';
 import { makeSelectCurrentUser } from 'containers/HomePage/selectors';
 
-const SelectCircle = styled.div`
+import WebCard from './WebCard';
+
+const SelectItem = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  width: 1rem;
-  height: 1rem;
-  font-size: '0.26rem';
-  color: ${pallete.text.help};
-  border: 0.01rem ${pallete.theme} solid;
-  border-radius: 50%;
+  font-size: 0.22rem;
 `;
 
 const HeaderWrapper = styled.div`
@@ -51,6 +49,32 @@ const HeaderWrapper = styled.div`
   color: ${pallete.text.help};
 `;
 
+const PanelWrapper = styled.div`
+  position: relative;
+  backgroundColor: ${pallete.white};
+`;
+
+const PanelHeader = styled.div`
+  padding: 0.24rem;
+  color: ${pallete.theme};
+  fontSize: 0.26rem;
+`;
+
+const KeywordTitle = styled.div`
+  padding: 0.04rem 0.24rem;
+  color: ${pallete.text.help};
+  fontSize: 0.2rem;
+`;
+
+const KeywordItem = styled.div`
+  padding: 0.08rem 0.24rem;
+  fontSize: 0.28rem;
+`;
+
+const selectStyle = {
+  marginTop: '0.14rem',
+};
+
 const buttonStyle = {
   padding: 0,
   marginLeft: '0.2rem',
@@ -58,8 +82,11 @@ const buttonStyle = {
   width: '2.24rem',
   height: '0.62rem',
   lineHeight: '0.62rem',
+  whiteSpace: 'nowrap',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  borderColor: '#aaaaaa',
   backgroundColor: pallete.background.white,
-  color: pallete.text.subHelp,
   fontSize: '0.22rem',
 }
 
@@ -78,6 +105,10 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
       page: 1,
       seeMore: false,
       historyList: historyList ? JSON.parse(historyList) : [],
+      // 关键词列表
+      keywordSearch: null,
+      // 全网搜索列表
+      webList: [],
       // the filter state is to save which filter value selected, but not used for now.
       priceFilter: {
         id: 0,
@@ -104,6 +135,15 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
         value: '',
       },
     }
+  }
+
+  componentWillMount() {
+    request.doGet('moments/search-data').then((res) => {
+      const { list } = res;
+      this.setState({
+        keywordSearch: list,
+      });
+    });
   }
 
   // handle keyword change
@@ -169,8 +209,17 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
       });
     }
 
-    this.props.doSearch(panel, keyword, reward_as, type, 1);
-    this.storeHistore(keyword);
+    if (reward_as === 3) {
+      request.doGet('moments/web-search', { keyword }).then((res) => {
+        const { list } = res;
+        this.setState({
+          webList: list,
+        });
+      });
+    } else {
+      this.props.doSearch(panel, keyword, reward_as, type, 1);
+      this.storeHistore(keyword);
+    }
   }
 
   // handle the see more action, to link step 3 page
@@ -234,6 +283,16 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
     });
     this.props.doSearch(panel, keyword, reward_as, type, 1);
     this.storeHistore(keyword);
+  }
+
+  handleKeywordSearch = (keyword) => {
+    const { panel, reward_as, type } = this.state;
+    
+    this.setState({
+      keyword,
+      step: 2,
+    });
+    this.props.doSearch(panel, keyword, reward_as, type, 1);
   }
 
   // click the filter panel to search
@@ -308,20 +367,21 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
         page: page + 1,
       });
     }
+    
     this.props.doSearch(panel, keyword, reward_as, type, page + 1);
   }
 
   render() {
-    const { keyword, step, panel, reward_as, historyList, priceFilter, numberFilter, rewardDemandFilter, rewardSupplierFilter, serviceFilter } = this.state;
+    const { keyword, step, panel, reward_as, historyList, keywordSearch, webList, priceFilter, numberFilter, rewardDemandFilter, rewardSupplierFilter, serviceFilter } = this.state;
     const { searchPanel, searchAll, currentUser, filters } = this.props;
     const { price, number, reward, service } = filters;
-    let placeholder = '搜索动态';
+    let placeholder = '搜索关键词';
     if (panel !== '7') {
       if (step !== 1 && reward_as === 0) {
         placeholder = '搜索人脉';
       } else if (reward_as === 1) {
         placeholder = '搜索供应'
-      } else {
+      } else if (reward_as === 2) {
         placeholder = '搜索需求';
       }
     }
@@ -345,7 +405,7 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
             }}
           />
         </FlexSB>
-        {reward_as !== 0 && (reward_as === 2 ?
+        {reward_as === 2 && (
           (
             <FlexRow>
               <FilterPanel
@@ -373,76 +433,128 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
                 from="demand"
               />
             </FlexRow>
-            ) : (
-              <FlexRow>
-                <FilterPanel
-                  defaultTitle="供应类别"
-                  selectTotalName="全部类别"
-                  items={reward}
-                  value={rewardSupplierFilter.id}
-                  field="name"
-                  onSelect={(item) => this.handleFilter('rewardSupplierFilter', item)}
-                  onExpand={() => {
-                    !reward && this.props.getReward();
-                  }}
-                  contentStyle={{ borderLeft: `0.01rem ${pallete.border.normal} solid` }}
-                  from="supplier"
-                />
-                <FilterPanel
-                  defaultTitle="特色服务"
-                  items={service ? service.slice(1) : service}
-                  value={serviceFilter.id}
-                  field="name"
-                  onSelect={(item) => this.handleFilter('serviceFilter', item)}
-                  onExpand={() => {
-                    !service && this.props.getService();
-                  }}
-                  contentStyle={{ borderLeft: `0.01rem ${pallete.border.normal} solid` }}
-                  from="supplier"
-                />
-                <FilterPanel
-                  defaultTitle="价格区间"
-                  items={price}
-                  value={priceFilter.id}
-                  field="value"
-                  onSelect={(item) => this.handleFilter('priceFilter', item)}
-                  onExpand={() => {
-                    !price && this.props.getPrice();
-                  }}
-                  contentStyle={{ borderLeft: `0.01rem ${pallete.border.normal} solid` }}
-                  from="supplier"
-                />
-              </FlexRow>
-          )
+            )
         )}
-        <AppContent style={{ top: reward_as !== 0 ? '1.8rem' : '0.9rem'}}>
+        {reward_as === 1 && (
+          <FlexRow>
+            <FilterPanel
+              defaultTitle="供应类别"
+              selectTotalName="全部类别"
+              items={reward}
+              value={rewardSupplierFilter.id}
+              field="name"
+              onSelect={(item) => this.handleFilter('rewardSupplierFilter', item)}
+              onExpand={() => {
+                !reward && this.props.getReward();
+              }}
+              contentStyle={{ borderLeft: `0.01rem ${pallete.border.normal} solid` }}
+              from="supplier"
+            />
+            <FilterPanel
+              defaultTitle="特色服务"
+              items={service ? service.slice(1) : service}
+              value={serviceFilter.id}
+              field="name"
+              onSelect={(item) => this.handleFilter('serviceFilter', item)}
+              onExpand={() => {
+                !service && this.props.getService();
+              }}
+              contentStyle={{ borderLeft: `0.01rem ${pallete.border.normal} solid` }}
+              from="supplier"
+            />
+            <FilterPanel
+              defaultTitle="价格区间"
+              items={price}
+              value={priceFilter.id}
+              field="value"
+              onSelect={(item) => this.handleFilter('priceFilter', item)}
+              onExpand={() => {
+                !price && this.props.getPrice();
+              }}
+              contentStyle={{ borderLeft: `0.01rem ${pallete.border.normal} solid` }}
+              from="supplier"
+            />
+          </FlexRow>
+        )}
+        <AppContent style={{ top: (reward_as === 1 || reward_as === 2) ? '1.8rem' : '0.9rem'}}>
         {
           step === 1 && (
             <div>
               <WhiteSpace size="md" />
               <FlexSB style={{
-                height: '2.6rem',
-                padding: '0 1.1rem',
+                height: '1.4rem',
+                padding: '0 0.4rem',
                 backgroundColor: pallete.white,
               }}>
-                <SelectCircle onClick={() => this.handleReward(2)}>需求</SelectCircle>
-                <SelectCircle onClick={() => this.handleReward(1)}>供应</SelectCircle>
-                <SelectCircle onClick={() => this.handleReward(0)}>人脉</SelectCircle>
+                <SelectItem onClick={() => this.handleReward(3)}>
+                  <Icon type={require('icons/ali/搜索-全网.svg')} />
+                  <span style={selectStyle}>全网搜索</span>
+                </SelectItem>
+                <SelectItem onClick={() => this.handleReward(2)}>
+                  <Icon type={require('icons/ali/搜索-需求.svg')} />
+                  <span style={selectStyle}>需求</span>
+                </SelectItem>
+                <SelectItem onClick={() => this.handleReward(1)}>
+                  <Icon type={require('icons/ali/搜索-供应.svg')} />
+                  <span style={selectStyle}>供应</span>
+                </SelectItem>
+                <SelectItem onClick={() => this.handleReward(0)}>
+                  <Icon type={require('icons/ali/搜索-人脉.svg')} />
+                  <span style={selectStyle}>人脉</span>
+                </SelectItem>
               </FlexSB>
               <WhiteSpace size="md" />
-              {(historyList && historyList.length > 0) && <div style={{ backgroundColor: pallete.white, height: '4.8rem' }}>
-                <section style={{ padding: '0.24rem', color: pallete.text.help, fontSize: '0.26rem' }}>
+              {(historyList && historyList.length > 0) && <PanelWrapper>
+                <PanelHeader>
                   历史搜索
-                </section>
+                </PanelHeader>
                 <div>
                   {historyList.map((item, i) => (
                      <Button key={i} style={buttonStyle} inline onClick={() => this.handleHistorySearch(item.name)}>{item.name}</Button>
                   ))}
                 </div>
-                <FlexCenter style={{ height: '1.2rem' }}>
-                  <Button type="ghost" style={{...buttonStyle, color: pallete.theme}} inline onClick={this.handleClearHistory}>清空搜索历史</Button>
-                </FlexCenter>
-              </div>}
+                <div style={{
+                  position: 'absolute',
+                  top: '0.24rem',
+                  right: '0.24rem',
+                  fontSize: '0.24rem',
+                  color: pallete.text.help,
+                }}>
+                  <FlexRow onClick={this.handleClearHistory}>
+                    <Icon type={require('icons/ali/垃圾桶.svg')} color={pallete.text.help} size="xxs" />
+                    <span style={{marginLeft: '0.04rem' }}>清空</span>
+                  </FlexRow>
+                </div>
+              </PanelWrapper>}
+              {keywordSearch && (
+                <div>
+                  <WhiteSpace size="md" />
+                  <PanelWrapper>
+                    <PanelHeader>
+                      热词搜索
+                    </PanelHeader>
+                    {keywordSearch.hot_search_keywords.map((item, i) => (
+                      <Button key={i} style={buttonStyle} inline onClick={() => this.handleKeywordSearch(item.keyword)}>{item.keyword}</Button>
+                    ))}
+                  </PanelWrapper>
+                  <WhiteSpace size="md" />
+                  <PanelWrapper>
+                    <PanelHeader>
+                      所有关键字
+                    </PanelHeader>
+                    {keywordSearch.all_keywords.map((listInfo, i) => (
+                      <div key={i}>
+                        <KeywordTitle>{listInfo.type}</KeywordTitle>
+                        {listInfo.list && listInfo.list.map((item, j) => (
+                          <KeywordItem key={j} onClick={() => this.handleKeywordSearch(item.name)}>
+                            {`${item.name}(${item.number})`}
+                          </KeywordItem>
+                        ))}
+                      </div>
+                    ))}
+                  </PanelWrapper>
+                </div>
+              )}
             </div>
           )
         }
@@ -538,42 +650,50 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
           )
         }
 
-        {(step === 3 && searchAll) && (
-          <ScrollContainer scrollKey="business_search">
-            <TouchLoader
-              initializing={0}
-              hasMore={searchAll.hasNext}
-              loading={searchAll.loading}
-              onLoadMore={this.onEndReached}
-              autoLoadMore={true}
-              className="tloader app-content"
-              style={{ top: 0 }}
-            >
-              {searchAll.list && searchAll.list.length > 0 ? searchAll.list.map((d) => {
-                if (reward_as === 0) {
-                  return (
-                    <MomentHeader
-                      key={d.id}
-                      user={d}
-                      style={{ padding: '0.24rem', borderBottom: `0.01rem ${pallete.border.normal} solid` }}
-                    />
-                  );
-                } else {
-                  return (
-                    <MomentCard
-                      key={d.id}
-                      moment={d}
-                      currentUser={currentUser}
-                      from="search"
-                      type="business"
-                    />
-                  );
-                }
-              }) : (
-                <EmptyCard type="search" />
-              )}
-            </TouchLoader>
-          </ScrollContainer>
+        {step === 3 &&
+          ((searchAll && reward_as !== 3) ? (
+            <ScrollContainer scrollKey="business_search">
+              <TouchLoader
+                initializing={0}
+                hasMore={searchAll.hasNext}
+                loading={searchAll.loading}
+                onLoadMore={this.onEndReached}
+                autoLoadMore={true}
+                className="tloader app-content"
+                style={{ top: 0 }}
+              >
+                {searchAll.list && searchAll.list.length > 0 ? searchAll.list.map((d) => {
+                  if (reward_as === 0) {
+                    return (
+                      <MomentHeader
+                        key={d.id}
+                        user={d}
+                        style={{ padding: '0.24rem', borderBottom: `0.01rem ${pallete.border.normal} solid` }}
+                      />
+                    );
+                  } else {
+                    return (
+                      <MomentCard
+                        key={d.id}
+                        moment={d}
+                        currentUser={currentUser}
+                        from="search"
+                        type="business"
+                      />
+                    );
+                  }
+                }) : (
+                  <EmptyCard type="search" />
+                )}
+              </TouchLoader>
+            </ScrollContainer>
+          ) : (
+            <div>
+              {webList.length > 0 ? webList.map((item, i) => (
+                <WebCard key={i} web={item}/>
+              )) : <EmptyCard type="search" />}
+            </div>
+          )
         )}
         </AppContent>
       </div>

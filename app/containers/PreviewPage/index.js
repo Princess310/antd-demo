@@ -72,7 +72,7 @@ export class PreviewPage extends React.PureComponent { // eslint-disable-line re
           }}>
             <Button type="primary" style={{ fontSize: '0.34rem' }} onClick={() => {
               browserHistory.push('/loginPhone');
-            }}>手机验证登录</Button>
+            }}>手机快速登录</Button>
             <FlexSB style={{ marginTop: '0.24rem', marginBottom: '0.9rem' }}>
               <Button
                 type="ghost"

@@ -10,7 +10,7 @@ injectGlobal`
     width: 100%;
   }
 
-  body {
+  body, a {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     color: #4d5059;
     font-size: 0.32rem;
