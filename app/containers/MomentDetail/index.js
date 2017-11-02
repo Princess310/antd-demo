@@ -22,6 +22,7 @@ import brower from 'utils/brower';
 import AppContent from 'components/AppContent';
 import MomentCard from 'components/MomentCard';
 import UserHeaderBar from 'components/UserHeaderBar';
+import MerchatUserCard from 'components/UserHeaderBar/MerchatUserCard'
 import FlexSB from 'components/FlexSB';
 import FlexCenter from 'components/FlexCenter';
 import chatTool from 'components/ChatTool';
@@ -68,10 +69,55 @@ if (brower.checkIfWeixin()) {
   });
 }
 
+// fetch api info 
+const apiList = [
+  'moments/comment-page',
+  'moments/like-page',
+  'moments/share-page',
+  'moments/referral-page',
+  'moments/merchant-page',
+];
+const keyList = ['comment', 'like', 'share', 'referral', 'merchant'];
+
 const TabPane = Tabs.TabPane;
 export class MomentDetail extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
     super(props);
+
+    this.state = {
+      // record the current tab type
+      activeKey: '0',
+      comment: {
+        list: false,
+        page: 1,
+        loading: false,
+        hasNext: false,
+      },
+      like: {
+        list: false,
+        page: 1,
+        loading: false,
+        hasNext: false,
+      },
+      share: {
+        list: false,
+        page: 1,
+        loading: false,
+        hasNext: false,
+      },
+      referral: {
+        list: false,
+        page: 1,
+        loading: false,
+        hasNext: false,
+      },
+      merchant: {
+        list: false,
+        page: 1,
+        loading: false,
+        hasNext: false,
+      },
+    };
   }
 
   componentWillMount() {
@@ -85,12 +131,83 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
     this.props.saveMoment(false);
   }
 
+  componentWillReceiveProps(newProps) {
+    const { momentDetail } = newProps;
+    const {
+      id,
+      reward_as,
+      category,
+    } = momentDetail;
+
+    const activeKey = (category === '3' || reward_as === '2' || category === '0' || reward_as === '1') ? '2' : '0';
+
+    this.setState({
+      activeKey,
+    }, () => {
+      // then, fetch the data for sub tab
+      this.fetchSubtabInfo(1);
+    });
+  }
+
+  fetchSubtabInfo = (page) => {
+    const { activeKey } = this.state;
+    const { momentDetail } = this.props;
+    const { id } = momentDetail;
+
+    request.doGet(apiList[activeKey], {
+      moments_id: id,
+      page,
+    }).then((res) => {
+      const { list, page } = res;
+      const subKey = keyList[activeKey];
+      
+      const info = this.state[subKey];
+      const oldList = info ? info.list : [];
+      let newList = [];
+      let hasNext = true;
+      let newPage = info ? info.page : 1;
+
+      if (page) {
+        if (page.current_page === 1) {
+          newList = list;
+        } else if (page.current_page <= page.page_count) {
+          newList = [...oldList, ...list];
+        }
+
+        if (page.current_page >= page.page_count) {
+          hasNext = false;
+        }
+
+        newPage = page.current_page;
+      } else {
+        hasNext = false;
+      }
+
+      this.setState({
+        [subKey]: {
+          list: newList,
+          page: newPage,
+          hasNext,
+          loading: false,
+        },
+      });
+    });
+  }
+
   callback = () => {
 
   }
 
-  handleTabClick = () => {
-
+  handleTabClick = (activeKey) => {
+    const subKey = keyList[activeKey];
+    const info = this.state[subKey];
+    this.setState({
+      activeKey,
+    }, () => {
+      if (!info.list) {
+        this.fetchSubtabInfo(1);
+      }
+    });
   }
 
   // handle do like moment action
@@ -224,6 +341,7 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
   }
 
   render() {
+    const { activeKey, comment, like, share, referral, merchant } = this.state;
     const { momentDetail, currentUser, location: { state: { type } } } = this.props;
     const {
       uid,
@@ -240,6 +358,7 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
       trade_status,
       referral_count,
       referrals,
+      merchant_count,
     } = momentDetail;
 
     const cmsTitle = title ? (title.length > 18 ? `${title.substring(0, 15)}...` : title) : '动态详情';
@@ -271,16 +390,17 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
 
               <WhiteSpace size="md" />
               <Tabs
-                defaultActiveKey={businessType === 'status' ? '1' : '3'}
+                defaultActiveKey={businessType === 'status' ? '0' : '2'}
                 animated={false}
                 onChange={this.callback}
                 onTabClick={this.handleTabClick}
+                activeKey={activeKey}
                 className={`moment-detail-tabs moment-detail-tabs-${businessType}`}
               >
                 {businessType === 'status' && (
-                  <TabPane tab={`评论 ${comment_count}`} key="1">
+                  <TabPane tab={`评论 ${comment_count}`} key="0">
                     <div>
-                      {comments && comments.map((u)  => (
+                      {comment.list && comment.list.map((u)  => (
                         <div key={u.id} style={{ borderBottom: `0.01rem ${pallete.border.deep} solid` }} onClick={() => {
                           this.handleDoublueSendComment(u.id, u.created_by);
                         }}>
@@ -310,9 +430,9 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
                   </TabPane>
                 )}
                 {businessType === 'status' && (
-                  <TabPane tab={`赞 ${like_count}`} key="2">
+                  <TabPane tab={`赞 ${like_count}`} key="1">
                     <div>
-                      {likes && likes.map((u)  => (
+                      {like.list && like.list.map((u)  => (
                         <div key={u.id} style={{ borderBottom: `0.01rem ${pallete.border.deep} solid` }}>
                           <UserHeaderBar
                             user={{...u, id: u.created_by}}
@@ -322,9 +442,9 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
                     </div>
                   </TabPane>
                 )}
-                <TabPane tab={`分享 ${share_count}`} key="3">
+                <TabPane tab={`分享 ${share_count}`} key="2">
                   <div>
-                    {shares && shares.map((u)  => (
+                    {share.list && share.list.map((u)  => (
                       <div key={u.id} style={{ borderBottom: `0.01rem ${pallete.border.deep} solid` }}>
                         <UserHeaderBar
                           user={{...u, id: u.created_by}}
@@ -334,15 +454,36 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
                   </div>
                 </TabPane>
                 {businessType !== 'status' && (
-                  <TabPane tab={`转介绍 ${referral_count}`} key="4">
+                  <TabPane tab={`转介绍 ${referral_count}`} key="3">
                     <div>
-                      {referrals && referrals.map((u)  => (
+                      {referral.list && referral.list.map((u)  => (
                         <div key={u.id} style={{ borderBottom: `0.01rem ${pallete.border.deep} solid` }}>
                           <UserHeaderBar
                             user={{...u, id: u.created_by}}
                           />
                         </div>
                       ))}
+                    </div>
+                  </TabPane>
+                )}
+                {businessType === 'demand' && (
+                  <TabPane tab={`推荐商家 ${merchant_count}`} key="4">
+                    <div>
+                      {merchant.list && merchant.list.map((u, i)  => {
+                        if (u.type === 1) {
+                          return (
+                            <div key={i} style={{ borderBottom: `0.01rem ${pallete.border.deep} solid` }}>
+                              <UserHeaderBar
+                                user={{...u, id: u.created_by}}
+                              />
+                            </div>
+                          );
+                        } else {
+                          return (
+                            <MerchatUserCard key={i} user={u} />
+                          );
+                        }
+                      })}
                     </div>
                   </TabPane>
                 )}

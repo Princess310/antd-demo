@@ -136,7 +136,7 @@ export class CommunicateSearch extends React.PureComponent { // eslint-disable-l
         <FlexSB style={{ backgroundColor: pallete.white }}>
           {step !== 1 && <div onClick={this.handleBack} style={{ marginLeft: '0.24rem' }}><Icon type={require('icons/ali/返回.svg')} color={pallete.theme} /></div>}
           <SearchWithCancelBar
-            placeholder="搜索交流"
+            placeholder="搜社交"
             value={keyword}
             onSearch={this.handleSearch}
             onCancel={() => {

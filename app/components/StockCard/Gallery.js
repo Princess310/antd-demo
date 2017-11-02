@@ -58,6 +58,8 @@ class Gallery extends React.PureComponent { // eslint-disable-line react/prefer-
         paginationClickable :true,
         keyboardControl : true,
         lazyLoading : true,
+        autoplay : 5000,
+        autoplayDisableOnInteraction : false,
         onSlideChangeEnd: (swiper) => {
           self.setState({
             activeIndex: swiper.activeIndex,
