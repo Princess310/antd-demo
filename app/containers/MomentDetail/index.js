@@ -19,7 +19,8 @@ import shareUtil from 'utils/shareUtil';
 import shareConfig from 'utils/shareConfig';
 import brower from 'utils/brower';
 
-import AppContent from 'components/AppContent';
+import { ScrollContainer } from 'react-router-scroll';
+import TouchLoader from 'components/TouchLoader';
 import MomentCard from 'components/MomentCard';
 import UserHeaderBar from 'components/UserHeaderBar';
 import MerchatUserCard from 'components/UserHeaderBar/MerchatUserCard'
@@ -210,6 +211,14 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
     });
   }
 
+  onEndReached = () => {
+    const { activeKey } = this.state;
+    const subKey = keyList[activeKey];
+    const info = this.state[subKey];
+
+    this.fetchSubtabInfo(info.page + 1);
+  }
+
   // handle do like moment action
   handleLike = () => {
     const { momentDetail, doLikeMoment } = this.props;
@@ -368,6 +377,9 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
     // defined the theme color for moment to show: special for business demand && supplier
     const themeColor = pallete.theme;
 
+    const subKey = keyList[activeKey];
+    const info = this.state[subKey];
+
     return (
       <div>
         <NavBar
@@ -380,83 +392,80 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
         </NavBar>
         {momentDetail && (
           <div>
-            <AppContent style={{ paddingBottom: '1rem' }}>
-              <MomentCard
-                moment={momentDetail}
-                currentUser={currentUser}
-                from="detail"
-                type={type}
-              />
-
-              <WhiteSpace size="md" />
-              <Tabs
-                defaultActiveKey={businessType === 'status' ? '0' : '2'}
-                animated={false}
-                onChange={this.callback}
-                onTabClick={this.handleTabClick}
-                activeKey={activeKey}
-                className={`moment-detail-tabs moment-detail-tabs-${businessType}`}
+            <ScrollContainer scrollKey={`moment_detail`}>
+              <TouchLoader
+                initializing={0}
+                hasMore={info.hasNext}
+                loading={info.loading}
+                onLoadMore={this.onEndReached}
+                autoLoadMore={true}
+                className="tloader app-content"
+                style={{ paddingBottom: '1rem' }}
               >
-                {businessType === 'status' && (
-                  <TabPane tab={`评论 ${comment_count}`} key="0">
-                    <div>
-                      {comment.list && comment.list.map((u)  => (
-                        <div key={u.id} style={{ borderBottom: `0.01rem ${pallete.border.deep} solid` }} onClick={() => {
-                          this.handleDoublueSendComment(u.id, u.created_by);
-                        }}>
-                          <UserHeaderBar
-                            user={{...u, id: u.created_by}}
-                          />
-                          <CommentWrapper>
-                            <div>
-                              {u.to_name !== '' && <span>回复<span style={{ color: pallete.theme }}>{u.to_name}</span>：</span>}
-                              {u.content}
-                            </div>
-                            <LikeWrapper
-                              style={{ color: businessType === 'status' ? (u.is_like > 0 ? pallete.theme : pallete.text.help) : themeColor }}
-                              onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                this.handleLikeComment(u.id, u.created_by);
-                              }}
-                            >
-                              <Icon type={u.is_like > 0 ? require('icons/ali/点赞-active.svg') : require('icons/ali/点赞.svg')} size="sm" />
-                              {u.like_count}
-                            </LikeWrapper>
-                          </CommentWrapper>
-                        </div>
-                      ))}
-                    </div>
-                  </TabPane>
-                )}
-                {businessType === 'status' && (
-                  <TabPane tab={`赞 ${like_count}`} key="1">
-                    <div>
-                      {like.list && like.list.map((u)  => (
-                        <div key={u.id} style={{ borderBottom: `0.01rem ${pallete.border.deep} solid` }}>
-                          <UserHeaderBar
-                            user={{...u, id: u.created_by}}
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  </TabPane>
-                )}
-                <TabPane tab={`分享 ${share_count}`} key="2">
-                  <div>
-                    {share.list && share.list.map((u)  => (
-                      <div key={u.id} style={{ borderBottom: `0.01rem ${pallete.border.deep} solid` }}>
-                        <UserHeaderBar
-                          user={{...u, id: u.created_by}}
-                        />
+                <MomentCard
+                  moment={momentDetail}
+                  currentUser={currentUser}
+                  from="detail"
+                  type={type}
+                />
+
+                <WhiteSpace size="md" />
+                <Tabs
+                  defaultActiveKey={businessType === 'status' ? '0' : '2'}
+                  animated={false}
+                  onChange={this.callback}
+                  onTabClick={this.handleTabClick}
+                  activeKey={activeKey}
+                  className={`moment-detail-tabs moment-detail-tabs-${businessType}`}
+                >
+                  {businessType === 'status' && (
+                    <TabPane tab={`评论 ${comment_count}`} key="0">
+                      <div>
+                        {comment.list && comment.list.map((u)  => (
+                          <div key={u.id} style={{ borderBottom: `0.01rem ${pallete.border.deep} solid` }} onClick={() => {
+                            this.handleDoublueSendComment(u.id, u.created_by);
+                          }}>
+                            <UserHeaderBar
+                              user={{...u, id: u.created_by}}
+                            />
+                            <CommentWrapper>
+                              <div>
+                                {u.to_name !== '' && <span>回复<span style={{ color: pallete.theme }}>{u.to_name}</span>：</span>}
+                                {u.content}
+                              </div>
+                              <LikeWrapper
+                                style={{ color: businessType === 'status' ? (u.is_like > 0 ? pallete.theme : pallete.text.help) : themeColor }}
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  this.handleLikeComment(u.id, u.created_by);
+                                }}
+                              >
+                                <Icon type={u.is_like > 0 ? require('icons/ali/点赞-active.svg') : require('icons/ali/点赞.svg')} size="sm" />
+                                {u.like_count}
+                              </LikeWrapper>
+                            </CommentWrapper>
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
-                </TabPane>
-                {businessType !== 'status' && (
-                  <TabPane tab={`转介绍 ${referral_count}`} key="3">
+                    </TabPane>
+                  )}
+                  {businessType === 'status' && (
+                    <TabPane tab={`赞 ${like_count}`} key="1">
+                      <div>
+                        {like.list && like.list.map((u)  => (
+                          <div key={u.id} style={{ borderBottom: `0.01rem ${pallete.border.deep} solid` }}>
+                            <UserHeaderBar
+                              user={{...u, id: u.created_by}}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </TabPane>
+                  )}
+                  <TabPane tab={`分享 ${share_count}`} key="2">
                     <div>
-                      {referral.list && referral.list.map((u)  => (
+                      {share.list && share.list.map((u)  => (
                         <div key={u.id} style={{ borderBottom: `0.01rem ${pallete.border.deep} solid` }}>
                           <UserHeaderBar
                             user={{...u, id: u.created_by}}
@@ -465,30 +474,43 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
                       ))}
                     </div>
                   </TabPane>
-                )}
-                {businessType === 'demand' && (
-                  <TabPane tab={`推荐商家 ${merchant_count}`} key="4">
-                    <div>
-                      {merchant.list && merchant.list.map((u, i)  => {
-                        if (u.type === 1) {
-                          return (
-                            <div key={i} style={{ borderBottom: `0.01rem ${pallete.border.deep} solid` }}>
-                              <UserHeaderBar
-                                user={{...u, id: u.created_by}}
-                              />
-                            </div>
-                          );
-                        } else {
-                          return (
-                            <MerchatUserCard key={i} user={u} />
-                          );
-                        }
-                      })}
-                    </div>
-                  </TabPane>
-                )}
-              </Tabs>
-            </AppContent>
+                  {businessType !== 'status' && (
+                    <TabPane tab={`转介绍 ${referral_count}`} key="3">
+                      <div>
+                        {referral.list && referral.list.map((u)  => (
+                          <div key={u.id} style={{ borderBottom: `0.01rem ${pallete.border.deep} solid` }}>
+                            <UserHeaderBar
+                              user={{...u, id: u.created_by}}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </TabPane>
+                  )}
+                  {businessType === 'demand' && (
+                    <TabPane tab={`推荐商家 ${merchant_count}`} key="4">
+                      <div>
+                        {merchant.list && merchant.list.map((u, i)  => {
+                          if (u.type === 1) {
+                            return (
+                              <div key={i} style={{ borderBottom: `0.01rem ${pallete.border.deep} solid` }}>
+                                <UserHeaderBar
+                                  user={{...u, id: u.created_by}}
+                                />
+                              </div>
+                            );
+                          } else {
+                            return (
+                              <MerchatUserCard key={i} user={u} />
+                            );
+                          }
+                        })}
+                      </div>
+                    </TabPane>
+                  )}
+                </Tabs>
+              </TouchLoader>
+            </ScrollContainer>
             <ActionWrapper style={{ color: themeColor }}>
               {(type === 'business' && String(currentUser.id) === uid) &&
                 <FlexCenter onClick={this.handleSetTop}>
