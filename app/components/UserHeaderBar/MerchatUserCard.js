@@ -142,10 +142,10 @@ class MerchatUserCard extends React.PureComponent { // eslint-disable-line react
 
   render() {
     const { user, avatarSize, linkUser, style, ...other } = this.props;
-    const { username, company, position, mobile, product, pictures } = user;
+    const { name, company, position, mobile, product, pictures } = user;
 
     // check pic length to show
-    const picturesView = pictures.map((pic, i) => (
+    const picturesView = pictures ? pictures.map((pic, i) => (
       <div
         key={i}
         onClick={(e) => this.handleView(e, i)}
@@ -160,16 +160,16 @@ class MerchatUserCard extends React.PureComponent { // eslint-disable-line react
           marginRight: '0.06rem'
         }}
       />
-    ));
+    )) : null;
 
     return (
       <div style={style} {...other}>
         <Wrapper style={{ borderBottom: `0.01rem ${pallete.border.deep} solid` }}>
-          <Avatar>{username.substr(username.length - 2, 2)}</Avatar>
+          <Avatar>{name.substr(name.length - 2, 2)}</Avatar>
           <FlexSB style={{ width: 'calc(100% - 1.2rem)' }}>
             <FlexColumn style={{ padding: '0.04rem 0.24rem' }}>
               <FlexRow>
-                <section style={{ fontSize: '0.28rem' }}>{username}</section>
+                <section style={{ fontSize: '0.28rem' }}>{name}</section>
               </FlexRow>
               <FlexRow>
                 {company && <ItemWrapper>{company}</ItemWrapper>}

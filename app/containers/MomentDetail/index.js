@@ -478,9 +478,9 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
                     <TabPane tab={`转介绍 ${referral_count}`} key="3">
                       <div>
                         {referral.list && referral.list.map((u)  => (
-                          <div key={u.id} style={{ borderBottom: `0.01rem ${pallete.border.deep} solid` }}>
+                          <div key={u.uid} style={{ borderBottom: `0.01rem ${pallete.border.deep} solid` }}>
                             <UserHeaderBar
-                              user={{...u, id: u.created_by}}
+                              user={{...u, id: u.uid}}
                             />
                           </div>
                         ))}
