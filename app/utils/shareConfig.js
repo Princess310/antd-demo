@@ -121,21 +121,21 @@ const shareConfig = {
         break;
       }
       case 'stock': {
-        const { id, name, images } = data;
-        title = `${user ? user.nickname : ''}正在清仓处理${name}的库存，赶快来看看吧！`;
+        const { id, name, images, user_info } = data;
+        title = `${user_info ? user_info.nickname : ''}正在清仓处理${name}的库存，赶快来看看吧！`;
         timeLineTitle = title;
         desc = `下载健康商信APP，您也可以清理您积压的库存！`;
         link = `${link}&id=${id}&uid=${uid}`;
         imgUrl = images.length > 0 ? images[0] : `http://${domain}${logo}`;
         break;
       }
-      case 'hongbao': {
-        const { id, pictures } = data;
+      case 'packet': {
+        const { id, pictures, avatar } = data;
         title = `${user ? user.nickname + '的' : ''}红包广告分享`;
         timeLineTitle = `${user ? user.nickname : ''}在分享红包广告，邀请您也来分享！`;
         desc = timeLineTitle;
         link = `${link}&id=${id}&uid=${uid}`;
-        imgUrl = (pictures && pictures.length > 0) ? pictures[0] : `http://${domain}${logo}`;
+        imgUrl = (pictures && pictures.length > 0) ? pictures[0] :  (avatar !== '' ? avatar : `http://${domain}${logo}`);
 
         break;
       }

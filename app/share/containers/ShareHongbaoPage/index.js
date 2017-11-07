@@ -62,7 +62,7 @@ export class ShareHongbaoPage extends React.PureComponent { // eslint-disable-li
         moment: moments_newest,
       });
 
-      shareConfig.share('hongbao', { ...data, pictures: moments_newest.pictures }, share_user);
+      shareConfig.share('packet', { ...data, pictures: moments_newest.pictures }, share_user);
     });
   }
 
