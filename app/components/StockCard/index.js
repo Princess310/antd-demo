@@ -27,6 +27,8 @@ const Head = styled.div`
 
 const Reward = styled.div`
   display: inline-block;
+  position: relative;
+  top: -0.02rem;
   margin-right: 0.08rem;
   padding: 0 0.04rem;
   font-size: 0.2rem;
@@ -180,7 +182,7 @@ class StockCard extends React.PureComponent { // eslint-disable-line react/prefe
               <CutItem>{Number(stock.discount).toFixed(1)}折</CutItem>
             </FlexRow>
             <TimeItem style={isOverTime ? { width: '1.38rem', backgroundImage: `url(${overTimeBg})` } : {}}>
-              {isOverTime ? '已下架' : showTime}
+              {isOverTime ? '已下架' : `仅剩${showTime}`}
             </TimeItem>
           </FlexSB>
           <FlexSB style={{ marginTop: '0.16rem', fontSize: '0.2rem', color: pallete.text.help }}>

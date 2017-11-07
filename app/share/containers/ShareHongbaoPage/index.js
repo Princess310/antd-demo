@@ -76,7 +76,9 @@ export class ShareHongbaoPage extends React.PureComponent { // eslint-disable-li
     const { moment: { id } } = this.state;
     const { uid } = this.props;
 
-    window.location.href = `public_share.html?type=momment&id=${id}&uid=${uid}`;
+    if (id) {
+      window.location.href = `public_share.html?type=momment&id=${id}&uid=${uid}`;
+    }
   }
 
   render() {

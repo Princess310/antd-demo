@@ -135,7 +135,7 @@ const shareConfig = {
         timeLineTitle = `${user ? user.nickname : ''}在分享红包广告，邀请您也来分享！`;
         desc = timeLineTitle;
         link = `${link}&id=${id}&uid=${uid}`;
-        imgUrl = pictures.length > 0 ? pictures[0] : `http://${domain}${logo}`;
+        imgUrl = (pictures && pictures.length > 0) ? pictures[0] : `http://${domain}${logo}`;
 
         break;
       }

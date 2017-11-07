@@ -123,9 +123,9 @@ const dateUtil = {
     const minutes = totalMinutes % 60;
     const totalHours = parseInt(totalMinutes / 60);
     const hours = totalHours % 60;
-    const days = parseInt(hours / 24);
+    const days = parseInt(totalHours / 24);
 
-    return days > 0 ? `${days}天${hours}小时${minutes}分${seconds}秒`
+    return days > 0 ? `${days}天`
           : hours > 0 ? `${hours}小时${minutes}分${seconds}秒`
           : (minutes > 0 ? `${minutes}分${seconds}秒`
           : `${seconds}秒`);
