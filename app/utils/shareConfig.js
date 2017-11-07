@@ -130,8 +130,8 @@ const shareConfig = {
         break;
       }
       case 'packet': {
-        const { id, pictures, avatar } = data;
-        title = `${user ? user.nickname + '的' : ''}红包广告分享`;
+        const { id, pictures, avatar, nickname } = data;
+        title = `${nickname ? nickname + '的' : ''}红包广告分享`;
         timeLineTitle = `${user ? user.nickname : ''}在分享红包广告，邀请您也来分享！`;
         desc = timeLineTitle;
         link = `${link}&id=${id}&uid=${uid}`;
