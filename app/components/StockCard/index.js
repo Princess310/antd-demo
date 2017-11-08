@@ -187,7 +187,7 @@ class StockCard extends React.PureComponent { // eslint-disable-line react/prefe
           </FlexSB>
           <FlexSB style={{ marginTop: '0.16rem', fontSize: '0.2rem', color: pallete.text.help }}>
             <div style={{ textDecoration: 'line-through' }}>&nbsp;批发价:&nbsp;￥{stock.wholesale_price}&nbsp;</div>
-            <div>{`库存${stock.number}${stock.number_unit}`}</div>
+            <div>{Number(stock.number) > 0 ? `库存${stock.number}${stock.number_unit}` : '已售罄'}</div>
           </FlexSB>
         </div>
         <UserCard>
