@@ -131,6 +131,11 @@ export class BusinessPublish extends React.PureComponent { // eslint-disable-lin
       return;
     }
 
+    if (files.length === 0 && content.trim().length === 0) {
+      Toast.info('请输入需求内容或上传图片', 2);
+      return;
+    }
+
     if (content.trim().length > 0 && (content.trim().length > 30 || content.trim().length < 6)) {
       Toast.info('补充信息 (6~30字)', 2);
       return;
