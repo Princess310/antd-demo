@@ -121,7 +121,7 @@ export class ShareNotePage extends React.PureComponent { // eslint-disable-line 
         <AppContent style={{
           top: 0,
           backgroundColor: pallete.white,
-          paddingBottom: '1.32rem',
+          paddingBottom: '2rem',
         }}>
           {moment && (
             <div>
