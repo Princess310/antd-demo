@@ -117,7 +117,7 @@ export class ShareHongbaoPage extends React.PureComponent { // eslint-disable-li
                   />
                   <Button style={buttonStyle} onClick={this.handleDownloadInfo}>对话</Button>
                 </div>
-                {moment.id && <MomentCard moment={moment} />}
+                {(moment && moment.id) && <MomentCard moment={moment} />}
               </div>
               <HongbaoList hongbao={info} list={list} />
             </div>
