@@ -20,7 +20,6 @@ const ListWrapper = styled.div`
 
 const ItemWrapper = styled(FlexRow)`
   position: relative;
-  display: flex;
   padding: 0.15rem 0;
   background-color: ${pallete.white};
   border-bottom: 0.01rem ${pallete.border.normal} solid;
@@ -39,7 +38,7 @@ class HongbaoList extends React.PureComponent { // eslint-disable-line react/pre
     }
 
     const listView = list && list.map((user) => (
-      <FlexSB key={user.id} style={{ width: '100%', alignSelf: 'flex-start' }}>
+      <ItemWrapper key={user.id} style={{ width: '100%', alignSelf: 'flex-start' }}>
         <Avatar
           size="0.88rem"
           id={user.id}
@@ -68,7 +67,7 @@ class HongbaoList extends React.PureComponent { // eslint-disable-line react/pre
               }
             </FlexSB>
           </FlexColumn>
-      </FlexSB>
+      </ItemWrapper>
     ));
 
     return (
@@ -76,9 +75,9 @@ class HongbaoList extends React.PureComponent { // eslint-disable-line react/pre
         <div style={{ fontSize: '0.24rem', color: '#999999' }}>
           {hongbao.total_number}个红包共{hongbao.total_fee}元，{hongbao.is_finish > 0 ? `${usedTime}被抢完` : `已领取${hongbao.get_count}个`}
         </div>
-        <ItemWrapper>
+        <div>
           {listView}
-        </ItemWrapper>
+        </div>
       </ListWrapper>
     );
   }
