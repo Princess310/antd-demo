@@ -15,7 +15,6 @@ import { Button, Toast } from 'antd-mobile';
 import FlexRow from 'components/FlexRow';
 import FlexSB from 'components/FlexSB';
 import MomentHeader from 'components/MomentCard/MomentHeader';
-import IframeCard from 'components/IframeCard';
 import timeBg from 'assets/images/stock-time-bar.png';
 import overTimeBg from 'assets/images/stock-over-time-bar.png';
 
@@ -128,6 +127,7 @@ class StockCard extends React.PureComponent { // eslint-disable-line react/prefe
 
   componentDidMount() {
     let { diffTime, showTime } = this.state;
+    const contentWindow = this.iframe.contentWindow;
 
     if (diffTime <= 0) {
       this.setState({
@@ -216,7 +216,8 @@ class StockCard extends React.PureComponent { // eslint-disable-line react/prefe
             <Button style={buttonStyle} onClick={this.handleDownloadInfo}>对话</Button>
           )}
         </UserCard>
-        <IframeCard type="stock" id={stock.id} style={{ marginTop: '0.24rem', padding: '0.24rem' }} />
+
+        <div style={{ marginTop: '0.24rem', padding: '0.24rem', backgroundColor: pallete.white }} dangerouslySetInnerHTML={{__html: stock.content}} />
       </div>
     );
   }
