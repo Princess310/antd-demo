@@ -342,7 +342,7 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
 
   render() {
     const { moreContent, expanded } = this.state;
-    const { moment, style, from, type, currentUser } = this.props;
+    const { moment, style, from, type, currentUser, recommendId } = this.props;
     const {
       id,
       uid,
@@ -439,6 +439,7 @@ class MomentCard extends React.PureComponent { // eslint-disable-line react/pref
               pathname: 'momentDetail',
               query: {
                 id,
+                recommendId: (recommendId ? recommendId : ''),
               },
               state: {
                 type,

@@ -89,8 +89,8 @@ import {
 
 export function* fetchMomentDetail(action) {
   try {
-    const { id } = action.payload;
-    const res = yield request.doGet('moments/details', { moments_id: id });
+    const { id, recommendId } = action.payload;
+    const res = yield request.doGet('moments/details', { moments_id: id, release_moments_id: recommendId });
     const { data } = res;
 
     yield put(loadMomentDetail(data));

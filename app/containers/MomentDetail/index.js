@@ -122,9 +122,9 @@ export class MomentDetail extends React.PureComponent { // eslint-disable-line r
   }
 
   componentWillMount() {
-    const { location: { query: { id } }, getMoment } = this.props;
+    const { location: { query: { id, recommendId } }, getMoment } = this.props;
 
-    getMoment(id);
+    getMoment(id, recommendId);
   }
 
   // clear the reducer info
@@ -606,7 +606,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    getMoment: (id) => dispatch(fetchMomentDetail(id)),
+    getMoment: (id, recommendId) => dispatch(fetchMomentDetail(id, recommendId)),
     saveMoment: (data) => dispatch(loadMomentDetail(data)),
     doLikeMoment: (id, uid, from) => dispatch(likeMoment(id, uid, from)),
     doLikeComment: (id, cid, uid) =>  dispatch(likeComment(id, cid, uid)),

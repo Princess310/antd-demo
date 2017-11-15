@@ -62,11 +62,12 @@ import {
   LOAD_BUSINESS_RECOMMEND_LOADING,
 } from './constants';
 
-export function fetchMomentDetail(id) {
+export function fetchMomentDetail(id, recommendId) {
   return {
     type: FETCH_MOMENT_DETAIL,
     payload: {
-      id: id,
+      id,
+      recommendId,
     },
   };
 }

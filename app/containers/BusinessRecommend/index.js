@@ -50,7 +50,7 @@ export class BusinessRecommend extends React.PureComponent { // eslint-disable-l
   }
 
   render() {
-    const { recommendList, currentUser } = this.props;
+    const { location: { query }, recommendList, currentUser } = this.props;
 
     const listView = recommendList.list ? recommendList.list.map((moment) => (
       <MomentCard
@@ -60,6 +60,7 @@ export class BusinessRecommend extends React.PureComponent { // eslint-disable-l
         from="recommend"
         type="business"
         style={{ marginTop: '0.12rem' }}
+        recommendId={query.id}
       />
     )) : null;
 
