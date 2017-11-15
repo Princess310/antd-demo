@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>iframe</title>
+</head>
+<body>
+  <div id="content"></div>
+  
+  <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script>
+    function getQueryString(name) {
+      const reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+      const r = window.location.search.substr(1).match(reg);
+
+      return r == null ? (arguments[1] === undefined ? null : arguments[1]) : decodeURIComponent(r[2]);
+    }
+
+
+    const apiUrl = 'http://jkhz-api.test.alijian.net/index.php?r=';
+    const apiMap = {
+      moment: 'moments/details',
+      stock: 'goods/share-info',
+    };
+    const type = getQueryString('type');
+    const id = getQueryString('id');
+    const path = apiMap[type];
+    let data = {};
+    if (type === 'moment') {
+      data.moments_id = id;
+    } else {
+      data.id = id;
+    }
+
+    let jqXHR = $.ajax({
+      url: apiUrl + path,
+      type: 'get',
+      dataType: "json",
+      data: data,
+      complete: function(XMLHttpRequest, textStatus){
+      // TODO: get the new x-access-token and set it to localStorage
+      // console.log("XMLHttpRequest", XMLHttpRequest.getAllResponseHeaders());
+      }
+    })
+
+    jqXHR.done(function(response){
+      console.log('response', response);
+      if (response.code === 200) {
+        const data = response.data;
+        let content = '';
+
+        switch (type) {
+          case 'stock': {
+            content = data.content;
+            break;
+          }
+          case 'moment': {
+            content = data.content;
+            break;
+          }
+          default:
+            break;
+        }
+
+        document.getElementById('content').innerHTML = content;
+      }
+    });
+  </script>
+</body>
+</html>

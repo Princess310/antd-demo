@@ -210,7 +210,7 @@ export class ShareBusinessPage extends React.PureComponent { // eslint-disable-l
           onLoadMore={this.onEndReached}
           autoLoadMore={true}
           className="tloader app-content"
-          style={{ paddingBottom: '1.28rem' }}
+          style={{ paddingBottom: '2rem' }}
         >
           {
             moment ? (

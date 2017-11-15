@@ -19,6 +19,7 @@ import CmsMomentHeader from 'components/MomentCard/CmsMomentHeader';
 import ShareIntroduceModal from 'components/IntroduceModal/ShareIntroduceModal';
 import showWeixinGuide from 'components/WeixinGuide';
 import actionSheet from 'components/ActionSheet';
+import IframeCard from 'components/IframeCard';
 import { getDownloadUrl } from 'utils/utils';
 
 import MomentHeader from './MomentHeader';
@@ -328,8 +329,8 @@ class ShareMomentCard extends React.PureComponent { // eslint-disable-line react
                       paddingBottom: '0.12rem',
                       borderBottom: `0.01rem ${pallete.border.normal} solid`,
                     }}
-                  />                    
-                  <div className="app-cms-content" dangerouslySetInnerHTML={{__html: contentResult}} />
+                  />            
+                  <IframeCard type="moment" id={id} />        
                 </div>                  
               ) : (
                 <div style={{ marginBottom: '0.12rem' }}>{contentView}</div>
