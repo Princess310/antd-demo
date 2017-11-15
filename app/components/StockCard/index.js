@@ -217,7 +217,7 @@ class StockCard extends React.PureComponent { // eslint-disable-line react/prefe
           )}
         </UserCard>
 
-        <div class="app-cms-content" style={{ marginTop: '0.24rem', padding: '0.24rem', backgroundColor: pallete.white }} dangerouslySetInnerHTML={{__html: stock.content}} />
+        <div className="app-cms-content" style={{ marginTop: '0.24rem', padding: '0.24rem', backgroundColor: pallete.white }} dangerouslySetInnerHTML={{__html: stock.content}} />
       </div>
     );
   }
