@@ -118,7 +118,7 @@ export class BusinessPage extends React.PureComponent { // eslint-disable-line r
         if (my_point < release_point) {
           alert('发布失败', <div>
               <div style={{ color: pallete.theme }}>{`剩余${my_point}积分`}</div>
-              <div>{`您的账户已不足${release_point}分，无法继续发布${type === 2 ? '采购需求信息' : '供应信息'}，可到“社交”栏目评论（+5分）、点赞（+1分）、分享（+10分）挣取积分。`}</div>
+              <div>{`您的账户已不足${release_point}分，无法继续发布采购需求信息，可到“社交”栏目评论（+5分）、点赞（+1分）、分享（+10分）挣取积分。`}</div>
             </div>, [
             { text: '我知道了', onPress: () => console.log('cancel') },
             { text: '立即前去', onPress: () => {

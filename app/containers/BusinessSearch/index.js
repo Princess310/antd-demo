@@ -486,10 +486,6 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
                 padding: '0 0.4rem',
                 backgroundColor: pallete.white,
               }}>
-                <SelectItem onClick={() => this.handleReward(3)}>
-                  <Icon type={require('icons/ali/搜索-全网.svg')} />
-                  <span style={selectStyle}>全网搜索</span>
-                </SelectItem>
                 <SelectItem onClick={() => this.handleReward(2)}>
                   <Icon type={require('icons/ali/搜索-需求.svg')} />
                   <span style={selectStyle}>需求</span>
@@ -501,6 +497,10 @@ export class BusinessSearch extends React.PureComponent { // eslint-disable-line
                 <SelectItem onClick={() => this.handleReward(0)}>
                   <Icon type={require('icons/ali/搜索-人脉.svg')} />
                   <span style={selectStyle}>人脉</span>
+                </SelectItem>
+                <SelectItem onClick={() => this.handleReward(3)}>
+                  <Icon type={require('icons/ali/搜索-全网.svg')} />
+                  <span style={selectStyle}>全网搜索</span>
                 </SelectItem>
               </FlexSB>
               <WhiteSpace size="md" />
