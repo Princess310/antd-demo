@@ -80,7 +80,7 @@ class HongbaoDesc extends React.PureComponent { // eslint-disable-line react/pre
           height: '5.56rem',
         }}
       >
-        <img src={descImg} />
+        <img style={{ width: '6.3rem', height: 'auto' }} src={descImg} />
         <DescItem style={{ marginTop: '0.16rem', textAlign: 'left' }} data-text="已领取">已领取</DescItem>
         <CountWrapper>
           <CountItem>{this.getPerCount(0)}</CountItem>
