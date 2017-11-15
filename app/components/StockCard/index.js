@@ -127,7 +127,6 @@ class StockCard extends React.PureComponent { // eslint-disable-line react/prefe
 
   componentDidMount() {
     let { diffTime, showTime } = this.state;
-    const contentWindow = this.iframe.contentWindow;
 
     if (diffTime <= 0) {
       this.setState({
