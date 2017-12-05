@@ -35,6 +35,14 @@
  * 红包:
  *   type: packet
  *   id: 传递被分享红包的id
+ * 
+ * 招商会:
+ *   type: investment
+ *   d: 对应的id
+ *
+ * 抓取的人:
+ *   type: temp_user
+ *   id: 抓取的id
  */
 
 import React from 'react';
@@ -124,6 +132,14 @@ export default class App extends React.PureComponent { // eslint-disable-line re
       }
       case 'packet': {
         import('share/containers/ShareHongbaoPage')
+          .then((cb) => {
+            self.loadModule(cb);
+          });
+
+        break;
+      }
+      case 'investment': {
+        import('share/containers/ShareInvestmentPage')
           .then((cb) => {
             self.loadModule(cb);
           });
