@@ -174,23 +174,23 @@ if (typeof getComputedStyle == 'undefined') {
             vid=vid.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g,"");
             // a.removeAttribute('src');
             a.setAttribute('src', src_);
-            a.style.display = "none";            
-            var obj = window.__getVideoWh(a),
-                mydiv = document.createElement('img');
-            mydiv.className = "img_loading";
-            mydiv.src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==";
-            mydiv.setAttribute("data-vid",vid);
-            mydiv.style.cssText = "width: " + obj.w + "px !important;";
-            insertAfter(mydiv,a);
+            // a.style.display = "none";            
+            var obj = window.__getVideoWh(a);
+            //     mydiv = document.createElement('img');
+            // mydiv.className = "img_loading";
+            // mydiv.src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==";
+            // mydiv.setAttribute("data-vid",vid);
+            // mydiv.style.cssText = "width: " + obj.w + "px !important;";
+            // insertAfter(mydiv,a);
             a.style.cssText += ";width: " + obj.w + "px !important;";
             a.setAttribute("width",obj.w);
             if(window.__zoom!=1){
                 a.style.display = "block";
-                mydiv.style.display = "none";
+                //mydiv.style.display = "none";
                 a.setAttribute("_ratio",obj.ratio);
                 a.setAttribute("_vid",vid);
             }else{
-                mydiv.style.cssText += "height: " + obj.h + "px !important;";
+                //mydiv.style.cssText += "height: " + obj.h + "px !important;";
                 a.style.cssText += "height: " + obj.h + "px !important;";
                 a.setAttribute("height",obj.h);
             }
