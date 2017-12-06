@@ -53,7 +53,7 @@ class UserHeaderBar extends React.PureComponent { // eslint-disable-line react/p
           <FlexColumn style={{ padding: '0.04rem 0.24rem' }}>
             <FlexRow>
               <section style={{ fontSize: '0.28rem' }}>{user.nickname}</section>
-              {user.tag_identity_name !== '' && <LineTag style={{ ...tagStyle }}>{user.tag_identity_name}</LineTag>}
+              {(user.tag_identity_name && user.tag_identity_name !== '') && <LineTag style={{ ...tagStyle }}>{user.tag_identity_name}</LineTag>}
               {(user.main_service_name && user.main_service_name !== '') && <LineTag style={{ ...tagStyle }}>{user.main_service_name}</LineTag>}
             </FlexRow>
             <FlexRow>

@@ -54,11 +54,6 @@ const fetchDao = {
       credentials: 'same-origin',
     };
 
-    const token = localStorage.getItem('access_token');
-    if (token !== '') {
-      config.headers['X-Access-Token'] = token;
-    }
-
     if ((method === 'GET') && typeof params !== 'undefined') {
       url += self.paramsParse(params);
     }

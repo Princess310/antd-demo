@@ -72,6 +72,7 @@ const shareConfig = {
     let success = data.success ? data.success : () => {};
     let cancel = data.cancel ? data.cancel : () => {};
     const uid = getQueryString('uid');
+    const shareId = getQueryString('id');
     const hongbaoInfo = getHongbaoInfo();
 
     switch (type) {
@@ -139,6 +140,25 @@ const shareConfig = {
 
         break;
       }
+      case 'investment': {
+        const { id, title: t, content, pictures } = data;
+        title = t;
+        timeLineTitle = `${title}.${content}`;
+        desc = content;
+        link = `${link}&id=${shareId}&uid=${uid}`;
+        imgUrl = (pictures && pictures.length > 0) ? pictures[0] :  (avatar !== '' ? avatar : `http://${domain}${logo}`);
+
+        break;
+      }
+      case 'temp_user': {
+        const { username, company, position } = data;
+        title = `${username}的健康商信名片`;
+        timeLineTitle = `分享${username}的健康商信名片，公司：${company}，职位：${position}`;
+        desc = `公司：${company}，职位：${position}`;
+        link = `${link}&id=${shareId}&uid=${uid}`;
+        imgUrl = `http://${domain}${logo}`;
+        break;
+      }
       default: {
       }
     }
@@ -148,7 +168,6 @@ const shareConfig = {
     desc = filterEmojiStr(desc).substring(0, 50);
     timeLineTitle = filterEmojiStr(timeLineTitle).substring(0, 50);
 
-    onMenuShareTimeline(timeLineTitle, link, imgUrl, success, cancel);
     onMenuShareOther(title, desc, link, imgUrl, success, cancel);
 
     // share config for QQ

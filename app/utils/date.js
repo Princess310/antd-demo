@@ -7,6 +7,8 @@ const DEFAULT_FORMAT_DATE = 'YYYY-MM-DD HH:mm:ss';
 // the time check value: 1 day for now
 const CHECK_DEFAULT_TIME = 24 * 60 * 60 * 1000;
 
+const weeks = ['一', '二', '三', '四', '五', '六', '日'];
+
 function zeroFull(str) {
   return str >= 10 ? str : `0${str}`;
 }
@@ -129,6 +131,16 @@ const dateUtil = {
           : hours > 0 ? `${hours}小时${minutes}分${seconds}秒`
           : (minutes > 0 ? `${minutes}分${seconds}秒`
           : `${seconds}秒`);
+  },
+  parseTimeDetail: (value) => {
+    const m = moment(value);
+    const time = m.format('HH:mm');
+    const dateStr = m.format('YYYY.MM.DD');
+    const dayOfWeek = m.day();
+    const hours = m.hours();
+    const timeTag = hours > 12 ? '下午' : '上午';
+
+    return `${dateStr}周${weeks[dayOfWeek]}${timeTag}${time}`;
   }
 };
 

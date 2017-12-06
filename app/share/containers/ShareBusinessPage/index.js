@@ -245,7 +245,7 @@ export class ShareBusinessPage extends React.PureComponent { // eslint-disable-l
                               <LikeWrapper onClick={(e) => {
                                 e.preventDefault();
                                 e.stopPropagation();
-                                this.handleDownloadInfo();
+                                this.handleDownloadInfo(e);
                               }}>
                                 <Icon type={require('icons/ali/点赞.svg')} size="sm" color={pallete.text.help} />
                                 {u.like_count}

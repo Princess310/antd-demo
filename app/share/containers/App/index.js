@@ -146,6 +146,14 @@ export default class App extends React.PureComponent { // eslint-disable-line re
 
         break;
       }
+      case 'temp_user': {
+        import('share/containers/ShareTempUserPage')
+        .then((cb) => {
+            self.loadModule(cb);
+          });
+
+        break;
+      }
     }
   }
 

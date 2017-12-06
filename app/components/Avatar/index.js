@@ -35,40 +35,57 @@ const Vip = styled.div`
 class Avatar extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   static defaultProps = {
     id: '',
-    avatar: defaultAvatar,
+    avatar: '',
     isVip: false,
     size: '1.04rem',
     linkUser: false,
     style: {},
+    username: null,
   }
 
   render() {
-    const { id, avatar, isVip, size, linkUser, linkParmas, style } = this.props;
+    const { id, avatar, isVip, size, linkUser, linkParmas, username, style } = this.props;
+    const showType = avatar ? 'user' : 'username';
 
     return (
       <Wrapper>
-        <img
-          role="presentation"
-          style={{
+        {showType === 'user' ? (
+          <img
+            role="presentation"
+            style={{
+              width: size,
+              height: size,
+              borderRadius: '0.08rem',
+              ...style,
+            }}
+            src={oss.getImgSuitablePath(avatar)}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              if (linkParmas) {
+                browserHistory.push(linkParmas);
+              } else {
+                linkUser && browserHistory.push({
+                  pathname: 'userInfo',
+                  query: { id },
+                });
+              }
+            }}
+          />
+        ) : (
+          <div style={{
             width: size,
             height: size,
+            textAlign: 'center',
+            lineHeight: size,
+            color: pallete.white,
+            fontSize: '0.32rem',
             borderRadius: '0.08rem',
-            ...style,
-          }}
-          src={oss.getImgSuitablePath(avatar)}
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            if (linkParmas) {
-              browserHistory.push(linkParmas);
-            } else {
-              linkUser && browserHistory.push({
-                pathname: 'userInfo',
-                query: { id },
-              });
-            }
-          }}
-        />
+            backgroundColor: '#CCCCCC',
+          }}>
+            {username ? username.substr(username.length - 2, 2) : ''}
+          </div>
+        )}
         {isVip && <Vip>V</Vip>}
       </Wrapper>
     );

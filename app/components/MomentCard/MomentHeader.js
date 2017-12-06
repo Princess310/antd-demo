@@ -72,6 +72,7 @@ class MomentHeader extends React.PureComponent { // eslint-disable-line react/pr
           size={avatarSize ? avatarSize : '0.96rem'}
           id={user.id}
           avatar={user.avatar}
+          username={user.nickname}
           isVip={Number(user.verify_status) === 2}
           linkUser={linkUser}
           linkParmas={ Number(source_type) === 1 ? {

@@ -96,6 +96,33 @@ injectGlobal`
     }
   }
 
+  .invest-detail-tabs {
+    .am-tabs-bar {
+      .am-tabs-tab {
+        color: #999999;
+        font-size: 0.24rem;
+      }
+      .am-tabs-tab-active {
+        color: #333333;
+      }
+    }
+
+    .am-list-item.am-input-item {
+      padding: 0;
+      min-height: auto;
+      height: auto;
+
+      &:after {
+        display: none;
+      }
+    }
+
+    .am-list-item .am-input-control input {
+      font-size: 0.24rem;
+      color: #888888;
+    }
+  }
+
   .am-accordion {
     &.select-friend-accordion {
       .am-accordion-item .am-accordion-header {

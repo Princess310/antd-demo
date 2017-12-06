@@ -63,16 +63,24 @@ export function getDownloadUrl() {
 
 export function linkOpenInstall() {
   if (OpenInstall) {
+    const type = getQueryString('type');
     const uid = getQueryString('uid');
+    const id = getQueryString('id');
+    let params = {
+      uid,
+    };
+
+    if (type === 'investment') {
+      params.meeting_id = id;
+    }
+
     const m = new OpenInstall({
       /*appKey必选参数，openinstall平台为每个应用分配的ID,在开发者平台可查看此appKey*/
       appKey : 'ewrjhz',
       /*可选参数，自定义android平台的apk下载文件名，只有apk在openinstall托管时才有效；
         个别andriod浏览器下载时，中文文件名显示乱码，请慎用中文文件名！*/
       //apkFileName : "OpenInstallDemo-v2-1.1.1.apk",
-    }, {
-      uid: uid,
-    });
+    }, params);
 
     m.wakeupOrInstall({ timeout: 500 });
   } else {
