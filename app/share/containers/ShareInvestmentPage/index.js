@@ -7,6 +7,7 @@
 import React, { PropTypes } from 'react';
 import styled from 'styled-components';
 import Helmet from 'react-helmet';
+import Clipboard  from 'clipboard';
 
 import { Button, WhiteSpace, Icon, Toast, Tabs, InputItem } from 'antd-mobile';
 import AppContent from 'components/AppContent';
@@ -113,6 +114,14 @@ export class ShareInvestmentPage extends React.PureComponent { // eslint-disable
 
   componentWillMount() {
     this.getInvestInfo();
+  }
+
+  componentDidUpdate() {
+    let clipboard = new Clipboard('.cut-btn');
+
+    clipboard.on('success', function(e) {
+      Toast.info('复制成功', 2);
+    });
   }
 
   getInvestInfo = () => {
@@ -237,7 +246,7 @@ export class ShareInvestmentPage extends React.PureComponent { // eslint-disable
                   className="list-item"
                   icon={<Icon type={require('icons/ali/地点.svg')} size="xs" color={pallete.theme } />}
                   name={info.address}
-                  rightContent={<Button style={buttonStyle} onClick={this.handleCopy}>复制</Button>}
+                  rightContent={<Button style={buttonStyle} className="cut-btn" onClick={this.handleCopy} data-clipboard-text={info.address}>复制</Button>}
                 />
                 {Number(info.show_mobile) === 1 && (info.mobile !== '') && (
                   <ListItem
@@ -245,7 +254,7 @@ export class ShareInvestmentPage extends React.PureComponent { // eslint-disable
                     icon={<Icon type={require('icons/ali/电话.svg')} size="xs" color={pallete.theme } />}
                     name={<span style={{ color: pallete.theme, textDecoration: 'underline' }}>{info.mobile}</span>}
                     rightContent={
-                      <Button style={buttonStyle} onClick={this.handleCopy} href={`tel:${info.mobile}`}>拨打</Button>
+                      <Button style={buttonStyle} href={`tel:${info.mobile}`}>拨打</Button>
                     }
                   />
                 )}
