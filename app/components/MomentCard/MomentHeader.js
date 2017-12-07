@@ -27,8 +27,12 @@ const Wrapper = styled(FlexRow)`
 
 const ItemWrapper = styled.div`
   margin-right: 0.24rem;
+  max-width: 2rem;
   font-size: 0.26rem;
   color: ${pallete.text.help};
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const SubInfoWrapper = styled.div`

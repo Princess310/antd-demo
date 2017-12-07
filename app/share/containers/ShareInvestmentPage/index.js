@@ -112,8 +112,12 @@ export class ShareInvestmentPage extends React.PureComponent { // eslint-disable
   }
 
   componentWillMount() {
-    const { id, uid } = this.props;
+    this.getInvestInfo();
+  }
 
+  getInvestInfo = () => {
+    const { id, uid } = this.props;
+    
     request.doGet('moments/details', {
       moments_id: id,
       uid,
@@ -177,6 +181,9 @@ export class ShareInvestmentPage extends React.PureComponent { // eslint-disable
         username: '',
         phone: '',
       });
+
+      // refresh info
+      this.getInvestInfo();
     });
   }
 
@@ -313,7 +320,7 @@ export class ShareInvestmentPage extends React.PureComponent { // eslint-disable
                 <TabPane tab={`已报名商家 ${info.member_count}`} key="2">
                   <div>
                     {info.enroll.map((u, i)  => (
-                      <div key={u.id + i} style={{ borderBottom: `0.01rem ${pallete.border.deep} solid` }}>
+                      <div key={i} style={{ borderBottom: `0.01rem ${pallete.border.deep} solid` }}>
                         {u.come_from === '0' ? (
                           <UserHeaderBar
                             user={{...u, id: u.created_by}}
