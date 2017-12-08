@@ -77,7 +77,7 @@ class UserInfoCard extends React.PureComponent { // eslint-disable-line react/pr
               {user.position && <ItemWrapper style={{ borderLeft: `0.01rem ${pallete.border.normal} solid`, paddingLeft: '0.12rem' }}>{user.position}</ItemWrapper>}
             </FlexRow>
             {user.is_my_friend > 0 ? (
-              <a href={`tel:user.mobile`} style={{ color: pallete.theme, textDecoration: 'underline' }}>
+              <a href={`tel:${user.mobile}`} style={{ color: pallete.theme, textDecoration: 'underline' }}>
                 <FlexRow>
                   <SubItem style={{ margin: 0 }}>手机号：</SubItem>
                   <SubItem style={{ margin: 0 }}>
