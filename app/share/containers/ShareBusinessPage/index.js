@@ -96,6 +96,13 @@ export class ShareBusinessPage extends React.PureComponent { // eslint-disable-l
         type = "communication";
         businessType = "status";
       }
+
+      // ali info
+      if (category === '8') {
+        title = "生意详情";
+        type = "business";
+        businessType = "supplier";
+      }
       // if it is CMS
       if (source_type === 1) {
         title = data.title;

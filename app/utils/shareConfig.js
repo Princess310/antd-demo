@@ -168,6 +168,7 @@ const shareConfig = {
     desc = filterEmojiStr(desc).substring(0, 50);
     timeLineTitle = filterEmojiStr(timeLineTitle).substring(0, 50);
 
+    onMenuShareTimeline(timeLineTitle, link, imgUrl, success, cancel);
     onMenuShareOther(title, desc, link, imgUrl, success, cancel);
 
     // share config for QQ

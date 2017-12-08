@@ -205,11 +205,12 @@ class ShareMomentCard extends React.PureComponent { // eslint-disable-line react
     ));
 
     // check type of moment
-    let businessType = (category === '3' || reward_as === '2') ? 'demand' : ((category === '0' || reward_as === '1') ? 'supplier' : 'status');
+    let businessType = (category === '3' || reward_as === '2') ? 'demand' : ((category === '0' || reward_as === '1' || category === '8') ? 'supplier' : 'status');
     // group status
     if (category === '0' && privilege_type === '4') {
       businessType = "status";
     }
+    // ali info
 
     // content to show
     const contentResult = businessType === 'demand' ? `需求描述：${content}` : content;
