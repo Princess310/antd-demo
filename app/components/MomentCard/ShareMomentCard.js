@@ -80,13 +80,15 @@ const actionSheetStyle = {
 
 const buttonStyle = {
   position: 'absolute',
-  top: '0.2rem',
+  top: '0.52rem',
   right: '0.2rem',
-  height: '0.4rem',
-  width: '1rem',
-  lineHeight: '0.4rem',
+  height: '0.44rem',
+  width: '1.2rem',
+  lineHeight: '0.44rem',
   fontSize: '0.24rem',
   color: pallete.white,
+  border: 'none ',
+  borderRadius: '0.44rem',
   backgroundColor: pallete.theme,
 }
 
@@ -171,6 +173,7 @@ class ShareMomentCard extends React.PureComponent { // eslint-disable-line react
       demand_counts,
       show_mobile,
       privilege_type,
+      mobile,
       ...other,
     } = moment;
 
@@ -210,7 +213,9 @@ class ShareMomentCard extends React.PureComponent { // eslint-disable-line react
     if (category === '0' && privilege_type === '4') {
       businessType = "status";
     }
+
     // ali info
+    const isAliInfo = category === '8';
 
     // content to show
     const contentResult = businessType === 'demand' ? `需求描述：${content}` : content;
@@ -253,7 +258,7 @@ class ShareMomentCard extends React.PureComponent { // eslint-disable-line react
             <span style={{ marginLeft: '0.08rem' }}>{businessType === 'demand' ? '我有' : '我需要'}</span>
           </FlexSB>
         }
-        {Number(trade_status) === 0 && 
+        {Number(trade_status) === 0 && !isAliInfo && 
           <FlexSB onClick={this.toggleModal} style={actionItemStyle}>
             <Icon type={require('icons/ali/转介绍.svg')} size="sm" color={pallete.text.content} />
             <span style={{ marginLeft: '0.08rem' }}>转介绍</span>
@@ -341,7 +346,14 @@ class ShareMomentCard extends React.PureComponent { // eslint-disable-line react
             {Number(source_type) !== 1 && (
               (Number(hits) > 0 && from !== 'search') && <div style={{ fontSize: '0.26rem', color: pallete.text.help }}>{hits}人看过</div>
             )}
-            {(type === 'business' && from !== 'list') && <Button style={buttonStyle} onClick={this.handleDownloadInfo}>对话</Button>}
+            {(type === 'business' && from !== 'list') && (
+              isAliInfo ? (
+                (mobile && mobile !== '') && <Button style={{ ...buttonStyle, border: `0.01rem solid ${pallete.theme}`, color: pallete.theme, backgroundColor: pallete.white }} href={`tel:${mobile}`}>打电话</Button>
+              ) : (
+                <Button style={buttonStyle} onClick={this.handleDownloadInfo}>对话</Button>
+              )
+            )
+            }
           </ContentWrapper>
           {actionView}
         </div>
