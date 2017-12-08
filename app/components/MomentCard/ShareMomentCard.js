@@ -92,6 +92,13 @@ const buttonStyle = {
   backgroundColor: pallete.theme,
 }
 
+const tagStyle = {
+  marginRight: '0.08rem',
+  borderColor: pallete.theme,
+  backgroundColor: pallete.theme,
+  color: pallete.white,
+};
+
 class ShareMomentCard extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
     super(props);
@@ -174,6 +181,7 @@ class ShareMomentCard extends React.PureComponent { // eslint-disable-line react
       show_mobile,
       privilege_type,
       mobile,
+      tags,
       ...other,
     } = moment;
 
@@ -218,7 +226,7 @@ class ShareMomentCard extends React.PureComponent { // eslint-disable-line react
     const isAliInfo = category === '8';
 
     // content to show
-    const contentResult = businessType === 'demand' ? `需求描述：${content}` : content;
+    const contentResult = businessType === 'demand' ? `需求描述：${content}` : content;console.log('businessType', businessType);
     const contentView = businessType === 'demand' ? (
       <div>
         <div>{nickname}已经发布了<Remark>{demand_counts}</Remark>条需求</div>
@@ -273,11 +281,6 @@ class ShareMomentCard extends React.PureComponent { // eslint-disable-line react
       </ActionWrapper>
     )
 
-    const tagStyle = {
-      borderColor: pallete.theme,
-      color: pallete.text.help,
-    };
-
     return (
       <div
         style={Object.assign(rootStyle, style)}
@@ -311,7 +314,14 @@ class ShareMomentCard extends React.PureComponent { // eslint-disable-line react
             {(type === 'business' && businessType === 'supplier') && (
               <div style={{ marginBottom: '0.08rem' }}>
                 {item_name !== '' && <LineTag style={tagStyle}>{item_name}</LineTag>}
-                {section !== '' && <LineTag style={{ marginLeft: '0.08rem', ...tagStyle }}>{section}</LineTag>}
+                {section !== '' && <LineTag style={tagStyle}>{section}</LineTag>}
+                {tags && (
+                  tags.map((tag, i) => (
+                    <LineTag style={tagStyle} key={i}>
+                      {tag}
+                    </LineTag>
+                  ))
+                )}
               </div>
             )}
             {

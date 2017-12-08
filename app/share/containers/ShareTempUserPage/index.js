@@ -138,7 +138,7 @@ export class ShareTempUserPage extends React.PureComponent { // eslint-disable-l
           style={{ top: 0, paddingBottom: '2rem' }}
         >
           <div>
-            <UserInfoCard user={{ is_my_friend: 1, nickname: userInfo.username, ...userInfo }} />
+            <UserInfoCard user={{ is_my_friend: 1, nickname: userInfo.username, ...userInfo }} tags={userInfo.tags} />
             <WhiteSpace />
             {(userInfo.registered_fund !== '' || userInfo.business_scope !== '') && (
               <ContentWrapper>
