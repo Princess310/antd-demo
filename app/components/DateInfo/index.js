@@ -19,7 +19,7 @@ class DateInfo extends React.PureComponent { // eslint-disable-line react/prefer
 
     return (
       <div style={Object.assign(rootStyle, style)}>
-        {format ? date.format(time * 1000, format) : date.dateSinceToday(time * 1000)}
+        {format ? date.format(time * 1000, format) : date.parseDate(time)}
       </div>
     );
   }

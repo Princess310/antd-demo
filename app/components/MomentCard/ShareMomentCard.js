@@ -226,7 +226,7 @@ class ShareMomentCard extends React.PureComponent { // eslint-disable-line react
     const isAliInfo = category === '8';
 
     // content to show
-    const contentResult = businessType === 'demand' ? `需求描述：${content}` : content;console.log('businessType', businessType);
+    const contentResult = businessType === 'demand' ? `需求描述：${content}` : content;
     const contentView = businessType === 'demand' ? (
       <div>
         <div>{nickname}已经发布了<Remark>{demand_counts}</Remark>条需求</div>

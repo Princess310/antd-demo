@@ -108,7 +108,7 @@ const dateUtil = {
   parseDate: (value) => {
     const time = dateUtil.getTimeForNow();
     const dateStr = value * 1000;
-    const diffTime = 1000 * 60 * 60 * 24 * 7; // 7 days diff
+    const diffTime = 1000 * 60 * 60 * 24 * 25; // 25 days diff
     let result;
 
     if (dateUtil.checkDiffDate(dateStr, time, diffTime)) {
