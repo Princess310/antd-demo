@@ -109,6 +109,7 @@ export class ShareInvestmentPage extends React.PureComponent { // eslint-disable
       info: null,
       username: '',
       phone: '',
+      downloadStyle: {},
     };
   }
 
@@ -171,6 +172,14 @@ export class ShareInvestmentPage extends React.PureComponent { // eslint-disable
     Toast.info('请下载健康商信APP', 2);
   }
 
+  handleInput = (focus) => {
+    const position = focus ? 'relative' : 'fixed';
+
+    this.setState({
+      downloadStyle: { position },
+    });
+  }
+
   handleSubmit = () => {
     const { username, phone } = this.state;
     const { id } = this.props;
@@ -197,7 +206,7 @@ export class ShareInvestmentPage extends React.PureComponent { // eslint-disable
   }
 
   render() {
-    const { info, username, phone } = this.state;
+    const { info, username, phone, downloadStyle } = this.state;
 
     return (
       <div>
@@ -305,20 +314,33 @@ export class ShareInvestmentPage extends React.PureComponent { // eslint-disable
                     <Paper style={{ padding: '0.4rem 1.27rem', textAlign: 'center' }}>
                       <header style={{ fontSize: '0.34rem', color: '#333333', fontWeight: 'bolder' }}>我要报名</header>
                       <InputWrapper>
-                        <InputItem placeholder="请输入您的姓名..." value={username} onChange={this.handleUsername} />
+                        <InputItem
+                          placeholder="请输入您的姓名..."
+                          value={username}
+                          onChange={this.handleUsername}
+                          onFocus={() => {this.handleInput(true)}}
+                          onBlur={() => {this.handleInput(false)}}
+                        />
                       </InputWrapper>
                       <InputWrapper>
-                        <InputItem type="phone" placeholder="请输入您的手机号..." value={phone} onChange={this.handlePhone} />
+                        <InputItem
+                          type="phone"
+                          placeholder="请输入您的手机号..."
+                          value={phone}
+                          onChange={this.handlePhone}
+                          onFocus={() => {this.handleInput(true)}}
+                          onBlur={() => {this.handleInput(false)}}
+                        />
                       </InputWrapper>
 
-                      {info.is_end === 1 && (
-                        <Button style={{...submitBtnStyle, backgroundColor: '#CCCCCC'}}>报名已截止</Button>
-                      )}
-                      {info.is_end === 1 && (
-                        <Button style={{...submitBtnStyle, backgroundColor: '#CCCCCC'}}>活动名额已满</Button>
-                      )}
-                      {info.is_action === 1 && (
+                      {info.is_action === 1 ? (
                         <Button style={{...submitBtnStyle, backgroundColor: '#CCCCCC'}}>活动已结束</Button>
+                      ) : (
+                        info.is_end === 1 ? (
+                          <Button style={{...submitBtnStyle, backgroundColor: '#CCCCCC'}}>报名已截止</Button>
+                        ) : info.is_full === 1 && (
+                          <Button style={{...submitBtnStyle, backgroundColor: '#CCCCCC'}}>活动名额已满</Button>
+                        )
                       )}
                       {(info.is_end === 0 && info.is_full === 0 && info.is_action === 0) && (
                         <Button style={submitBtnStyle} onClick={this.handleSubmit}>立即报名</Button>
@@ -395,7 +417,7 @@ export class ShareInvestmentPage extends React.PureComponent { // eslint-disable
               </Tabs>
             </div>
           )}
-          <DownloadBar name="立即加群交流" />
+          <DownloadBar name="立即加群交流" style={downloadStyle} />
         </AppContent>
       </div>
     );

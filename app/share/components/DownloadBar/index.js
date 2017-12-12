@@ -41,11 +41,11 @@ class DownloadBar extends React.PureComponent { // eslint-disable-line react/pre
     linkOpenInstall();
   }
   render() {
-    const { name, buttonStyle } = this.props;
+    const { name, buttonStyle, style } = this.props;
     const hongbaoInfo = getHongbaoInfo();
     const resultName = name ? name : (hongbaoInfo.isHongbao ? '下载登录领现金红包' : '免费下载，已有10000+人下载');
     return (
-      <Wrapper style={hongbaoInfo.isHongbao ? { height: '2rem' } : {}}>
+      <Wrapper style={hongbaoInfo.isHongbao ? { height: '2rem', ...style } : {...style}}>
         <FlexCenter>
           <FlexColumnCenter>
             <Button style={{...btnStyle, ...buttonStyle}} onClick={this.handleDownload}>{resultName}</Button>
