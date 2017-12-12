@@ -133,14 +133,14 @@ const dateUtil = {
           : `${seconds}秒`);
   },
   parseTimeDetail: (value) => {
-    const m = moment(value);
+    const m = moment();
     const time = m.format('HH:mm');
     const dateStr = m.format('YYYY.MM.DD');
     const dayOfWeek = m.day();
     const hours = m.hours();
     const timeTag = hours > 12 ? '下午' : '上午';
 
-    return `${dateStr}周${weeks[dayOfWeek]}${timeTag}${time}`;
+    return `${dateStr}周${weeks[dayOfWeek - 1]}${timeTag}${time}`;
   }
 };
 
