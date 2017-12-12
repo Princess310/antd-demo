@@ -184,8 +184,14 @@ export class ShareInvestmentPage extends React.PureComponent { // eslint-disable
     const { username, phone } = this.state;
     const { id } = this.props;
 
-    if (username.trim() === '' || phone.trim() === '') {
-      Toast.info('姓名或手机号不能为空', 2);
+    if (username.trim() === '' || username.match(/\d+/g) || username.trim().length < 2 || username.trim().length > 6 ) {
+      Toast.info('姓名长度2~6个中文且不能包含数字', 2);
+      return;
+    }
+
+    if (phone.trim() === '') {
+      Toast.info('请输入正确的电话号码', 2);
+      return;
     }
 
     request.doPost('investment/enroll', {
