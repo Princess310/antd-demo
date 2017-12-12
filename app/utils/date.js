@@ -133,7 +133,7 @@ const dateUtil = {
           : `${seconds}秒`);
   },
   parseTimeDetail: (value) => {
-    const m = moment();
+    const m = moment(value);
     const time = m.format('HH:mm');
     const dateStr = m.format('YYYY.MM.DD');
     const dayOfWeek = m.day();
