@@ -185,7 +185,7 @@ export class ShareInvestmentPage extends React.PureComponent { // eslint-disable
   }
 
   handleSubmit = () => {
-    const { username, phone } = this.state;
+    let { username, phone } = this.state;
     const { id } = this.props;
 
     if (username.trim() === '' || username.match(/\d+/g) || username.trim().length < 2 || username.trim().length > 6 ) {
@@ -193,6 +193,7 @@ export class ShareInvestmentPage extends React.PureComponent { // eslint-disable
       return;
     }
 
+    phone = phone.replace(/\s/g, '')
     if (phone.trim() === '' || phone.trim().length !== 11) {
       Toast.info('请输入正确的电话号码', 2);
       return;
