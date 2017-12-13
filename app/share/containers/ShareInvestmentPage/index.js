@@ -193,7 +193,7 @@ export class ShareInvestmentPage extends React.PureComponent { // eslint-disable
       return;
     }
 
-    if (phone.trim() === '') {
+    if (phone.trim() === '' || phone.trim().length !== 11) {
       Toast.info('请输入正确的电话号码', 2);
       return;
     }
