@@ -125,7 +125,7 @@ export class ShareInvestmentPage extends React.PureComponent { // eslint-disable
     });
   }
 
-  getInvestInfo = () => {
+  getInvestInfo = (showTost) => {
     const { id, uid } = this.props;
     
     request.doGet('moments/details', {
@@ -134,6 +134,10 @@ export class ShareInvestmentPage extends React.PureComponent { // eslint-disable
       'from_share': 1
     }).then((res) => {
       const { data, share_user } = res;
+
+      if (showTost) {
+        Toast.info('报名成功', 2);
+      }
 
       this.setState({
         info: data,
@@ -199,15 +203,13 @@ export class ShareInvestmentPage extends React.PureComponent { // eslint-disable
       mobile: phone,
       moments_id: id,
     }).then((res) => {
-      Toast.info('报名成功', 2);
-
       this.setState({
         username: '',
         phone: '',
       });
 
       // refresh info
-      this.getInvestInfo();
+      this.getInvestInfo(true);
     });
   }
 
