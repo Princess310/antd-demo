@@ -48,7 +48,7 @@ const submitBtnStyle = {
 };
 
 const contentStyle = {
-  paddingLeft: '1.24rem',
+  // paddingLeft: '1.08rem',
 };
 
 const imgStyle = {
