@@ -53,7 +53,7 @@ const contentStyle = {
 
 const imgStyle = {
   marginTop: '0.1rem',
-  height: '2.64rem',
+  height: '3rem',
   width: '100%',
   objectFit: 'cover',
 };
