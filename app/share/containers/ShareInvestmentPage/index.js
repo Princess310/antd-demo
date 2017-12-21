@@ -53,9 +53,9 @@ const contentStyle = {
 
 const imgStyle = {
   marginTop: '0.1rem',
-  height: '3rem',
+  height: 'auto',
   width: '100%',
-  objectFit: 'cover',
+  // objectFit: 'cover',
 };
 
 const actionItemStyle = {
