@@ -7,7 +7,7 @@ const DEFAULT_FORMAT_DATE = 'YYYY-MM-DD HH:mm:ss';
 // the time check value: 1 day for now
 const CHECK_DEFAULT_TIME = 24 * 60 * 60 * 1000;
 
-const weeks = ['一', '二', '三', '四', '五', '六', '日'];
+const weeks = ['日', '一', '二', '三', '四', '五', '六'];
 
 function zeroFull(str) {
   return str >= 10 ? str : `0${str}`;
@@ -140,7 +140,7 @@ const dateUtil = {
     const hours = m.hours();
     const timeTag = hours > 12 ? '下午' : '上午';
 
-    return `${dateStr}周${weeks[dayOfWeek - 1]}${timeTag}${time}`;
+    return `${dateStr}周${weeks[dayOfWeek]}${timeTag}${time}`;
   }
 };
 
